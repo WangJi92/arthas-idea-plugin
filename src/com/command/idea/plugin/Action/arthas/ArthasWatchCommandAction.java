@@ -10,7 +10,7 @@ import com.command.idea.plugin.constants.ArthasCommandConstants;
  */
 public class ArthasWatchCommandAction extends BaseArthasPluginAction {
     @Override
-    String doBuildCommand(String className, String methodName) {
+    public String doBuildCommand(String className, String methodName) {
         return String.join(" ", "watch", className, methodName, "'{params,returnObj,throwExp}'", "-n", ArthasCommandConstants.INVOKE_COUNT, "-x", ArthasCommandConstants.RESULT_X);
     }
 }

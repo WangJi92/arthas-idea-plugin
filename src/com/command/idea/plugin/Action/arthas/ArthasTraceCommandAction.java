@@ -10,7 +10,7 @@ import com.command.idea.plugin.constants.ArthasCommandConstants;
  */
 public class ArthasTraceCommandAction extends BaseArthasPluginAction {
     @Override
-    String doBuildCommand(String className, String methodName) {
+    public String doBuildCommand(String className, String methodName) {
 
         return String.join(" ", "trace", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT);
     }

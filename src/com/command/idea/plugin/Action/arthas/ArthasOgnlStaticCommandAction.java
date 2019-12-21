@@ -1,24 +1,23 @@
 package com.command.idea.plugin.Action.arthas;
 
-import com.command.idea.plugin.utils.ClipboardUtils;
-import com.command.idea.plugin.utils.NotifyUtils;
+import com.command.idea.plugin.constants.ArthasCommandConstants;
+import com.command.idea.plugin.ui.ArthasActionStaticDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * static 方法处理
+ *
  * @author jet
  * @date 21-12-2019
  */
-public abstract class BaseArthasPluginAction extends AnAction {
+public class ArthasOgnlStaticCommandAction extends AnAction {
 
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
@@ -35,20 +34,32 @@ public abstract class BaseArthasPluginAction extends AnAction {
             e.getPresentation().setEnabled(false);
             return;
         }
-
         if (psiElement instanceof PsiClass) {
-            enabled = true;
-        } else if (psiElement instanceof PsiMethod) {
-            enabled = true;
-        } else if (psiElement instanceof PsiField) {
-            enabled = true;
-        } else {
-            enabled = false;
+            e.getPresentation().setEnabled(false);
+            return;
         }
 
-        e.getPresentation().setEnabled(enabled);
+        //判断是否为静态方法
+        if (psiElement instanceof PsiMethod) {
+            /**
+             * {@link https://www.programcreek.com/java-api-examples/?class=com.intellij.psi.PsiField&method=hasModifierProperty }
+             */
+            PsiMethod psiMethod = (PsiMethod) psiElement;
+            if (!psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
+                e.getPresentation().setEnabled(false);
+                return;
+            }
+        }
 
+        if (psiElement instanceof PsiField) {
+            PsiField psiField = (PsiField) psiElement;
+            if (!psiField.hasModifierProperty(PsiModifier.STATIC)) {
+                e.getPresentation().setEnabled(false);
+                return;
+            }
+        }
 
+        e.getPresentation().setEnabled(true);
     }
 
     @Override
@@ -65,37 +76,31 @@ public abstract class BaseArthasPluginAction extends AnAction {
         PsiElement psiElement = (PsiElement) CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = "";
         String methodName = "";
+
+        if (psiElement instanceof PsiClass) {
+            return;
+        }
+        String join = String.join(" ", "ognl", " -x ", ArthasCommandConstants.RESULT_X);
+        StringBuilder builder = new StringBuilder(join);
+
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             className = psiMethod.getContainingClass().getQualifiedName();
             methodName = psiMethod.getName();
-        }
-        if (psiElement instanceof PsiClass) {
-            PsiClass psiClass = (PsiClass) psiElement;
-            className = psiClass.getQualifiedName();
-            methodName = "*";
+            builder.append("'").append("@").append(className).append("@").append(methodName).append("'");
         }
 
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
+            if (!psiField.hasModifierProperty(PsiModifier.STATIC)) {
+                return;
+            }
+
             className = psiField.getContainingClass().getQualifiedName();
-            methodName = "*";
+            String fileName = psiField.getName();
+            builder.append("'").append("@").append(className).append("@").append(fileName).append("'");
         }
-        String command = doBuildCommand(className, methodName);
-        ClipboardUtils.setClipboardString(command);
-
-        NotifyUtils.notifyMessageDefault(project);
-    }
-
-    /**
-     * 构造命令信息
-     *
-     * @param className
-     * @param methodName
-     * @return
-     */
-    public String doBuildCommand(String className, String methodName) {
-        return "";
+        new ArthasActionStaticDialog(project, className, builder.toString()).open();
     }
 
 }

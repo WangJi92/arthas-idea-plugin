@@ -7,7 +7,7 @@ package com.command.idea.plugin.Action.arthas;
  */
 public class ArthasScCommandAction extends BaseArthasPluginAction {
     @Override
-    String doBuildCommand(String className, String methodName) {
+    public String doBuildCommand(String className, String methodName) {
         return String.join(" ", "sc", "-d", className);
     }
 }
