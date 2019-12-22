@@ -1,0 +1,72 @@
+<idea-plugin>
+    <id>com.command.arthas.idea.plugin</id>
+    <name>arthas 辅助类</name>
+    <version>1.0</version>
+    <vendor email="983433479@qq.com" url="">汪小哥</vendor>
+
+    <description><![CDATA[
+      arthas 辅助工具类
+    ]]></description>
+
+    <change-notes><![CDATA[
+    添加支持  arthas
+     sc -d,trace,watch
+    ]]>
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="162"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable dynamic="true" instance="com.command.idea.plugin.ui.SettingDialog"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+
+        <action id="ArthasSc" class="com.command.idea.plugin.Action.arthas.ArthasScCommandAction" text="Sc"
+                description="Arthas get classload">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke=" ctrlshift alt S"/>-->
+        </action>
+        <action id="ArthasWatch" class="com.command.idea.plugin.Action.arthas.ArthasWatchCommandAction" text="Watch"
+                description=" Arthas watch">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke=" ctrl shift alt W"/>-->
+        </action>
+        <action id="ArthasTrace" class="com.command.idea.plugin.Action.arthas.ArthasTraceCommandAction" text="Trace"
+                description="Arthas trace">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
+        <action id="ArthasStatic" class="com.command.idea.plugin.Action.arthas.ArthasOgnlStaticCommandAction" text="Static Ognl"
+                description="Arthas ognl static">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
+
+        <action id="ArthasSpecial" class="com.command.idea.plugin.Action.arthas.ArthasSpecialCommandAction" text="Arthas Special Use Link"
+                description="Arthas special use link">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
+
+
+
+        <group id="arthas-plugin" popup="true" text="Arthas Command">
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <reference ref="ArthasSc"/>
+            <reference ref="ArthasWatch"/>
+            <reference ref="ArthasTrace"/>
+            <reference ref="ArthasStatic"/>
+            <separator/>
+            <reference ref="ArthasSpecial"/>
+        </group>
+    </actions>
+
+</idea-plugin>
