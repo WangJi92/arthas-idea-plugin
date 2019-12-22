@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.command.arthas.idea.plugin</id>
     <name>arthas idea</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -23,7 +23,7 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable dynamic="true" instance="com.command.idea.plugin.ui.SettingDialog"/>
+        <applicationConfigurable dynamic="false" instance="com.command.idea.plugin.ui.SettingDialog"/>
     </extensions>
 
     <actions>

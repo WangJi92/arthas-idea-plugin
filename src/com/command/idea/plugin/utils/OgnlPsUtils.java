@@ -1,7 +1,7 @@
 package com.command.idea.plugin.utils;
 
+import com.google.common.collect.Sets;
 import com.intellij.psi.*;
-import org.assertj.core.util.Sets;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -89,7 +89,7 @@ public class OgnlPsUtils {
         String beanName = "";
         if (annotations.length > 0) {
             for (PsiAnnotation annotation : annotations) {
-                beanName = getAttributeFromAnnotation(annotation, Sets.newLinkedHashSet("org.springframework.stereotype.Service", "org.springframework.stereotype.Controller", "org.springframework.stereotype.Repository", "org.springframework.web.bind.annotation.RestController"), "value");
+                beanName = getAttributeFromAnnotation(annotation, Sets.newHashSet("org.springframework.stereotype.Service", "org.springframework.stereotype.Controller", "org.springframework.stereotype.Repository", "org.springframework.web.bind.annotation.RestController"), "value");
                 if (StringUtils.isNotBlank(beanName)) {
                     break;
                 }
