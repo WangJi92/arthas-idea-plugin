@@ -1,27 +1,26 @@
 <idea-plugin>
     <id>com.command.arthas.idea.plugin</id>
-    <name>arthas 辅助类</name>
+    <name>arthas idea</name>
     <version>1.0</version>
-    <vendor email="983433479@qq.com" url="">汪小哥</vendor>
+    <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
-      arthas 辅助工具类
+     <tag> arthas 辅助工具类</tag>
+      <ul>
+        <li>支持arthas 工具，可以直接trace、watch、ognl static，ognl bean method</li>
+      </ul>
     ]]></description>
 
     <change-notes><![CDATA[
-    添加支持  arthas
-     sc -d,trace,watch
+      <ul>
+        <li>v1.0 支持arthas 工具，可以直接trace、watch、ognl static，ognl bean method</li>
+      </ul>
     ]]>
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="162"/>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable dynamic="true" instance="com.command.idea.plugin.ui.SettingDialog"/>
@@ -43,30 +42,34 @@
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
-        <action id="ArthasStatic" class="com.command.idea.plugin.Action.arthas.ArthasOgnlStaticCommandAction" text="Static Ognl"
+        <action id="ArthasStatic" class="com.command.idea.plugin.Action.arthas.ArthasOgnlStaticCommandAction"
+                text="Static Ognl"
                 description="Arthas ognl static">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
 
-        <action id="ArthasSpecial" class="com.command.idea.plugin.Action.arthas.ArthasSpecialCommandAction" text="Arthas Special Use Link"
+        <action id="ArthasSpecial" class="com.command.idea.plugin.Action.arthas.ArthasSpecialCommandAction"
+                text="Arthas Special Use Link"
                 description="Arthas special use link">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
 
-        <action id="ArthasInvokeBeanMethod" class="com.command.idea.plugin.Action.arthas.ArthasOgnlSpringContextInvokeMethodAction" text="Invoke BeanMethod"
+        <action id="ArthasInvokeBeanMethod"
+                class="com.command.idea.plugin.Action.arthas.ArthasOgnlSpringContextInvokeMethodAction"
+                text="Invoke BeanMethod"
                 description="Arthas invoke bean method">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
 
-        <action id="ArthasInstallCommand" class="com.command.idea.plugin.Action.arthas.ArthasInstallCommandAction" text="Install"
+        <action id="ArthasInstallCommand" class="com.command.idea.plugin.Action.arthas.ArthasInstallCommandAction"
+                text="Install"
                 description="Arthas install shell">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
-
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
