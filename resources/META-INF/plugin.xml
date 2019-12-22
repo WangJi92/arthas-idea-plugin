@@ -55,15 +55,22 @@
 
         </action>
 
+        <action id="ArthasInvokeBeanMethod" class="com.command.idea.plugin.Action.arthas.ArthasOgnlSpringContextInvokeMethodAction" text="Invoke BeanMethod"
+                description="Arthas invoke bean method">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
+
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
-            <reference ref="ArthasSc"/>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
             <reference ref="ArthasStatic"/>
+            <reference ref="ArthasInvokeBeanMethod"/>
+            <reference ref="ArthasSc"/>
             <separator/>
             <reference ref="ArthasSpecial"/>
         </group>

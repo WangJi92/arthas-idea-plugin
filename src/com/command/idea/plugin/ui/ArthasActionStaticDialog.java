@@ -118,8 +118,8 @@ public class ArthasActionStaticDialog extends  JDialog {
     /**
      * 打开窗口
      */
-    public void open() {
-        setTitle("arthas ognl static use");
+    public void open(String title) {
+        setTitle(title);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
