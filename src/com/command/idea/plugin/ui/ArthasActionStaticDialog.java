@@ -2,7 +2,13 @@ package com.command.idea.plugin.ui;
 
 import com.command.idea.plugin.utils.ClipboardUtils;
 import com.command.idea.plugin.utils.NotifyUtils;
+import com.intellij.icons.AllIcons;
+import com.intellij.ide.BrowserUtil;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.components.labels.ActionLink;
+import com.intellij.ui.components.labels.LinkLabel;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -34,6 +40,9 @@ public class ArthasActionStaticDialog extends  JDialog {
     private JTextField ognlExpressionEditor;
 
     private JPanel contentPane;
+    private LinkLabel classLoadLinkLable;
+    private LinkLabel ognlOfficeLinkLabel;
+    private LinkLabel oglSpecialLink;
 
 
     private String className;
@@ -115,5 +124,29 @@ public class ArthasActionStaticDialog extends  JDialog {
     }
 
 
+    private void createUIComponents() {
+        classLoadLinkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://alibaba.github.io/arthas/ognl.html");
+            }
+        });
+        classLoadLinkLable.setPaintUnderline(false);
 
+        ognlOfficeLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://commons.apache.org/proper/commons-ognl/language-guide.html");
+            }
+        });
+        ognlOfficeLinkLabel.setPaintUnderline(false);
+
+        oglSpecialLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/71");
+            }
+        });
+        oglSpecialLink.setPaintUnderline(false);
+    }
 }
