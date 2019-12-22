@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.command.idea.plugin.ui.ArthasActionStaticDialog">
-  <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
       <xy x="20" y="34" width="562" height="117"/>
@@ -15,7 +15,7 @@
     <children>
       <component id="b494" class="javax.swing.JButton" binding="closeButton">
         <constraints>
-          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="2" indent="0" use-parent-layout="false">
+          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="101" height="27"/>
           </grid>
         </constraints>
@@ -33,7 +33,7 @@
       </component>
       <component id="2ed44" class="javax.swing.JTextField" binding="ognlExpressionEditor">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+          <grid row="0" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="200" height="-1"/>
           </grid>
         </constraints>
@@ -43,15 +43,15 @@
       </component>
       <component id="3b23" class="javax.swing.JButton" binding="scCommandButton">
         <constraints>
-          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="复制获取classload命令"/>
+          <text value="获取classload命令"/>
         </properties>
       </component>
       <component id="4bddd" class="javax.swing.JTextField" binding="classloaderHashEditor">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
@@ -78,7 +78,15 @@
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="ongl special"/>
+          <text value="ognl special"/>
+        </properties>
+      </component>
+      <component id="d5190" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlDemoLink" custom-create="true">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="ognl 实践"/>
         </properties>
       </component>
     </children>

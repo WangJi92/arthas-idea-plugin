@@ -44,6 +44,7 @@ public class ArthasActionStaticDialog extends  JDialog {
     private LinkLabel classLoadLinkLable;
     private LinkLabel ognlOfficeLinkLabel;
     private LinkLabel oglSpecialLink;
+    private LinkLabel ognlDemoLink;
 
 
     private String className;
@@ -149,5 +150,12 @@ public class ArthasActionStaticDialog extends  JDialog {
             }
         });
         oglSpecialLink.setPaintUnderline(false);
+        ognlDemoLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://blog.csdn.net/u010634066/article/details/101013479");
+            }
+        });
+        ognlDemoLink.setPaintUnderline(false);
     }
 }

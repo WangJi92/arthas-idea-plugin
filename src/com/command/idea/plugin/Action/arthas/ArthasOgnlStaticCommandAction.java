@@ -2,6 +2,7 @@ package com.command.idea.plugin.Action.arthas;
 
 import com.command.idea.plugin.constants.ArthasCommandConstants;
 import com.command.idea.plugin.ui.ArthasActionStaticDialog;
+import com.command.idea.plugin.utils.OgnlPsUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -87,7 +88,22 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             className = psiMethod.getContainingClass().getQualifiedName();
             methodName = psiMethod.getName();
-            builder.append("'").append("@").append(className).append("@").append(methodName).append("'");
+            builder.append("  '").append("@").append(className).append("@").append(methodName).append("(");
+
+            PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
+            if (parameters.length > 0) {
+                int index = 0;
+                for (PsiParameter parameter : parameters) {
+                    String defaulParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
+                    builder.append(defaulParamValue);
+                    if (!(index == parameters.length - 1)) {
+                        builder.append(",");
+                    }
+                    index++;
+                }
+            }
+            builder.append(")").append("'");
+
         }
 
         if (psiElement instanceof PsiField) {
