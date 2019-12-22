@@ -61,6 +61,12 @@
 
         </action>
 
+        <action id="ArthasInstallCommand" class="com.command.idea.plugin.Action.arthas.ArthasInstallCommandAction" text="Install"
+                description="Arthas install shell">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
+
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -71,7 +77,9 @@
             <reference ref="ArthasStatic"/>
             <reference ref="ArthasInvokeBeanMethod"/>
             <reference ref="ArthasSc"/>
+
             <separator/>
+            <reference ref="ArthasInstallCommand"/>
             <reference ref="ArthasSpecial"/>
         </group>
     </actions>

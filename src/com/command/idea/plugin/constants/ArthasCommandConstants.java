@@ -25,4 +25,8 @@ public interface ArthasCommandConstants {
      * spring 表达式信息
      */
     String SPRING_CONTEXT_PARAM = "#springContext";
+    /**
+     * 安装脚本
+     */
+    String AS_INSTALL_BASH = "curl -sk https://arthas.gitee.io/arthas-boot.jar -o ~/.arthas-boot.jar  && echo \"alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http'\" >> ~/.bashrc && source ~/.bashrc";
 }
