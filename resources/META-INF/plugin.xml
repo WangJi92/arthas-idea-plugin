@@ -26,6 +26,8 @@
         <applicationConfigurable dynamic="false" instance="com.command.idea.plugin.ui.SettingDialog"/>
     </extensions>
 
+    <depends>com.intellij.modules.platform</depends>
+
     <actions>
         <!-- Add your actions here -->
 

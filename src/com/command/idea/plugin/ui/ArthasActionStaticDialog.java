@@ -123,6 +123,7 @@ public class ArthasActionStaticDialog extends  JDialog {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+
     }
 
 
