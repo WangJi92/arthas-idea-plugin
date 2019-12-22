@@ -17,6 +17,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
+ * arthas ognl 获取静态信息的展示
  * @author jet
  * @date 21-12-2019
  */
