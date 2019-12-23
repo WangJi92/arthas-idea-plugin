@@ -10,6 +10,7 @@ import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.ui.components.labels.LinkLabel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -109,7 +110,8 @@ public class ArthasSpecialDialog extends JDialog {
     public void open() {
         setTitle("arthas special use");
         pack();
-        //两个屏幕处理出现问题，跳到主屏幕去了
+        setMinimumSize(new Dimension(404,300));
+        //两个屏幕处理出现问题，跳到主屏幕去了 https://blog.csdn.net/weixin_33919941/article/details/88129513
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
         setVisible(true);
     }
