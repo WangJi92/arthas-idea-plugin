@@ -7,13 +7,14 @@
 ## 
 <a name="vwK8h"></a>
 # 二、支持的功能
-支持的功能都是平时处理最常用的一些功能，一些快捷的链接，在处理紧急问题时候不需要到处查找，都是一些基本的功能,自动复制到剪切板中去，方便快捷。<br />![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577110207183-951efa06-26ba-4201-abc9-46efb3836c41.png#align=left&display=inline&height=286&name=image.png&originHeight=572&originWidth=1074&size=241010&status=done&style=none&width=537)
+支持的功能都是平时处理最常用的一些功能，一些快捷的链接，在处理紧急问题时候不需要到处查找，都是一些基本的功能,自动复制到剪切板中去，方便快捷。<br />!![image](https://user-images.githubusercontent.com/20874972/71365498-24e05000-25da-11ea-98be-640dc7ca7e12.png)
 
-![arthas command.svg](https://cdn.nlark.com/yuque/0/2019/svg/171220/1577110958822-5fd46571-d616-4bef-8432-f94992ceab43.svg#align=left&display=inline&height=660&name=arthas%20command.svg&originHeight=660&originWidth=917&size=2375450&status=done&style=none&width=917)
 
-<a name="pwJKx"></a>
+
+![image](https://user-images.githubusercontent.com/20874972/71365516-3295d580-25da-11ea-928b-a28e4c47cda5.png)
+
 ## 2.1 watch
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577111133387-260aa3ff-1a8d-441f-ab5a-3786c585e618.png#align=left&display=inline&height=230&name=image.png&originHeight=460&originWidth=1570&size=326956&status=done&style=none&width=785)
+![image](https://user-images.githubusercontent.com/20874972/71365531-43464b80-25da-11ea-98bf-de363d8f08c8.png)
 ```bash
 watch com.command.idea.plugin.utils.StringUtils toLowerFristChar '{params,returnObj,throwExp}' -n 5 -x 3
 ```
