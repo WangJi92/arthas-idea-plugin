@@ -28,7 +28,7 @@ trace com.command.idea.plugin.utils.StringUtils toLowerFristChar -n 5
 
 <a name="M5hj0"></a>
 ## 2.3 static ognl (字段或者方法)
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577111229892-122cacbb-1f25-47cc-bab2-df5cc10cebc0.png#align=left&display=inline&height=234&name=image.png&originHeight=468&originWidth=1410&size=304620&status=done&style=none&width=705)
+![image](https://user-images.githubusercontent.com/20874972/71365634-8ef8f500-25da-11ea-90e7-d5e63eec63a5.png)
 
 <a name="qFcTH"></a>
 ### 2.3.1 右键static ognl
@@ -40,11 +40,12 @@ trace com.command.idea.plugin.utils.StringUtils toLowerFristChar -n 5
 sc -d com.command.idea.plugin.utils.StringUtils
 ```
 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577111475711-5ffa5492-9099-4b50-9ac0-18b03631f03c.png#align=left&display=inline&height=196&name=image.png&originHeight=392&originWidth=1346&size=218372&status=done&style=none&width=673)
+![image](https://user-images.githubusercontent.com/20874972/71365668-a932d300-25da-11ea-9ed6-49a43e4afbef.png)
 
 <a name="6Q1ae"></a>
 ### 2.3.2 复制到界面，获取命令，执行即可
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577111519442-aee9d985-5d0c-4f67-a8fc-bd4f2d9c3ff5.png#align=left&display=inline&height=126&name=image.png&originHeight=252&originWidth=1290&size=161506&status=done&style=none&width=645)
+![image](https://user-images.githubusercontent.com/20874972/71365687-b94ab280-25da-11ea-9af8-0ae0dd4cde97.png)
+
 
 ```bash
 ognl  -x  3  '@com.command.idea.plugin.utils.StringUtils@toLowerFristChar(" ")' -c 8bed358
@@ -73,11 +74,13 @@ public class ApplicationContextProvider implements ApplicationContextAware {
 ### 2.4.1 设置获取spring context的上下文
 > ps 这里可以使用@applicationContextProvider@context 这样，比如还行进行函数调用可以直接使用ognl逗号分割可以继续执行的语法，比如 @applicationContextProvider@context,#springContext.getBean("name").todo() 后续我们需要在界面调用任何的方法都会添加上这句话。
 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577111904672-c0b779ec-06eb-45fb-b95e-c1bb9ae743b1.png#align=left&display=inline&height=701&name=image.png&originHeight=1402&originWidth=2152&size=547914&status=done&style=none&width=1076)
+![image](https://user-images.githubusercontent.com/20874972/71365722-ce274600-25da-11ea-9794-9a8db5571141.png)
+
 
 <a name="KuN43"></a>
 ### 2.4.2 右键点击需要调用的方法
-这里的策略和static ognl 一样的，本质还是ognl的调用。<br />![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577112169623-5535dd8a-47d2-4fbb-8631-f785406c6057.png#align=left&display=inline&height=191&name=image.png&originHeight=382&originWidth=1632&size=318255&status=done&style=none&width=816)
+这里的策略和static ognl 一样的，本质还是ognl的调用。<br />
+![image](https://user-images.githubusercontent.com/20874972/71365745-e1d2ac80-25da-11ea-8e05-34e2f051d172.png)
 
 ```bash
 ognl  -x  3  '@applicationContextProvider@context,#springContext.getBean("arthasInstallCommandAction").actionPerformed(new com.intellij.openapi.actionSystem.AnActionEvent())' -c desw22
@@ -104,7 +107,9 @@ ognl  -x  3  '@applicationContextProvider@context,#springContext.getBean("arthas
 curl -sk https://arthas.gitee.io/arthas-boot.jar -o ~/.arthas-boot.jar  && echo "alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http'" >> ~/.bashrc && source ~/.bashrc
 ```
 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577112830008-8b7d0714-f37d-4425-b343-c7318eaf51ef.png#align=left&display=inline&height=257&name=image.png&originHeight=514&originWidth=2060&size=649699&status=done&style=none&width=1030)
+
+![image](https://user-images.githubusercontent.com/20874972/71365779-f7e06d00-25da-11ea-92e9-e3ad5725f1ca.png)
+
 
 <a name="Is5S6"></a>
 ## 2.6 常用特殊用法链接
@@ -120,15 +125,17 @@ curl -sk https://arthas.gitee.io/arthas-boot.jar -o ~/.arthas-boot.jar  && echo 
 # 三、其他
 <a name="j4UkL"></a>
 ## 3.1 安装 
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577113149941-dd21bf43-446d-4a74-bb6d-46438437bea5.png#align=left&display=inline&height=173&name=image.png&originHeight=346&originWidth=756&size=133740&status=done&style=none&width=378)
+![image](https://user-images.githubusercontent.com/20874972/71365799-07f84c80-25db-11ea-9094-b4b6972e47f0.png)
+
 
 <a name="vKsvI"></a>
 ## 3.2 快捷键设置
-![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577113190659-92993f9c-80f6-49f6-a66a-425c585ab616.png#align=left&display=inline&height=326&name=image.png&originHeight=652&originWidth=2126&size=358045&status=done&style=none&width=1063)
+![image](https://user-images.githubusercontent.com/20874972/71365859-35dd9100-25db-11ea-9233-c436efb4e651.png)
 
 <a name="r40qy"></a>
 ## 3.3 代码地址
 [https://github.com/WangJi92/arthas-idea-plugin](https://github.com/WangJi92/arthas-idea-plugin)
 <a name="5pfFa"></a>
 ## 3.4 插件开发，发布
- 参考 插件开发： [https://www.jianshu.com/p/722841c6d0a9](https://www.jianshu.com/p/722841c6d0a9)<br />就可以看到编译后的zip包了<br />![image.png](https://cdn.nlark.com/yuque/0/2019/png/171220/1577113324071-634991d1-c0c7-42aa-ad7c-d0bcde8b7a5a.png#align=left&display=inline&height=273&name=image.png&originHeight=546&originWidth=908&size=347771&status=done&style=none&width=454)
+ 参考 插件开发： [https://www.jianshu.com/p/722841c6d0a9](https://www.jianshu.com/p/722841c6d0a9)<br />就可以看到编译后的zip包了<br />
+![image](https://user-images.githubusercontent.com/20874972/71365888-47269d80-25db-11ea-95ab-efc4ccad3ac1.png)
