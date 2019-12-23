@@ -5,6 +5,7 @@ import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.ui.components.labels.LinkLabel;
 
@@ -108,7 +109,8 @@ public class ArthasSpecialDialog extends JDialog {
     public void open() {
         setTitle("arthas special use");
         pack();
-        setLocationRelativeTo(null);
+        //两个屏幕处理出现问题，跳到主屏幕去了
+        setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
         setVisible(true);
     }
 }

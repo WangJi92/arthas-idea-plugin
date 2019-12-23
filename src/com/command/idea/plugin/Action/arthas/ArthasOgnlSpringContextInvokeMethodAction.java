@@ -101,7 +101,7 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
 
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
-            className = psiMethod.getContainingClass().getName();
+            className = psiMethod.getContainingClass().getQualifiedName();
            // String lowCamelBeanName = StringUtils.toLowerFristChar(className);
 
             String lowCamelBeanName =OgnlPsUtils.getClassBeanName(psiMethod.getContainingClass());
