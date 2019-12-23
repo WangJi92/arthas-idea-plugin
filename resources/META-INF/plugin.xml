@@ -73,6 +73,13 @@
 
         </action>
 
+        <action id="ArthasHelpCommand" class="com.command.idea.plugin.Action.arthas.HelpAction"
+                text="Arthas Idea Help"
+                description="Arthas idea help">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
+
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
@@ -86,6 +93,9 @@
             <separator/>
             <reference ref="ArthasInstallCommand"/>
             <reference ref="ArthasSpecial"/>
+            <separator/>
+            <reference ref="ArthasHelpCommand"/>
+
         </group>
     </actions>
 
