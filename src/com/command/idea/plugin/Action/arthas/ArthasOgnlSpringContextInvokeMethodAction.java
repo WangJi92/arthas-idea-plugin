@@ -102,9 +102,8 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             className = psiMethod.getContainingClass().getQualifiedName();
-           // String lowCamelBeanName = StringUtils.toLowerFristChar(className);
 
-            String lowCamelBeanName =OgnlPsUtils.getClassBeanName(psiMethod.getContainingClass());
+            String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiMethod.getContainingClass());
             methodName = psiMethod.getName();
 
             //这里获取spring context的信息
@@ -113,6 +112,7 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
                 NotifyUtils.notifyMessage(project, "配置 arthas 插件spring context 获取的信息", NotificationType.ERROR);
                 return;
             }
+            springContextValue = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=" + springContextValue;
             if (!springContextValue.endsWith(",")) {
                 springContextValue = springContextValue + ",";
             }
