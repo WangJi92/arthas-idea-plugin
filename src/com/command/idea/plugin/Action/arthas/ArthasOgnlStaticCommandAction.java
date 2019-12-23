@@ -86,7 +86,7 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             className = psiMethod.getContainingClass().getQualifiedName();
-            methodName = psiMethod.getName();
+            methodName = psiMethod.getNameIdentifier().getText();
             builder.append("  '").append("@").append(className).append("@").append(methodName).append("(");
 
             PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
@@ -112,7 +112,7 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
             }
 
             className = psiField.getContainingClass().getQualifiedName();
-            String fileName = psiField.getName();
+            String fileName = psiField.getNameIdentifier().getText();
             builder.append("'").append("@").append(className).append("@").append(fileName).append("'");
         }
         new ArthasActionStaticDialog(project, className, builder.toString()).open("arthas ognl static use");

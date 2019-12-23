@@ -69,7 +69,7 @@ public abstract class BaseArthasPluginAction extends AnAction {
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             className = psiMethod.getContainingClass().getQualifiedName();
-            methodName = psiMethod.getName();
+            methodName = psiMethod.getNameIdentifier().getText();
         }
         if (psiElement instanceof PsiClass) {
             PsiClass psiClass = (PsiClass) psiElement;

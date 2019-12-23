@@ -104,7 +104,10 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             className = psiMethod.getContainingClass().getQualifiedName();
 
             String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiMethod.getContainingClass());
-            methodName = psiMethod.getName();
+
+            // Experimental API method JvmField.getName() is invoked in Action.arthas.ArthasOgnlStaticCommandAction.actionPerformed().
+            // This method can be changed in a future release leading to incompatibilities
+            methodName = psiMethod.getNameIdentifier().getText();
 
             //这里获取spring context的信息
             String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);

@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.command.arthas.idea.plugin</id>
     <name>arthas idea</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -28,6 +28,15 @@
     </extensions>
 
     <depends>com.intellij.modules.platform</depends>
+
+<!--    Plugin uses classes of Java plugin, for example-->
+<!--    'JvmAnnotatedElement' is used at 'JvmModifiersOwner'-->
+<!--    'JvmAnnotatedElement' is used at 'JvmTypeDeclaration'-->
+<!--    'JvmClass' is used at 'PsiClass'-->
+<!--    but the plugin does not declare explicit dependency on the Java plugin, via <depends>com.intellij.modules.java</depends>.-->
+<!--    Java functionality was extracted from the IntelliJ Platform to a separate plugin in IDEA 2019.2.-->
+<!--    For more info refer to https://blog.jetbrains.com/platform/2019/06/java-functionality-extracted-as-a-plugin-->
+    <depends>com.intellij.modules.java</depends>.
 
     <actions>
         <!-- Add your actions here -->
