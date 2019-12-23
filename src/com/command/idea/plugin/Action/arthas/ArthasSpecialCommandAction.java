@@ -20,7 +20,7 @@ public class ArthasSpecialCommandAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         DataContext dataContext = anActionEvent.getDataContext();
-        Project project = (Project) CommonDataKeys.PROJECT.getData(dataContext);
+        Project project = CommonDataKeys.PROJECT.getData(dataContext);
         if (project == null) {
             return;
         }

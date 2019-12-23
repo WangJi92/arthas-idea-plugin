@@ -20,7 +20,7 @@ public class ArthasInstallCommandAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         DataContext dataContext = event.getDataContext();
-        Project project = (Project) CommonDataKeys.PROJECT.getData(dataContext);
+        Project project = CommonDataKeys.PROJECT.getData(dataContext);
         if (project == null) {
             return;
         }

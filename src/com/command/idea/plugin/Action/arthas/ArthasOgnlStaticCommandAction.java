@@ -23,14 +23,13 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();
-        Editor editor = (Editor) CommonDataKeys.EDITOR.getData(dataContext);
-        boolean enabled = true;
+        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
         if (editor == null) {
             e.getPresentation().setEnabled(false);
             return;
         }
         //获取当前事件触发时，光标所在的元素
-        PsiElement psiElement = (PsiElement) CommonDataKeys.PSI_ELEMENT.getData(dataContext);
+        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         if (psiElement == null) {
             e.getPresentation().setEnabled(false);
             return;
@@ -69,12 +68,12 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
          * {@link com.intellij.ide.actions.CopyReferenceAction}
          */
         DataContext dataContext = event.getDataContext();
-        Editor editor = (Editor) CommonDataKeys.EDITOR.getData(dataContext);
-        Project project = (Project) CommonDataKeys.PROJECT.getData(dataContext);
+        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
+        Project project = CommonDataKeys.PROJECT.getData(dataContext);
         if (editor == null || project == null) {
             return;
         }
-        PsiElement psiElement = (PsiElement) CommonDataKeys.PSI_ELEMENT.getData(dataContext);
+        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = "";
         String methodName = "";
 
@@ -94,8 +93,8 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
             if (parameters.length > 0) {
                 int index = 0;
                 for (PsiParameter parameter : parameters) {
-                    String defaulParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
-                    builder.append(defaulParamValue);
+                    String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
+                    builder.append(defaultParamValue);
                     if (!(index == parameters.length - 1)) {
                         builder.append(",");
                     }

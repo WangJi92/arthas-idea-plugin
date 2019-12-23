@@ -20,17 +20,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class BaseArthasPluginAction extends AnAction {
 
+    @Override
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();
-        Editor editor = (Editor) CommonDataKeys.EDITOR.getData(dataContext);
+        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
         boolean enabled = true;
         if (editor == null) {
             e.getPresentation().setEnabled(false);
             return;
         }
         //获取当前事件触发时，光标所在的元素
-        PsiElement psiElement = (PsiElement) CommonDataKeys.PSI_ELEMENT.getData(dataContext);
+        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         if (psiElement == null) {
             e.getPresentation().setEnabled(false);
             return;
@@ -57,12 +58,12 @@ public abstract class BaseArthasPluginAction extends AnAction {
          * {@link com.intellij.ide.actions.CopyReferenceAction}
          */
         DataContext dataContext = event.getDataContext();
-        Editor editor = (Editor) CommonDataKeys.EDITOR.getData(dataContext);
-        Project project = (Project) CommonDataKeys.PROJECT.getData(dataContext);
+        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
+        Project project = CommonDataKeys.PROJECT.getData(dataContext);
         if (editor == null || project == null) {
             return;
         }
-        PsiElement psiElement = (PsiElement) CommonDataKeys.PSI_ELEMENT.getData(dataContext);
+        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = "";
         String methodName = "";
         if (psiElement instanceof PsiMethod) {
