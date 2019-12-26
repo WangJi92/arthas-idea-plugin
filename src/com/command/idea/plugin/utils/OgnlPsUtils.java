@@ -36,19 +36,28 @@ public class OgnlPsUtils {
             return result;
         }
 
+        if (PsiType.LONG.equals(psiType) || "java.lang.Long".equals(canonicalText)) {
+            result = "0L";
+            return result;
+        }
+
+        if (PsiType.DOUBLE.equals(psiType) || "java.lang.Double".equals(canonicalText)) {
+            result = "0D";
+            return result;
+        }
+
+        if (PsiType.FLOAT.equals(psiType) || "java.lang.Float".equals(canonicalText)) {
+            result = "0F";
+            return result;
+        }
+
+
         //基本类型  数字
-        if (PsiType.LONG.equals(psiType) || canonicalText.equals("java.lang.Long")
-                ||
-                PsiType.INT.equals(psiType) || canonicalText.equals("java.lang.Integer")
-                ||
-                PsiType.DOUBLE.equals(psiType) || canonicalText.equals("java.lang.Double")
-                ||
-                PsiType.FLOAT.equals(psiType) || canonicalText.equals("java.lang.Float")
+        if (PsiType.INT.equals(psiType) || canonicalText.equals("java.lang.Integer")
                 ||
                 PsiType.BYTE.equals(psiType) || canonicalText.equals("java.lang.Byte")
                 ||
-                PsiType.SHORT.equals(psiType) || canonicalText.equals("java.lang.Short")
-        ) {
+                PsiType.SHORT.equals(psiType) || canonicalText.equals("java.lang.Short")) {
             result = "0";
             return result;
         }
