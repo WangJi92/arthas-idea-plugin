@@ -83,7 +83,7 @@ public class ApplicationContextProvider implements ApplicationContextAware {
 ![image](https://user-images.githubusercontent.com/20874972/71365745-e1d2ac80-25da-11ea-8e05-34e2f051d172.png)
 
 ```bash
-ognl  -x  3  '@applicationContextProvider@context,#springContext.getBean("arthasInstallCommandAction").actionPerformed(new com.intellij.openapi.actionSystem.AnActionEvent())' -c desw22
+ognl  -x  3  '#springContext=@applicationContextProvider@context,#springContext.getBean("arthasInstallCommandAction").actionPerformed(new com.intellij.openapi.actionSystem.AnActionEvent())' -c desw22
 ```
 
 **特别说明** 
