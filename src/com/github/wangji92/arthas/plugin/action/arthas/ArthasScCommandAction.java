@@ -1,4 +1,4 @@
-package com.command.idea.plugin.Action.arthas;
+package com.github.wangji92.arthas.plugin.action.arthas;
 
 /**
  * sc -d 获取classloader

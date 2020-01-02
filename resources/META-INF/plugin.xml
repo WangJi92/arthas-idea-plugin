@@ -36,7 +36,7 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable dynamic="false" instance="com.command.idea.plugin.ui.SettingDialog"/>
+        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>
     </extensions>
 
     <depends>com.intellij.modules.platform</depends>
@@ -53,27 +53,27 @@
     <actions>
         <!-- Add your actions here -->
 
-        <action id="ArthasSc" class="com.command.idea.plugin.Action.arthas.ArthasScCommandAction" text="Sc"
+        <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction" text="Sc"
                 description="Arthas get classload">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke=" ctrlshift alt S"/>-->
         </action>
-        <action id="ArthasWatch" class="com.command.idea.plugin.Action.arthas.ArthasWatchCommandAction" text="Watch"
+        <action id="ArthasWatch" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchCommandAction" text="Watch"
                 description=" Arthas watch">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke=" ctrl shift alt W"/>-->
         </action>
-        <action id="ArthasTrace" class="com.command.idea.plugin.Action.arthas.ArthasTraceCommandAction" text="Trace"
+        <action id="ArthasTrace" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTraceCommandAction" text="Trace"
                 description="Arthas trace">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
-        <action id="ArthasStatic" class="com.command.idea.plugin.Action.arthas.ArthasOgnlStaticCommandAction"
+        <action id="ArthasStatic" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
                 text="Static Ognl"
                 description="Arthas ognl static">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
 
-        <action id="ArthasSpecial" class="com.command.idea.plugin.Action.arthas.ArthasSpecialCommandAction"
+        <action id="ArthasSpecial" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSpecialCommandAction"
                 text="Arthas Special Use Link"
                 description="Arthas special use link">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
@@ -81,21 +81,21 @@
         </action>
 
         <action id="ArthasInvokeBeanMethod"
-                class="com.command.idea.plugin.Action.arthas.ArthasOgnlSpringContextInvokeMethodAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringContextInvokeMethodAction"
                 text="Invoke BeanMethod"
                 description="Arthas invoke bean method">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
 
-        <action id="ArthasInstallCommand" class="com.command.idea.plugin.Action.arthas.ArthasInstallCommandAction"
+        <action id="ArthasInstallCommand" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasInstallCommandAction"
                 text="Install"
                 description="Arthas install shell">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
 
-        <action id="ArthasHelpCommand" class="com.command.idea.plugin.Action.arthas.HelpAction"
+        <action id="ArthasHelpCommand" class="com.github.wangji92.arthas.plugin.action.arthas.HelpAction"
                 text="Arthas Idea Help"
                 description="Arthas idea help">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->

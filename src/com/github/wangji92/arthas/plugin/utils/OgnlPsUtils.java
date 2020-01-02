@@ -1,4 +1,4 @@
-package com.command.idea.plugin.utils;
+package com.github.wangji92.arthas.plugin.utils;
 
 import com.google.common.collect.Sets;
 import com.intellij.psi.*;

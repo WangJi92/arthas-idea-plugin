@@ -1,4 +1,4 @@
-package com.command.idea.plugin.utils;
+package com.github.wangji92.arthas.plugin.utils;
 
 /**
  * 首字母小写

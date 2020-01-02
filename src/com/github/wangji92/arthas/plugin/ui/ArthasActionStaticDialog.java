@@ -1,7 +1,7 @@
-package com.command.idea.plugin.ui;
+package com.github.wangji92.arthas.plugin.ui;
 
-import com.command.idea.plugin.utils.ClipboardUtils;
-import com.command.idea.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;

@@ -1,6 +1,6 @@
-package com.command.idea.plugin.utils;
+package com.github.wangji92.arthas.plugin.utils;
 
-import com.command.idea.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.intellij.ide.util.PropertiesComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

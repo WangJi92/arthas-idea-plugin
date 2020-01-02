@@ -1,4 +1,4 @@
-package com.command.idea.plugin.ui;
+package com.github.wangji92.arthas.plugin.ui;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;

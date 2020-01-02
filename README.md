@@ -16,14 +16,14 @@
 ## 2.1 watch
 ![image](https://user-images.githubusercontent.com/20874972/71365531-43464b80-25da-11ea-98bf-de363d8f08c8.png)
 ```bash
-watch com.command.idea.plugin.utils.StringUtils toLowerFristChar '{params,returnObj,throwExp}' -n 5 -x 3
+watch StringUtils toLowerFristChar '{params,returnObj,throwExp}' -n 5 -x 3
 ```
 
 <a name="yrbvX"></a>
 ## 2.2 trace 
 
 ```bash
-trace com.command.idea.plugin.utils.StringUtils toLowerFristChar -n 5
+trace StringUtils toLowerFristChar -n 5
 ```
 
 <a name="M5hj0"></a>
@@ -37,7 +37,7 @@ trace com.command.idea.plugin.utils.StringUtils toLowerFristChar -n 5
 必须要获取，不然会找不到classload，arthas 官方获取问题系统的classload，spring 项目应该无法获取到这个class的信息，因此首先执行一下这个命令
 
 ```bash
-sc -d com.command.idea.plugin.utils.StringUtils
+sc -d StringUtils
 ```
 
 ![image](https://user-images.githubusercontent.com/20874972/71365668-a932d300-25da-11ea-9ed6-49a43e4afbef.png)
@@ -48,7 +48,7 @@ sc -d com.command.idea.plugin.utils.StringUtils
 
 
 ```bash
-ognl  -x  3  '@com.command.idea.plugin.utils.StringUtils@toLowerFristChar(" ")' -c 8bed358
+ognl  -x  3  '@StringUtils@toLowerFristChar(" ")' -c 8bed358
 ```
 
 <a name="DzhKQ"></a>

@@ -1,8 +1,8 @@
-package com.command.idea.plugin.Action.arthas;
+package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.command.idea.plugin.constants.ArthasCommandConstants;
-import com.command.idea.plugin.ui.ArthasActionStaticDialog;
-import com.command.idea.plugin.utils.OgnlPsUtils;
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
+import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;

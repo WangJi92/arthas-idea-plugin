@@ -1,4 +1,4 @@
-package com.command.idea.plugin.Action.arthas;
+package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;

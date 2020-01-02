@@ -1,8 +1,8 @@
-package com.command.idea.plugin.ui;
+package com.github.wangji92.arthas.plugin.ui;
 
-import com.command.idea.plugin.constants.ArthasCommandConstants;
-import com.command.idea.plugin.utils.PropertiesComponentUtils;
-import com.command.idea.plugin.utils.StringUtils;
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.ide.util.PropertiesComponent;

@@ -1,4 +1,4 @@
-package com.command.idea.plugin.constants;
+package com.github.wangji92.arthas.plugin.constants;
 
 /**
  * @author jet

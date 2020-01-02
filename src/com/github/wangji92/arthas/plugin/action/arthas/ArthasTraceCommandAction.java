@@ -1,6 +1,6 @@
-package com.command.idea.plugin.Action.arthas;
+package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.command.idea.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 
 /**
  * trace 命令

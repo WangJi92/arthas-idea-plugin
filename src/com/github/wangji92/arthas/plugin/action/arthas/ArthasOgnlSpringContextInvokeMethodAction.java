@@ -1,11 +1,11 @@
-package com.command.idea.plugin.Action.arthas;
+package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.command.idea.plugin.constants.ArthasCommandConstants;
-import com.command.idea.plugin.ui.ArthasActionStaticDialog;
-import com.command.idea.plugin.utils.NotifyUtils;
-import com.command.idea.plugin.utils.OgnlPsUtils;
-import com.command.idea.plugin.utils.PropertiesComponentUtils;
-import com.command.idea.plugin.utils.StringUtils;
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
+import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
