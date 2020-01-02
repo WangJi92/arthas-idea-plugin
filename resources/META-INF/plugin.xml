@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.command.arthas.idea.plugin</id>
+    <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
     <version>2.0</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
