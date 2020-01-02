@@ -141,5 +141,5 @@ curl -sk https://arthas.gitee.io/arthas-boot.jar -o ~/.arthas-boot.jar  && echo 
 ![image](https://user-images.githubusercontent.com/20874972/71365888-47269d80-25db-11ea-95ab-efc4ccad3ac1.png)
 
 
-##最后
+## 备注
 github 图片加载不出来，[可以访问这个地址查看](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
