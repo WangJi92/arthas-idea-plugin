@@ -1,6 +1,9 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.intellij.openapi.project.Project;
 
 /**
  * watch展开结构
@@ -10,7 +13,9 @@ import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
  */
 public class ArthasWatchCommandAction extends BaseArthasPluginAction {
     @Override
-    public String doBuildCommand(String className, String methodName) {
-        return String.join(" ", "watch", className, methodName, "'{params,returnObj,throwExp}'", "-n", ArthasCommandConstants.INVOKE_COUNT, "-x", ArthasCommandConstants.RESULT_X);
+    public void doCommand(String className, String methodName, Project project) {
+        String command = String.join(" ", "watch", className, methodName, "'{params,returnObj,throwExp}'", "-n", ArthasCommandConstants.INVOKE_COUNT, "-x", ArthasCommandConstants.RESULT_X);
+        ClipboardUtils.setClipboardString(command);
+        NotifyUtils.notifyMessageDefault(project);
     }
 }

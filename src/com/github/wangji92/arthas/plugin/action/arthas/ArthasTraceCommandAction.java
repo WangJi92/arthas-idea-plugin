@@ -1,6 +1,9 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.intellij.openapi.project.Project;
 
 /**
  * trace 命令
@@ -10,8 +13,12 @@ import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
  */
 public class ArthasTraceCommandAction extends BaseArthasPluginAction {
     @Override
-    public String doBuildCommand(String className, String methodName) {
+    public void doCommand(String className, String methodName, Project project) {
 
-        return String.join(" ", "trace", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT);
+        String command = String.join(" ", "trace", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT);
+
+        ClipboardUtils.setClipboardString(command);
+        NotifyUtils.notifyMessageDefault(project);
+
     }
 }

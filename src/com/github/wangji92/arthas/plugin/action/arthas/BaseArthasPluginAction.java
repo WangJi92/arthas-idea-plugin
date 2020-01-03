@@ -1,7 +1,5 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -82,21 +80,18 @@ public abstract class BaseArthasPluginAction extends AnAction {
             className = psiField.getContainingClass().getQualifiedName();
             methodName = "*";
         }
-        String command = doBuildCommand(className, methodName);
-        ClipboardUtils.setClipboardString(command);
-
-        NotifyUtils.notifyMessageDefault(project);
+        doCommand(className, methodName, project);
     }
 
     /**
-     * 构造命令信息
+     * 构造命令信息,处理命令后续操作
      *
      * @param className
      * @param methodName
      * @return
      */
-    public String doBuildCommand(String className, String methodName) {
-        return "";
+    public void doCommand(String className, String methodName, Project project) {
     }
+
 
 }
