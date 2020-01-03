@@ -195,6 +195,7 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
      */
     public void showDialog() {
         this.showTraceCommand();
+        this.open();
         this.setVisible(true);
     }
 
@@ -202,7 +203,7 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
      * 打开窗口
      */
     public void open() {
-        setTitle("arthas special use");
+        setTitle("arthas trace -E");
         pack();
         //两个屏幕处理出现问题，跳到主屏幕去了 https://blog.csdn.net/weixin_33919941/article/details/88129513
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
