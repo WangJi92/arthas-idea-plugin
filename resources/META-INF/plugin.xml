@@ -54,7 +54,7 @@
         <!-- Add your actions here -->
 
         <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction" text="Sc"
-                description="Arthas get classload">
+                description="Arthas get classloader">
             <!--            <keyboard-shortcut keymap="$default" first-keystroke=" ctrlshift alt S"/>-->
         </action>
         <action id="ArthasWatch" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchCommandAction" text="Watch"
@@ -101,6 +101,12 @@
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
+        <action id="ArthasTraceMultipleCommand" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTraceMultipleClassMethodCommandAction"
+                text="Trace E"
+                description="Arthas trace multiple class method">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -108,6 +114,7 @@
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
+            <reference ref="ArthasTraceMultipleCommand"/>
             <reference ref="ArthasStatic"/>
             <reference ref="ArthasInvokeBeanMethod"/>
             <reference ref="ArthasSc"/>
