@@ -1,17 +1,17 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.0</version>
+    <version>2.1</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
-      <tag>Alibaba Arthas Idea Help Tools,Help generated Arthas Common Command </tag>
+      <tag> Arthas Idea Help Tools,Help generated Arthas Common Command </tag>
       <h4>Arthas helps developers in trouble-shooting issues in production environment for Java based applications without modifying code or restarting servers.</h4>
       <h3>English:</h3>
       <ul>
-      <li>Based on the Alibaba Arthas command generation plugin developed by IntelliJ IDEA, it supports <a href="https://alibaba.github.io/arthas/"> Alibaba Arthas </a> official commonly used commands.</li>
+      <li>Based on the  Arthas command generation plugin developed by IntelliJ IDEA, it supports <a href="https://alibaba.github.io/arthas/"> Alibaba Arthas </a> official commonly used commands.</li>
       <li>The official commands are too complicated. In order to simplify the difficulty of users, this plugin provides support for some common commands.</li>
-      <li>The plugin supports  Alibaba Arths commands such as watch, trace, ognl static, ognl bean method, etc.</li>
+      <li>The plugin supports  Alibaba Arthas commands such as watch, trace, ognl static, ognl bean method, etc.</li>
       </ul>
       <h3>中文：</h3>
       <ul>
@@ -23,10 +23,17 @@
     <change-notes><![CDATA[
       <p>2.0-RELEASE</p>
       <ul>
-        <li>1.supports  Alibaba Arths commands such as watch, trace, ognl static, ognl bean method, etc.</li>
+        <li>1.supports Arthas commands such as watch, trace, ognl static, ognl bean method, etc.</li>
       </ul>
       <ul>
-        <li>1.支持Alibaba Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method</li>
+        <li>1.支持Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method</li>
+      </ul>
+       <p>2.1-RELEASE</p>
+      <ul>
+        <li>1.supports Arthas commands Trace -E,The trace command will only trace the subcalls in the method to the trace, and will not trace down multiple layers. Because traces are expensive, multi-layer traces can lead to a lot of classes and methods that ultimately have to be traced..</li>
+      </ul>
+      <ul>
+        <li>1.trace命令只会trace匹配到的函数里的子调用，并不会向下trace多层。因为trace是代价比较贵的，多层trace可能会导致最终要trace的类和函数非常多。因此Arthas 官方支持 trace -E 特殊获取多个，该插件支持一下trace -E</li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
