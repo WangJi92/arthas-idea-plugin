@@ -1,7 +1,9 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -19,10 +21,11 @@ import java.awt.event.WindowEvent;
 
 /**
  * arthas ognl 获取静态信息的展示
+ *
  * @author 汪小哥
  * @date 21-12-2019
  */
-public class ArthasActionStaticDialog extends  JDialog {
+public class ArthasActionStaticDialog extends JDialog {
     /**
      * sc 复制信息命令
      */
@@ -46,6 +49,7 @@ public class ArthasActionStaticDialog extends  JDialog {
     private LinkLabel ognlOfficeLinkLabel;
     private LinkLabel oglSpecialLink;
     private LinkLabel ognlDemoLink;
+    private JButton clearClassloaderHashValue;
 
 
     private String className;
@@ -55,16 +59,18 @@ public class ArthasActionStaticDialog extends  JDialog {
     private Project project;
 
 
-
-    public ArthasActionStaticDialog(Project project,String className, String staticOgnlExpression) {
+    public ArthasActionStaticDialog(Project project, String className, String staticOgnlExpression) {
         this.project = project;
         setContentPane(this.contentPane);
         setModal(true);
         getRootPane().setDefaultButton(closeButton);
-        this.className=className;
+        this.className = className;
         this.staticOgnlExpression = staticOgnlExpression;
 
         closeButton.addActionListener(e -> onOK());
+
+        //清除缓存的classloader的hash值的信息
+        clearClassloaderHashValue.addActionListener(e -> onClearClassLoaderHashValue());
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -87,26 +93,38 @@ public class ArthasActionStaticDialog extends  JDialog {
     }
 
     private void init() {
-        scCommandButton.addActionListener(e->onCopyScCommand());
+        scCommandButton.addActionListener(e -> onCopyScCommand());
         ognlExpressionEditor.setText(this.staticOgnlExpression);
+        String classloaderHash = PropertiesComponentUtils.getValue(ArthasCommandConstants.CLASSLOADER_HASH_VALUE);
+        classloaderHashEditor.setText(classloaderHash);
     }
+
 
     /**
      * 取人按钮回调
      */
     private void onOK() {
-        String hashClassloader= classloaderHashEditor.getText();
+        String hashClassloader = classloaderHashEditor.getText();
         String ognCurrentExpression = ognlExpressionEditor.getText();
-        if(StringUtils.isNotBlank(hashClassloader) && ognCurrentExpression !=null &&  !ognCurrentExpression.contains("-c")){
+        if (StringUtils.isNotBlank(hashClassloader) && ognCurrentExpression != null && !ognCurrentExpression.contains("-c")) {
             StringBuilder builder = new StringBuilder(ognCurrentExpression);
-            builder.append(" -c ").append( hashClassloader);
-            ognCurrentExpression  = builder.toString();
+            builder.append(" -c ").append(hashClassloader);
+            ognCurrentExpression = builder.toString();
+            PropertiesComponentUtils.setValue(ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
         }
-        if(StringUtils.isNotBlank(ognCurrentExpression)){
+        if (StringUtils.isNotBlank(ognCurrentExpression)) {
             ClipboardUtils.setClipboardString(ognCurrentExpression);
             NotifyUtils.notifyMessageDefault(project);
         }
         dispose();
+    }
+
+    /**
+     * 删除之前的缓存classloader的信息
+     */
+    private void onClearClassLoaderHashValue() {
+        classloaderHashEditor.setText("");
+        PropertiesComponentUtils.setValue(ArthasCommandConstants.CLASSLOADER_HASH_VALUE, "");
     }
 
     /**

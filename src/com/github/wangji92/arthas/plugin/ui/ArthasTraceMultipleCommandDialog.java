@@ -60,7 +60,6 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
      * 方法名称
      */
     private Set<String> methodSet = new HashSet<>(10);
-    ;
 
     private static ArthasTraceMultipleCommandDialog arthasTraceMultipleCommandDialog;
 

@@ -15,6 +15,10 @@ public interface ArthasCommandConstants {
     String RESULT_X = "3";
 
     String PRO_PREFIX = "ArthasIdeaPlugin";
+    /**
+     * 缓存hashValue的信息
+     */
+    String CLASSLOADER_HASH_VALUE = "CLASSLOADER_HASH_VALUE";
 
     /**
      * spring 获取表达式

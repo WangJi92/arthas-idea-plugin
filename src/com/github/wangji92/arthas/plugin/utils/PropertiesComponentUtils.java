@@ -47,7 +47,8 @@ public class PropertiesComponentUtils {
             return "";
         }
         PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
-        return propertiesComponent.getValue(ArthasCommandConstants.PRO_PREFIX + name);
+        String value = propertiesComponent.getValue(ArthasCommandConstants.PRO_PREFIX + name);
+        return value == null ? "" : value;
     }
 
 }
