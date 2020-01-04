@@ -17,10 +17,11 @@ import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * 通过ognl 调用获取spring context 然后调用方法、field处理
  * 通过获取静态的的spring context 然后进行获取到Bean的信息进行处理
  * {@literal http://www.dcalabresi.com/blog/java/spring-context-static-class/}
  *
- * @author jet
+ * @author 汪小哥
  * @date 22-12-2019
  */
 public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
@@ -44,8 +45,14 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             e.getPresentation().setEnabled(false);
             return;
         }
+
         if (psiElement instanceof PsiField) {
-            e.getPresentation().setEnabled(false);
+            PsiField psiField = (PsiField) psiElement;
+            if (psiField.hasModifierProperty(PsiModifier.STATIC)) {
+                e.getPresentation().setEnabled(false);
+                return;
+            }
+            e.getPresentation().setEnabled(true);
             return;
         }
 
@@ -91,14 +98,25 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
         }
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = "";
-        String methodName = "";
 
         if (psiElement instanceof PsiClass) {
             return;
         }
-        String join = String.join(" ", "ognl", " -x ", ArthasCommandConstants.RESULT_X);
+        String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
         StringBuilder builder = new StringBuilder(join);
 
+        //这里获取spring context的信息
+        String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
+        if (StringUtils.isBlank(springContextValue)) {
+            NotifyUtils.notifyMessage(project, "配置 arthas 插件spring context 获取的信息", NotificationType.ERROR);
+            return;
+        }
+        springContextValue = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=" + springContextValue;
+        if (!springContextValue.endsWith(",")) {
+            springContextValue = springContextValue + ",";
+        }
+
+        //支持方法
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             className = psiMethod.getContainingClass().getQualifiedName();
@@ -107,18 +125,7 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
 
             // Experimental API method JvmField.getName() is invoked in Action.arthas.ArthasOgnlStaticCommandAction.actionPerformed().
             // This method can be changed in a future release leading to incompatibilities
-            methodName = psiMethod.getNameIdentifier().getText();
-
-            //这里获取spring context的信息
-            String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
-            if (StringUtils.isBlank(springContextValue)) {
-                NotifyUtils.notifyMessage(project, "配置 arthas 插件spring context 获取的信息", NotificationType.ERROR);
-                return;
-            }
-            springContextValue = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=" + springContextValue;
-            if (!springContextValue.endsWith(",")) {
-                springContextValue = springContextValue + ",";
-            }
+            String methodName = psiMethod.getNameIdentifier().getText();
 
             //构建表达式
             builder.append(" '").append(springContextValue).append(ArthasCommandConstants.SPRING_CONTEXT_PARAM).append(".getBean(")
@@ -143,7 +150,21 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             builder.append(")").append("'");
 
         }
-        new ArthasActionStaticDialog(project, className, builder.toString()).open("arthas ognl invoke spring bean method");
+
+        //支持field
+        if (psiElement instanceof PsiField) {
+            PsiField psiField = (PsiField) psiElement;
+            className = psiField.getContainingClass().getQualifiedName();
+            String fileName = psiField.getNameIdentifier().getText();
+            String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiField.getContainingClass());
+            //构建表达式
+            builder.append(" '").append(springContextValue).append(ArthasCommandConstants.SPRING_CONTEXT_PARAM).append(".getBean(")
+                    .append("\"")
+                    .append(lowCamelBeanName)
+                    .append("\"")
+                    .append(").").append(fileName).append("'");
+        }
+        new ArthasActionStaticDialog(project, className, builder.toString()).open("arthas ognl invoke spring bean method、field");
     }
 
 

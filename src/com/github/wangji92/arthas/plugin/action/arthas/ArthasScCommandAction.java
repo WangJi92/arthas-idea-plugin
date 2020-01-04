@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project;
 /**
  * sc -d 获取classloader
  *
- * @author jet
+ * @author 汪小哥
  * @date 21-12-2019
  */
 public class ArthasScCommandAction extends BaseArthasPluginAction {

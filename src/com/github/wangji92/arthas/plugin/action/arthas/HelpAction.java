@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 帮助文档链接
  *
- * @author jet
+ * @author 汪小哥
  * @date 23-12-2019
  */
 public class HelpAction extends AnAction {

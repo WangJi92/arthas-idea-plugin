@@ -18,7 +18,7 @@ import java.awt.event.WindowEvent;
 /**
  * arthas 特殊用法
  *
- * @author jet
+ * @author 汪小哥
  * @date 22-12-2019
  */
 public class ArthasSpecialDialog extends JDialog {

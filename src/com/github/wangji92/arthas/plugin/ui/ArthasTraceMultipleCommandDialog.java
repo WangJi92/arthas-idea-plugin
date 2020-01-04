@@ -18,6 +18,11 @@ import java.awt.event.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * 支持trace -E
+ * @author 汪小哥
+ * @date 3-1-2020
+ */
 public class ArthasTraceMultipleCommandDialog extends JDialog {
     private JPanel contentPane;
     /**

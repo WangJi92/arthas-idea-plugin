@@ -13,7 +13,7 @@ import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author jet
+ * @author 汪小哥
  * @date 21-12-2019
  */
 public abstract class BaseArthasPluginAction extends AnAction {

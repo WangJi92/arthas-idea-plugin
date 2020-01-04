@@ -19,7 +19,7 @@ import java.awt.event.WindowEvent;
 
 /**
  * arthas ognl 获取静态信息的展示
- * @author jet
+ * @author 汪小哥
  * @date 21-12-2019
  */
 public class ArthasActionStaticDialog extends  JDialog {

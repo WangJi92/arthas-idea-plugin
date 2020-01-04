@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 通知消息
  *
- * @author jet
+ * @author 汪小哥
  * @date 21-12-2019
  */
 public class NotifyUtils {

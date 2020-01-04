@@ -3,7 +3,7 @@ package com.github.wangji92.arthas.plugin.utils;
 /**
  * 首字母小写
  *
- * @author jet
+ * @author 汪小哥
  * @date 22-12-2019
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {

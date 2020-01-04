@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 安装脚本处理
  *
- * @author jet
+ * @author 汪小哥
  * @date 22-12-2019
  */
 public class ArthasInstallCommandAction extends AnAction {

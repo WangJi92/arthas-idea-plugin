@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project;
 /**
  * trace -E  classA|classB|classC  methodA|methodB|methodC 模式支持
  *
- * @author jet
+ * @author 汪小哥
  * @date 03-01-2020
  */
 public class ArthasTraceMultipleClassMethodCommandAction extends BaseArthasPluginAction {

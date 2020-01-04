@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 特殊用法
  *
- * @author jet
+ * @author 汪小哥
  * @date 22-12-2019
  */
 public class ArthasSpecialCommandAction extends AnAction {

@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project;
 /**
  * trace 命令
  *
- * @author jet
+ * @author 汪小哥
  * @date 21-12-2019
  */
 public class ArthasTraceCommandAction extends BaseArthasPluginAction {

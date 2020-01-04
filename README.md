@@ -143,3 +143,6 @@ curl -sk https://arthas.gitee.io/arthas-boot.jar -o ~/.arthas-boot.jar  && echo 
 
 ## 备注
 github 图片加载不出来，[可以访问这个地址查看](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
+
+## 使用视频介绍
+[arthas idea 使用介绍](http://v.youku.com/v_show/id_XNDQ4Mjg3MzM4MA==.html)

@@ -11,7 +11,7 @@ import java.awt.datatransfer.Transferable;
 /**
  * 剪切板工具类
  *
- * @author jet
+ * @author 汪小哥
  * @date 20-11-2019
  */
 @Slf4j

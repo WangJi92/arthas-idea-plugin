@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * {@literal https://blog.xiaohansong.com/idea-plugin-development.html}
  * {@literal http://www.dcalabresi.com/blog/java/spring-context-static-class/}
  *
- * @author jet
+ * @author 汪小哥
  * @date 22-12-2019
  */
 public class PropertiesComponentUtils {

@@ -1,7 +1,7 @@
 package com.github.wangji92.arthas.plugin.constants;
 
 /**
- * @author jet
+ * @author 汪小哥
  * @date 21-12-2019
  */
 public interface ArthasCommandConstants {
