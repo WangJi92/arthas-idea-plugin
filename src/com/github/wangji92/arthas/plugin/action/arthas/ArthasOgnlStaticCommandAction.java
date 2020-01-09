@@ -113,7 +113,7 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
 
             className = psiField.getContainingClass().getQualifiedName();
             String fileName = psiField.getNameIdentifier().getText();
-            builder.append("'").append("@").append(className).append("@").append(fileName).append("'");
+            builder.append(" '").append("@").append(className).append("@").append(fileName).append("'");
         }
         new ArthasActionStaticDialog(project, className, builder.toString()).open("arthas ognl static use");
     }
