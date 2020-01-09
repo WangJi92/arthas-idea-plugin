@@ -10,6 +10,14 @@ public interface ArthasCommandConstants {
      */
     String INVOKE_COUNT = "5";
     /**
+     * 调用监控的次数
+     */
+    String INVOKE_MONITOR_COUNT = "10";
+    /**
+     * 调用监控的时间间隔
+     */
+    String INVOKE_MONITOR_INTERVAL="10";
+    /**
      * 展开的结构
      */
     String RESULT_X = "3";
