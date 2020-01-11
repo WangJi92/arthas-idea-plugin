@@ -11,13 +11,27 @@
       <ul>
       <li>Based on the  Arthas command generation plugin developed by IntelliJ IDEA, it supports <a href="https://alibaba.github.io/arthas/"> Alibaba Arthas </a> official commonly used commands.</li>
       <li>The official commands are too complicated. In order to simplify the difficulty of users, this plugin provides support for some common commands.</li>
-      <li>The plugin supports  Alibaba Arthas commands such as watch, trace, ognl static, ognl bean method, etc.</li>
+      <li>The plugin supports  Alibaba Arthas commands such as watch、trace、ognl static、ognl bean method、field、monitor、stack 、tt etc.</li>
+      <li>watch: Display the input/output parameter, return object, and thrown exception of specified method invocation</li>
+      <li>trace: Trace the execution time of specified method invocation.</li>
+      <li>ognl:Execute ognl expression.</li>
+      <li>monitor:Monitor method execution statistics, e.g. total/success/failure count, average rt, fail rate, etc.</li>
+      <li>stack:Display the stack trace for the specified class and method</li>
+      <li>tt:Time Tunnel</li>
+
+
       </ul>
       <h3>中文：</h3>
       <ul>
       <li>基于IntelliJ IDEA开发的Alibaba Arthas 命令生成插件，支持<a href="https://alibaba.github.io/arthas/">Alibaba Arthas</a> 官方常用的命令。</li>
       <li>官方的命令太复杂，此插件为了简化使用者的难度，提供了一些常用命令的支持</li>
-      <li>该插件支持Alibaba Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method 等命令</li>
+      <li>该插件支持Alibaba Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method、field、monitor、stack 、tt等命令</li>
+      <li>watch:能方便的观察到指定方法的调用情况,返回值、抛出异常、入参(特殊值、异常没有捕获排查)<li/>
+      <li>trace:方法内部调用路径，并输出方法路径上的每个节点上耗时(性能问题，调用链问题)<li/>
+      <li>ognl:执行表达式(方便获取静态变量，方法，获取spring context 为所欲为)</li>
+      <li>monitor:方法执行监控(性能问题排查，一段时间内的性能指标)</li>
+      <li>stack:获取方法从哪里执行的调用栈(用途：源码学习调用堆栈，了解调用流程)</li>
+      <li>tt:方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测(可以重新触发，周期触发，唯一缺点对于ThreadLocal 信息丢失[隐含参数]、引用对象数据变更无效)</li>
     ]]></description>
 
     <change-notes><![CDATA[
@@ -54,6 +68,13 @@
         <li>1.ognl调用static field 多一个空格bug</li>
         <li>2.支持Monitor,主要用途一段时间的执行的性能监控</li>
         <li>3.支持Stack,主要用途方法从哪里开始被调用(很多时候我们都知道一个方法被执行，但这个方法被执行的路径非常多，或者你根本就不知道这个方法是从那里被执行)</li>
+      </ul>
+       <p>2.4-RELEASE</p>
+      <ul>
+        <li>1.support time tunnel tt commmand</li>
+      </ul>
+      <ul>
+        <li>1.支持时光隧道 tt 命令，支持常用的tt命令</li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
@@ -152,6 +173,13 @@
             <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
+        <action id="ArthasTimeTunnelCommand"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTimeTunnelCommandAction"
+                text="TimeTunnel Tt"
+                description="Time tunnel">
+            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -168,6 +196,7 @@
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasStatic"/>
             <reference ref="ArthasInvokeBeanMethod"/>
+            <reference ref="ArthasTimeTunnelCommand"/>
 
             <separator/>
             <reference ref="ArthasInstallCommand"/>

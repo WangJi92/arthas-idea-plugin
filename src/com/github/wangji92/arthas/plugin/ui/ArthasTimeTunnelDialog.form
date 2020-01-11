@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.wangji92.arthas.plugin.ui.ArthasTimeTunnelDialog">
+  <grid id="27dc6" binding="contentPane" layout-manager="FormLayout">
+    <rowspec value="center:28px:noGrow"/>
+    <rowspec value="top:16dlu:noGrow"/>
+    <rowspec value="top:21dlu:noGrow"/>
+    <colspec value="fill:78px:noGrow"/>
+    <colspec value="left:57dlu:noGrow"/>
+    <colspec value="left:3dlu:noGrow"/>
+    <colspec value="fill:271px:noGrow"/>
+    <colspec value="fill:max(d;4px):noGrow"/>
+    <constraints>
+      <xy x="20" y="22" width="606" height="90"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="eef42" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="tt -t "/>
+          <toolTipText value="可以通过help tt 获取帮助信息"/>
+        </properties>
+      </component>
+      <component id="ff98" class="javax.swing.JTextField" binding="ttTextField">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="87fea" class="javax.swing.JButton" binding="ttButton">
+        <constraints>
+          <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="获取Command"/>
+        </properties>
+      </component>
+      <component id="118be" class="javax.swing.JComboBox" binding="comboBox">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <editable value="true"/>
+          <model>
+            <item value="tt -p -i 1000 "/>
+            <item value="tt -w params[0] -i 1000 "/>
+            <item value="tt -w '{method.name,params,returnObj,throwExp}' -x 3 -i 1000 "/>
+            <item value="tt -p --replay-times 3 --replay-interval 2000 -i 1000 "/>
+            <item value="tt -l "/>
+            <item value="tt --delete-all "/>
+          </model>
+        </properties>
+      </component>
+      <component id="54af4" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <text value="常用命令"/>
+          <toolTipText value="-i 参数需要根据运行时进行修改"/>
+        </properties>
+      </component>
+      <component id="33722" class="javax.swing.JButton" binding="comboBoxValueGetButton">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <text value="获取Command"/>
+          <toolTipText value="-i 参数需要根据运行时进行修改"/>
+        </properties>
+      </component>
+      <component id="74dfa" class="com.intellij.ui.components.labels.LinkLabel" binding="helpLink" custom-create="true">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <text value="help"/>
+          <toolTipText value="可以通过help tt 获取帮助信息"/>
+        </properties>
+      </component>
+      <component id="99c61" class="com.intellij.ui.components.labels.LinkLabel" binding="ttBestLink" custom-create="true">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <text value="tt best example"/>
+        </properties>
+      </component>
+      <component id="677dd" class="javax.swing.JButton" binding="closeButton">
+        <constraints>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <text value="关闭"/>
+        </properties>
+      </component>
+      <component id="f2991" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <text value="常用命令 -i 参数需要运行时修改"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
