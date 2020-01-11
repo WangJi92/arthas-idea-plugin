@@ -1,5 +1,6 @@
 # Idea arthas 插件
 
+## [语雀arthas 插件使用介绍(更新及时)](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
 <a name="eaba0"></a>
 # 一、背景
 目前Arthas 官方的工具还不够足够的简单，需要记住一些命令，特别是一些扩展性特别强的高级语法，比如ognl获取spring context 为所欲为，watch、trace 不够简单，需要构造一些命令工具的信息，因此只需要一个能够简单处理字符串信息的插件即可使用。当在处理线上问题的时候需要最快速、最便捷的命令，因此Idea arthas 插件还是有存在的意义和价值的。
@@ -146,3 +147,4 @@ github 图片加载不出来，[可以访问这个地址查看](https://www.yuqu
 
 ## 使用视频介绍
 [arthas idea 使用介绍](http://v.youku.com/v_show/id_XNDQ4Mjg3MzM4MA==.html)
+
