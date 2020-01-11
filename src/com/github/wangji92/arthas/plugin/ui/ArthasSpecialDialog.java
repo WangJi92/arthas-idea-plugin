@@ -29,6 +29,7 @@ public class ArthasSpecialDialog extends JDialog {
     private LinkLabel redfineLinLable;
     private JPanel contentPane;
     private LinkLabel ognlUseLinkLable;
+    private LinkLabel userCase;
 
     private Project project;
 
@@ -102,6 +103,13 @@ public class ArthasSpecialDialog extends JDialog {
             }
         });
         ognlUseLinkLable.setPaintUnderline(false);
+        userCase = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://github.com/alibaba/arthas/issues?utf8=%E2%9C%93&q=+is%3Aissue+label%3Auser-case+");
+            }
+        });
+        userCase.setPaintUnderline(false);
     }
 
     /**
@@ -110,7 +118,7 @@ public class ArthasSpecialDialog extends JDialog {
     public void open() {
         setTitle("arthas special use");
         pack();
-        setMinimumSize(new Dimension(404,300));
+        setMinimumSize(new Dimension(378,242));
         //两个屏幕处理出现问题，跳到主屏幕去了 https://blog.csdn.net/weixin_33919941/article/details/88129513
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
         setVisible(true);
