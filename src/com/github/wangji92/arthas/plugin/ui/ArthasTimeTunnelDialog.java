@@ -116,9 +116,8 @@ public class ArthasTimeTunnelDialog extends JDialog {
                                                           int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index,
                         isSelected, cellHasFocus);
-                if (index == -1) {
+                if (isSelected) {
                     comboBox.setToolTipText(value.toString());
-                    return this;
                 }
 
                 setToolTipText(value.toString());
