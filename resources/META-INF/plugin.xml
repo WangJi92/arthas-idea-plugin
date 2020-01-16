@@ -71,10 +71,18 @@
       </ul>
        <p>2.4-RELEASE</p>
       <ul>
-        <li>1.support time tunnel tt commmand</li>
+        <li>1.support time tunnel tt command</li>
       </ul>
       <ul>
         <li>1.支持时光隧道 tt 命令，支持常用的tt命令</li>
+      </ul>
+      </ul>
+       <p>2.5-RELEASE</p>
+      <ul>
+        <li>1.support set static field command</li>
+      </ul>
+      <ul>
+        <li>1.支持通过ognl 设置静态变量的值</li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
@@ -103,38 +111,30 @@
 
         <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction" text="Sc"
                 description="Arthas get classloader">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke=" ctrlshift alt S"/>-->
         </action>
         <action id="ArthasWatch" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchCommandAction"
                 text="Watch"
                 description=" Arthas watch">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke=" ctrl shift alt W"/>-->
         </action>
         <action id="ArthasTrace" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTraceCommandAction"
                 text="Trace"
                 description="Arthas trace">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
-
         </action>
         <action id="ArthasStatic" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
-                text="Static Ognl"
+                text="Invoke Static Method Field"
                 description="Arthas ognl static">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
-
         </action>
 
         <action id="ArthasSpecial" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSpecialCommandAction"
                 text="Arthas Special Use Link"
                 description="Arthas special use link">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
 
         <action id="ArthasInvokeBeanMethod"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringContextInvokeMethodAction"
-                text="Invoke Bean Method Field"
-                description="Arthas invoke bean method、field">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+                text="Invoke Spring Bean Method Field"
+                description="Ognl invoke bean method、field">
 
         </action>
 
@@ -142,42 +142,41 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasInstallCommandAction"
                 text="Install"
                 description="Arthas install shell">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
 
         <action id="ArthasHelpCommand" class="com.github.wangji92.arthas.plugin.action.arthas.HelpAction"
                 text="Arthas Idea Help"
                 description="Arthas idea help">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
-
         </action>
         <action id="ArthasTraceMultipleCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTraceMultipleClassMethodCommandAction"
                 text="Trace E"
                 description="Arthas trace multiple class method">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
         <action id="ArthasMonitorCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasMonitorCommandAction"
                 text="Monitor"
                 description="Monitor method execution statistics, e.g. total/success/failure count, average rt, fail rate, etc.">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
         <action id="ArthasStackCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasStackCommandAction"
                 text="Stack"
                 description="Display the stack trace for the specified class and method">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
 
         </action>
         <action id="ArthasTimeTunnelCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTimeTunnelCommandAction"
                 text="TimeTunnel Tt"
                 description="Time tunnel">
-            <!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift alt T"/>-->
+
+        </action>
+        <action id="ArthasSetStaticFieldCommand"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSetStaticFieldCommandAction"
+                text="Set Static Field"
+                description="Ognl set static field">
 
         </action>
 
@@ -186,24 +185,25 @@
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <separator/>
+            <group id="arthas-plugin-ognl" popup="true" text="Ognl">
+                <reference ref="ArthasStatic"/>
+                <reference ref="ArthasSetStaticFieldCommand"/>
+                <reference ref="ArthasInvokeBeanMethod"/>
+            </group>
+            <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
-            <reference ref="ArthasTraceMultipleCommand"/>
             <reference ref="ArthasStackCommand"/>
             <reference ref="ArthasMonitorCommand"/>
-            <reference ref="ArthasSc"/>
-            <separator/>
-
-            <reference ref="ArthasWatch"/>
-            <reference ref="ArthasStatic"/>
-            <reference ref="ArthasInvokeBeanMethod"/>
             <reference ref="ArthasTimeTunnelCommand"/>
-
+            <group id="arthas-plugin-other" popup="true" text="Other">
+                <reference ref="ArthasTraceMultipleCommand"/>
+                <reference ref="ArthasSc"/>
+                <reference ref="ArthasSpecial"/>
+            </group>
             <separator/>
             <reference ref="ArthasInstallCommand"/>
-            <reference ref="ArthasSpecial"/>
             <separator/>
             <reference ref="ArthasHelpCommand"/>
-
         </group>
     </actions>
 
