@@ -51,12 +51,13 @@
         <properties>
           <editable value="true"/>
           <model>
-            <item value="tt -p -i 1000 "/>
-            <item value="tt -w params[0] -i 1000 "/>
-            <item value="tt -w '{method.name,params,returnObj,throwExp}' -x 3 -i 1000 "/>
-            <item value="tt -p --replay-times 3 --replay-interval 2000 -i 1000 "/>
-            <item value="tt -l "/>
-            <item value="tt --delete-all "/>
+            <item value="tt -p -i 1000"/>
+            <item value="tt -w params[0] -i 1000"/>
+            <item value="tt -w target -i 1000"/>
+            <item value="tt -w '{method.name,params,returnObj,throwExp}' -x 3 -i 1000"/>
+            <item value="tt -p --replay-times 3 --replay-interval 2000 -i 1000"/>
+            <item value="tt -l"/>
+            <item value="tt --delete-all"/>
           </model>
         </properties>
       </component>
