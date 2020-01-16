@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArthasOgnlStaticCommandAction extends AnAction {
 
+    @Override
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();

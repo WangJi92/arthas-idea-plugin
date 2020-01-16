@@ -139,8 +139,8 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             if (parameters.length > 0) {
                 int index = 0;
                 for (PsiParameter parameter : parameters) {
-                    String defaulParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
-                    builder.append(defaulParamValue);
+                    String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
+                    builder.append(defaultParamValue);
                     if (!(index == parameters.length - 1)) {
                         builder.append(",");
                     }
