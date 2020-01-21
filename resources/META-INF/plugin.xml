@@ -180,6 +180,13 @@
 
         </action>
 
+        <action id="ArthasOgnlSpringSelectedPropertySourceCommand"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringSelectedPropertySourceCommandAction"
+                text="Get Spring Property"
+                description="Ognl get spring property">
+
+        </action>
+
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
@@ -189,6 +196,7 @@
                 <reference ref="ArthasStatic"/>
                 <reference ref="ArthasSetStaticFieldCommand"/>
                 <reference ref="ArthasInvokeBeanMethod"/>
+                <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
             </group>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
