@@ -186,6 +186,12 @@
                 description="Ognl get spring property">
 
         </action>
+        <action id="ArthasOgnlSpringAllPropertySourceCommand"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringAllPropertySourceCommandAction"
+                text="Get Spring All Property"
+                description="Ognl get spring all property">
+
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -197,6 +203,7 @@
                 <reference ref="ArthasSetStaticFieldCommand"/>
                 <reference ref="ArthasInvokeBeanMethod"/>
                 <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
+                <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
             </group>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
