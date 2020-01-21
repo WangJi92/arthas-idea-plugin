@@ -6,7 +6,6 @@ import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -14,7 +13,6 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,11 +51,11 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
         }
 
         // 获取class的classloader
-        List<String> springContextCLass = Splitter.on('@').omitEmptyStrings().splitToList(springContextValue);
-        if(CollectionUtils.isEmpty(springContextCLass)){
+        List<String> springContextCLassLists = Splitter.on('@').omitEmptyStrings().splitToList(springContextValue);
+        if (springContextCLassLists.isEmpty()) {
             NotifyUtils.notifyMessage(project, "配置 arthas 插件spring context 获取的信息", NotificationType.ERROR);
         }
-        String className= springContextCLass.get(0);
+        String className = springContextCLassLists.get(0);
 
         springContextValue = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=" + springContextValue;
         if (!springContextValue.endsWith(",")) {
@@ -66,7 +64,7 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
         //ognl -x 3 '#springContext=@applicationContextProvider@context,
         String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
 
-        String command = String.format(SPRING_ENVIRONMENT_PROPERTY,join,springContextValue,ArthasCommandConstants.SPRING_CONTEXT_PARAM,selectedText);
+        String command = String.format(SPRING_ENVIRONMENT_PROPERTY, join, springContextValue, ArthasCommandConstants.SPRING_CONTEXT_PARAM, selectedText);
 
         new ArthasActionStaticDialog(project, className, command).open("arthas ognl spring get property");
 

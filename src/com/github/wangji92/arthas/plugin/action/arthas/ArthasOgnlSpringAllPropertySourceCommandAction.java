@@ -13,7 +13,6 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
  * 参考 : https://blog.csdn.net/xunjiushi9717/article/details/94050139
  * <p>
  * org.springframework.core.env.MutablePropertySources 中的优先级 addFirst高  addLast低
- *
+ * <p>
  * 下一个版本可以考虑一下添加spring 属性值，感觉这个用得比较少 https://my.oschina.net/u/2263272/blog/1824864
  *
  * @author 汪小哥
@@ -48,11 +47,11 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
             return;
         }
         // 获取class的classloader
-        List<String> springContextCLass = Splitter.on('@').omitEmptyStrings().splitToList(springContextValue);
-        if (CollectionUtils.isEmpty(springContextCLass)) {
+        List<String> springContextCLassLists = Splitter.on('@').omitEmptyStrings().splitToList(springContextValue);
+        if (springContextCLassLists.isEmpty()) {
             NotifyUtils.notifyMessage(project, "配置 arthas 插件spring context 获取的信息", NotificationType.ERROR);
         }
-        String className = springContextCLass.get(0);
+        String className = springContextCLassLists.get(0);
 
         springContextValue = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=" + springContextValue;
         if (!springContextValue.endsWith(",")) {
