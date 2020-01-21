@@ -23,6 +23,8 @@ import java.util.List;
  * <p>
  * org.springframework.core.env.MutablePropertySources 中的优先级 addFirst高  addLast低
  *
+ * 下一个版本可以考虑一下添加spring 属性值，感觉这个用得比较少 https://my.oschina.net/u/2263272/blog/1824864
+ *
  * @author 汪小哥
  * @date 21-01-2020
  */
