@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.6</version>
+    <version>2.7</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -26,6 +26,7 @@
       <li>基于IntelliJ IDEA开发的Alibaba Arthas 命令生成插件，支持<a href="https://alibaba.github.io/arthas/">Alibaba Arthas</a> 官方常用的命令。</li>
       <li>官方的命令太复杂，此插件为了简化使用者的难度，提供了一些常用命令的支持</li>
       <li>该插件支持Alibaba Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method、field、monitor、stack 、tt等命令</li>
+      <li>支持设置static field、static final</>
       <li>watch:能方便的观察到指定方法的调用情况,返回值、抛出异常、入参(特殊值、异常没有捕获排查)<li/>
       <li>trace:方法内部调用路径，并输出方法路径上的每个节点上耗时(性能问题，调用链问题)<li/>
       <li>ognl:执行表达式(方便获取静态变量，方法，获取spring context 为所欲为)</li>
@@ -92,6 +93,13 @@
       <ul>
         <li>1.支持通过获取选中的text在spring中环境变量的值</li>
         <li>2.支持获取所有在spring中环境变量的值</li>
+      </ul>
+      <p>2.7-RELEASE</p>
+      <ul>
+        <li>1.support set static final field command <a href="https://github.com/alibaba/arthas/issues/641">issue</a></li>
+      </ul>
+      <ul>
+        <li>1.支持设置static final的值 <a href="https://github.com/alibaba/arthas/issues/641">issue</a></li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
