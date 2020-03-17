@@ -15,17 +15,9 @@ import com.intellij.ui.components.labels.LinkLabel;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
-/**
- * arthas ognl 获取静态信息的展示
- *
- * @author 汪小哥
- * @date 21-12-2019
- */
-public class ArthasActionStaticDialog extends JDialog {
+public class ArthasActionDumpDialog extends JDialog {
     /**
      * sc 复制信息命令
      */
@@ -45,10 +37,9 @@ public class ArthasActionStaticDialog extends JDialog {
     private JTextField ognlExpressionEditor;
 
     private JPanel contentPane;
-    private LinkLabel classLoaderLinkLable;
-    private LinkLabel ognlOfficeLinkLabel;
-    private LinkLabel oglSpecialLink;
-    private LinkLabel ognlDemoLink;
+
+    private LinkLabel dumpOfficeLinkLabel;
+
     private JButton clearClassloaderHashValue;
 
 
@@ -58,8 +49,10 @@ public class ArthasActionStaticDialog extends JDialog {
 
     private Project project;
 
+    private LinkLabel classLoaderLinkLable;
 
-    public ArthasActionStaticDialog(Project project, String className, String staticOgnlExpression) {
+
+    public ArthasActionDumpDialog(Project project, String className, String staticOgnlExpression) {
         this.project = project;
         setContentPane(this.contentPane);
         setModal(true);
@@ -148,6 +141,15 @@ public class ArthasActionStaticDialog extends JDialog {
 
 
     private void createUIComponents() {
+
+        dumpOfficeLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://alibaba.github.io/arthas/dump");
+            }
+        });
+        dumpOfficeLinkLabel.setPaintUnderline(false);
+
         classLoaderLinkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
@@ -156,27 +158,5 @@ public class ArthasActionStaticDialog extends JDialog {
         });
         classLoaderLinkLable.setPaintUnderline(false);
 
-        ognlOfficeLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://commons.apache.org/proper/commons-ognl/language-guide.html");
-            }
-        });
-        ognlOfficeLinkLabel.setPaintUnderline(false);
-
-        oglSpecialLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/71");
-            }
-        });
-        oglSpecialLink.setPaintUnderline(false);
-        ognlDemoLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://blog.csdn.net/u010634066/article/details/101013479");
-            }
-        });
-        ognlDemoLink.setPaintUnderline(false);
     }
 }

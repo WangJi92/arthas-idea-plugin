@@ -223,6 +223,12 @@
 
         </action>
 
+        <action id="ArthasDumpCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasDumpCommandAction"
+                text="Dump Class Byte Array from JVM"
+                description="Dump class byte array from JVM">
+        </action>
+
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
@@ -244,6 +250,7 @@
                 <reference ref="ArthasTraceMultipleCommand"/>
                 <reference ref="ArthasSc"/>
                 <reference ref="ArthasJadCommandAction"/>
+                <reference ref="ArthasDumpCommandAction"/>
                 <reference ref="ArthasSpecial"/>
             </group>
             <separator/>
