@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.common.enums.TimeTunnelCommandEnum;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.icons.AllIcons;
@@ -101,14 +102,22 @@ public class ArthasTimeTunnelDialog extends JDialog {
         });
 
         comboBoxValueGetButton.addActionListener(e -> {
-            String selectedItem = (String) comboBox.getSelectedItem();
-            if (StringUtils.isNotBlank(selectedItem)) {
-                ClipboardUtils.setClipboardString(selectedItem);
+            Object selectedItem = comboBox.getSelectedItem();
+            String selectedItemStr = selectedItem.toString();
+            if(selectedItem instanceof TimeTunnelCommandEnum){
+                selectedItemStr = ((TimeTunnelCommandEnum) selectedItem).getCode();
+            }
+            if (StringUtils.isNotBlank(selectedItemStr)) {
+                ClipboardUtils.setClipboardString(selectedItemStr);
                 NotifyUtils.notifyMessage(project, "选中的tt常用命令已经复制");
             }
         });
-
         //值太长展示不全处理 https://www.java-forums.org/awt-swing/16196-item-too-big-jcombobox.html
+
+        for (TimeTunnelCommandEnum value : TimeTunnelCommandEnum.values()) {
+            comboBox.addItem(value);
+        }
+
         comboBox.setRenderer(new DefaultListCellRenderer() {
 
             @Override
@@ -116,17 +125,24 @@ public class ArthasTimeTunnelDialog extends JDialog {
                                                           int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index,
                         isSelected, cellHasFocus);
+
+                String tipText = value.toString();
+                String codeValue = value.toString();
+                if(value instanceof  TimeTunnelCommandEnum){
+                    tipText= ((TimeTunnelCommandEnum) value).getEnumMsg();
+                    codeValue = ((TimeTunnelCommandEnum) value).getCode();
+                }
                 if (isSelected) {
-                    comboBox.setToolTipText(value.toString());
+                    comboBox.setToolTipText(tipText);
                 }
 
-                setToolTipText(value.toString());
+                setToolTipText(tipText);
                 Rectangle textRect =
                         new Rectangle(comboBox.getSize().width,
                                 getPreferredSize().height);
                 String shortText = SwingUtilities.layoutCompoundLabel(this,
                         getFontMetrics(getFont()),
-                        value.toString(), null,
+                        codeValue, null,
                         getVerticalAlignment(), getHorizontalAlignment(),
                         getHorizontalTextPosition(), getVerticalTextPosition(),
                         textRect, new Rectangle(), textRect,
