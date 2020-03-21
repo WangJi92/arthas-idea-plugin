@@ -112,10 +112,14 @@
       <ul>
         <li>1.Dump class byte array from JVM </li>
         <li>2.tt tip optimization </li>
+        <li>3.heapdump /tmp/dump.hprof </li>
+        <li>4.thread -i 3000 -n 5 </li>
       </ul>
       <ul>
         <li>1.支持dump class 命令</li>
         <li>2.优化了tt的提示，JComboBox 展示中文信息<a href="https://github.com/alibaba/arthas/issues/482">添加了tt 直接获取spring context 命令</a></li>
+        <li>3.heapdump /tmp/dump.hprof </li>
+        <li>4.thread -i 3000 -n 5 </li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
@@ -237,6 +241,16 @@
                 text="Dump Class Byte Array from JVM"
                 description="Dump class byte array from JVM">
         </action>
+        <action id="ArthasHeapDumpCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHeapDumpCommandAction"
+                text="Heap Dump"
+                description="Heap dump">
+        </action>
+        <action id="ArthasThreadAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasThreadAction"
+                text="Top Thread Stack"
+                description="Display thread info, thread stack">
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -255,6 +269,8 @@
             <reference ref="ArthasStackCommand"/>
             <reference ref="ArthasMonitorCommand"/>
             <reference ref="ArthasTimeTunnelCommand"/>
+            <reference ref="ArthasHeapDumpCommandAction"/>
+            <reference ref="ArthasThreadAction"/>
             <group id="arthas-plugin-other" popup="true" text="Other">
                 <reference ref="ArthasTraceMultipleCommand"/>
                 <reference ref="ArthasSc"/>
