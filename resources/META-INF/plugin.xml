@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.8</version>
+    <version>2.9</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -107,6 +107,15 @@
       </ul>
       <ul>
         <li>1.支持反编译命令 jad --source-only java.lang.String toString 支持方法、和整个类</li>
+      </ul>
+       <p>2.9-RELEASE</p>
+      <ul>
+        <li>1.Dump class byte array from JVM </li>
+        <li>2.tt tip optimization </li>
+      </ul>
+      <ul>
+        <li>1.支持dump class 命令</li>
+        <li>2.优化了tt的提示，JComboBox 展示中文信息<a href="https://github.com/alibaba/arthas/issues/482">添加了tt 直接获取spring context 命令</a></li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
