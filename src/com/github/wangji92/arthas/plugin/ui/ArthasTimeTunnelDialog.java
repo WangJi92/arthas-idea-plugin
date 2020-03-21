@@ -25,6 +25,7 @@ import java.awt.event.WindowEvent;
  * @author 汪小哥
  * @date 11-01-2020
  */
+@SuppressWarnings("unchecked")
 public class ArthasTimeTunnelDialog extends JDialog {
     private JPanel contentPane;
     /**
