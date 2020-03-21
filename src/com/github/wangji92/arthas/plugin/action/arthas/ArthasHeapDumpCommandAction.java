@@ -24,7 +24,8 @@ public class ArthasHeapDumpCommandAction extends AnAction {
         if (project == null) {
             return;
         }
+        // 下载好了 使用 mac 工具分析哦  https://www.jianshu.com/p/d9f9fb221c30
         ClipboardUtils.setClipboardString("heapdump /tmp/dump.hprof");
-        NotifyUtils.notifyMessage(project, "heapdump /tmp/dump.hprof 已经复制,只要存活对象可以--live");
+        NotifyUtils.notifyMessage(project, "heapdump /tmp/dump.hprof 已经复制,只要存活对象可以--live,然后下载下来使用 Memory Analyzer(MAT)分析");
     }
 }
