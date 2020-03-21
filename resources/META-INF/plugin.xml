@@ -170,8 +170,8 @@
 
         <action id="ArthasInvokeBeanMethod"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringContextInvokeMethodAction"
-                text="Invoke Spring Bean Method Field"
-                description="Ognl invoke bean method、field">
+                text="Static Spring Context Invoke  Method Field"
+                description="Static spring context invoke  method field">
 
         </action>
 
@@ -252,6 +252,12 @@
                 description="Display thread info, thread stack">
         </action>
 
+        <action id="ArthasWatchOgnlSpringContextInvokeMethodAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchOgnlSpringContextInvokeMethodAction"
+                text="Watch Spring Context Invoke Method Field"
+                description="Watch spring context invoke method field">
+        </action>
+
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
@@ -271,6 +277,7 @@
             <reference ref="ArthasTimeTunnelCommand"/>
             <reference ref="ArthasHeapDumpCommandAction"/>
             <reference ref="ArthasThreadAction"/>
+            <reference ref="ArthasWatchOgnlSpringContextInvokeMethodAction"/>
             <group id="arthas-plugin-other" popup="true" text="Other">
                 <reference ref="ArthasTraceMultipleCommand"/>
                 <reference ref="ArthasSc"/>
