@@ -146,7 +146,7 @@
     <actions>
         <!-- Add your actions here -->
 
-        <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction" text=" Search Classes Loaded By JVM Sc"
+        <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction" text="Search Classes Loaded By JVM Sc"
                 description="Arthas get classloader">
         </action>
         <action id="ArthasWatch" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchCommandAction"
@@ -257,6 +257,11 @@
                 text="Watch Spring Context Invoke Method Field"
                 description="Watch spring context invoke method field">
         </action>
+        <action id="ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"
+                text="TimeTunnel Spring Context Invoke Method Field"
+                description="TimeTunnel spring context invoke method field">
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -266,23 +271,26 @@
             <group id="arthas-plugin-ognl" popup="true" text="Ognl">
                 <reference ref="ArthasStatic"/>
                 <reference ref="ArthasSetStaticFieldCommand"/>
-                <reference ref="ArthasInvokeBeanMethod"/>
                 <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
                 <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
             </group>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
+            <reference ref="ArthasTraceMultipleCommand"/>
             <reference ref="ArthasStackCommand"/>
             <reference ref="ArthasMonitorCommand"/>
             <reference ref="ArthasTimeTunnelCommand"/>
-            <reference ref="ArthasHeapDumpCommandAction"/>
-            <reference ref="ArthasThreadAction"/>
+            <separator/>
+            <reference ref="ArthasInvokeBeanMethod"/>
             <reference ref="ArthasWatchOgnlSpringContextInvokeMethodAction"/>
+            <reference ref="ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"/>
+            <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
-                <reference ref="ArthasTraceMultipleCommand"/>
                 <reference ref="ArthasSc"/>
                 <reference ref="ArthasJadCommandAction"/>
                 <reference ref="ArthasDumpCommandAction"/>
+                <reference ref="ArthasHeapDumpCommandAction"/>
+                <reference ref="ArthasThreadAction"/>
                 <reference ref="ArthasSpecial"/>
             </group>
             <separator/>

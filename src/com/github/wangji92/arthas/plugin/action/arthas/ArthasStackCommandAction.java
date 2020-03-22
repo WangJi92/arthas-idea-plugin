@@ -19,7 +19,7 @@ public class ArthasStackCommandAction extends BaseArthasPluginAction {
     public void doCommand(String className, String methodName, Project project) {
         String command = String.join(" ", "stack", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessage(project,"源码分析，查看方法调用栈非常方便");
     }
 
 }

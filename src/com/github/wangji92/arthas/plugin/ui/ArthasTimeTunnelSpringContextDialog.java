@@ -17,17 +17,24 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class ArthasActionWatchSpringContextDialog extends JDialog {
-
+public class ArthasTimeTunnelSpringContextDialog extends JDialog {
     private JButton closeButton;
 
+    /**
+     * 全量表达式
+     */
     private JTextField ognlExpressionEditor;
 
     private JPanel contentPane;
     private LinkLabel ognlOfficeLinkLabel;
     private LinkLabel oglSpecialLink;
     private LinkLabel ognlDemoLink;
-    private LinkLabel watchHelpLink;
+    private LinkLabel ttInvokeAfterLink;
+    private JTextField ttRequestMappingHandlerAdapterInvokeField;
+    private JTextField timeTunnelIndexField;
+    private JButton ttBeginButton;
+    private LinkLabel ttInvokeBeforeHelp;
+    private LinkLabel ttIndexLabel;
 
 
     private String className;
@@ -37,7 +44,7 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
     private Project project;
 
 
-    public ArthasActionWatchSpringContextDialog(Project project, String className, String staticOgnlExpression) {
+    public ArthasTimeTunnelSpringContextDialog(Project project, String className, String staticOgnlExpression) {
         this.project = project;
         setContentPane(this.contentPane);
         setModal(true);
@@ -65,17 +72,27 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
 
     private void init() {
         ognlExpressionEditor.setText(this.staticOgnlExpression);
+        ttBeginButton.addActionListener(e -> {
+            String text = ttRequestMappingHandlerAdapterInvokeField.getText();
+            ClipboardUtils.setClipboardString(text);
+            NotifyUtils.notifyMessage(project, "通过tt 获取spring context的命令可以多次使用,第一次使用需要触发一下一个接口的调用");
+        });
     }
 
 
     /**
-     * 取人按钮回调
+     * 关闭按钮回调
      */
     private void onOK() {
         String ognCurrentExpression = ognlExpressionEditor.getText();
+        String timeTunnelIndex = timeTunnelIndexField.getText();
+        if (StringUtils.isBlank(timeTunnelIndex)) {
+            timeTunnelIndex = "1000";
+        }
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
-            ClipboardUtils.setClipboardString(ognCurrentExpression);
-            NotifyUtils.notifyMessage(project,"由于使用watch 触发ognl的调用，必须要触发一次Mvc接口的调用，这个和Static Spring Context 调用不同");
+            String invokeCommand = String.join(" ", ognCurrentExpression,"-x","3","-i", timeTunnelIndex);
+            ClipboardUtils.setClipboardString(invokeCommand);
+            NotifyUtils.notifyMessage(project,"这里的-i 参数必须是通过tt 获取spring context的命令的time tunnel index的值");
         }
         dispose();
     }
@@ -120,19 +137,36 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
         ognlDemoLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/5");
+                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/4");
             }
         });
         ognlDemoLink.setPaintUnderline(false);
 
         //https://github.com/WangJi92/arthas-idea-plugin/issues/5
 
-        watchHelpLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        ttInvokeBeforeHelp = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("   https://alibaba.github.io/arthas/watch");
+                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/482");
             }
         });
-        watchHelpLink.setPaintUnderline(false);
+        ttInvokeBeforeHelp.setPaintUnderline(false);
+
+        ttIndexLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://alibaba.github.io/arthas/tt");
+            }
+        });
+        ttIndexLabel.setPaintUnderline(false);
+
+        ttInvokeAfterLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/4");
+            }
+        });
+        ttInvokeAfterLink.setPaintUnderline(false);
     }
+
 }

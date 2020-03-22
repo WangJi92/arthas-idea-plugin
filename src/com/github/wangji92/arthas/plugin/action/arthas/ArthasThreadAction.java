@@ -25,6 +25,6 @@ public class ArthasThreadAction extends AnAction {
             return;
         }
         ClipboardUtils.setClipboardString("thread -i 3000 -n 5");
-        NotifyUtils.notifyMessage(project, "-n 5打印cpu占比最高的堆栈,-b 某个线程拿住了某个锁,支持找出synchronized关键字");
+        NotifyUtils.notifyMessage(project, "-n 5打印cpu占比最高的堆栈,-b 某个线程拿住了某个锁,只支持持找出synchronized关键字锁住的");
     }
 }
