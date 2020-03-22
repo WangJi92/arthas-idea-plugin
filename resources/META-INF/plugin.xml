@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.9</version>
+    <version>2.10</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -120,6 +120,15 @@
         <li>2.优化了tt的提示，JComboBox 展示中文信息<a href="https://github.com/alibaba/arthas/issues/482">添加了tt 直接获取spring context 命令</a></li>
         <li>3.heapdump /tmp/dump.hprof </li>
         <li>4.thread -i 3000 -n 5 </li>
+      </ul>
+       <p>2.10-RELEASE</p>
+      <ul>
+        <li>1.support tt invoke spring context invoke method field </li>
+        <li>2.tip optimization </li>
+      </ul>
+      <ul>
+        <li>1.support tt invoke spring context invoke method field </li>
+        <li>2.tip optimization </li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
