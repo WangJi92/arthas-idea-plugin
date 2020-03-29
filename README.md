@@ -1,6 +1,8 @@
 # Idea arthas 插件
 
-## [语雀arthas 插件使用介绍(更新及时)](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
+##  语雀使用文档链接 
+* [语雀arthas 插件使用](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
+* [爱上Java诊断利器Arthas之Arthas idea plugin 的前世今生 体验demo](https://github.com/WangJi92/arthas-plugin-demo)
 <a name="eaba0"></a>
 # 一、背景
 目前Arthas 官方的工具还不够足够的简单，需要记住一些命令，特别是一些扩展性特别强的高级语法，比如ognl获取spring context 为所欲为，watch、trace 不够简单，需要构造一些命令工具的信息，因此只需要一个能够简单处理字符串信息的插件即可使用。当在处理线上问题的时候需要最快速、最便捷的命令，因此Idea arthas 插件还是有存在的意义和价值的。
@@ -10,9 +12,8 @@
 # 二、支持的功能
 支持的功能都是平时处理最常用的一些功能，一些快捷的链接，在处理紧急问题时候不需要到处查找，都是一些基本的功能,自动复制到剪切板中去，方便快捷。<br />!![image](https://user-images.githubusercontent.com/20874972/71365498-24e05000-25da-11ea-98be-640dc7ca7e12.png)
 
+![image](https://user-images.githubusercontent.com/20874972/77851010-fa211b80-7208-11ea-909c-e4a208f282f6.png)
 
-
-![image](https://user-images.githubusercontent.com/20874972/71365516-3295d580-25da-11ea-928b-a28e4c47cda5.png)
 
 ## 2.1 watch
 ![image](https://user-images.githubusercontent.com/20874972/71365531-43464b80-25da-11ea-98bf-de363d8f08c8.png)
@@ -99,6 +100,76 @@ ognl  -x  3  '#springContext=@applicationContextProvider@context,#springContext.
 > ......,#newParam= #springContext.getBean("beanName").todo(),#springContext.getBean("other").to(#newParam)
 > 这样使用参数定义到你的bash脚本中去，这种属于特殊用法，不具有一般的通用性
 
+#### 特别说明对于ognl 字段类型的处理
+[代码地址 ](https://github.com/WangJi92/arthas-idea-plugin/blob/master/src/com/github/wangji92/arthas/plugin/utils/OgnlPsUtils.java)
+```java
+public static String getDefaultString(PsiType psiType) {
+        String result = " ";
+        String canonicalText = psiType.getCanonicalText();
+
+        //基本类型  boolean
+        if (PsiType.BOOLEAN.equals(psiType) || canonicalText.equals("java.lang.Boolean")) {
+            result = "true";
+            return result;
+        }
+
+        //基本类型  String
+        if (canonicalText.endsWith("java.lang.String")) {
+            result = "\" \"";
+            return result;
+        }
+
+        if (PsiType.LONG.equals(psiType) || "java.lang.Long".equals(canonicalText)) {
+            result = "0L";
+            return result;
+        }
+
+        if (PsiType.DOUBLE.equals(psiType) || "java.lang.Double".equals(canonicalText)) {
+            result = "0D";
+            return result;
+        }
+
+        if (PsiType.FLOAT.equals(psiType) || "java.lang.Float".equals(canonicalText)) {
+            result = "0F";
+            return result;
+        }
+
+
+        //基本类型  数字
+        if (PsiType.INT.equals(psiType) || canonicalText.equals("java.lang.Integer")
+                ||
+                PsiType.BYTE.equals(psiType) || canonicalText.equals("java.lang.Byte")
+                ||
+                PsiType.SHORT.equals(psiType) || canonicalText.equals("java.lang.Short")) {
+            result = "0";
+            return result;
+        }
+
+        //常见的List 和Map
+        if (canonicalText.startsWith("java.util.")) {
+            if (canonicalText.contains("Map")) {
+                result = "#{\" \":\" \"}";
+                return result;
+            }
+            if (canonicalText.contains("List")) {
+                result = "{}";
+                return result;
+            }
+        }
+
+        //原生的数组
+        if (canonicalText.contains("[]")) {
+            result = "new " + canonicalText + "{}";
+            return result;
+        }
+
+        //不管他的构造函数了，太麻烦了
+        result = "new " + canonicalText + "()";
+        return result;
+
+    }
+```
+
 
 <a name="Cybim"></a>
 ## 2.5  install(linux)
@@ -122,29 +193,4 @@ curl -sk https://arthas.gitee.io/arthas-boot.jar -o ~/.arthas-boot.jar  && echo 
 - [Arthas实践--jad/mc/redefine线上热更新一条龙](http://hengyunabc.github.io/arthas-online-hotswap/)
 - [ognl 使用姿势](https://blog.csdn.net/u010634066/article/details/101013479)
 
-<a name="L0Qr4"></a>
-# 三、其他
-<a name="j4UkL"></a>
-## 3.1 安装 
-![image](https://user-images.githubusercontent.com/20874972/71365799-07f84c80-25db-11ea-9094-b4b6972e47f0.png)
-
-
-<a name="vKsvI"></a>
-## 3.2 快捷键设置
-![image](https://user-images.githubusercontent.com/20874972/71365859-35dd9100-25db-11ea-9233-c436efb4e651.png)
-
-<a name="r40qy"></a>
-## 3.3 代码地址
-[https://github.com/WangJi92/arthas-idea-plugin](https://github.com/WangJi92/arthas-idea-plugin)
-<a name="5pfFa"></a>
-## 3.4 插件开发，发布
- 参考 插件开发： [https://www.jianshu.com/p/722841c6d0a9](https://www.jianshu.com/p/722841c6d0a9)<br />就可以看到编译后的zip包了<br />
-![image](https://user-images.githubusercontent.com/20874972/71365888-47269d80-25db-11ea-95ab-efc4ccad3ac1.png)
-
-
-## 备注
-github 图片加载不出来，[可以访问这个地址查看](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
-
-## 使用视频介绍
-[arthas idea 使用介绍](http://v.youku.com/v_show/id_XNDQ4Mjg3MzM4MA==.html)
 
