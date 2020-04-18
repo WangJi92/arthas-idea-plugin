@@ -15,6 +15,6 @@ public class ArthasScCommandAction extends BaseArthasPluginAction {
     public void doCommand(String className, String methodName, Project project) {
         String command = String.join(" ", "sc", "-d", className);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessage(project, "查看JVM已加载的类信息 Search-Class,类似命令Search-Method(sm);-d 输出类的详情,加载的ClassLoader,-f:类的成员变量信息（配合-d一起使用");
     }
 }
