@@ -16,7 +16,7 @@
           <text value="arthas 特殊用法"/>
         </properties>
       </component>
-      <component id="c7d12" class="com.intellij.ui.components.labels.LinkLabel" binding="specialOgnlLinkLable" custom-create="true">
+      <component id="c7d12" class="com.intellij.ui.components.labels.LinkLabel" binding="specialOgnlLinkLabel" custom-create="true">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="89" height="23"/>
@@ -34,7 +34,7 @@
           <text value="tt get spring context"/>
         </properties>
       </component>
-      <component id="91302" class="com.intellij.ui.components.labels.LinkLabel" binding="errorFilterLinkLable" custom-create="true">
+      <component id="91302" class="com.intellij.ui.components.labels.LinkLabel" binding="errorFilterLinkLabel" custom-create="true">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -42,7 +42,7 @@
           <text value="get ERROR Filter"/>
         </properties>
       </component>
-      <component id="efe0d" class="com.intellij.ui.components.labels.LinkLabel" binding="dubboArthasLinkLable" custom-create="true">
+      <component id="efe0d" class="com.intellij.ui.components.labels.LinkLabel" binding="dubboArthasLinkLabel" custom-create="true">
         <constraints>
           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -50,7 +50,7 @@
           <text value="Dubbo 遇上arthas"/>
         </properties>
       </component>
-      <component id="de454" class="com.intellij.ui.components.labels.LinkLabel" binding="redfineLinLable" custom-create="true">
+      <component id="de454" class="com.intellij.ui.components.labels.LinkLabel" binding="redefineLinLabel" custom-create="true">
         <constraints>
           <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -58,7 +58,7 @@
           <text value="jad/mc/redefine线上热更新一条龙"/>
         </properties>
       </component>
-      <component id="b2126" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlUseLinkLable" custom-create="true">
+      <component id="b2126" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlUseLinkLabel" custom-create="true">
         <constraints>
           <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

@@ -22,13 +22,13 @@ import java.awt.event.WindowEvent;
  * @date 22-12-2019
  */
 public class ArthasSpecialDialog extends JDialog {
-    private LinkLabel specialOgnlLinkLable;
+    private LinkLabel specialOgnlLinkLabel;
     private LinkLabel ttGetSpringContextLinkLabel;
-    private LinkLabel errorFilterLinkLable;
-    private LinkLabel dubboArthasLinkLable;
-    private LinkLabel redfineLinLable;
+    private LinkLabel errorFilterLinkLabel;
+    private LinkLabel dubboArthasLinkLabel;
+    private LinkLabel redefineLinLabel;
     private JPanel contentPane;
-    private LinkLabel ognlUseLinkLable;
+    private LinkLabel ognlUseLinkLabel;
     private LinkLabel userCase;
 
     private Project project;
@@ -60,13 +60,13 @@ public class ArthasSpecialDialog extends JDialog {
     }
 
     private void createUIComponents() {
-        specialOgnlLinkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        specialOgnlLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
                 BrowserUtil.browse("https://github.com/alibaba/arthas/issues/71");
             }
         });
-        specialOgnlLinkLable.setPaintUnderline(false);
+        specialOgnlLinkLabel.setPaintUnderline(false);
         ttGetSpringContextLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
@@ -74,35 +74,35 @@ public class ArthasSpecialDialog extends JDialog {
             }
         });
         ttGetSpringContextLinkLabel.setPaintUnderline(false);
-        errorFilterLinkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        errorFilterLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
                 BrowserUtil.browse("https://github.com/alibaba/arthas/issues/429");
             }
         });
-        errorFilterLinkLable.setPaintUnderline(false);
-        dubboArthasLinkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        errorFilterLinkLabel.setPaintUnderline(false);
+        dubboArthasLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
                 BrowserUtil.browse("http://hengyunabc.github.io/dubbo-meet-arthas/");
             }
         });
-        dubboArthasLinkLable.setPaintUnderline(false);
+        dubboArthasLinkLabel.setPaintUnderline(false);
 
-        redfineLinLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        redefineLinLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
                 BrowserUtil.browse("http://hengyunabc.github.io/arthas-online-hotswap/");
             }
         });
-        redfineLinLable.setPaintUnderline(false);
-        ognlUseLinkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        redefineLinLabel.setPaintUnderline(false);
+        ognlUseLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
                 BrowserUtil.browse("https://blog.csdn.net/u010634066/article/details/101013479");
             }
         });
-        ognlUseLinkLable.setPaintUnderline(false);
+        ognlUseLinkLabel.setPaintUnderline(false);
         userCase = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
