@@ -45,7 +45,7 @@ public class ArthasActionStaticDialog extends JDialog {
     private JTextField ognlExpressionEditor;
 
     private JPanel contentPane;
-    private LinkLabel classLoaderLinkLable;
+    private LinkLabel classLoaderLinkLabel;
     private LinkLabel ognlOfficeLinkLabel;
     private LinkLabel oglSpecialLink;
     private LinkLabel ognlDemoLink;
@@ -148,13 +148,13 @@ public class ArthasActionStaticDialog extends JDialog {
 
 
     private void createUIComponents() {
-        classLoaderLinkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        classLoaderLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
                 BrowserUtil.browse("https://alibaba.github.io/arthas/ognl.html");
             }
         });
-        classLoaderLinkLable.setPaintUnderline(false);
+        classLoaderLinkLabel.setPaintUnderline(false);
 
         ognlOfficeLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
