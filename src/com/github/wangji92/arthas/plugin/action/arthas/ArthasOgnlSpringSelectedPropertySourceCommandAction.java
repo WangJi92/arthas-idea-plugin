@@ -42,6 +42,10 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
         }
         //https://zhuanlan.zhihu.com/p/47740017
         String selectedText = editor.getSelectionModel().getSelectedText();
+        if (selectedText != null) {
+            //去掉多余的空格
+            selectedText = selectedText.trim();
+        }
 
         //这里获取spring context的信息
         String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
