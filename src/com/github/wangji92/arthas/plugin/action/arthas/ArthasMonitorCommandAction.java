@@ -17,6 +17,6 @@ public class ArthasMonitorCommandAction extends BaseArthasPluginAction {
 
         String command = String.join(" ", "monitor", className, methodName, "-n", ArthasCommandConstants.INVOKE_MONITOR_COUNT, "--cycle", ArthasCommandConstants.INVOKE_MONITOR_INTERVAL);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessage(project,"方法执行监控,非实时 -c 统计周期（10秒）-n 执行次数统计(10次) 可以手动修改大一点，详情参看 help monitor");
     }
 }

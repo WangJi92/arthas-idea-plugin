@@ -21,6 +21,7 @@
         </constraints>
         <properties>
           <text value="获取Command"/>
+          <toolTipText value="Bean 名称可能不正确，可以手动配置"/>
         </properties>
       </component>
       <component id="26403" class="javax.swing.JLabel">
@@ -30,6 +31,7 @@
         <properties>
           <enabled value="false"/>
           <text value="ognl表达式"/>
+          <toolTipText value="这里通过静态statc spring context 进行调用，需要去设置那里配置"/>
         </properties>
       </component>
       <component id="2ed44" class="javax.swing.JTextField" binding="ognlExpressionEditor">

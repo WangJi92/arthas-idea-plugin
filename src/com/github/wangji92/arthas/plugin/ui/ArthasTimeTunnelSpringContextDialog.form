@@ -16,7 +16,8 @@
         </constraints>
         <properties>
           <enabled value="true"/>
-          <text value="Time Tunnel Invoke Method Field"/>
+          <text value="2、Time Tunnel Invoke Method Field"/>
+          <toolTipText value="bean的名称、方法参数值可以自己手动修改"/>
         </properties>
       </component>
       <component id="1335b" class="javax.swing.JTextField" binding="ognlExpressionEditor">
@@ -53,7 +54,8 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Time Tunnel Get Spring Context"/>
+          <text value="1、Time Tunnel Get Spring Context"/>
+          <toolTipText value="获取spring context 时间隧道只需执行一次，记录下indx 下次调用任意的bean的方法不用再次执行"/>
         </properties>
       </component>
       <component id="627ce" class="javax.swing.JButton" binding="ttBeginButton">
@@ -86,6 +88,7 @@
         <properties>
           <enabled value="true"/>
           <text value="获取Command"/>
+          <toolTipText value="bean的名称可能不正确，可以手动修改"/>
         </properties>
       </component>
       <component id="6dcfc" class="com.intellij.ui.components.labels.LinkLabel" binding="ttIndexLabel" custom-create="true">
@@ -93,7 +96,8 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Time Tunnel Index"/>
+          <text value="3、Time Tunnel Index"/>
+          <toolTipText value="时间隧道的index值，由第一步获取 可以通过tt -l 查看"/>
         </properties>
       </component>
       <component id="41a2b" class="javax.swing.JTextField" binding="timeTunnelIndexField">

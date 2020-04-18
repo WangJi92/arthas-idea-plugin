@@ -114,7 +114,7 @@ public class ArthasActionStaticDialog extends JDialog {
         }
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
             ClipboardUtils.setClipboardString(ognCurrentExpression);
-            NotifyUtils.notifyMessageDefault(project);
+            NotifyUtils.notifyMessage(project,"Bean名称可能不正确,可以手动修改，Static Spring context 需要手动配置，具体参考Arthas Idea help 命令获取相关文档");
         }
         dispose();
     }

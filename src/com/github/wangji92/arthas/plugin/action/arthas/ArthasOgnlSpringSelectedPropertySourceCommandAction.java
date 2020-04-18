@@ -45,15 +45,15 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
 
         //这里获取spring context的信息
         String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
-        if (StringUtils.isBlank(springContextValue)) {
-            NotifyUtils.notifyMessage(project, "配置 arthas 插件spring context 获取的信息", NotificationType.ERROR);
+        if (StringUtils.isBlank(springContextValue) || ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue)) {
+            NotifyUtils.notifyMessage(project, "Static Spring context 需要手动配置，具体参考Arthas Idea help 命令获取相关文档", NotificationType.ERROR);
             return;
         }
 
         // 获取class的classloader
         List<String> springContextCLassLists = Splitter.on('@').omitEmptyStrings().splitToList(springContextValue);
         if (springContextCLassLists.isEmpty()) {
-            NotifyUtils.notifyMessage(project, "配置 arthas 插件spring context 获取的信息", NotificationType.ERROR);
+            NotifyUtils.notifyMessage(project, "请正确配置 Static Spring context 信息，具体参考Arthas Idea help 命令获取相关文档", NotificationType.ERROR);
         }
         String className = springContextCLassLists.get(0);
 

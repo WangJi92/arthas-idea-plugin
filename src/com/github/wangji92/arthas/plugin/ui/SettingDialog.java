@@ -42,7 +42,7 @@ public class SettingDialog implements Configurable {
         PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
         String oldspringContextEx = propertiesComponent.getValue(ArthasCommandConstants.PRO_PREFIX + ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
         if (StringUtils.isBlank(oldspringContextEx)) {
-            oldspringContextEx = "@applicationContextProvider@context";
+            oldspringContextEx = ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING;
             PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, oldspringContextEx);
 
         }

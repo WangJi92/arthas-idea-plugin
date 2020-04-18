@@ -92,7 +92,7 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
             String invokeCommand = String.join(" ", ognCurrentExpression,"-x","3","-i", timeTunnelIndex);
             ClipboardUtils.setClipboardString(invokeCommand);
-            NotifyUtils.notifyMessage(project,"这里的-i 参数必须是通过tt 获取spring context的命令的time tunnel index的值");
+            NotifyUtils.notifyMessage(project,"这里的-i 参数必须是通过tt 获取spring context的命令的tt index的值，bean 名称可能不正确，可以手动修改");
         }
         dispose();
     }

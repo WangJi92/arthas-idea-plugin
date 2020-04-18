@@ -25,7 +25,7 @@ public class ArthasInstallCommandAction extends AnAction {
             return;
         }
         ClipboardUtils.setClipboardString(ArthasCommandConstants.AS_INSTALL_BASH);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessage(project, "安装脚本 使用alias 实现,原理为下载arthas-boot 包 通过 java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http启动 arhtas。");
 
     }
 }

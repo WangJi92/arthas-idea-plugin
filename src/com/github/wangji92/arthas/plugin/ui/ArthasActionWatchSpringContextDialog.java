@@ -75,7 +75,7 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
         String ognCurrentExpression = ognlExpressionEditor.getText();
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
             ClipboardUtils.setClipboardString(ognCurrentExpression);
-            NotifyUtils.notifyMessage(project,"由于使用watch 触发ognl的调用，必须要触发一次Mvc接口的调用，这个和Static Spring Context 调用不同");
+            NotifyUtils.notifyMessage(project,"Bean 名称可能不正确可以手动修改,由于使用watch 触发ognl的调用，必须要触发一次Mvc接口的调用，Static Spring Context 调用不同");
         }
         dispose();
     }

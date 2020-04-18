@@ -34,6 +34,11 @@ public interface ArthasCommandConstants {
     String SPRING_CONTEXT_STATIC_OGNL_EXPRESSION = "springContextStaticOgnlExpression";
 
     /**
+     * 默认static spring context
+     */
+    String DEFAULT_SPRING_CONTEXT_SETTING = "@applicationContextProvider@context";
+
+    /**
      * spring 表达式信息
      */
     String SPRING_CONTEXT_PARAM = "#springContext";
