@@ -14,8 +14,8 @@ import com.intellij.openapi.project.Project;
 public class ArthasWatchCommandAction extends BaseArthasPluginAction {
     @Override
     public void doCommand(String className, String methodName, Project project) {
-        String command = String.join(" ", "watch", className, methodName, "'{params,returnObj,throwExp}'", "-n", ArthasCommandConstants.INVOKE_COUNT, "-x", ArthasCommandConstants.RESULT_X);
+        String command = String.join(" ", "watch", className, methodName, "'{params,returnObj,throwExp}'", "-n", ArthasCommandConstants.INVOKE_COUNT, "-x", ArthasCommandConstants.RESULT_X, ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) eg:'params[0].name=\"name\" and params.size == 1' eg:'returnObj instanceof java.lang.String && returnObj.length>5'");
     }
 }

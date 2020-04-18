@@ -15,10 +15,10 @@ public class ArthasTraceCommandAction extends BaseArthasPluginAction {
     @Override
     public void doCommand(String className, String methodName, Project project) {
 
-        String command = String.join(" ", "trace", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT);
+        String command = String.join(" ", "trace", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
 
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) eg:'throwExp != null && params[0]==\"name\"' eg:'returnObj instanceof java.lang.String && returnObj.length>5'");
 
     }
 }

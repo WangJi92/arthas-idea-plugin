@@ -1,10 +1,17 @@
 package com.github.wangji92.arthas.plugin.constants;
 
 /**
+ * arthas plugin 插件中使用的常量的信息
+ *
  * @author 汪小哥
  * @date 21-12-2019
  */
 public interface ArthasCommandConstants {
+
+    /**
+     * 默认条件表达式
+     */
+    String DEFAULT_CONDITION_EXPRESS = "'1==1'";
     /**
      * 调用次数
      */
@@ -16,7 +23,7 @@ public interface ArthasCommandConstants {
     /**
      * 调用监控的时间间隔
      */
-    String INVOKE_MONITOR_INTERVAL="10";
+    String INVOKE_MONITOR_INTERVAL = "10";
     /**
      * 展开的结构
      */
