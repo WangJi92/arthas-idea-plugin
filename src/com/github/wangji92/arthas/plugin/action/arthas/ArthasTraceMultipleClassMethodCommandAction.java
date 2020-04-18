@@ -13,7 +13,7 @@ public class ArthasTraceMultipleClassMethodCommandAction extends BaseArthasPlugi
 
     @Override
     public void doCommand(String className, String methodName, Project project) {
-        ArthasTraceMultipleCommandDialog instance = ArthasTraceMultipleCommandDialog.getInstance(project);
+        ArthasTraceMultipleCommandDialog instance = new ArthasTraceMultipleCommandDialog(project);
         instance.continueAddTrace(className,methodName);
         instance.showDialog();
     }

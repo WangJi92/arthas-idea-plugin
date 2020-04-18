@@ -3,6 +3,7 @@ package com.github.wangji92.arthas.plugin.ui;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.google.common.collect.Sets;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -15,11 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * 支持trace -E
+ *
  * @author 汪小哥
  * @date 3-1-2020
  */
@@ -55,13 +56,12 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
     /**
      * 类名称
      */
-    private Set<String> classSet = new HashSet<>(10);
+    private static Set<String> CLASS_SET = Sets.newConcurrentHashSet();
     /**
      * 方法名称
      */
-    private Set<String> methodSet = new HashSet<>(10);
+    private static Set<String> METHOD_SET = Sets.newConcurrentHashSet();
 
-    private static ArthasTraceMultipleCommandDialog arthasTraceMultipleCommandDialog;
 
     public ArthasTraceMultipleCommandDialog(Project project) {
         this.project = project;
@@ -69,8 +69,6 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(commandOk);
         initEvent();
-
-
     }
 
     /**
@@ -117,8 +115,8 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
     private void onOK() {
         String traceECommand = traceCommandTextField.getText();
         if (StringUtils.isNotBlank(traceECommand)) {
-            ClipboardUtils.setClipboardString(traceECommand);
-            NotifyUtils.notifyMessageDefault(project);
+            ClipboardUtils.setClipboardString(traceECommand + " " + ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
+            NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) eg:'throwExp != null'; trace -E 支持trace多个方法,方法中的方法");
         }
         this.destroyTraceData(project);
         dispose();
@@ -141,35 +139,13 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
      * 展示命令信息
      */
     private void showTraceCommand() {
-        String classNames = String.join("|", this.classSet);
-        String methodNames = String.join("|", this.methodSet);
+        String classNames = String.join("|", CLASS_SET);
+        String methodNames = String.join("|", METHOD_SET);
 
         String command = String.join(" ", "trace -E", classNames, methodNames, "-n", ArthasCommandConstants.INVOKE_COUNT);
         traceCommandTextField.setText(command);
     }
 
-    /**
-     * 获取当前对话框的实例
-     *
-     * @param project
-     * @return
-     */
-    public static ArthasTraceMultipleCommandDialog getInstance(Project project) {
-        //不是同一个工工程清除掉数据信息
-        if (arthasTraceMultipleCommandDialog != null && arthasTraceMultipleCommandDialog.project != project) {
-            arthasTraceMultipleCommandDialog.destroyTraceData(null);
-            arthasTraceMultipleCommandDialog = null;
-        }
-        if (arthasTraceMultipleCommandDialog == null) {
-            synchronized (ArthasTraceMultipleCommandDialog.class) {
-                if (arthasTraceMultipleCommandDialog == null) {
-                    arthasTraceMultipleCommandDialog = new ArthasTraceMultipleCommandDialog(project);
-                    arthasTraceMultipleCommandDialog.open();
-                }
-            }
-        }
-        return arthasTraceMultipleCommandDialog;
-    }
 
     /**
      * 添加方法和参数信息
@@ -178,8 +154,8 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
      * @param methodName
      */
     public void continueAddTrace(String className, String methodName) {
-        this.classSet.add(className);
-        this.methodSet.add(methodName);
+        CLASS_SET.add(className);
+        METHOD_SET.add(methodName);
     }
 
     /**
@@ -189,8 +165,8 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
      */
     private void destroyTraceData(Project project) {
         this.project = project;
-        this.classSet.clear();
-        this.methodSet.clear();
+        CLASS_SET.clear();
+        METHOD_SET.clear();
         this.traceCommandTextField.setText("trace -E ");
     }
 
