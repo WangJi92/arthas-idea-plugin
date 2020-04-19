@@ -2,6 +2,7 @@ package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -11,7 +12,6 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.ui.components.labels.LinkLabel;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Lists;
 
 import javax.swing.*;
 import java.awt.event.*;
