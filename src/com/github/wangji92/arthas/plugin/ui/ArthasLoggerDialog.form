@@ -55,8 +55,8 @@
             <item value=""/>
             <item value="trace"/>
             <item value="debug"/>
-            <item value="warn"/>
             <item value="info"/>
+            <item value="warn"/>
             <item value="error"/>
           </model>
           <toolTipText value="修改日志等级"/>
