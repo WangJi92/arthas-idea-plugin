@@ -81,7 +81,7 @@ public class ArthasLoggerDialog extends JDialog {
         }
         String joinCommands = String.join(" ", commands);
         ClipboardUtils.setClipboardString(joinCommands);
-        NotifyUtils.notifyMessage(project, "logger日志等级trace>debug>warn>info>error,-c hash值,--l 动态更新level");
+        NotifyUtils.notifyMessage(project, "logger日志等级trace>debug>info>warn>error,-c hash值,--l 动态更新level");
     }
 
     private void onCancel() {
