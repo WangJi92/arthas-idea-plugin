@@ -1,2 +1,10 @@
 # Project exclude paths
 /out/
+
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+rebel.xml
