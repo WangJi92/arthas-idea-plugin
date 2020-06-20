@@ -50,7 +50,18 @@ public class OgnlPsUtils {
             result = "0F";
             return result;
         }
-
+        //Class xx
+        //java.lang.Class
+        if ("java.lang.Class".equals(canonicalText)) {
+            result = "@java.lang.Object@class";
+            return result;
+        }
+        //Class<XXX> x
+        //java.lang.Class<com.wangji92.arthas.plugin.demo.controller.user>
+        if (canonicalText.startsWith("java.lang.Class")) {
+            result = "@" + canonicalText.substring(canonicalText.indexOf("<") + 1, canonicalText.length() - 1) + "@class";
+            return result;
+        }
 
         //基本类型  数字
         if (PsiType.INT.equals(psiType) || canonicalText.equals("java.lang.Integer")
@@ -138,6 +149,5 @@ public class OgnlPsUtils {
         }
         return "";
     }
-
 
 }

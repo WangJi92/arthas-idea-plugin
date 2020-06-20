@@ -259,8 +259,8 @@
 
         <action id="ArthasDumpCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasDumpCommandAction"
-                text="Dump Class Byte Array from JVM"
-                description="Dump class byte array from JVM">
+                text="Dump Class Byte Array from Jvm"
+                description="Dump class byte array from Jvm">
         </action>
         <action id="ArthasHeapDumpCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHeapDumpCommandAction"
@@ -314,6 +314,11 @@
                 text="Jvm Option"
                 description="VmOption">
         </action>
+        <action id="ArthasOgnlStaticGrammaticalStructureCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticGrammaticalStructureCommandAction"
+                text="Static Ognl Grammar Help Watch Static Content"
+                description="Ognl static grammatical structure">
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -333,6 +338,7 @@
             <separator text="*  Static Method Field"/>
             <reference ref="ArthasStatic"/>
             <reference ref="ArthasSetStaticFieldCommand"/>
+            <reference ref="ArthasOgnlStaticGrammaticalStructureCommandAction"/>
             <separator text="*  Spring Properties Priority"/>
             <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
             <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
