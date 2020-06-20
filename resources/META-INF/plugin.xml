@@ -166,7 +166,8 @@
     <actions>
         <!-- Add your actions here -->
 
-        <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction" text="Search Classes Loaded By JVM Sc"
+        <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction"
+                text="Search Classes Loaded By JVM Sc"
                 description="Arthas get classloader">
         </action>
         <action id="ArthasWatch" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchCommandAction"
@@ -178,7 +179,7 @@
                 description="Arthas trace">
         </action>
         <action id="ArthasStatic" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
-                text="Invoke Static Method Field"
+                text="Ognl To Get Static Method Field"
                 description="Arthas ognl static">
         </action>
 
@@ -232,7 +233,7 @@
         </action>
         <action id="ArthasSetStaticFieldCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSetStaticFieldCommandAction"
-                text="Set Static Field"
+                text="Reflect To Modify Static Field"
                 description="Ognl set static field">
 
         </action>
@@ -288,41 +289,71 @@
                 text="Logger"
                 description="Print logger info, and update the logger level">
         </action>
+        <action id="ArthasJvmCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasJvmCommandAction"
+                text="Jvm Information"
+                description="Display the target JVM information">
+        </action>
+        <action id="ArthasClassloaderCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasClassloaderCommandAction"
+                text="Show Classloader Info"
+                description="Show classloader info">
+        </action>
+        <action id="ArthasPerCountCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasPerCountCommandAction"
+                text="Jvm Perf Counter"
+                description="Jvm perf counter">
+        </action>
+        <action id="ArthasDashboardCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasDashboardCommandAction"
+                text="Dashboard"
+                description="Dashboard">
+        </action>
+        <action id="ArthasVmOptionCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmOptionCommandAction"
+                text="Jvm Option"
+                description="VmOption">
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
-            <separator/>
-            <group id="arthas-plugin-ognl" popup="true" text="Ognl">
-                <reference ref="ArthasStatic"/>
-                <reference ref="ArthasSetStaticFieldCommand"/>
-                <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
-                <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
-            </group>
+            <separator />
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
             <reference ref="ArthasTraceMultipleCommand"/>
             <reference ref="ArthasStackCommand"/>
             <reference ref="ArthasMonitorCommand"/>
             <reference ref="ArthasTimeTunnelCommand"/>
-            <separator/>
+            <separator text="* Spring ApplicationContext getBean"/>
             <reference ref="ArthasInvokeBeanMethod"/>
             <reference ref="ArthasWatchOgnlSpringContextInvokeMethodAction"/>
             <reference ref="ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"/>
+            <separator text="*  Static Method Field"/>
+            <reference ref="ArthasStatic"/>
+            <reference ref="ArthasSetStaticFieldCommand"/>
+            <separator text="*  Spring Properties Priority"/>
+            <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
+            <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
             <separator/>
+            <reference ref="ArthasDashboardCommandAction"/>
+            <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasLoggerCommandAction"/>
             <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
                 <reference ref="ArthasSc"/>
-                <reference ref="ArthasJadCommandAction"/>
+                <reference ref="ArthasClassloaderCommandAction"/>
                 <reference ref="ArthasDumpCommandAction"/>
                 <reference ref="ArthasHeapDumpCommandAction"/>
                 <reference ref="ArthasThreadAction"/>
-                <reference ref="ArthasSpecial"/>
+                <reference ref="ArthasJvmCommandAction"/>
+                <reference ref="ArthasPerCountCommandAction"/>
+                <reference ref="ArthasVmOptionCommandAction"/>
             </group>
             <separator/>
             <reference ref="ArthasInstallCommand"/>
+            <reference ref="ArthasSpecial"/>
             <separator/>
             <reference ref="ArthasHelpCommand"/>
         </group>

@@ -30,6 +30,9 @@ public class ArthasSpecialDialog extends JDialog {
     private JPanel contentPane;
     private LinkLabel ognlUseLinkLabel;
     private LinkLabel userCase;
+    private LinkLabel tt;
+    private LinkLabel conditionArthas;
+    private LinkLabel watchSpringContext;
 
     private Project project;
 
@@ -110,6 +113,27 @@ public class ArthasSpecialDialog extends JDialog {
             }
         });
         userCase.setPaintUnderline(false);
+        conditionArthas = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/6");
+            }
+        });
+        conditionArthas.setPaintUnderline(false);
+        tt = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/4");
+            }
+        });
+        tt.setPaintUnderline(false);
+        watchSpringContext = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/5");
+            }
+        });
+        watchSpringContext.setPaintUnderline(false);
     }
 
     /**
