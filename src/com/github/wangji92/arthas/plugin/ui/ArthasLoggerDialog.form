@@ -25,7 +25,8 @@
           </grid>
         </constraints>
         <properties>
-          <editable value="false"/>
+          <editable value="true"/>
+          <enabled value="true"/>
           <horizontalAlignment value="4"/>
         </properties>
       </component>

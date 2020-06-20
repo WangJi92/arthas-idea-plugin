@@ -32,7 +32,6 @@ public class ArthasLoggerDialog extends JDialog {
     private LinkLabel helpLink;
     private LinkLabel loggerBestLink;
 
-    private String loggerExpression;
 
     private Project project;
 
@@ -65,7 +64,9 @@ public class ArthasLoggerDialog extends JDialog {
     private void onOK() {
         // add your code here
         List<String> commands = Lists.newArrayList();
-        commands.add(this.loggerExpression);
+
+        String loggerName = loggerExpressionEditor.getText();
+        commands.add(loggerName);
 
         //更新level
         String currentLoggerLevel = (String) logLevelComboBox.getSelectedItem();
@@ -106,11 +107,11 @@ public class ArthasLoggerDialog extends JDialog {
         this.closeButton.addActionListener(e -> onCancel());
         String loggerEx = String.join(" ", "logger", "--name", this.className);
         this.loggerExpressionEditor.setText(loggerEx);
-        this.loggerExpression = loggerEx;
     }
 
     private void getLoggerClassHashLoader() {
-        ClipboardUtils.setClipboardString(this.loggerExpression);
+        String loggerName = loggerExpressionEditor.getText();
+        ClipboardUtils.setClipboardString(loggerName);
         NotifyUtils.notifyMessageDefault(project);
     }
 
