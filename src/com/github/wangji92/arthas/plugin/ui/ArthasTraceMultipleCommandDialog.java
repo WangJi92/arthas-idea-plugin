@@ -118,7 +118,8 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
             ClipboardUtils.setClipboardString(traceECommand + " " + ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
             NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) eg:'throwExp != null'; trace -E 支持trace多个方法,方法中的方法");
         }
-        this.destroyTraceData(project);
+        // modify by wangji 同事意见 多次trace 可能需要增加其他的 最好是自己手动清除
+        // this.destroyTraceData(project);
         dispose();
     }
 
@@ -132,7 +133,7 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
     private void onCancel() {
         dispose();
         //清除数据
-        this.destroyTraceData(project);
+       // this.destroyTraceData(project);
     }
 
     /**
