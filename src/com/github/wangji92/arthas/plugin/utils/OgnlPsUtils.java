@@ -50,7 +50,7 @@ public class OgnlPsUtils {
             result = "0F";
             return result;
         }
-        //Class xx
+        //Class xx 特殊class 字段的判断
         //java.lang.Class
         if ("java.lang.Class".equals(canonicalText)) {
             result = "@java.lang.Object@class";

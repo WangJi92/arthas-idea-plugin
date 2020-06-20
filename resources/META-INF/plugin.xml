@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.11</version>
+    <version>2.12</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -142,6 +142,17 @@
         <li>1.logger:动态更新日志等级</li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
+       <p>2.12-RELEASE</p>
+      <ul>
+        <li>1.Builder Static Ognl Grammar Help Watch Static Content</li>
+        <li>2.Add some commmon command eg jvm、dashboard、classloader、vmoption</li>
+      </ul>
+      <ul>
+        <li>1.增加一个watch 观察静态部分的后半部分信息的构造 @xxxClass@method、field、class</li>
+        <li>2.增加一些常用的命令 eg jvm、dashboard、classloader、vmoption</li>
+        <li>3.接受同事的banghong建议对于trace -E 获取命令后不清空，可能排查问题还需要继续添加，手动清空比较好</li>
+      </ul>
+      <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
@@ -167,7 +178,7 @@
         <!-- Add your actions here -->
 
         <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction"
-                text="Search Classes Loaded By JVM Sc"
+                text="Search Classes Loaded By Jvm Sc"
                 description="Arthas get classloader">
         </action>
         <action id="ArthasWatch" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchCommandAction"
