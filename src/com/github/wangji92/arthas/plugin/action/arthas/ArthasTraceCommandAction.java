@@ -4,6 +4,7 @@ import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 
 /**
  * trace 命令
@@ -13,7 +14,7 @@ import com.intellij.openapi.project.Project;
  */
 public class ArthasTraceCommandAction extends BaseArthasPluginAction {
     @Override
-    public void doCommand(String className, String methodName, Project project) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
 
         String command = String.join(" ", "trace", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
 

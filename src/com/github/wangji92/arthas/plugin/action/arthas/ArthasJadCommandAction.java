@@ -3,6 +3,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 
 /**
  * 反编译查看类文件的信息  Decompile class
@@ -18,7 +19,7 @@ import com.intellij.openapi.project.Project;
 public class ArthasJadCommandAction extends BaseArthasPluginAction {
 
     @Override
-    public void doCommand(String className, String methodName, Project project) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         if ("*".equals(methodName)) {
             // 查看当前类的反编译结果
             methodName ="";

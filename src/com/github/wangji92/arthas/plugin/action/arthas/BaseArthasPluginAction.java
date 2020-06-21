@@ -80,7 +80,7 @@ public abstract class BaseArthasPluginAction extends AnAction {
             className = psiField.getContainingClass().getQualifiedName();
             methodName = "*";
         }
-        doCommand(className, methodName, project);
+        doCommand(className, methodName, project,psiElement);
     }
 
     /**
@@ -88,9 +88,11 @@ public abstract class BaseArthasPluginAction extends AnAction {
      *
      * @param className
      * @param methodName
+     * @param project
+     * @param psiElement
      * @return
      */
-    public void doCommand(String className, String methodName, Project project) {
+    public void doCommand(String className, String methodName, Project project,PsiElement psiElement) {
     }
 
 

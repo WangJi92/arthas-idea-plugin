@@ -2,6 +2,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.ui.ArthasLoggerDialog;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 
 /**
  * logger --name sample.mybatis.SampleXmlApplication --l warn
@@ -12,7 +13,7 @@ import com.intellij.openapi.project.Project;
 public class ArthasLoggerCommandAction extends BaseArthasPluginAction {
 
     @Override
-    public void doCommand(String className, String methodName, Project project) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
 
         new ArthasLoggerDialog(project, className).open("Print logger info, and update the logger level");
     }

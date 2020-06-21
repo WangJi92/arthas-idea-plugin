@@ -4,6 +4,7 @@ import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 
 /**
  * Monitor method execution statistics, e.g. total/success/failure count, average rt, fail rate, etc.
@@ -13,7 +14,7 @@ import com.intellij.openapi.project.Project;
 public class ArthasMonitorCommandAction extends BaseArthasPluginAction {
 
     @Override
-    public void doCommand(String className, String methodName, Project project) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
 
         String command = String.join(" ", "monitor", className, methodName, "-n", ArthasCommandConstants.INVOKE_MONITOR_COUNT, "--cycle", ArthasCommandConstants.INVOKE_MONITOR_INTERVAL);
         ClipboardUtils.setClipboardString(command);
