@@ -146,11 +146,13 @@
       <ul>
         <li>1.Builder Static Ognl Grammar Help Watch Static Content</li>
         <li>2.Add some commmon command eg jvm、dashboard、classloader、vmoption</li>
+        <li>3.Enhance watch command,eg: watch com.wangji92.arthas.plugin.demo.controller.StaticTest * '{params,returnObj,throwExp,target.filedValue}' -n 5 -x 3 'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'</li>
       </ul>
       <ul>
         <li>1.增加一个watch 观察静态部分的后半部分信息的构造 @xxxClass@method、field、class</li>
         <li>2.增加一些常用的命令 eg jvm、dashboard、classloader、vmoption</li>
         <li>3.接受同事的banghong建议对于trace -E 获取命令后不清空，可能排查问题还需要继续添加，手动清空比较好</li>
+        <li>4.watch 功能增强，方法watch 获取成员变量，将光标放置在watch 类的字段上即可使用</li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
