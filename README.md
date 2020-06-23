@@ -1,4 +1,5 @@
 # arthas idea plugin 
+**有问题直接加我微信wj983433479 或者 扫码添加钉钉群 32102545 沟通**
 >  帮助文档链接
 >  * [语雀arthas 插件使用](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
 >  * [爱上Java诊断利器Arthas之Arthas idea plugin 的前世今生 体验demo](https://github.com/WangJi92/arthas-plugin-demo)
