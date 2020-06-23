@@ -33,6 +33,7 @@ public class ArthasSpecialDialog extends JDialog {
     private LinkLabel tt;
     private LinkLabel conditionArthas;
     private LinkLabel watchSpringContext;
+    private LinkLabel asyncExample;
 
     private Project project;
 
@@ -134,6 +135,13 @@ public class ArthasSpecialDialog extends JDialog {
             }
         });
         watchSpringContext.setPaintUnderline(false);
+        asyncExample = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://www.cnblogs.com/leihuazhe/p/11630466.html");
+            }
+        });
+        asyncExample.setPaintUnderline(false);
     }
 
     /**

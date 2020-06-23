@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.12</version>
+    <version>2.13</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -20,6 +20,7 @@
       <li>tt:Time Tunnel</li>
       <li>support get all spring property command、get selected spring property</li>
       <li>logger:Print logger info, and update the logger level</li>
+      <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler</li>
 
 
       </ul>
@@ -37,6 +38,7 @@
       <li>tt:方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测(可以重新触发，周期触发，唯一缺点对于ThreadLocal 信息丢失[隐含参数]、引用对象数据变更无效)</li>
       <li>支持获取选择中的spring 环境变量的值获取，获取spring 上下文所有的环境变量按照优先级打印出来,方便排查环境问题</li>
       <li>logger:动态更新日志等级</li>
+      <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler 火焰图命令支持</li>
     ]]></description>
 
     <change-notes><![CDATA[
@@ -332,6 +334,11 @@
                 text="Static Ognl Grammar Help Watch Static Content"
                 description="Ognl static grammatical structure">
         </action>
+        <action id="ArthasAsyncProfilerCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasAsyncProfilerCommandAction"
+                text="Async Profiler"
+                description="Async profiler">
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -359,6 +366,7 @@
             <reference ref="ArthasDashboardCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasLoggerCommandAction"/>
+            <reference ref="ArthasAsyncProfilerCommandAction"/>
             <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
                 <reference ref="ArthasSc"/>
