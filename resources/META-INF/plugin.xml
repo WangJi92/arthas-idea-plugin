@@ -157,6 +157,14 @@
         <li>4.watch 功能增强，方法watch 获取成员变量，将光标放置在watch 类的字段上即可使用</li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
+      <p>2.13-RELEASE</p>
+      <ul>
+        <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler</li>
+      </ul>
+      <ul>
+       <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler 火焰图命令支持</li>
+      </ul>
+      <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
