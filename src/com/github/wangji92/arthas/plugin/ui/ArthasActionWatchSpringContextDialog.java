@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.icons.AllIcons;
@@ -19,15 +20,31 @@ import java.awt.event.WindowEvent;
 
 public class ArthasActionWatchSpringContextDialog extends JDialog {
 
+    /**
+     * 构造前缀
+     */
+    private static final String WATCH_FOR_SPRING_PROPERTY_PRE = "watch -x 3 -n 1  org.springframework.web.servlet.DispatcherServlet doDispatch";
+    /**
+     * 构造获取spring 表达式的信息 参考 {@link com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringAllPropertySourceCommandAction}
+     */
+    private static final String WATCH_FOR_SPRING_PROPERTY_CONTEXT = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=@org.springframework.web.context.support.WebApplicationContextUtils@getWebApplicationContext(params[0].getServletContext()),";
+
+//    public static void main(String[] args) {
+//        String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, WATCH_FOR_SPRING_PROPERTY_PRE, WATCH_FOR_SPRING_PROPERTY_CONTEXT, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
+//        System.out.println(command);
+//    }
     private JButton closeButton;
 
     private JTextField ognlExpressionEditor;
 
     private JPanel contentPane;
     private LinkLabel ognlOfficeLinkLabel;
-    private LinkLabel oglSpecialLink;
     private LinkLabel ognlDemoLink;
     private LinkLabel watchHelpLink;
+    /**
+     * spring 所有环境配置项信息获取
+     */
+    private JButton springPropertyButton;
 
 
     private String className;
@@ -65,6 +82,11 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
 
     private void init() {
         ognlExpressionEditor.setText(this.staticOgnlExpression);
+        springPropertyButton.addActionListener((e -> {
+            String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, WATCH_FOR_SPRING_PROPERTY_PRE, WATCH_FOR_SPRING_PROPERTY_CONTEXT, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
+            ClipboardUtils.setClipboardString(command);
+            NotifyUtils.notifyMessage(project, "由于使用watch 触发ognl的调用，必须要触发一次Mvc接口的调用，Static Spring Context 调用不同,获取指定项的值可以可以参考Ognl get selected spring property");
+        }));
     }
 
 
@@ -75,7 +97,7 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
         String ognCurrentExpression = ognlExpressionEditor.getText();
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
             ClipboardUtils.setClipboardString(ognCurrentExpression);
-            NotifyUtils.notifyMessage(project,"Bean 名称可能不正确可以手动修改,由于使用watch 触发ognl的调用，必须要触发一次Mvc接口的调用，Static Spring Context 调用不同");
+            NotifyUtils.notifyMessage(project, "Bean 名称可能不正确可以手动修改,由于使用watch 触发ognl的调用，必须要触发一次Mvc接口的调用，Static Spring Context 调用不同");
         }
         dispose();
     }
@@ -109,14 +131,6 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
             }
         });
         ognlOfficeLinkLabel.setPaintUnderline(false);
-
-        oglSpecialLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/71");
-            }
-        });
-        oglSpecialLink.setPaintUnderline(false);
         ognlDemoLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
