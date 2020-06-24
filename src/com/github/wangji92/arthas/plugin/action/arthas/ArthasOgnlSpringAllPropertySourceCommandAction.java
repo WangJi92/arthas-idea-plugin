@@ -32,8 +32,6 @@ import java.util.List;
  */
 public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
 
-    private static final String SPRING_ALL_PROPERTY = "%s '%s#allProperties={},#standardServletEnvironment=#propertySourceIterator=%s.getEnvironment(),#propertySourceIterator=#standardServletEnvironment.getPropertySources().iterator(),#propertySourceIterator.{#key=#this.getName(),#allProperties.add(\"                \"),#allProperties.add(\"------------------------- name:\"+#key),#this.getSource() instanceof java.util.Map ?#this.getSource().entrySet().iterator.{#key=#this.key,#allProperties.add(#key+\"=\"+#standardServletEnvironment.getProperty(#key))}:#{}},#allProperties'";
-
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
@@ -63,7 +61,7 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
         //ognl -x 3 '#springContext=@applicationContextProvider@context,
         String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
 
-        String command = String.format(SPRING_ALL_PROPERTY, join, springContextValue, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
+        String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, join, springContextValue, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
 
         new ArthasActionStaticDialog(project, className, command).open("arthas ognl spring get all property");
     }

@@ -53,4 +53,8 @@ public interface ArthasCommandConstants {
      * 安装脚本
      */
     String AS_INSTALL_BASH = "curl -sk https://arthas.gitee.io/arthas-boot.jar -o ~/.arthas-boot.jar  && echo \"alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http'\" >> ~/.bashrc && source ~/.bashrc";
+    /**
+     * 获取spring 所有的环境变量的表达式
+     */
+    String SPRING_ALL_PROPERTY = "%s '%s#allProperties={},#standardServletEnvironment=#propertySourceIterator=%s.getEnvironment(),#propertySourceIterator=#standardServletEnvironment.getPropertySources().iterator(),#propertySourceIterator.{#key=#this.getName(),#allProperties.add(\"                \"),#allProperties.add(\"------------------------- name:\"+#key),#this.getSource() instanceof java.util.Map ?#this.getSource().entrySet().iterator.{#key=#this.key,#allProperties.add(#key+\"=\"+#standardServletEnvironment.getProperty(#key))}:#{}},#allProperties'";
 }
