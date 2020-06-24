@@ -160,9 +160,11 @@
       <p>2.13-RELEASE</p>
       <ul>
         <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler</li>
+        <li>support tt watch invoke spring context invoke method field get spring property</li>
       </ul>
       <ul>
        <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler 火焰图命令支持</li>
+       <li>支持tt watch invoke spring context invoke method field 这个命令中增加快捷获取spring 环境变量</li>
       </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
