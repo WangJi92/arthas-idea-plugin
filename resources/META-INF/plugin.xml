@@ -349,6 +349,11 @@
                 text="Async Profiler"
                 description="Async profiler">
         </action>
+        <action id="ArthasSmCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSmCommandAction"
+                text="Search Method Loaded By Jvm Sm"
+                description="Search method loaded By jvm sm">
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -380,6 +385,7 @@
             <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
                 <reference ref="ArthasSc"/>
+                <reference ref="ArthasSmCommandAction"/>
                 <reference ref="ArthasClassloaderCommandAction"/>
                 <reference ref="ArthasDumpCommandAction"/>
                 <reference ref="ArthasHeapDumpCommandAction"/>
