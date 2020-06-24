@@ -62,7 +62,8 @@
         </constraints>
         <properties>
           <horizontalTextPosition value="0"/>
-          <text value="spring property"/>
+          <text value="spring 环境变量"/>
+          <toolTipText value="获取当前spring 环境变量信息"/>
         </properties>
       </component>
     </children>

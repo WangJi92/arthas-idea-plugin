@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.icons.AllIcons;
@@ -18,6 +19,20 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class ArthasTimeTunnelSpringContextDialog extends JDialog {
+    /**
+     * 构造前缀
+     */
+    private static final String TT_FOR_SPRING_PROPERTY_PRE = "tt -w";
+    /**
+     * 构造获取spring 表达式的信息 参考 {@link com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringAllPropertySourceCommandAction}
+     */
+    private static final String TT_FOR_SPRING_PROPERTY_CONTEXT = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=target.getApplicationContext(),";
+
+//    public static void main(String[] args) {
+//        String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, TT_FOR_SPRING_PROPERTY_PRE, TT_FOR_SPRING_PROPERTY_CONTEXT, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
+//        System.out.println(command);
+//    }
+
     private JButton closeButton;
 
     /**
@@ -35,6 +50,10 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
     private JButton ttBeginButton;
     private LinkLabel ttInvokeBeforeHelp;
     private LinkLabel ttIndexLabel;
+    /**
+     * spring all 环境变量信息
+     */
+    private JButton springPropertyButton;
 
 
     private String className;
@@ -77,6 +96,16 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
             ClipboardUtils.setClipboardString(text);
             NotifyUtils.notifyMessage(project, "通过tt 获取spring context的命令可以多次使用,第一次使用需要触发一下一个接口的调用");
         });
+        springPropertyButton.addActionListener((e -> {
+            String timeTunnelIndex = timeTunnelIndexField.getText();
+            if (StringUtils.isBlank(timeTunnelIndex)) {
+                timeTunnelIndex = "1000";
+            }
+            String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, TT_FOR_SPRING_PROPERTY_PRE, TT_FOR_SPRING_PROPERTY_CONTEXT, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
+            String invokeCommand = String.join(" ", command, "-x", "3", "-i", timeTunnelIndex);
+            ClipboardUtils.setClipboardString(invokeCommand);
+            NotifyUtils.notifyMessage(project, "这里的-i 参数必须是通过tt 获取spring context的命令的tt index的值,获取指定项的值可以可以参考Ognl get selected spring property");
+        }));
     }
 
 
@@ -90,9 +119,9 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
             timeTunnelIndex = "1000";
         }
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
-            String invokeCommand = String.join(" ", ognCurrentExpression,"-x","3","-i", timeTunnelIndex);
+            String invokeCommand = String.join(" ", ognCurrentExpression, "-x", "3", "-i", timeTunnelIndex);
             ClipboardUtils.setClipboardString(invokeCommand);
-            NotifyUtils.notifyMessage(project,"这里的-i 参数必须是通过tt 获取spring context的命令的tt index的值，bean 名称可能不正确，可以手动修改");
+            NotifyUtils.notifyMessage(project, "这里的-i 参数必须是通过tt 获取spring context的命令的tt index的值，bean 名称可能不正确，可以手动修改");
         }
         dispose();
     }
