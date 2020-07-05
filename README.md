@@ -1,11 +1,17 @@
 # arthas idea plugin 
-**有问题直接加我微信wj983433479 或者 扫码添加钉钉群 32102545 沟通**
->  帮助文档链接
->  * [语雀arthas 插件使用](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
->  * [爱上Java诊断利器Arthas之Arthas idea plugin 的前世今生 体验demo](https://github.com/WangJi92/arthas-plugin-demo)
->  **好好跟着体验demo的视频走一遍流程，通过arthas idea plugin 插件，arthas 将对于你排查线上问题更加的方便。**
-<a name="eaba0"></a>
->  * [issue 中有部分功能用法简介](https://github.com/WangJi92/arthas-idea-plugin/issues) 有兴趣的可以看一下。
+### 联系方式
+有问题直接加我微信wj983433479 或者 扫码添加钉钉群 32102545 沟通
+### 帮助文档链接
+   * [语雀arthas 插件使用](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
+   * [爱上Java诊断利器Arthas之Arthas idea plugin 的前世今生 体验demo](https://github.com/WangJi92/arthas-plugin-demo)
+   **好好跟着体验demo的视频走一遍流程，通过arthas idea plugin 插件，arthas 将对于你排查线上问题更加的方便。**
+   * [issue 中有部分功能用法简介](https://github.com/WangJi92/arthas-idea-plugin/issues) 有兴趣的可以看一下。
+   * 最新博客 [arthas 入门最佳实践](https://wangji.blog.csdn.net/article/details/106964278)
+### 给作者一个鼓励
+如果你喜欢这款插件，欢迎给身边的小伙伴推荐哦哦！当然打赏一杯咖啡是对我最大的鼓励！
+![image](https://user-images.githubusercontent.com/20874972/86533905-11a62980-bf07-11ea-909c-3f53b41ef5b2.png)
+
+
 # 一、背景
 目前Arthas 官方的工具还不够足够的简单，需要记住一些命令，特别是一些扩展性特别强的高级语法，比如ognl获取spring context 为所欲为，watch、trace 不够简单，需要构造一些命令工具的信息，因此只需要一个能够简单处理字符串信息的插件即可使用。当在处理线上问题的时候需要最快速、最便捷的命令，因此Idea arthas 插件还是有存在的意义和价值的。
 <a name="cE2LQ"></a>
