@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.13</version>
+    <version>2.14</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -166,6 +166,15 @@
        <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler 火焰图命令支持</li>
        <li>支持tt watch invoke spring context invoke method field 这个命令中增加快捷获取spring 环境变量</li>
       </ul>
+      <p>2.14-RELEASE</p>
+      <ul>
+        <li>Optimize the right-click display of high version 2020</li>
+        <li>Add support for the Arthas command getstatic</li>
+      </ul>
+      <ul>
+       <li>优化高版本右键展示问题</li>
+       <li>增加支持arthas 命令 getstatic</li>
+      </ul>
       <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
     ]]></change-notes>
 
@@ -206,6 +215,10 @@
         <action id="ArthasStatic" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
                 text="Ognl To Get Static Method Field"
                 description="Arthas ognl static">
+        </action>
+        <action id="ArthasSimpleGetStaticCommand" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSimpleGetStaticCommandAction"
+                text="Simple Get Static Field"
+                description="Simple getStatic field">
         </action>
 
         <action id="ArthasSpecial" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSpecialCommandAction"
@@ -371,6 +384,7 @@
             <reference ref="ArthasWatchOgnlSpringContextInvokeMethodAction"/>
             <reference ref="ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"/>
             <separator text="*  Static Method Field"/>
+            <reference ref="ArthasSimpleGetStaticCommand"/>
             <reference ref="ArthasStatic"/>
             <reference ref="ArthasSetStaticFieldCommand"/>
             <reference ref="ArthasOgnlStaticGrammaticalStructureCommandAction"/>

@@ -34,7 +34,7 @@ public class ArthasSpecialDialog extends JDialog {
     private LinkLabel conditionArthas;
     private LinkLabel watchSpringContext;
     private LinkLabel asyncExample;
-    private LinkLabel arthasBastUnderStand;
+    private LinkLabel arthasBestUnderStand;
 
     private Project project;
 
@@ -143,13 +143,13 @@ public class ArthasSpecialDialog extends JDialog {
             }
         });
         asyncExample.setPaintUnderline(false);
-        arthasBastUnderStand = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        arthasBestUnderStand = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
                 BrowserUtil.browse("https://wangji.blog.csdn.net/article/details/106964278");
             }
         });
-        arthasBastUnderStand.setPaintUnderline(false);
+        arthasBestUnderStand.setPaintUnderline(false);
     }
 
     /**

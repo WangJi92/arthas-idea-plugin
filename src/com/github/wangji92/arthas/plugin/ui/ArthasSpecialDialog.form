@@ -104,7 +104,7 @@
           <text value="使用Async-profiler 对程序性能优化实战"/>
         </properties>
       </component>
-      <component id="178c4" class="com.intellij.ui.components.labels.LinkLabel" binding="arthasBastUnderStand" custom-create="true">
+      <component id="178c4" class="com.intellij.ui.components.labels.LinkLabel" binding="arthasBestUnderStand" custom-create="true">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
