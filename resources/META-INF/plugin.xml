@@ -357,7 +357,7 @@
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
-            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="ShowIntentionsGroup" anchor="before" relative-to-action="ShowIntentionActions"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <separator />
             <reference ref="ArthasWatch"/>
