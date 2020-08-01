@@ -8,8 +8,7 @@
    * [issue 中有部分功能用法简介](https://github.com/WangJi92/arthas-idea-plugin/issues) 有兴趣的可以看一下。
    * 最新博客 [arthas 入门最佳实践](https://wangji.blog.csdn.net/article/details/106964278)
 ### 给作者一个鼓励
-如果你喜欢这款插件，欢迎给身边的小伙伴推荐哦哦！当然打赏一杯咖啡是对我最大的鼓励！
-![image](https://user-images.githubusercontent.com/20874972/86533905-11a62980-bf07-11ea-909c-3f53b41ef5b2.png)
+如果你喜欢这款插件，欢迎给身边的小伙伴推荐哦哦,点赞哦 
 
 
 # 一、背景

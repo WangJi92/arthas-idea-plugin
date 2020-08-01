@@ -12,6 +12,11 @@ public interface ArthasCommandConstants {
      * 默认条件表达式
      */
     String DEFAULT_CONDITION_EXPRESS = "'1==1'";
+
+    /**
+     * 跳过JDK 自带的方法
+     */
+    String DEFAULT_SKIP_JDK = "--skipJDKMethod false";
     /**
      * 调用次数
      */

@@ -40,6 +40,6 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
 
         String command = String.join(" ", "watch", className, methodName, watchContentBuilder.toString(), "-n", ArthasCommandConstants.INVOKE_COUNT, "-x", ArthasCommandConstants.RESULT_X, conditionExpress);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, "支持表达式(默认1==1) eg:'params[0].name=\"name\" and params.size == 1',可以将光标放置在字段上watch获取值 ");
+        NotifyUtils.notifyMessage(project, "支持表达式(默认1==1) 更多搜索 [arthas 入门最佳实践],可以将光标放置在字段上watch获取值 ");
     }
 }

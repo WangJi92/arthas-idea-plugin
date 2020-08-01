@@ -115,8 +115,9 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
     private void onOK() {
         String traceECommand = traceCommandTextField.getText();
         if (StringUtils.isNotBlank(traceECommand)) {
-            ClipboardUtils.setClipboardString(traceECommand + " " + ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
-            NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) eg:'throwExp != null'; trace -E 支持trace多个方法,方法中的方法");
+            String command = String.join(" ",traceECommand,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS,ArthasCommandConstants.DEFAULT_SKIP_JDK);
+            ClipboardUtils.setClipboardString(command);
+            NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) 更多搜索 [arthas 入门最佳实践],trace -E 支持trace多个方法,方法中的方法");
         }
         // modify by wangji 同事意见 多次trace 可能需要增加其他的 最好是自己手动清除
         // this.destroyTraceData(project);
