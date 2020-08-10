@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
+import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -66,18 +67,19 @@ public abstract class BaseArthasPluginAction extends AnAction {
         String methodName = "";
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
-            className = psiMethod.getContainingClass().getQualifiedName();
+            //处理内部类 匿名类获取class的问题
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
             methodName = psiMethod.getNameIdentifier().getText();
         }
         if (psiElement instanceof PsiClass) {
             PsiClass psiClass = (PsiClass) psiElement;
-            className = psiClass.getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass);
             methodName = "*";
         }
 
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
-            className = psiField.getContainingClass().getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             methodName = "*";
         }
         doCommand(className, methodName, project,psiElement);

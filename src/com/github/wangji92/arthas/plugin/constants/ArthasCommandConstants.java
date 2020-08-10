@@ -17,6 +17,11 @@ public interface ArthasCommandConstants {
      * 跳过JDK 自带的方法
      */
     String DEFAULT_SKIP_JDK = "--skipJDKMethod false";
+
+    /**
+     * ognl 内部类分割符 https://github.com/alibaba/arthas/issues/71
+     */
+    String OGNL_INNER_CLASS_SEPARATOR = "$";
     /**
      * 调用次数
      */
