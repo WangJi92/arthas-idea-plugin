@@ -192,7 +192,7 @@ public class OgnlPsUtils {
      * @param psiClass
      * @return
      */
-    public static String getClassBeanName(@NotNull PsiClass psiClass) {
+    public static String getClassBeanName(PsiClass psiClass) {
         if (psiClass == null) {
             return "emptyBeanName";
         }
