@@ -105,7 +105,6 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction  extends AnAction {
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             psiClass = psiMethod.getContainingClass();
-            className = psiMethod.getContainingClass().getQualifiedName();
             String methodName = psiMethod.getNameIdentifier().getText();
             //构建表达式
             builder.append(methodName).append("(");
@@ -129,7 +128,6 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction  extends AnAction {
         //支持field
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
-            className = psiField.getContainingClass().getQualifiedName();
             String fileName = psiField.getNameIdentifier().getText();
             psiClass = psiField.getContainingClass();
             //构建 field的信息
@@ -138,6 +136,6 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction  extends AnAction {
 
         String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiClass);
         String watchSpringOgnlExpression = String.format(WATCH_SPRING_CONTEXT, lowCamelBeanName, builder.toString());
-        new ArthasActionWatchSpringContextDialog(project, className, watchSpringOgnlExpression).open("arthas watch ognl get spring context invoke method field 要触发任意的接口调用");
+        new ArthasActionWatchSpringContextDialog(project, null, watchSpringOgnlExpression).open("arthas watch ognl get spring context invoke method field 要触发任意的接口调用");
     }
 }

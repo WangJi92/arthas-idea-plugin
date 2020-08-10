@@ -3,6 +3,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -66,7 +67,8 @@ public class ArthasSimpleGetStaticCommandAction extends AnAction {
             if (!psiField.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            String className = psiField.getContainingClass().getQualifiedName();
+            // 处理内部类问题
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             String fileName = psiField.getNameIdentifier().getText();
             String command = String.join(" ", "getstatic",className,fileName, "-x", ArthasCommandConstants.RESULT_X);
             ClipboardUtils.setClipboardString(command);

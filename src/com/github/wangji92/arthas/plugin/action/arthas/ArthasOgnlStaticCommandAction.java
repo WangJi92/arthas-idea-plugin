@@ -86,7 +86,7 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
 
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
-            className = psiMethod.getContainingClass().getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
             methodName = psiMethod.getNameIdentifier().getText();
             builder.append("  '").append("@").append(className).append("@").append(methodName).append("(");
 
@@ -112,7 +112,7 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
                 return;
             }
 
-            className = psiField.getContainingClass().getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             String fileName = psiField.getNameIdentifier().getText();
             builder.append(" '").append("@").append(className).append("@").append(fileName).append("'");
         }

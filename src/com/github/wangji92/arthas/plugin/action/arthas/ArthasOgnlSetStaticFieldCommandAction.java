@@ -87,7 +87,7 @@ public class ArthasOgnlSetStaticFieldCommandAction extends AnAction {
             if (!psiField.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-            String className = psiField.getContainingClass().getQualifiedName();
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             String fileName = psiField.getNameIdentifier().getText();
 
             //获取字段的默认值

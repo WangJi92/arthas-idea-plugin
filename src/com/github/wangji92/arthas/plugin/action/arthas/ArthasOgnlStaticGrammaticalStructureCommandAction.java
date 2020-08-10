@@ -66,9 +66,10 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
 
         // 下面处理 不是static的方法、字段直接获取 方法、字段所在class的 @xxxclass@class 这样的静态信息
         //region 非静态的处理方式
+        //todo 这里可能不准 匿名的不是太准 问题不大 用的比较少
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
-            className = psiMethod.getContainingClass().getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
             if (!psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
                 iStaticMethod = false;
                 builder.append("'").append("@").append(className).append("@").append("class").append("'");
@@ -76,7 +77,7 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         }
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
-            className = psiField.getContainingClass().getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             if (!psiField.hasModifierProperty(PsiModifier.STATIC)) {
                 iStaticField = false;
                 builder.append("'").append("@").append(className).append("@").append("class").append("'");
@@ -84,7 +85,7 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         }
         if (psiElement instanceof PsiClass) {
             PsiClass psiClass = (PsiClass) psiElement;
-            className = psiClass.getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass);
             builder.append("'").append("@").append(className).append("@").append("class").append("'");
         }
         //endregion
@@ -92,7 +93,7 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         //region 静态的处理方式
         if (psiElement instanceof PsiMethod && iStaticMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
-            className = psiMethod.getContainingClass().getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
             methodName = psiMethod.getNameIdentifier().getText();
             builder.append(" '").append("@").append(className).append("@").append(methodName).append("(");
 
@@ -117,7 +118,7 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
                 return;
             }
 
-            className = psiField.getContainingClass().getQualifiedName();
+            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             String fileName = psiField.getNameIdentifier().getText();
             builder.append("'").append("@").append(className).append("@").append(fileName).append("'");
         }
