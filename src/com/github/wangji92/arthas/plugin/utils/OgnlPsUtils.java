@@ -192,13 +192,16 @@ public class OgnlPsUtils {
      * @param psiClass
      * @return
      */
-    public static String getClassBeanName(@NotNull PsiClass psiClass) {
+    public static String getClassBeanName(PsiClass psiClass) {
         if (psiClass == null) {
-            return "emptyBeanName";
+            return "errorBeanName";
         }
         PsiModifierList psiModifierList = psiClass.getModifierList();
+        if (psiModifierList ==null) {
+            return "errorBeanName";
+        }
         PsiAnnotation[] annotations = psiModifierList.getAnnotations();
-        String beanName = "";
+        String beanName = "errorBeanName";
         if (annotations.length > 0) {
             for (PsiAnnotation annotation : annotations) {
                 beanName = getAttributeFromAnnotation(annotation, Sets.newHashSet("org.springframework.stereotype.Service", "org.springframework.stereotype.Controller", "org.springframework.stereotype.Repository", "org.springframework.web.bind.annotation.RestController"), "value");
