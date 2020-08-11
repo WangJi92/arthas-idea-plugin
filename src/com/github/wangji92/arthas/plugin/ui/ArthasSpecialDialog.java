@@ -35,6 +35,7 @@ public class ArthasSpecialDialog extends JDialog {
     private LinkLabel watchSpringContext;
     private LinkLabel asyncExample;
     private LinkLabel arthasBestUnderStand;
+    private LinkLabel arthasJprofileLink;
 
     private Project project;
 
@@ -150,6 +151,13 @@ public class ArthasSpecialDialog extends JDialog {
             }
         });
         arthasBestUnderStand.setPaintUnderline(false);
+        arthasJprofileLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/1416");
+            }
+        });
+        arthasJprofileLink.setPaintUnderline(false);
     }
 
     /**
