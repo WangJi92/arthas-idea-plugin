@@ -11,6 +11,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.ui.components.labels.LinkLabel;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -50,6 +51,15 @@ public class ArthasAsyncProfileDialog extends JDialog {
     private JButton closeButton;
     private JRadioButton differentThreadsSeparatelyRadioButton;
     private LinkLabel asyncExample;
+    /**
+     * 持续时间
+     */
+    private JTextField durationTextField;
+
+    /**
+     * 持续时间自动结束的命令
+     */
+    private JButton autoStopCommandButton;
 
     private Project project;
 
@@ -94,6 +104,9 @@ public class ArthasAsyncProfileDialog extends JDialog {
             startCommand();
 
         });
+        autoStopCommandButton.addActionListener((event) -> {
+            autoStopCommand();
+        });
         stopCommandButton.addActionListener((event) -> {
             stopCommand();
         });
@@ -124,7 +137,7 @@ public class ArthasAsyncProfileDialog extends JDialog {
         }
         String commandFinal = String.join(" ", commands);
         ClipboardUtils.setClipboardString(commandFinal);
-        NotifyUtils.notifyMessage(project,"list(all supported events),actions(all supported actions)");
+        NotifyUtils.notifyMessage(project, "list(all supported events),actions(all supported actions)");
     }
 
     private void stopCommand() {
@@ -142,12 +155,50 @@ public class ArthasAsyncProfileDialog extends JDialog {
     }
 
     private void startCommand() {
+        List<String> commands = getStartCommandList();
+        String commandFinal = String.join(" ", commands);
+        ClipboardUtils.setClipboardString(commandFinal);
+        NotifyUtils.notifyMessage(project, "默认收集cpu  alluser(user-mode events) allkernel(kernel-mode events) 频率单位纳秒");
+    }
+
+    /**
+     * 完成后自动关闭
+     */
+    private void autoStopCommand() {
+        List<String> commands = getStartCommandList();
+
+        String outputFileFormatComboBoxStr = outputFileFormatComboBox.getSelectedItem() != null ? outputFileFormatComboBox.getSelectedItem().toString() : "";
+        if (StringUtils.isNotBlank(outputFileFormatComboBoxStr)) {
+            commands.add("--format");
+            commands.add(outputFileFormatComboBoxStr);
+        }
+
+        String durationTextFieldText = durationTextField.getText();
+        if (StringUtils.isNotBlank(durationTextFieldText)) {
+            durationTextFieldText = "30";
+            commands.add("-duration");
+            commands.add(durationTextFieldText);
+        }
+        String commandFinal = String.join(" ", commands);
+        ClipboardUtils.setClipboardString(commandFinal);
+        NotifyUtils.notifyMessage(project, " 自动完成后自动Stop 详情见 Arthas special Use link");
+
+    }
+
+    /**
+     * 获取启动命令的构造 List
+     *
+     * @return
+     */
+    @NotNull
+    private List<String> getStartCommandList() {
         List<String> commands = new ArrayList<>();
         commands.add("profiler");
         commands.add("start");
         commands.add("--event");
         String eventComboBoxStr = eventComboBox.getSelectedItem() != null ? eventComboBox.getSelectedItem().toString() : "";
         commands.add(eventComboBoxStr);
+        // 具体的参数规则 https://github.com/jvm-profiling-tools/async-profiler/blob/v1.6/src/arguments.cpp#L34 allkernel alluser 虽然  ./profiler.sh help 不一样 由于脚本处理了
         String eventModeComboBoxStr = eventModeComboBox.getSelectedItem() != null ? eventModeComboBox.getSelectedItem().toString() : "";
         if (StringUtils.isNotBlank(eventModeComboBoxStr)) {
             commands.add("--" + eventModeComboBoxStr);
@@ -158,9 +209,7 @@ public class ArthasAsyncProfileDialog extends JDialog {
         if (differentThreadsSeparatelyRadioButton.isSelected()) {
             commands.add("--threads");
         }
-        String commandFinal = String.join(" ", commands);
-        ClipboardUtils.setClipboardString(commandFinal);
-        NotifyUtils.notifyMessage(project, "默认收集cpu  all-user(user-mode events) all-kernel(kernel-mode events) 频率单位纳秒");
+        return commands;
     }
 
 
