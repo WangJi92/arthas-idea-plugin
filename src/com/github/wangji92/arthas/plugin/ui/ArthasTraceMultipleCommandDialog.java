@@ -144,7 +144,11 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
         String classNames = String.join("|", CLASS_SET);
         String methodNames = String.join("|", METHOD_SET);
 
-        String command = String.join(" ", "trace -E", classNames, methodNames, "-n", ArthasCommandConstants.INVOKE_COUNT);
+        // java.util.regex.PatternSyntaxException: Dangling meta character '*' near index
+        // eg trace -E com.common.A |com.common.B  *| list  will be error before
+        String replaceMethodName = methodNames.replace("*", "\\\\*");
+
+        String command = String.join(" ", "trace -E", classNames, replaceMethodName, "-n", ArthasCommandConstants.INVOKE_COUNT);
         traceCommandTextField.setText(command);
     }
 
