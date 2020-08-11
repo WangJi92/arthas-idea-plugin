@@ -158,6 +158,7 @@
               <model>
                 <item value="svg"/>
                 <item value="html"/>
+                <item value="jfr"/>
               </model>
             </properties>
           </component>
