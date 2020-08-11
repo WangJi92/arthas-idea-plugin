@@ -14,6 +14,7 @@ import com.intellij.ui.components.labels.LinkLabel;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -55,23 +56,37 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
      */
     private JButton springPropertyButton;
 
+    /**
+     * 获取目标对象的表达式
+     */
+    private JTextField aopTargetTextField;
+
+    /**
+     * 获取目标对象
+     */
+    private JButton aopTargetCommandButton;
+
 
     private String className;
 
     private String staticOgnlExpression;
 
+    /**
+     * aop 获取目标对象的表达式
+     */
+    private String aopTargetOgnlExpression;
+
     private Project project;
 
 
-    public ArthasTimeTunnelSpringContextDialog(Project project, String className, String staticOgnlExpression) {
+    public ArthasTimeTunnelSpringContextDialog(Project project, String className, String staticOgnlExpression, String aopTargetOgnlExpression) {
         this.project = project;
         setContentPane(this.contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(closeButton);
+        getRootPane().setDefaultButton(null);
         this.className = className;
         this.staticOgnlExpression = staticOgnlExpression;
-
-        closeButton.addActionListener(e -> onOK());
+        this.aopTargetOgnlExpression = aopTargetOgnlExpression;
 
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -91,6 +106,9 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
 
     private void init() {
         ognlExpressionEditor.setText(this.staticOgnlExpression);
+        // aop 获取目标对象 https://github.com/alibaba/arthas/issues/482
+        // tt -i 1000 -w '#userServers=target.getApplicationContext().getBean("userService"),@org.springframework.aop.support.AopUtils@getTargetClass(#userServers)'
+        aopTargetTextField.setText(this.aopTargetOgnlExpression);
         ttBeginButton.addActionListener(e -> {
             String text = ttRequestMappingHandlerAdapterInvokeField.getText();
             ClipboardUtils.setClipboardString(text);
@@ -106,14 +124,19 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
             ClipboardUtils.setClipboardString(invokeCommand);
             NotifyUtils.notifyMessage(project, "这里的-i 参数必须是通过tt 获取spring context的命令的tt index的值,获取指定项的值可以可以参考Ognl get selected spring property");
         }));
+
+        // aop target 对象的信息
+        aopTargetCommandButton.addActionListener(e -> onOK(aopTargetTextField.getText()));
+
+        // 原始的获取方法的数据
+        closeButton.addActionListener(e -> onOK(ognlExpressionEditor.getText()));
     }
 
 
     /**
      * 关闭按钮回调
      */
-    private void onOK() {
-        String ognCurrentExpression = ognlExpressionEditor.getText();
+    private void onOK(String ognCurrentExpression) {
         String timeTunnelIndex = timeTunnelIndexField.getText();
         if (StringUtils.isBlank(timeTunnelIndex)) {
             timeTunnelIndex = "1000";
@@ -123,7 +146,6 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
             ClipboardUtils.setClipboardString(invokeCommand);
             NotifyUtils.notifyMessage(project, "这里的-i 参数必须是通过tt 获取spring context的命令的tt index的值，bean 名称可能不正确，可以手动修改");
         }
-        dispose();
     }
 
 
@@ -140,6 +162,7 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
     public void open(String title) {
         setTitle(title);
         pack();
+        setMinimumSize(new Dimension(854,200));
         //两个屏幕处理出现问题，跳到主屏幕去了
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
         setVisible(true);

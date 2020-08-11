@@ -26,6 +26,11 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction  extends AnActi
      */
     private  static final String TT_SPRING_CONTEXT="tt -w 'target.getApplicationContext().getBean(\"%s\").%s'";
 
+    /**
+     * spring aop 获取target
+     */
+    public static final String  TT_SPRING_AOP_TARGET = "tt -w '#beanName=\"%s\",#targetBean=target.getApplicationContext().getBean(#beanName),@org.springframework.aop.support.AopUtils@getTargetClass(#targetBean)'";
+
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();
@@ -142,6 +147,8 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction  extends AnActi
 
         String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiClass);
         String watchSpringOgnlExpression = String.format(TT_SPRING_CONTEXT, lowCamelBeanName, builder.toString());
-        new ArthasTimeTunnelSpringContextDialog(project, className, watchSpringOgnlExpression).open("time tunnel ognl get spring context invoke method field");
+        //这里不需要方法
+        String  aopTargetOgnlExpression = String.format(TT_SPRING_AOP_TARGET, lowCamelBeanName);
+        new ArthasTimeTunnelSpringContextDialog(project, className, watchSpringOgnlExpression,aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
     }
 }
