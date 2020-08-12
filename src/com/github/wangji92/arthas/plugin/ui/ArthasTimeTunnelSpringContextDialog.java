@@ -126,23 +126,27 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
         }));
 
         // aop target 对象的信息
-        aopTargetCommandButton.addActionListener(e -> onOK(aopTargetTextField.getText()));
+        aopTargetCommandButton.addActionListener(e -> onOK(aopTargetTextField.getText(), true));
 
         // 原始的获取方法的数据
-        closeButton.addActionListener(e -> onOK(ognlExpressionEditor.getText()));
+        closeButton.addActionListener(e -> onOK(ognlExpressionEditor.getText(), false));
     }
 
 
     /**
      * 关闭按钮回调
      */
-    private void onOK(String ognCurrentExpression) {
+    private void onOK(String ognCurrentExpression, boolean isAop) {
         String timeTunnelIndex = timeTunnelIndexField.getText();
         if (StringUtils.isBlank(timeTunnelIndex)) {
             timeTunnelIndex = "1000";
         }
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
-            String invokeCommand = String.join(" ", ognCurrentExpression, "-x", "3", "-i", timeTunnelIndex);
+            String count = "3";
+            if (isAop) {
+                count = "1";
+            }
+            String invokeCommand = String.join(" ", ognCurrentExpression, "-x", count, "-i", timeTunnelIndex);
             ClipboardUtils.setClipboardString(invokeCommand);
             NotifyUtils.notifyMessage(project, "这里的-i 参数必须是通过tt 获取spring context的命令的tt index的值，bean 名称可能不正确，可以手动修改");
         }
@@ -162,7 +166,7 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
     public void open(String title) {
         setTitle(title);
         pack();
-        setMinimumSize(new Dimension(854,200));
+        setMinimumSize(new Dimension(854, 200));
         //两个屏幕处理出现问题，跳到主屏幕去了
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
         setVisible(true);
