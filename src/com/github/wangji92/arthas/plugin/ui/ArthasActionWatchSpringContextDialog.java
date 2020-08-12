@@ -29,7 +29,7 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
      */
     private static final String WATCH_FOR_SPRING_PROPERTY_CONTEXT = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=@org.springframework.web.context.support.WebApplicationContextUtils@getWebApplicationContext(params[0].getServletContext()),";
 
-//    public static void main(String[] args) {
+    //    public static void main(String[] args) {
 //        String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, WATCH_FOR_SPRING_PROPERTY_PRE, WATCH_FOR_SPRING_PROPERTY_CONTEXT, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
 //        System.out.println(command);
 //    }
@@ -45,6 +45,10 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
      * spring 所有环境配置项信息获取
      */
     private JButton springPropertyButton;
+    /**
+     * 代理对象的原始对象的信息
+     */
+    private JButton springNonProxyTargetButton;
 
 
     private String className;
@@ -53,14 +57,17 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
 
     private Project project;
 
+    private String aopTargetOgnlExpression;
 
-    public ArthasActionWatchSpringContextDialog(Project project, String className, String staticOgnlExpression) {
+
+    public ArthasActionWatchSpringContextDialog(Project project, String className, String staticOgnlExpression, String aopTargetOgnlExpression) {
         this.project = project;
         setContentPane(this.contentPane);
         setModal(true);
         getRootPane().setDefaultButton(closeButton);
         this.className = className;
         this.staticOgnlExpression = staticOgnlExpression;
+        this.aopTargetOgnlExpression = aopTargetOgnlExpression;
 
         closeButton.addActionListener(e -> onOK());
 
@@ -87,6 +94,11 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
             ClipboardUtils.setClipboardString(command);
             NotifyUtils.notifyMessage(project, "由于使用watch 触发ognl的调用，必须要触发一次Mvc接口的调用，Static Spring Context 调用不同,获取指定项的值可以可以参考Ognl get selected spring property");
         }));
+
+        springNonProxyTargetButton.addActionListener(e -> {
+            ClipboardUtils.setClipboardString(aopTargetOgnlExpression);
+            NotifyUtils.notifyMessage(project, "Bean 名称可能不正确可以手动修改,由于使用watch 触发ognl的调用，必须要触发一次Mvc接口的调用，Static Spring Context 调用不同");
+        });
     }
 
 

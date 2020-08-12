@@ -22,6 +22,11 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction  extends AnAction {
      */
     private  static final String WATCH_SPRING_CONTEXT="watch -x 3 -n 1  org.springframework.web.servlet.DispatcherServlet doDispatch '@org.springframework.web.context.support.WebApplicationContextUtils@getWebApplicationContext(params[0].getServletContext()).getBean(\"%s\").%s'";
 
+    /**
+     * spring aop 获取target
+     */
+    public static final String  WATCH_SPRING_AOP_TARGET = "watch -x 1 -n 1  org.springframework.web.servlet.DispatcherServlet doDispatch '#beanName=\"%s\",#targetBean=@org.springframework.web.context.support.WebApplicationContextUtils@getWebApplicationContext(params[0].getServletContext()).getBean(#beanName),#isProxy=:[ @org.springframework.aop.support.AopUtils@isAopProxy(#this)?true:false],#isJdkDynamicProxy =:[@org.springframework.aop.support.AopUtils@isJdkDynamicProxy(#this) ? true :false ],#cglibTarget =:[#hField =#this.getClass().getDeclaredField(\"CGLIB$CALLBACK_0\"),#hField.setAccessible(true),#dynamicAdvisedInterceptor=#hField.get(#this),#fieldAdvised=#dynamicAdvisedInterceptor.getClass().getDeclaredField(\"advised\"),#fieldAdvised.setAccessible(true),1==1? #fieldAdvised.get(#dynamicAdvisedInterceptor).getTargetSource().getTarget():null],#jdkTarget=:[ #hField=#this.getClass().getSuperclass().getDeclaredField(\"h\"),#hField.setAccessible(true),#aopProxy=#hField.get(#this),#advisedField=#aopProxy.getClass().getDeclaredField(\"advised\"),#advisedField.setAccessible(true),1==1?#advisedField.get(#aopProxy).getTargetSource().getTarget():null],#nonProxyResultFunc = :[!#isProxy(#this) ? #this :#isJdkDynamicProxy(#this)? #isJdkDynamicProxy(#this) : #cglibTarget(#this)],#nonProxyTarget=#nonProxyResultFunc(#targetBean),#nonProxyTarget'";
+
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();
@@ -136,6 +141,7 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction  extends AnAction {
 
         String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiClass);
         String watchSpringOgnlExpression = String.format(WATCH_SPRING_CONTEXT, lowCamelBeanName, builder.toString());
-        new ArthasActionWatchSpringContextDialog(project, null, watchSpringOgnlExpression).open("arthas watch ognl get spring context invoke method field 要触发任意的接口调用");
+        String aopTargetOgnlExpression = String.format(WATCH_SPRING_AOP_TARGET, lowCamelBeanName);
+        new ArthasActionWatchSpringContextDialog(project, null, watchSpringOgnlExpression,aopTargetOgnlExpression).open("arthas watch ognl get spring context invoke method field 要触发任意的接口调用");
     }
 }
