@@ -211,7 +211,7 @@ public class OgnlPsUtils {
             }
         }
         //注解上没有获取值，使用默认的名称首字母小写
-        if (StringUtils.isBlank(beanName)) {
+        if (StringUtils.isNotBlank(beanName)) {
             beanName = StringUtils.toLowerFristChar(psiClass.getName());
         }
         return beanName;
