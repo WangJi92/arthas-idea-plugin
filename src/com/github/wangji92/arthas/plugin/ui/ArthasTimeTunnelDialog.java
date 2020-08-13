@@ -176,7 +176,7 @@ public class ArthasTimeTunnelDialog extends JDialog {
         helpLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://alibaba.github.io/arthas/tt.html");
+                BrowserUtil.browse("https://arthas.aliyun.com/arthas/tt.html");
             }
         });
         helpLink.setPaintUnderline(false);

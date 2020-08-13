@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement;
 
 /**
  * Dump class byte array from JVM
- * https://alibaba.github.io/arthas/dump
+ * https://arthas.aliyun.com/arthas/dump
  * <p>
  * dump java.lang.String
  * dump -d /tmp/output java.lang.String

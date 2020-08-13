@@ -156,7 +156,7 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
         watchHelpLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("   https://alibaba.github.io/arthas/watch");
+                BrowserUtil.browse("   https://arthas.aliyun.com/arthas/watch");
             }
         });
         watchHelpLink.setPaintUnderline(false);

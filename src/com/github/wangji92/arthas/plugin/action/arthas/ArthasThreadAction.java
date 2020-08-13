@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * thread -i 3000 -n 5
  * 这里的cpu统计的是，一段采样间隔内，当前JVM里各个线程所占用的cpu时间占总cpu时间的百分比。其计算方法为： 首先进行一次采样，获得所有线程的cpu的使用时间(调用的是java.lang.management.ThreadMXBean#getThreadCpuTime这个接口)，然后睡眠一段时间，默认100ms，可以通过-i参数指定，然后再采样一次，最后得出这段时间内各个线程消耗的cpu时间情况，最后算出百分比。
- * https://alibaba.github.io/arthas/thread thread
+ * https://arthas.aliyun.com/arthas/thread thread
  * @author 汪小哥
  * @date 21-03-2020
  */

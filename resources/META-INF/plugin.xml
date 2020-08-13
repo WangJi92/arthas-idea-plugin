@@ -9,7 +9,7 @@
       <h4>Arthas helps developers in trouble-shooting issues in production environment for Java based applications without modifying code or restarting servers.</h4>
       <h3>English:</h3>
       <ul>
-      <li>Based on the  Arthas command generation plugin developed by IntelliJ IDEA, it supports <a href="https://alibaba.github.io/arthas/"> Alibaba Arthas </a> official commonly used commands.</li>
+      <li>Based on the  Arthas command generation plugin developed by IntelliJ IDEA, it supports <a href="https://arthas.aliyun.com/arthas/"> Alibaba Arthas </a> official commonly used commands.</li>
       <li>The official commands are too complicated. In order to simplify the difficulty of users, this plugin provides support for some common commands.</li>
       <li>The plugin supports  Alibaba Arthas commands such as watch、trace、ognl static、ognl bean method、field、monitor、stack 、tt etc.</li>
       <li>watch: Display the input/output parameter, return object, and thrown exception of specified method invocation</li>
@@ -26,7 +26,7 @@
       </ul>
       <h3>中文：</h3>
       <ul>
-      <li>基于IntelliJ IDEA开发的Alibaba Arthas 命令生成插件，支持<a href="https://alibaba.github.io/arthas/">Alibaba Arthas</a> 官方常用的命令。</li>
+      <li>基于IntelliJ IDEA开发的Alibaba Arthas 命令生成插件，支持<a href="https://arthas.aliyun.com/arthas/">Alibaba Arthas</a> 官方常用的命令。</li>
       <li>官方的命令太复杂，此插件为了简化使用者的难度，提供了一些常用命令的支持</li>
       <li>该插件支持Alibaba Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method、field、monitor、stack 、tt等命令</li>
       <li>支持设置static field、static final</>
@@ -242,8 +242,8 @@
         </action>
 
         <action id="ArthasHelpCommand" class="com.github.wangji92.arthas.plugin.action.arthas.HelpAction"
-                text="Arthas Idea Help"
-                description="Arthas idea help">
+                text="Arthas Idea Plugin Help"
+                description="Arthas idea plugin help">
         </action>
         <action id="ArthasTraceMultipleCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTraceMultipleClassMethodCommandAction"
@@ -367,6 +367,11 @@
                 text="Search Method Loaded By Jvm Sm"
                 description="Search method loaded By jvm sm">
         </action>
+        <action id="HelpArthasDocumentPageAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.HelpArthasDocumentPageAction"
+                text="Arthas Documentation Website"
+                description="Arthas documentation website">
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -413,6 +418,7 @@
             <reference ref="ArthasSpecial"/>
             <separator/>
             <reference ref="ArthasHelpCommand"/>
+            <reference ref="HelpArthasDocumentPageAction"/>
         </group>
     </actions>
 

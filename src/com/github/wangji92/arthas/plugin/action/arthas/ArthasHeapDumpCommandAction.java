@@ -10,7 +10,7 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * https://alibaba.github.io/arthas/heapdump
+ * https://arthas.aliyun.com/arthas/heapdump
  * heapdump  /tmp/dump.hprof 打印堆栈信息 ,有点类似 jmap -dump:format=b,file=/temp/dump.hprof pid
  *
  * @author 汪小哥

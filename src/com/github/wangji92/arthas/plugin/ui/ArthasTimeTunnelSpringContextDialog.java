@@ -211,7 +211,7 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
         ttIndexLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://alibaba.github.io/arthas/tt");
+                BrowserUtil.browse("https://arthas.aliyun.com/arthas/tt");
             }
         });
         ttIndexLabel.setPaintUnderline(false);
