@@ -127,7 +127,7 @@ public class ArthasLoggerDialog extends JDialog {
         helpLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/arthas/logger.html");
+                BrowserUtil.browse("https://arthas.aliyun.com/doc/logger.html");
             }
         });
         helpLink.setPaintUnderline(false);

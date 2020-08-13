@@ -203,7 +203,7 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
         traceHelp = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/arthas/trace.html");
+                BrowserUtil.browse("https://arthas.aliyun.com/doc/trace.html");
             }
         });
         traceHelp.setPaintUnderline(false);

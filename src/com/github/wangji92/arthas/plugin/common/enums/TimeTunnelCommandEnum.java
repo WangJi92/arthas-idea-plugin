@@ -3,7 +3,7 @@ package com.github.wangji92.arthas.plugin.common.enums;
 import com.github.wangji92.arthas.plugin.common.enums.base.EnumCodeMsg;
 
 /**
- * https://arthas.aliyun.com/arthas/tt
+ * https://arthas.aliyun.com/doc/tt
  * 常用命令枚举信息  参考：https://blog.csdn.net/u012881904/article/details/104763791
  * <p>
  * 先记录一下这种获取spring context

@@ -233,7 +233,7 @@ public class ArthasAsyncProfileDialog extends JDialog {
         help = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/arthas/profiler.html");
+                BrowserUtil.browse("https://arthas.aliyun.com/doc/profiler.html");
             }
         });
         help.setPaintUnderline(false);

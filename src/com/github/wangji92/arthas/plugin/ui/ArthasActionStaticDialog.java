@@ -168,7 +168,7 @@ public class ArthasActionStaticDialog extends JDialog {
         classLoaderLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/arthas/ognl.html");
+                BrowserUtil.browse("https://arthas.aliyun.com/doc/ognl.html");
             }
         });
         classLoaderLinkLabel.setPaintUnderline(false);

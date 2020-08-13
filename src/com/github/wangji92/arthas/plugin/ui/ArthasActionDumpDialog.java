@@ -145,7 +145,7 @@ public class ArthasActionDumpDialog extends JDialog {
         dumpOfficeLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/arthas/dump");
+                BrowserUtil.browse("https://arthas.aliyun.com/doc/dump");
             }
         });
         dumpOfficeLinkLabel.setPaintUnderline(false);
@@ -153,7 +153,7 @@ public class ArthasActionDumpDialog extends JDialog {
         classLoaderLinkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/arthas/ognl.html");
+                BrowserUtil.browse("https://arthas.aliyun.com/doc/ognl.html");
             }
         });
         classLoaderLinkLable.setPaintUnderline(false);
