@@ -1,8 +1,9 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.github.wangji92.arthas.plugin.ui.ArthasActionWatchSpringContextDialog;
 import com.github.wangji92.arthas.plugin.ui.ArthasTimeTunnelSpringContextDialog;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -16,20 +17,21 @@ import org.jetbrains.annotations.NotNull;
  * tt 处理获取spring context 进行调用
  * https://github.com/WangJi92/arthas-idea-plugin/issues/4
  * https://github.com/alibaba/arthas/issues/482
+ *
  * @author 汪小哥
  * @date 22-03-2020
  */
-public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction  extends AnAction {
+public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnAction {
 
     /**
      * tt 获取spring context 进行处理
      */
-    private  static final String TT_SPRING_CONTEXT="tt -w 'target.getApplicationContext().getBean(\"%s\").%s'";
+    private static final String TT_SPRING_CONTEXT = "tt -w 'target.getApplicationContext().getBean(\"%s\").%s'";
 
     /**
      * spring aop 获取target
      */
-    public static final String  TT_SPRING_AOP_TARGET = "tt -w '#beanName=\"%s\",#targetBean=target.getApplicationContext().getBean(#beanName),#isProxy=:[ @org.springframework.aop.support.AopUtils@isAopProxy(#this)?true:false],#isJdkDynamicProxy =:[@org.springframework.aop.support.AopUtils@isJdkDynamicProxy(#this) ? true :false ],#cglibTarget =:[#hField =#this.getClass().getDeclaredField(\"CGLIB$CALLBACK_0\"),#hField.setAccessible(true),#dynamicAdvisedInterceptor=#hField.get(#this),#fieldAdvised=#dynamicAdvisedInterceptor.getClass().getDeclaredField(\"advised\"),#fieldAdvised.setAccessible(true),1==1? #fieldAdvised.get(#dynamicAdvisedInterceptor).getTargetSource().getTarget():null],#jdkTarget=:[ #hField=#this.getClass().getSuperclass().getDeclaredField(\"h\"),#hField.setAccessible(true),#aopProxy=#hField.get(#this),#advisedField=#aopProxy.getClass().getDeclaredField(\"advised\"),#advisedField.setAccessible(true),1==1?#advisedField.get(#aopProxy).getTargetSource().getTarget():null],#nonProxyResultFunc = :[!#isProxy(#this) ? #this :#isJdkDynamicProxy(#this)? #isJdkDynamicProxy(#this) : #cglibTarget(#this)],#nonProxyTarget=#nonProxyResultFunc(#targetBean),#nonProxyTarget'";
+    public static final String TT_SPRING_AOP_TARGET = "tt -w '#beanName=\"%s\",#targetBean=target.getApplicationContext().getBean(#beanName),#isProxy=:[ @org.springframework.aop.support.AopUtils@isAopProxy(#this)?true:false],#isJdkDynamicProxy =:[@org.springframework.aop.support.AopUtils@isJdkDynamicProxy(#this) ? true :false ],#cglibTarget =:[#hField =#this.getClass().getDeclaredField(\"CGLIB$CALLBACK_0\"),#hField.setAccessible(true),#dynamicAdvisedInterceptor=#hField.get(#this),#fieldAdvised=#dynamicAdvisedInterceptor.getClass().getDeclaredField(\"advised\"),#fieldAdvised.setAccessible(true),1==1? #fieldAdvised.get(#dynamicAdvisedInterceptor).getTargetSource().getTarget():null],#jdkTarget=:[ #hField=#this.getClass().getSuperclass().getDeclaredField(\"h\"),#hField.setAccessible(true),#aopProxy=#hField.get(#this),#advisedField=#aopProxy.getClass().getDeclaredField(\"advised\"),#advisedField.setAccessible(true),1==1?#advisedField.get(#aopProxy).getTargetSource().getTarget():null],#nonProxyResultFunc = :[!#isProxy(#this) ? #this :#isJdkDynamicProxy(#this)? #isJdkDynamicProxy(#this) : #cglibTarget(#this)],#nonProxyTarget=#nonProxyResultFunc(#targetBean),#nonProxyTarget'";
 
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
@@ -102,7 +104,7 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction  extends AnActi
         }
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = "";
-        PsiClass psiClass =null;
+        PsiClass psiClass = null;
 
         if (psiElement instanceof PsiClass) {
             return;
@@ -113,31 +115,25 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction  extends AnActi
         //支持方法
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
+            if (psiMethod.getContainingClass() instanceof PsiAnonymousClass) {
+                NotifyUtils.notifyMessage(project, "匿名类不支持", NotificationType.ERROR);
+                return;
+            }
             psiClass = psiMethod.getContainingClass();
             className = psiMethod.getContainingClass().getQualifiedName();
-            String methodName = psiMethod.getNameIdentifier().getText();
             //构建表达式
-            builder.append(methodName).append("(");
-            //处理参数
-            PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
-            if (parameters.length > 0) {
-                int index = 0;
-                for (PsiParameter parameter : parameters) {
-                    String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
-                    builder.append(defaultParamValue);
-                    if (!(index == parameters.length - 1)) {
-                        builder.append(",");
-                    }
-                    index++;
-                }
-            }
-            builder.append(")");
+            String methodParameterDefault = OgnlPsUtils.getMethodParameterDefault(psiMethod);
+            builder.append(methodParameterDefault);
 
         }
 
         //支持field
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
+            if (psiField.getContainingClass() instanceof PsiAnonymousClass) {
+                NotifyUtils.notifyMessage(project, "匿名类不支持", NotificationType.ERROR);
+                return;
+            }
             className = psiField.getContainingClass().getQualifiedName();
             String fileName = psiField.getNameIdentifier().getText();
             psiClass = psiField.getContainingClass();
@@ -148,7 +144,7 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction  extends AnActi
         String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiClass);
         String watchSpringOgnlExpression = String.format(TT_SPRING_CONTEXT, lowCamelBeanName, builder.toString());
         //这里不需要方法
-        String  aopTargetOgnlExpression = String.format(TT_SPRING_AOP_TARGET, lowCamelBeanName);
-        new ArthasTimeTunnelSpringContextDialog(project, className, watchSpringOgnlExpression,aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
+        String aopTargetOgnlExpression = String.format(TT_SPRING_AOP_TARGET, lowCamelBeanName);
+        new ArthasTimeTunnelSpringContextDialog(project, className, watchSpringOgnlExpression, aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
     }
 }

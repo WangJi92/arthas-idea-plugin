@@ -28,12 +28,12 @@ public class ArthasOgnlSetStaticFieldCommandAction extends AnAction {
     /**
      * 设置static final 特殊处理 https://www.cnblogs.com/noKing/p/9038234.html https://github.com/alibaba/arthas/issues/641
      */
-    private static final String INVOKE_STATIC_FINAL_FIELD ="'#field=@%s@class.getDeclaredField(\"%s\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),#field.set(null,%s)'";
+    private static final String INVOKE_STATIC_FINAL_FIELD = "'#field=@%s@class.getDeclaredField(\"%s\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),#field.set(null,%s)'";
 
     /**
      * ps 这个是比较完整的 填写数据不方便~ 最后重新加上final 不加了 相比较上面比较完整
      */
-    private static final String INVOKE_STATIC_FINAL_FIELD_ALL ="'#field=@%s@class.getDeclaredField(\"%s\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),#field.set(null,%s),#modifiers.setInt(#field,#field.getModifiers()& ~@java.lang.reflect.Modifier@FINAL)'";
+    private static final String INVOKE_STATIC_FINAL_FIELD_ALL = "'#field=@%s@class.getDeclaredField(\"%s\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),#field.set(null,%s),#modifiers.setInt(#field,#field.getModifiers()& ~@java.lang.reflect.Modifier@FINAL)'";
 
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
@@ -99,7 +99,7 @@ public class ArthasOgnlSetStaticFieldCommandAction extends AnAction {
                 invokeCommand = String.format(INVOKE_STATIC_FINAL_FIELD, className, fileName, defaultFieldValue);
             }
             builder.append(invokeCommand);
-            new ArthasActionStaticDialog(project, className, builder.toString()).open("arthas ognl set static field");
+            new ArthasActionStaticDialog(project, className, builder.toString(), "").open("arthas ognl set static field");
         }
     }
 }

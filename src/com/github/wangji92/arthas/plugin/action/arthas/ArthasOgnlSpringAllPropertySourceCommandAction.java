@@ -3,9 +3,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
-import com.github.wangji92.arthas.plugin.utils.StringUtils;
-import com.google.common.base.Splitter;
+import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -14,8 +12,6 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * 参考 : https://blog.csdn.net/xunjiushi9717/article/details/94050139
@@ -40,29 +36,24 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
         if (editor == null || project == null) {
             return;
         }
+        try {
+            // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
+            String className = SpringStaticContextUtils.getStaticSpringContextClassName();
 
-        //这里获取spring context的信息
-        String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
-        if (StringUtils.isBlank(springContextValue) || ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue)) {
-            NotifyUtils.notifyMessage(project, "Static Spring context 需要手动配置，具体参考Arthas Idea help 命令获取相关文档", NotificationType.ERROR);
+            //#springContext=@applicationContextProvider@context
+            String springContextValue = SpringStaticContextUtils.getStaticSpringContextPrefix();
+
+            //ognl -x 3 
+            String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
+
+            String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, join, springContextValue);
+
+            new ArthasActionStaticDialog(project, className, command, "").open("arthas ognl spring get all property");
+        } catch (Exception ex) {
+            NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;
         }
-        // 获取class的classloader
-        List<String> springContextCLassLists = Splitter.on('@').omitEmptyStrings().splitToList(springContextValue);
-        if (springContextCLassLists.isEmpty()) {
-            NotifyUtils.notifyMessage(project, "请正确配置 Static Spring context 信息，具体参考Arthas Idea help 命令获取相关文档", NotificationType.ERROR);
-        }
-        String className = springContextCLassLists.get(0);
 
-        springContextValue = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=" + springContextValue;
-        if (!springContextValue.endsWith(",")) {
-            springContextValue = springContextValue + ",";
-        }
-        //ognl -x 3 '#springContext=@applicationContextProvider@context,
-        String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
 
-        String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, join, springContextValue, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
-
-        new ArthasActionStaticDialog(project, className, command).open("arthas ognl spring get all property");
     }
 }

@@ -104,6 +104,33 @@ public class OgnlPsUtils {
     }
 
     /**
+     * 构造方法的参数信息  complexParameterCall(#{" ":" "}) 后面这个部分需要构造
+     *
+     * @param psiMethod
+     * @return
+     */
+    public static String getMethodParameterDefault(@NotNull PsiMethod psiMethod) {
+        // Experimental API method JvmField.getName() is invoked in Action.arthas.ArthasOgnlStaticCommandAction.actionPerformed().
+        // This method can be changed in a future release leading to incompatibilities
+        String methodName = psiMethod.getNameIdentifier().getText();
+        StringBuilder builder = new StringBuilder(methodName).append("(");
+        PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
+        if (parameters.length > 0) {
+            int index = 0;
+            for (PsiParameter parameter : parameters) {
+                String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
+                builder.append(defaultParamValue);
+                if (!(index == parameters.length - 1)) {
+                    builder.append(",");
+                }
+                index++;
+            }
+        }
+        builder.append(")");
+        return builder.toString();
+    }
+
+    /**
      * 构造ognl 的默认值
      *
      * @param psiType
@@ -197,11 +224,11 @@ public class OgnlPsUtils {
             return "errorBeanName";
         }
         PsiModifierList psiModifierList = psiClass.getModifierList();
-        if (psiModifierList ==null) {
+        if (psiModifierList == null) {
             return "errorBeanName";
         }
         PsiAnnotation[] annotations = psiModifierList.getAnnotations();
-        String beanName = "errorBeanName";
+        String beanName = "";
         if (annotations.length > 0) {
             for (PsiAnnotation annotation : annotations) {
                 beanName = getAttributeFromAnnotation(annotation, Sets.newHashSet("org.springframework.stereotype.Service", "org.springframework.stereotype.Controller", "org.springframework.stereotype.Repository", "org.springframework.web.bind.annotation.RestController"), "value");
@@ -211,7 +238,7 @@ public class OgnlPsUtils {
             }
         }
         //注解上没有获取值，使用默认的名称首字母小写
-        if (StringUtils.isNotBlank(beanName)) {
+        if (StringUtils.isBlank(beanName)) {
             beanName = StringUtils.toLowerFristChar(psiClass.getName());
         }
         return beanName;

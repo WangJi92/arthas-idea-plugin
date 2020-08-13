@@ -29,7 +29,6 @@ public enum TimeTunnelCommandEnum implements EnumCodeMsg<String> {
      */
     GET_CONTEXT_BEGIN("tt -t org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter invokeHandlerMethod", "调用一次Spring Mvc接口,获取spring context"),
     GET_CONTEXT_END("tt -w 'target.getApplicationContext()' -x 3 -i 1000", "通过tt 获取spring context,然后getBean 为所欲为"),
-    GET_CONTEXT_TARGET_BEAN("tt -w '#beanName=\"commonController\",#targetBean=target.getApplicationContext().getBean(#beanName),@org.springframework.aop.support.AopUtils@getTargetClass(#targetBean)' -x 1 -i 1000", "通过目标Bean的非代理原始对象,首先通过tt获取到spring context 对象"),
     GET_ALL_TIME("tt -l", "List all the time fragments"),
     DELETE_ALL("tt --delete-all", "Delete all time fragments");
 

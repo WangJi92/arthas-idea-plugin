@@ -50,6 +50,7 @@ public class ArthasActionStaticDialog extends JDialog {
     private LinkLabel oglSpecialLink;
     private LinkLabel ognlDemoLink;
     private JButton clearClassloaderHashValue;
+    private JButton springNonProxyTargetButton;
 
 
     private String className;
@@ -58,14 +59,18 @@ public class ArthasActionStaticDialog extends JDialog {
 
     private Project project;
 
+    private String aopTargetOgnlExpression;
 
-    public ArthasActionStaticDialog(Project project, String className, String staticOgnlExpression) {
+
+    public ArthasActionStaticDialog(Project project, String className, String staticOgnlExpression,String aopTargetOgnlExpression) {
         this.project = project;
         setContentPane(this.contentPane);
         setModal(true);
         getRootPane().setDefaultButton(closeButton);
         this.className = className;
         this.staticOgnlExpression = staticOgnlExpression;
+        this.aopTargetOgnlExpression = aopTargetOgnlExpression;
+
 
         closeButton.addActionListener(e -> onOK());
 
@@ -97,6 +102,18 @@ public class ArthasActionStaticDialog extends JDialog {
         ognlExpressionEditor.setText(this.staticOgnlExpression);
         String classloaderHash = PropertiesComponentUtils.getValue(ArthasCommandConstants.CLASSLOADER_HASH_VALUE);
         classloaderHashEditor.setText(classloaderHash);
+        if(StringUtils.isBlank(aopTargetOgnlExpression)){
+            springNonProxyTargetButton.setVisible(false);
+        }else{
+            springNonProxyTargetButton.setVisible(true);
+        }
+        springNonProxyTargetButton.addActionListener(e -> {
+            String hashClassloader = classloaderHashEditor.getText();
+            StringBuilder builder = new StringBuilder(aopTargetOgnlExpression);
+            builder.append(" -c ").append(hashClassloader);
+            ClipboardUtils.setClipboardString(builder.toString());
+            NotifyUtils.notifyMessage(project,"Bean名称可能不正确,可以手动修改，Static Spring context 需要手动配置，具体参考Arthas Idea help 命令获取相关文档");
+        });
     }
 
 
@@ -151,7 +168,7 @@ public class ArthasActionStaticDialog extends JDialog {
         classLoaderLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://alibaba.github.io/arthas/ognl.html");
+                BrowserUtil.browse("https://arthas.aliyun.com/arthas/ognl.html");
             }
         });
         classLoaderLinkLabel.setPaintUnderline(false);

@@ -76,7 +76,6 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
         }
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = "";
-        String methodName = "";
 
         if (psiElement instanceof PsiClass) {
             return;
@@ -87,22 +86,10 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
-            methodName = psiMethod.getNameIdentifier().getText();
-            builder.append("  '").append("@").append(className).append("@").append(methodName).append("(");
+            builder.append(" '").append("@").append(className).append("@");
 
-            PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
-            if (parameters.length > 0) {
-                int index = 0;
-                for (PsiParameter parameter : parameters) {
-                    String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
-                    builder.append(defaultParamValue);
-                    if (!(index == parameters.length - 1)) {
-                        builder.append(",");
-                    }
-                    index++;
-                }
-            }
-            builder.append(")").append("'");
+            String methodParameterDefault = OgnlPsUtils.getMethodParameterDefault(psiMethod);
+            builder.append(methodParameterDefault).append("'");
 
         }
 
@@ -111,12 +98,11 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
             if (!psiField.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
-
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             String fileName = psiField.getNameIdentifier().getText();
             builder.append(" '").append("@").append(className).append("@").append(fileName).append("'");
         }
-        new ArthasActionStaticDialog(project, className, builder.toString()).open("arthas ognl static use");
+        new ArthasActionStaticDialog(project, className, builder.toString(), "").open("arthas ognl static use");
     }
 
 }

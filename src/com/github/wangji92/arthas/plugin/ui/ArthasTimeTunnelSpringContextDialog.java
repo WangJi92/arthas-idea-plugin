@@ -27,7 +27,7 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
     /**
      * 构造获取spring 表达式的信息 参考 {@link com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringAllPropertySourceCommandAction}
      */
-    private static final String TT_FOR_SPRING_PROPERTY_CONTEXT = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=target.getApplicationContext(),";
+    private static final String TT_FOR_SPRING_PROPERTY_CONTEXT = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=target.getApplicationContext()";
 
 //    public static void main(String[] args) {
 //        String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, TT_FOR_SPRING_PROPERTY_PRE, TT_FOR_SPRING_PROPERTY_CONTEXT, ArthasCommandConstants.SPRING_CONTEXT_PARAM);

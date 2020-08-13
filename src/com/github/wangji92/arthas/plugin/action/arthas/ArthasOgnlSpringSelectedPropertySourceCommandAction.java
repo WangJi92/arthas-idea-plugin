@@ -3,9 +3,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
-import com.github.wangji92.arthas.plugin.utils.StringUtils;
-import com.google.common.base.Splitter;
+import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -14,8 +12,6 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * 获取当前spring 中的配置文件的信息
@@ -30,7 +26,7 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
     /**
      * 构造表达式
      */
-    private static final String SPRING_ENVIRONMENT_PROPERTY = "%s '%s%s.getEnvironment().getProperty(\"%s\")'";
+    private static final String SPRING_ENVIRONMENT_PROPERTY = "%s '%s,#springContext.getEnvironment().getProperty(\"%s\")'";
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
@@ -47,30 +43,23 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
             selectedText = selectedText.trim();
         }
 
-        //这里获取spring context的信息
-        String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
-        if (StringUtils.isBlank(springContextValue) || ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue)) {
-            NotifyUtils.notifyMessage(project, "Static Spring context 需要手动配置，具体参考Arthas Idea help 命令获取相关文档", NotificationType.ERROR);
+        try {
+            // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
+            String className = SpringStaticContextUtils.getStaticSpringContextClassName();
+
+            //#springContext=@applicationContextProvider@context
+            String springContextValue = SpringStaticContextUtils.getStaticSpringContextPrefix();
+
+            //ognl -x 3 '#springContext=@applicationContextProvider@context
+            String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
+
+            String command = String.format(SPRING_ENVIRONMENT_PROPERTY, join, springContextValue, selectedText);
+
+            new ArthasActionStaticDialog(project, className, command, "").open("arthas ognl spring get property");
+        } catch (Exception ex) {
+            NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;
         }
-
-        // 获取class的classloader
-        List<String> springContextCLassLists = Splitter.on('@').omitEmptyStrings().splitToList(springContextValue);
-        if (springContextCLassLists.isEmpty()) {
-            NotifyUtils.notifyMessage(project, "请正确配置 Static Spring context 信息，具体参考Arthas Idea help 命令获取相关文档", NotificationType.ERROR);
-        }
-        String className = springContextCLassLists.get(0);
-
-        springContextValue = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=" + springContextValue;
-        if (!springContextValue.endsWith(",")) {
-            springContextValue = springContextValue + ",";
-        }
-        //ognl -x 3 '#springContext=@applicationContextProvider@context,
-        String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
-
-        String command = String.format(SPRING_ENVIRONMENT_PROPERTY, join, springContextValue, ArthasCommandConstants.SPRING_CONTEXT_PARAM, selectedText);
-
-        new ArthasActionStaticDialog(project, className, command).open("arthas ognl spring get property");
 
 
     }
@@ -82,7 +71,6 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
         if (editor == null) {
             e.getPresentation().setEnabled(false);
-            return;
         }
     }
 }

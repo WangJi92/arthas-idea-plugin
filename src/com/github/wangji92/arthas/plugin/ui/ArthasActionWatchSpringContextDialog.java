@@ -27,7 +27,7 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
     /**
      * 构造获取spring 表达式的信息 参考 {@link com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringAllPropertySourceCommandAction}
      */
-    private static final String WATCH_FOR_SPRING_PROPERTY_CONTEXT = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=@org.springframework.web.context.support.WebApplicationContextUtils@getWebApplicationContext(params[0].getServletContext()),";
+    private static final String WATCH_FOR_SPRING_PROPERTY_CONTEXT = ArthasCommandConstants.SPRING_CONTEXT_PARAM + "=@org.springframework.web.context.support.WebApplicationContextUtils@getWebApplicationContext(params[0].getServletContext())";
 
     //    public static void main(String[] args) {
 //        String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, WATCH_FOR_SPRING_PROPERTY_PRE, WATCH_FOR_SPRING_PROPERTY_CONTEXT, ArthasCommandConstants.SPRING_CONTEXT_PARAM);
