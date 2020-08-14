@@ -1,6 +1,8 @@
 package com.github.wangji92.arthas.plugin.setting;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -55,9 +57,18 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public String depthPrintProperty = ArthasCommandConstants.RESULT_X;
 
 
-
     public static AppSettingsState getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, AppSettingsState.class);
+        AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
+        // 配置检查.. 兼容老版本
+        if (appSettingsState.staticSpringContextOgnl.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
+            String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
+            // 最早的版本设置过配置的！ 使用那个配置作为当前工程的配置
+            if (StringUtils.isNotBlank(springContextValue) && !ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue) && springContextValue.contains("@")) {
+                appSettingsState.staticSpringContextOgnl = springContextValue;
+            }
+
+        }
+        return appSettingsState;
     }
 
     @Nullable

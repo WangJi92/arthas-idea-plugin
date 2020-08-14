@@ -1,7 +1,9 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
@@ -18,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
+ * https://jetbrains.org/intellij/sdk/docs/reference_guide/settings_guide.html 属性配置 参考
+ * https://github.com/pwielgolaski/shellcheck-plugin
+ *
  * @author 汪小哥
  * @date 15-08-2020
  */
@@ -121,6 +126,13 @@ public class AppSettingsPage implements Configurable {
         if (StringUtils.isBlank(staticOgnlExpressionTextFiledText) || !staticOgnlExpressionTextFiledText.contains("@")) {
             error.append("配置静态spring context 错误");
         } else {
+            if (!springContextStaticOgnlExpressionTextFiled.getText().equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
+                String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
+                // 有一个地方设置 默认设置为全局的！
+                if (StringUtils.isBlank(springContextValue) || springContextValue.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
+                    PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, springContextStaticOgnlExpressionTextFiled.getText());
+                }
+            }
             settings.staticSpringContextOgnl = springContextStaticOgnlExpressionTextFiled.getText();
         }
         if (((int) invokeCountField.getValue()) <= 0) {
