@@ -182,15 +182,16 @@
     <idea-version since-build="162"/>
 
     <extensions defaultExtensionNs="com.intellij">
+        // parentId = "tools"
         <projectConfigurable  instance="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
                                  id="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
                                  displayName="Arthas Idea Plugin"/>
         <projectService serviceImplementation="com.github.wangji92.arthas.plugin.setting.AppSettingsState"/>
     </extensions>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>
-    </extensions>
+<!--    <extensions defaultExtensionNs="com.intellij">-->
+<!--        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>-->
+<!--    </extensions>-->
 
     <depends>com.intellij.modules.platform</depends>
 

@@ -29,6 +29,7 @@ import java.util.Objects;
  * @author 汪小哥
  * @date 22-12-2019
  */
+@Deprecated
 public class SettingDialog implements Configurable {
     private JTextField springContextStaticOgnlExpressionTextFiled;
     private JPanel contentPane;
