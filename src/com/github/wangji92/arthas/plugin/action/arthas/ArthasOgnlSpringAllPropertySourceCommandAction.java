@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
@@ -44,7 +45,9 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
             String springContextValue = SpringStaticContextUtils.getStaticSpringContextPrefix(project);
 
             //ognl -x 3 
-            String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
+            AppSettingsState instance = AppSettingsState.getInstance(project);
+            String depthPrintProperty = instance.depthPrintProperty;
+            String join = String.join(" ", "ognl", "-x", depthPrintProperty);
 
             String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, join, springContextValue);
 
