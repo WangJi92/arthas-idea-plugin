@@ -116,7 +116,7 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             if (psiMethod.getContainingClass() instanceof PsiAnonymousClass) {
-                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClas*$* 查找具体的类处理", NotificationType.ERROR);
+                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
                 return;
             }
             psiClass = psiMethod.getContainingClass();
@@ -131,7 +131,7 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
             if (psiField.getContainingClass() instanceof PsiAnonymousClass) {
-                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClas*$* 查找具体的类处理", NotificationType.ERROR);
+                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
                 return;
             }
             className = psiField.getContainingClass().getQualifiedName();
