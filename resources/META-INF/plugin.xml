@@ -379,6 +379,11 @@
                 text="Arthas Documentation Website"
                 description="Arthas documentation website">
         </action>
+        <action id="ArthasClassLoaderLoadClassCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasClassLoaderLoadClassCommandAction"
+                text="Classloader Load Class"
+                description="Classloader load class">
+        </action>
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -407,6 +412,7 @@
             <reference ref="ArthasDashboardCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasLoggerCommandAction"/>
+            <reference ref="ArthasClassLoaderLoadClassCommandAction"/>
             <reference ref="ArthasAsyncProfilerCommandAction"/>
             <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
