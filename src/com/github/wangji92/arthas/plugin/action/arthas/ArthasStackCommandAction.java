@@ -21,9 +21,10 @@ public class ArthasStackCommandAction extends BaseArthasPluginAction {
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         AppSettingsState instance = AppSettingsState.getInstance(project);
         String invokeCount = instance.invokeCount;
-        String command = String.join(" ", "stack", className, methodName, "-n", invokeCount,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
+        String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
+        String command = String.join(" ", "stack", className, methodName, "-n", invokeCount, conditionExpressDisplay);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project,"源码分析，查看方法调用栈非常方便");
+        NotifyUtils.notifyMessage(project, "源码分析，查看方法调用栈非常方便");
     }
 
 }

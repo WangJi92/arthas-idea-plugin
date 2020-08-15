@@ -56,6 +56,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public String depthPrintProperty = ArthasCommandConstants.RESULT_X;
 
+    /**
+     * 是否展示默认的条件表达式
+     */
+    public boolean conditionExpressDisplay = true;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);

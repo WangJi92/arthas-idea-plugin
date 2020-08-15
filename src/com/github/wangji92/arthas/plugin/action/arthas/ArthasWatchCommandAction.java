@@ -19,6 +19,7 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         StringBuilder watchContentBuilder = new StringBuilder("'{params,returnObj,throwExp");
+        AppSettingsState instance = AppSettingsState.getInstance(project);
         //这里针对放置在字段上获取字段的值的信息进行处理增强
         String conditionExpress = ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS;
         if (psiElement instanceof PsiField) {
@@ -35,10 +36,12 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
             } else {
                 //watch 获取静态字段的值
                 watchContentBuilder.append(",@").append(className).append("@").append(fieldName);
+                conditionExpress = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
             }
+        }else {
+            conditionExpress = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
         }
         watchContentBuilder.append("}'");
-        AppSettingsState instance = AppSettingsState.getInstance(project);
         String invokeCount = instance.invokeCount;
         String depthPrintPropertyX = instance.depthPrintProperty;
         String command = String.join(" ", "watch", className, methodName, watchContentBuilder.toString(), "-n", invokeCount, "-x", depthPrintPropertyX, conditionExpress);

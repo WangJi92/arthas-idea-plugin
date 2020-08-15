@@ -41,7 +41,7 @@ public class AppSettingsPage implements Configurable {
     /**
      * 跳过jdk trace
      */
-    private JRadioButton traceSkipJdkButton;
+    private JRadioButton traceSkipJdkRadio;
     /**
      * 调用次数
      */
@@ -55,6 +55,10 @@ public class AppSettingsPage implements Configurable {
      * 打印属性的深度
      */
     private JSpinner depthPrintPropertyField;
+    /**
+     * 是否展示默认的条件表达式
+     */
+    private JRadioButton conditionExpressDisplayRadio;
 
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
@@ -107,7 +111,8 @@ public class AppSettingsPage implements Configurable {
                 || !invokeMonitorCountField.getValue().toString().equals(settings.invokeMonitorCount)
                 || !invokeMonitorIntervalField.getValue().toString().equals(settings.invokeMonitorInterval)
                 || !depthPrintPropertyField.getValue().toString().equals(settings.depthPrintProperty)
-                || traceSkipJdkButton.isSelected() != settings.traceSkipJdk;
+                || traceSkipJdkRadio.isSelected() != settings.traceSkipJdk
+                || conditionExpressDisplayRadio.isSelected() != settings.conditionExpressDisplay;
     }
 
     @Override
@@ -155,7 +160,8 @@ public class AppSettingsPage implements Configurable {
         } else {
             settings.depthPrintProperty = depthPrintPropertyField.getValue().toString();
         }
-        settings.traceSkipJdk = traceSkipJdkButton.isSelected();
+        settings.traceSkipJdk = traceSkipJdkRadio.isSelected();
+        settings.conditionExpressDisplay = conditionExpressDisplayRadio.isSelected();
 
         if (StringUtils.isNotBlank(error)) {
             NotifyUtils.notifyMessage(project, error.toString(), NotificationType.ERROR);
@@ -169,7 +175,8 @@ public class AppSettingsPage implements Configurable {
         invokeMonitorCountField.setValue(Integer.parseInt(settings.invokeMonitorCount));
         invokeMonitorIntervalField.setValue(Integer.parseInt(settings.invokeMonitorInterval));
         depthPrintPropertyField.setValue(Integer.parseInt(settings.depthPrintProperty));
-        traceSkipJdkButton.setSelected(settings.traceSkipJdk);
+        traceSkipJdkRadio.setSelected(settings.traceSkipJdk);
+        conditionExpressDisplayRadio.setSelected(settings.conditionExpressDisplay);
     }
 
     @Override

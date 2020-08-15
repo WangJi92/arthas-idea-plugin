@@ -18,7 +18,8 @@ public class ArthasTimeTunnelCommandAction extends BaseArthasPluginAction {
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         AppSettingsState instance = AppSettingsState.getInstance(project);
         String invokeCount = instance.invokeCount;
-        String command = String.join(" ", "tt -t", className, methodName, "-n", invokeCount,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
+        String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
+        String command = String.join(" ", "tt -t", className, methodName, "-n", invokeCount, conditionExpressDisplay);
         new ArthasTimeTunnelDialog(project, command).open("arthas time tunnel use");
     }
 }
