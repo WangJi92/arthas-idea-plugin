@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.icons.AllIcons;
@@ -44,7 +45,6 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
     private JPanel contentPane;
     private LinkLabel ognlOfficeLinkLabel;
     private LinkLabel oglSpecialLink;
-    private LinkLabel ognlDemoLink;
     private LinkLabel ttInvokeAfterLink;
     private JTextField ttRequestMappingHandlerAdapterInvokeField;
     private JTextField timeTunnelIndexField;
@@ -130,6 +130,13 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
 
         // 原始的获取方法的数据
         closeButton.addActionListener(e -> onOK(ognlExpressionEditor.getText(), false));
+
+        //初始化数据
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        String invokeCount = instance.invokeCount;
+        String ttSpringContextBeginPrefix = "tt -t org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter invokeHandlerMethod";
+        String ttSpringContextBegin = String.join(" ", ttSpringContextBeginPrefix, "-n", invokeCount,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
+        ttRequestMappingHandlerAdapterInvokeField.setText(ttSpringContextBegin);
     }
 
 
@@ -142,11 +149,12 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
             timeTunnelIndex = "1000";
         }
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
-            String count = "3";
+            AppSettingsState instance = AppSettingsState.getInstance(project);
+            String depthPrintPropertyX = instance.depthPrintProperty;
             if (isAop) {
-                count = "1";
+                depthPrintPropertyX = "1";
             }
-            String invokeCommand = String.join(" ", ognCurrentExpression, "-x", count, "-i", timeTunnelIndex);
+            String invokeCommand = String.join(" ", ognCurrentExpression, "-x", depthPrintPropertyX, "-i", timeTunnelIndex);
             ClipboardUtils.setClipboardString(invokeCommand);
             NotifyUtils.notifyMessage(project, "这里的-i 参数必须是通过tt 获取spring context的命令的tt index的值，bean 名称可能不正确，可以手动修改");
         }
@@ -190,13 +198,6 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
             }
         });
         oglSpecialLink.setPaintUnderline(false);
-        ognlDemoLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/4");
-            }
-        });
-        ognlDemoLink.setPaintUnderline(false);
 
         //https://github.com/WangJi92/arthas-idea-plugin/issues/5
 

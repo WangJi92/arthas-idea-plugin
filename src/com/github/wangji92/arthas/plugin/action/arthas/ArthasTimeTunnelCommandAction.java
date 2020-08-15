@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.ui.ArthasTimeTunnelDialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -15,7 +16,9 @@ public class ArthasTimeTunnelCommandAction extends BaseArthasPluginAction {
 
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
-        String command = String.join(" ", "tt -t", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT);
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        String invokeCount = instance.invokeCount;
+        String command = String.join(" ", "tt -t", className, methodName, "-n", invokeCount,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
         new ArthasTimeTunnelDialog(project, command).open("arthas time tunnel use");
     }
 }
