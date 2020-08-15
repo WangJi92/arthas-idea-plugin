@@ -36,7 +36,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     /**
      * 跳过jdk trace
      */
-    public boolean traceSkipJdk = true;
+    public boolean traceSkipJdk = false;
     /**
      * 调用次数
      */

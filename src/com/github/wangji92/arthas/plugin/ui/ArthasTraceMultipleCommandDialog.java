@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.google.common.collect.Sets;
@@ -115,7 +116,10 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
     private void onOK() {
         String traceECommand = traceCommandTextField.getText();
         if (StringUtils.isNotBlank(traceECommand)) {
-            String command = String.join(" ",traceECommand,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS,ArthasCommandConstants.DEFAULT_SKIP_JDK);
+            AppSettingsState instance = AppSettingsState.getInstance(project);
+            boolean skipJdkMethod = instance.traceSkipJdk;
+            String skpJdkMethodCommand = skipJdkMethod ? "" : ArthasCommandConstants.DEFAULT_SKIP_JDK_FALSE;
+            String command = String.join(" ", traceECommand, ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS, skpJdkMethodCommand);
             ClipboardUtils.setClipboardString(command);
             NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) 更多搜索 [arthas 入门最佳实践],trace -E 支持trace多个方法,方法中的方法");
         }
@@ -134,7 +138,7 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
     private void onCancel() {
         dispose();
         //清除数据
-       // this.destroyTraceData(project);
+        // this.destroyTraceData(project);
     }
 
     /**
@@ -148,7 +152,9 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
         // eg trace -E com.common.A |com.common.B  *| list  will be error before
         String replaceMethodName = methodNames.replace("*", "\\\\*");
 
-        String command = String.join(" ", "trace -E", classNames, replaceMethodName, "-n", ArthasCommandConstants.INVOKE_COUNT);
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        String invokeCount = instance.invokeCount;
+        String command = String.join(" ", "trace -E", classNames, replaceMethodName, "-n", invokeCount);
         traceCommandTextField.setText(command);
     }
 

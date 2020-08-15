@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.project.Project;
@@ -15,9 +16,11 @@ import com.intellij.psi.PsiElement;
 public class ArthasTraceCommandAction extends BaseArthasPluginAction {
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
-
-        String command = String.join(" ", "trace", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT, ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS, ArthasCommandConstants.DEFAULT_SKIP_JDK);
-
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        String invokeCount = instance.invokeCount;
+        boolean skipJdkMethod = instance.traceSkipJdk;
+        String skpJdkMethodCommand = skipJdkMethod ? "" : ArthasCommandConstants.DEFAULT_SKIP_JDK_FALSE;
+        String command = String.join(" ", "trace", className, methodName, "-n", invokeCount, ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS, skpJdkMethodCommand);
         ClipboardUtils.setClipboardString(command);
         NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) 更多搜索 [arthas 入门最佳实践] --skipJDKMethod 不跳过JDK 函数");
 

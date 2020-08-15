@@ -16,7 +16,11 @@ public interface ArthasCommandConstants {
     /**
      * 跳过JDK 自带的方法
      */
-    String DEFAULT_SKIP_JDK = "--skipJDKMethod false";
+    String DEFAULT_SKIP_JDK_FALSE = "--skipJDKMethod false";
+    /**
+     * 不跳过JDK 自带的方法
+     */
+    String DEFAULT_SKIP_JDK_TRUE = "--skipJDKMethod true";
 
     /**
      * ognl 内部类分割符 https://github.com/alibaba/arthas/issues/71
