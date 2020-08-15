@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.ui.ArthasActionWatchSpringContextDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
@@ -22,7 +23,7 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction extends AnAction {
     /**
      * watch 获取spring context 进行处理
      */
-    private static final String WATCH_SPRING_CONTEXT = "watch -x 3 -n 1  org.springframework.web.servlet.DispatcherServlet doDispatch '@org.springframework.web.context.support.WebApplicationContextUtils@getWebApplicationContext(params[0].getServletContext()).getBean(\"%s\").%s'";
+    private static final String WATCH_SPRING_CONTEXT = "watch -x %s -n 1  org.springframework.web.servlet.DispatcherServlet doDispatch '@org.springframework.web.context.support.WebApplicationContextUtils@getWebApplicationContext(params[0].getServletContext()).getBean(\"%s\").%s'";
 
     /**
      * spring aop 获取target
@@ -137,7 +138,9 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction extends AnAction {
         }
 
         String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiClass);
-        String watchSpringOgnlExpression = String.format(WATCH_SPRING_CONTEXT, lowCamelBeanName, builder.toString());
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        String depthPrintPropertyX = instance.depthPrintProperty;
+        String watchSpringOgnlExpression = String.format(WATCH_SPRING_CONTEXT, depthPrintPropertyX, lowCamelBeanName, builder.toString());
         String aopTargetOgnlExpression = String.format(WATCH_SPRING_AOP_TARGET, lowCamelBeanName);
         new ArthasActionWatchSpringContextDialog(project, null, watchSpringOgnlExpression, aopTargetOgnlExpression).open("arthas watch ognl get spring context invoke method field 要触发任意的接口调用");
     }

@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.project.Project;
@@ -37,8 +38,10 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
             }
         }
         watchContentBuilder.append("}'");
-
-        String command = String.join(" ", "watch", className, methodName, watchContentBuilder.toString(), "-n", ArthasCommandConstants.INVOKE_COUNT, "-x", ArthasCommandConstants.RESULT_X, conditionExpress);
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        String invokeCount = instance.invokeCount;
+        String depthPrintPropertyX = instance.depthPrintProperty;
+        String command = String.join(" ", "watch", className, methodName, watchContentBuilder.toString(), "-n", invokeCount, "-x", depthPrintPropertyX, conditionExpress);
         ClipboardUtils.setClipboardString(command);
         NotifyUtils.notifyMessage(project, "支持表达式(默认1==1) 更多搜索 [arthas 入门最佳实践],可以将光标放置在字段上watch获取值 ");
     }
