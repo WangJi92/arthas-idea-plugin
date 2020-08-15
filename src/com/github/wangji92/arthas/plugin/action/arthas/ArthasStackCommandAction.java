@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.project.Project;
@@ -18,7 +19,9 @@ public class ArthasStackCommandAction extends BaseArthasPluginAction {
 
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
-        String command = String.join(" ", "stack", className, methodName, "-n", ArthasCommandConstants.INVOKE_COUNT,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        String invokeCount = instance.invokeCount;
+        String command = String.join(" ", "stack", className, methodName, "-n", invokeCount,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
         ClipboardUtils.setClipboardString(command);
         NotifyUtils.notifyMessage(project,"源码分析，查看方法调用栈非常方便");
     }

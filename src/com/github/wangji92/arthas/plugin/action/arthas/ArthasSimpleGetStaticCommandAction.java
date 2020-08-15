@@ -1,6 +1,6 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
@@ -70,7 +70,10 @@ public class ArthasSimpleGetStaticCommandAction extends AnAction {
             // 处理内部类问题
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             String fileName = psiField.getNameIdentifier().getText();
-            String command = String.join(" ", "getstatic",className,fileName, "-x", ArthasCommandConstants.RESULT_X);
+            AppSettingsState instance = AppSettingsState.getInstance(project);
+
+            String depthPrintProperty = instance.depthPrintProperty;
+            String command = String.join(" ", "getstatic", className, fileName, "-x", depthPrintProperty);
             ClipboardUtils.setClipboardString(command);
             NotifyUtils.notifyMessage(project, "简单的获取静态变量的值 如果多个classloader 加载获取不到信息");
         }
