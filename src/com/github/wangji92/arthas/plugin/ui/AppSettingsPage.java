@@ -78,7 +78,11 @@ public class AppSettingsPage implements Configurable {
      */
     private AppSettingsState settings;
 
-
+    /**
+     * 自动构造  idea 会携带当前的project 参数信息
+     *
+     * @param project
+     */
     public AppSettingsPage(Project project) {
         this.project = project;
         settings = AppSettingsState.getInstance(this.project);
