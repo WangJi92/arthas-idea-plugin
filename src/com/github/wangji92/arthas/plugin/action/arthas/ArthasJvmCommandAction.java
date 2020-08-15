@@ -10,7 +10,7 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *[jvm 命令](https://arthas.gitee.io/jvm.html)
+ *[jvm 命令](https://arthas.aliyun.com/doc/jvm.html)
  * @author 汪小哥
  * @date 20-06-2020
  */

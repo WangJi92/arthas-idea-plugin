@@ -16,7 +16,7 @@ import com.intellij.psi.PsiModifier;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * https://arthas.gitee.io/getstatic.html 简单的版本的获取静态变量
+ * https://arthas.aliyun.com/doc/getstatic.html 简单的版本的获取静态变量
  *
  * @author 汪小哥
  * @date 01-08-2020

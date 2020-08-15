@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
 /**
- * trace 命令  https://arthas.gitee.io/trace.html 默认打开 不跳过JDK的方法
+ * trace 命令  https://arthas.aliyun.com/doc/trace.html 默认打开 不跳过JDK的方法
  *
  * @author 汪小哥
  * @date 21-12-2019
