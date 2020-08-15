@@ -3,6 +3,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -66,27 +67,34 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
 
         // 下面处理 不是static的方法、字段直接获取 方法、字段所在class的 @xxxclass@class 这样的静态信息
         //region 非静态的处理方式
-        //todo 这里可能不准 匿名的不是太准 问题不大 用的比较少
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
+            if (psiMethod.getContainingClass() instanceof PsiAnonymousClass) {
+                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClas*$* 查找具体的类处理", NotificationType.ERROR);
+                return;
+            }
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
             if (!psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
                 iStaticMethod = false;
-                builder.append("'").append("@").append(className).append("@").append("class").append("'");
+                builder.append("@").append(className).append("@").append("class");
             }
         }
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
+            if (psiField.getContainingClass() instanceof PsiAnonymousClass) {
+                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClas*$* 查找具体的类处理", NotificationType.ERROR);
+                return;
+            }
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             if (!psiField.hasModifierProperty(PsiModifier.STATIC)) {
                 iStaticField = false;
-                builder.append("'").append("@").append(className).append("@").append("class").append("'");
+                builder.append("@").append(className).append("@").append("class");
             }
         }
         if (psiElement instanceof PsiClass) {
             PsiClass psiClass = (PsiClass) psiElement;
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass);
-            builder.append("'").append("@").append(className).append("@").append("class").append("'");
+            builder.append("@").append(className).append("@").append("class");
         }
         //endregion
 
@@ -94,22 +102,8 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         if (psiElement instanceof PsiMethod && iStaticMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
-            methodName = psiMethod.getNameIdentifier().getText();
-            builder.append(" '").append("@").append(className).append("@").append(methodName).append("(");
-
-            PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
-            if (parameters.length > 0) {
-                int index = 0;
-                for (PsiParameter parameter : parameters) {
-                    String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
-                    builder.append(defaultParamValue);
-                    if (!(index == parameters.length - 1)) {
-                        builder.append(",");
-                    }
-                    index++;
-                }
-            }
-            builder.append(")").append("'");
+            String methodParameterDefault = OgnlPsUtils.getMethodParameterDefault(psiMethod);
+            builder.append("@").append(className).append("@").append(methodParameterDefault);
         }
 
         if (psiElement instanceof PsiField && iStaticField) {
@@ -120,7 +114,7 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
 
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             String fileName = psiField.getNameIdentifier().getText();
-            builder.append("'").append("@").append(className).append("@").append(fileName).append("'");
+            builder.append("@").append(className).append("@").append(fileName);
         }
         //endregion
         ClipboardUtils.setClipboardString(builder.toString());
