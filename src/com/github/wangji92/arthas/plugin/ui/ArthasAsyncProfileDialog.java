@@ -179,6 +179,9 @@ public class ArthasAsyncProfileDialog extends JDialog {
             commands.add("-duration");
             commands.add(durationTextFieldText);
         }
+        if (differentThreadsSeparatelyRadioButton.isSelected()) {
+            commands.add("--threads");
+        }
         String commandFinal = String.join(" ", commands);
         ClipboardUtils.setClipboardString(commandFinal);
         NotifyUtils.notifyMessage(project, " 自动完成后自动Stop 详情见 Arthas special Use link");

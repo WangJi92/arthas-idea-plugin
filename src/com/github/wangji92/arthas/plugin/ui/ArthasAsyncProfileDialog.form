@@ -189,7 +189,7 @@
                 <item value="alluser"/>
                 <item value="allkernel"/>
               </model>
-              <toolTipText value="events mode"/>
+              <toolTipText value="events mode 注意: macOS 分析仅限于用户空间"/>
             </properties>
           </component>
           <component id="67b5" class="javax.swing.JRadioButton" binding="differentThreadsSeparatelyRadioButton">
