@@ -38,10 +38,10 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
         }
         try {
             // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
-            String className = SpringStaticContextUtils.getStaticSpringContextClassName();
+            String className = SpringStaticContextUtils.getStaticSpringContextClassName(project);
 
             //#springContext=@applicationContextProvider@context
-            String springContextValue = SpringStaticContextUtils.getStaticSpringContextPrefix();
+            String springContextValue = SpringStaticContextUtils.getStaticSpringContextPrefix(project);
 
             //ognl -x 3 
             String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);

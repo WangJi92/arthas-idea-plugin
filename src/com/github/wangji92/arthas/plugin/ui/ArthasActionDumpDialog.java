@@ -88,7 +88,7 @@ public class ArthasActionDumpDialog extends JDialog {
     private void init() {
         scCommandButton.addActionListener(e -> onCopyScCommand());
         ognlExpressionEditor.setText(this.staticOgnlExpression);
-        String classloaderHash = PropertiesComponentUtils.getValue(ArthasCommandConstants.CLASSLOADER_HASH_VALUE);
+        String classloaderHash = PropertiesComponentUtils.getValue(project,ArthasCommandConstants.CLASSLOADER_HASH_VALUE);
         classloaderHashEditor.setText(classloaderHash);
     }
 
@@ -103,7 +103,7 @@ public class ArthasActionDumpDialog extends JDialog {
             StringBuilder builder = new StringBuilder(ognCurrentExpression);
             builder.append(" -c ").append(hashClassloader);
             ognCurrentExpression = builder.toString();
-            PropertiesComponentUtils.setValue(ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
+            PropertiesComponentUtils.setValue(project,ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
         }
         if (StringUtils.isNotBlank(ognCurrentExpression)) {
             ClipboardUtils.setClipboardString(ognCurrentExpression);
@@ -117,7 +117,7 @@ public class ArthasActionDumpDialog extends JDialog {
      */
     private void onClearClassLoaderHashValue() {
         classloaderHashEditor.setText("");
-        PropertiesComponentUtils.setValue(ArthasCommandConstants.CLASSLOADER_HASH_VALUE, "");
+        PropertiesComponentUtils.setValue(project,ArthasCommandConstants.CLASSLOADER_HASH_VALUE, "");
     }
 
     /**

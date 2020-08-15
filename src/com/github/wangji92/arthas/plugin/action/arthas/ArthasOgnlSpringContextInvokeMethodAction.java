@@ -138,10 +138,10 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
 
         try {
             // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
-            String classNameClassLoaderGet = SpringStaticContextUtils.getStaticSpringContextClassName();
+            String classNameClassLoaderGet = SpringStaticContextUtils.getStaticSpringContextClassName(project);
 
             //#springContext=填充,#springContext.getBean("%s")
-            String staticSpringContextGetBeanPrefix = SpringStaticContextUtils.getStaticSpringContextGetBeanPrefix(lowCamelBeanName);
+            String staticSpringContextGetBeanPrefix = SpringStaticContextUtils.getStaticSpringContextGetBeanPrefix(project,lowCamelBeanName);
 
             String join = String.join(" ", "ognl", "-x", ArthasCommandConstants.RESULT_X);
 
@@ -150,7 +150,7 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             builder.append(" '").append(staticSpringContextGetBeanPrefix).append(".").append(suffixMethodOrFieldBuild).append("'");
 
             //#springContext=填充,#targetBean=#springContext.getBean("%s")
-            String staticSpringContextGetBeanVariable = SpringStaticContextUtils.getStaticSpringContextGetBeanVariable(lowCamelBeanName);
+            String staticSpringContextGetBeanVariable = SpringStaticContextUtils.getStaticSpringContextGetBeanVariable(project,lowCamelBeanName);
             String aopTargetOgnlExpression = String.format(STATIC_SPRING_AOP_TARGET, staticSpringContextGetBeanVariable);
 
             new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("arthas ognl invoke spring bean method、field");
