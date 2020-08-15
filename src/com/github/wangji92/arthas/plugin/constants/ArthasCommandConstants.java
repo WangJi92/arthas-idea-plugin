@@ -66,7 +66,7 @@ public interface ArthasCommandConstants {
     /**
      * 安装脚本
      */
-    String AS_INSTALL_BASH = "curl -sk https://arthas.aliyun.com/arthas-boot.jar -o ~/.arthas-boot.jar  && echo \"alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http >>2&1'\" >> ~/.bashrc && source ~/.bashrc && echo \"source ~/.bashrc\" >> ~/.bash_profile && source ~/.bash_profile";
+    String AS_INSTALL_BASH = "curl -sk https://arthas.aliyun.com/arthas-boot.jar -o ~/.arthas-boot.jar  && echo \"alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http 2>&1'\" >> ~/.bashrc && source ~/.bashrc && echo \"source ~/.bashrc\" >> ~/.bash_profile && source ~/.bash_profile";
     /**
      * 获取spring 所有的环境变量的表达式
      */

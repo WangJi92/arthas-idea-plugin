@@ -136,7 +136,7 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
         String invokeCount = instance.invokeCount;
         String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
         String ttSpringContextBeginPrefix = "tt -t org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter invokeHandlerMethod";
-        String ttSpringContextBegin = String.join(" ", ttSpringContextBeginPrefix, "-n", conditionExpressDisplay);
+        String ttSpringContextBegin = String.join(" ", ttSpringContextBeginPrefix, "-n",invokeCount, conditionExpressDisplay);
         ttRequestMappingHandlerAdapterInvokeField.setText(ttSpringContextBegin);
     }
 

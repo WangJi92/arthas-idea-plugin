@@ -183,7 +183,7 @@ public static String getDefaultString(PsiType psiType) {
 安装脚本，可以一键的通过as.sh 进行执行
 
 ```bash
-curl -sk https://arthas.aliyun.com/arthas-boot.jar  -o ~/.arthas-boot.jar  && echo "alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http >>2&1'" >> ~/.bashrc && source ~/.bashrc && echo "source ~/.bashrc" >> ~/.bash_profile && source ~/.bash_profile
+curl -sk https://arthas.aliyun.com/arthas-boot.jar  -o ~/.arthas-boot.jar  && echo "alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http 2>&1'" >> ~/.bashrc && source ~/.bashrc && echo "source ~/.bashrc" >> ~/.bash_profile && source ~/.bash_profile
 ```
 
 
