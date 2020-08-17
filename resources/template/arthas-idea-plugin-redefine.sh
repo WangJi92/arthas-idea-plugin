@@ -49,7 +49,7 @@ decodebase64CLassFile() {
 
 # Usage: doStartedefine
 doStartedefine() {
-  echo $(tput bold)"arthas start commnad ：$HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName}  -c "${arthasIdeaPluginRedefineCommand}"  >/tmp/redefine.out"$(tput sgr0)
+  echo $(tput bold)"arthas start commnad ：$HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName}  -c \"${arthasIdeaPluginRedefineCommand}\"  >/tmp/redefine.out"$(tput sgr0)
   $HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName} -c "${arthasIdeaPluginRedefineCommand}" >/tmp/redefine.out
 }
 

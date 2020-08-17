@@ -397,7 +397,7 @@
         </action>
         <action id="ArthasHotCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
-                text="Redefine"
+                text="Hot Redefine"
                 description="Redefine">
         </action>
 
