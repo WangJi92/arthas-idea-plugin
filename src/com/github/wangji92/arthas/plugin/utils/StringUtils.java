@@ -1,5 +1,9 @@
 package com.github.wangji92.arthas.plugin.utils;
 
+import org.apache.commons.text.StringSubstitutor;
+
+import java.util.Map;
+
 /**
  * 首字母小写
  *
@@ -23,4 +27,20 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             return String.valueOf(charArray);
         }
     }
+
+    /**
+     * common-text 字符串模板替换
+     *
+     * @param filePath
+     * @param param
+     * @return
+     */
+    public static String stringSubstitutor(String filePath, Map<String, String> param) {
+        String templateString = IoUtils.getResourceFile(filePath);
+        StringSubstitutor stringSubstitutor = new StringSubstitutor(param);
+        //key value 字符串替换
+        return stringSubstitutor.replace(templateString);
+    }
+
+
 }

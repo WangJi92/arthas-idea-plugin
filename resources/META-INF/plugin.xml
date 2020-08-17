@@ -395,6 +395,12 @@
                 text="Classloader Load Class"
                 description="Classloader load class">
         </action>
+        <action id="ArthasHotCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotCommandAction"
+                text="Redefine"
+                description="Redefine">
+        </action>
+
 
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
@@ -425,6 +431,7 @@
             <reference ref="ArthasLoggerCommandAction"/>
             <reference ref="ArthasClassLoaderLoadClassCommandAction"/>
             <reference ref="ArthasAsyncProfilerCommandAction"/>
+            <reference ref="ArthasHotCommandAction"/>
             <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
                 <reference ref="ArthasSc"/>

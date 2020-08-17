@@ -9,6 +9,11 @@ package com.github.wangji92.arthas.plugin.constants;
 public interface ArthasCommandConstants {
 
     /**
+     * arthas 热更新 基础包名称
+     */
+    String REDEFINE_BASH_PACKAGE_PATH = "/tmp/arthasIdeaPluginRedefine/";
+
+    /**
      * 默认条件表达式
      */
     String DEFAULT_CONDITION_EXPRESS = "'1==1'";
