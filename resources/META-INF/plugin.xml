@@ -396,7 +396,7 @@
                 description="Classloader load class">
         </action>
         <action id="ArthasHotCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
                 text="Redefine"
                 description="Redefine">
         </action>

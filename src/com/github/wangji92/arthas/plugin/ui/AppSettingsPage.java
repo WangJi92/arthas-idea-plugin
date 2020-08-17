@@ -60,6 +60,11 @@ public class AppSettingsPage implements Configurable {
      */
     private JRadioButton conditionExpressDisplayRadio;
 
+    private JTextField selectProjectNameTextField;
+
+    private LinkLabel selectLink;
+    private LinkLabel batchSupportLink;
+
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
@@ -100,6 +105,22 @@ public class AppSettingsPage implements Configurable {
             }
         });
         linkLabel.setPaintUnderline(false);
+
+        selectLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://arthas.aliyun.com/doc/advanced-use.html");
+            }
+        });
+        selectLink.setPaintUnderline(false);
+
+        batchSupportLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://arthas.aliyun.com/doc/batch-support.html");
+            }
+        });
+        batchSupportLink.setPaintUnderline(false);
     }
 
     @Nullable
@@ -115,6 +136,7 @@ public class AppSettingsPage implements Configurable {
                 || !invokeMonitorCountField.getValue().toString().equals(settings.invokeMonitorCount)
                 || !invokeMonitorIntervalField.getValue().toString().equals(settings.invokeMonitorInterval)
                 || !depthPrintPropertyField.getValue().toString().equals(settings.depthPrintProperty)
+                || !selectProjectNameTextField.getText().equals(settings.selectProjectName)
                 || traceSkipJdkRadio.isSelected() != settings.traceSkipJdk
                 || conditionExpressDisplayRadio.isSelected() != settings.conditionExpressDisplay;
     }
@@ -167,6 +189,7 @@ public class AppSettingsPage implements Configurable {
         settings.traceSkipJdk = traceSkipJdkRadio.isSelected();
         settings.conditionExpressDisplay = conditionExpressDisplayRadio.isSelected();
 
+        settings.selectProjectName = selectProjectNameTextField.getText();
         if (StringUtils.isNotBlank(error)) {
             NotifyUtils.notifyMessage(project, error.toString(), NotificationType.ERROR);
         }
@@ -181,6 +204,8 @@ public class AppSettingsPage implements Configurable {
         depthPrintPropertyField.setValue(Integer.parseInt(settings.depthPrintProperty));
         traceSkipJdkRadio.setSelected(settings.traceSkipJdk);
         conditionExpressDisplayRadio.setSelected(settings.conditionExpressDisplay);
+
+        selectProjectNameTextField.setText(settings.selectProjectName);
     }
 
     @Override

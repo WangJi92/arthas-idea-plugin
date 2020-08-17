@@ -61,6 +61,12 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public boolean conditionExpressDisplay = true;
 
+    /**
+     * {@literal https://arthas.aliyun.com/doc/batch-support.html 批处理支持}
+     * {@literal https://arthas.aliyun.com/doc/advanced-use.html --select}
+     */
+    public String selectProjectName;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
