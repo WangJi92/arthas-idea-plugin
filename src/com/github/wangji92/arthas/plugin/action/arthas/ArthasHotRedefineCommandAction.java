@@ -157,6 +157,11 @@ public class ArthasHotRedefineCommandAction extends AnAction {
             bash64FileAndPathList.add(pathAndClass);
         });
 
+        if (bash64FileAndPathList.size() <= 0) {
+            NotifyUtils.notifyMessage(project, "当前选择对于的类文件在target目录.class文件不存在,请编译", NotificationType.ERROR);
+            return;
+        }
+
 
         String arthasIdeaPluginBase64AndPathCommand = String.join(",", bash64FileAndPathList);
         String arthasIdeaPluginRedefineCommand = "redefine " + String.join(" ", shellOutPaths);
