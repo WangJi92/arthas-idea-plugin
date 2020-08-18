@@ -10,7 +10,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.projectlombok:lombok:1.18.10" level="project" />
-    <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="commons-io-2.7" level="project" />
+    <orderEntry type="library" name="com.aliyun.oss:aliyun-sdk-oss:3.9.1" level="project" />
+    <orderEntry type="library" name="commons-io:commons-io:2.7" level="project" />
+    <orderEntry type="library" name="org.apache.commons:commons-text:1.9" level="project" />
+    <orderEntry type="library" name="com.google.guava:guava:23.0" level="project" />
   </component>
 </module>
