@@ -72,6 +72,7 @@ public class AliyunOssUtils {
                 throw new IllegalArgumentException("配置aliyun oss参数错误 无法获取 bucketName");
             }
         } catch (OSSException | ClientException e) {
+            StackTraceUtils.printSanitizedStackTrace(e);
             throw new IllegalArgumentException("配置aliyun oss 检测bucketName 错误 "+e.getMessage());
         }
     }

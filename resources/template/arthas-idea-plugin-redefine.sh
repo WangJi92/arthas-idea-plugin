@@ -25,7 +25,7 @@ createFile() {
 
 installArthas() {
   if [ ! -d "$HOME/opt/arthas" ]; then
-    banner_simple "artjas idea plugin make dir $HOME/opt/arthas"
+    banner_simple "arthas idea plugin make dir $HOME/opt/arthas"
     mkdir -p $HOME/opt/arthas || return 1
   fi
   # download arthas
@@ -47,8 +47,8 @@ decodebase64CLassFile() {
   done
 }
 
-# Usage: doStartedefine
-doStartedefine() {
+# Usage: doStarteRedefine
+doStarteRedefine() {
   echo $(tput bold)"arthas start commnad ：$HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName}  -c \"${arthasIdeaPluginRedefineCommand}\"  >/tmp/redefine.out"$(tput sgr0)
   $HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName} -c "${arthasIdeaPluginRedefineCommand}" >/tmp/redefine.out
 }
@@ -79,7 +79,7 @@ main() {
     exit_on_err 1 "arthas idea plugin decodebase64CLass error"
   fi
 
-  doStartedefine
+  doStarteRedefine
 
   redefineResult
 }

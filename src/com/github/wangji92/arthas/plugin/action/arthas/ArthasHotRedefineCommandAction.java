@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
+import com.aliyun.oss.OSS;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
@@ -23,11 +24,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +39,15 @@ import java.util.stream.Collectors;
  * @date 16-08-2020
  */
 public class ArthasHotRedefineCommandAction extends AnAction {
+
+    /**
+     * oss 获取到链接
+     */
+    public static final String OSS_HOT_REDEFINE = "curl -sLk  %s --connect-timeout 60 | base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
+    /**
+     * 剪切板处理字符串
+     */
+    public static final String CLIPBOARD_HOT_REDEFINE = "echo %s |base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
 
     @Override
     public void update(@NotNull AnActionEvent e) {
@@ -173,10 +186,33 @@ public class ArthasHotRedefineCommandAction extends AnAction {
         String redefineSh = StringUtils.stringSubstitutor("/template/arthas-idea-plugin-redefine.sh", params);
 
         String base64RedefineSh = BaseEncoding.base64().encode(redefineSh.getBytes());
-        String commandFormat = "echo %s |base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
-        String format = String.format(commandFormat, base64RedefineSh);
-        ClipboardUtils.setClipboardString(format);
 
-        NotifyUtils.notifyMessage(project, "由于没有使用其他存储 执行的脚本比较长，命令已经复制到了剪切板可以到目标服务器上去执行shell，无需打开arthas ");
+        String command = "";
+        if (!settings.aliYunOss) {
+            command = String.format(CLIPBOARD_HOT_REDEFINE, base64RedefineSh);
+            ClipboardUtils.setClipboardString(command);
+            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas 【由于没有使用其他存储 执行的脚本比较长】");
+            return;
+        }
+        OSS oss = null;
+        try {
+            oss = AliyunOssUtils.buildOssClient(project);
+            String filePathKey = settings.depthPrintProperty + UUID.randomUUID().toString();
+            String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, base64RedefineSh);
+            String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
+            command = String.format(OSS_HOT_REDEFINE, presignedUrl);
+            ClipboardUtils.setClipboardString(command);
+            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas");
+        } catch (Exception e) {
+            StackTraceUtils.printSanitizedStackTrace(e);
+            NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
+            return;
+        } finally {
+            if (oss != null) {
+                oss.shutdown();
+            }
+        }
+
+
     }
 }
