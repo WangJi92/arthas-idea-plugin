@@ -67,6 +67,36 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public String selectProjectName;
 
+    /**
+     * oss endpoint  https://helpcdn.aliyun.com/document_detail/84781.html?spm=a2c4g.11186623.6.823.148d1144LOadRS
+     */
+    public String endpoint;
+
+    /**
+     * oss accessKeyId
+     */
+    public String accessKeyId;
+
+    /**
+     * oss accessKeySecret
+     */
+    public String accessKeySecret;
+
+    /**
+     * oss bucketName
+     */
+    public String bucketName;
+
+    /**
+     * oss 存储的路径
+     */
+    public String directoryPrefix = "arthas/";
+
+    /**
+     * 是否设置阿里云
+     */
+    public boolean aliYunOss = false;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);

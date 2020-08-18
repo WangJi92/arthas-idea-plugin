@@ -1,187 +1,384 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.wangji92.arthas.plugin.ui.AppSettingsPage">
-  <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="10" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="685" height="400"/>
+      <xy x="20" y="20" width="723" height="408"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="8adc" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="99" height="16"/>
-          </grid>
-        </constraints>
-        <properties>
-          <text value="Spring Static Context Setting Example"/>
-        </properties>
-      </component>
       <vspacer id="ed2e1">
         <constraints>
-          <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <grid id="bfed5" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
+      <tabbedpane id="87b09" binding="settingTabPane">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="200" height="200"/>
+          </grid>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <hspacer id="ed04a">
+          <grid id="a5445" binding="basicSettingPane" layout-manager="GridLayoutManager" row-count="10" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <tabbedpane title="Basic Setting"/>
             </constraints>
-          </hspacer>
-          <component id="2e7dc" class="com.intellij.ui.components.labels.LinkLabel" binding="linkLabel" custom-create="true">
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="8adc" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="99" height="16"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Spring Static Context Setting Example"/>
+                </properties>
+              </component>
+              <vspacer id="c6b4f">
+                <constraints>
+                  <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="2e7dc" class="com.intellij.ui.components.labels.LinkLabel" binding="linkLabel" custom-create="true">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Spring Context eg:@applicationContextProvider@context"/>
+                </properties>
+              </component>
+              <component id="e90c2" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Spring Static  Context Ognl Setting"/>
+                  <toolTipText value="@XXXCLass@xxStaticField 静态的spring context完整路径"/>
+                </properties>
+              </component>
+              <component id="6f8ab" class="javax.swing.JTextField" binding="springContextStaticOgnlExpressionTextFiled">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="48c8c" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Invoke Count(-n)"/>
+                  <toolTipText value="watch trace 调用次数"/>
+                </properties>
+              </component>
+              <component id="819cc" class="javax.swing.JSpinner" binding="invokeCountField">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="511a2" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Invoke Monitor Count(-n)"/>
+                  <toolTipText value="监控次数"/>
+                </properties>
+              </component>
+              <component id="f108e" class="javax.swing.JSpinner" binding="invokeMonitorCountField">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="fbc59" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Invoke MoInitor Interval(--cycle)"/>
+                  <toolTipText value="调用监控的时间间隔"/>
+                </properties>
+              </component>
+              <component id="933dd" class="javax.swing.JSpinner" binding="invokeMonitorIntervalField">
+                <constraints>
+                  <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="ad4ae" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Depth  Print Property (-x)"/>
+                  <toolTipText value="指定输出结果的属性遍历深度"/>
+                </properties>
+              </component>
+              <component id="b72f0" class="javax.swing.JSpinner" binding="depthPrintPropertyField">
+                <constraints>
+                  <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="a0878" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Trace skipJDKMethod"/>
+                  <toolTipText value="默认是否跳过jdk方法"/>
+                </properties>
+              </component>
+              <component id="4d5a4" class="javax.swing.JRadioButton" binding="traceSkipJdkRadio">
+                <constraints>
+                  <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="跳过Jdk 方法"/>
+                </properties>
+              </component>
+              <component id="1bb6e" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Default Condition Express Display"/>
+                  <toolTipText value="默认条件表达式展示否"/>
+                </properties>
+              </component>
+              <component id="6ae03" class="javax.swing.JRadioButton" binding="conditionExpressDisplayRadio">
+                <constraints>
+                  <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="是否展示默认的条件表达式 1==1"/>
+                </properties>
+              </component>
+              <component id="8ab87" class="com.intellij.ui.components.labels.LinkLabel" binding="selectLink" custom-create="true">
+                <constraints>
+                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="as.sh --select 指定进程的名称"/>
+                  <toolTipText value="as.sh --select -c '命令' auto redfine"/>
+                </properties>
+              </component>
+              <component id="c1425" class="com.intellij.ui.components.labels.LinkLabel" binding="batchSupportLink" custom-create="true">
+                <constraints>
+                  <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="-c batch support"/>
+                </properties>
+              </component>
+              <component id="75dd6" class="javax.swing.JTextField" binding="selectProjectNameTextField">
+                <constraints>
+                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+            </children>
+          </grid>
+          <grid id="f4b0a" binding="hotRedefineSettingPane" layout-manager="GridLayoutManager" row-count="3" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <tabbedpane title="Hot Redefine Setting"/>
             </constraints>
-            <properties>
-              <text value="Spring Context eg:@applicationContextProvider@context"/>
-            </properties>
-          </component>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="54244" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="热更新存储配置"/>
+                  <toolTipText value="redefine 的时候需要将更新的class 上传到目标服务器"/>
+                </properties>
+              </component>
+              <vspacer id="d59d5">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="bf4f" class="javax.swing.JRadioButton" binding="clipboardRadioButton">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="直接使用剪切板"/>
+                  <toolTipText value="直接使用剪切板class文件比较大剪切板的就比较长"/>
+                </properties>
+              </component>
+              <hspacer id="5ec22">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <component id="ebf7f" class="javax.swing.JRadioButton" binding="aliYunOssRadioButton">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="阿里云oss"/>
+                  <toolTipText value="使用阿里云oss 存储，本地将构造好的脚本上传到阿里云oss"/>
+                </properties>
+              </component>
+              <component id="52e34" class="com.intellij.ui.components.labels.LinkLabel" binding="redefineHelpLinkLabel" custom-create="true">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="redefine help"/>
+                </properties>
+              </component>
+              <grid id="4aed9" binding="aliyunOssSettingPane" layout-manager="GridLayoutManager" row-count="7" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="0" height="51"/>
+                  </grid>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="5af5c" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss Endpoint"/>
+                      <toolTipText value="eg: http://oss-cn-hangzhou.aliyuncs.com"/>
+                    </properties>
+                  </component>
+                  <vspacer id="762ac">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <component id="2adae" class="javax.swing.JTextField" binding="ossEndpointTextField">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="790b0" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss accessKeyId"/>
+                      <toolTipText value="yourAccessKeyId"/>
+                    </properties>
+                  </component>
+                  <component id="50202" class="javax.swing.JPasswordField" binding="ossAccessKeyIdPasswordField">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="3b1e7" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss AccessKeySecret"/>
+                      <toolTipText value="yourAccessKeySecret"/>
+                    </properties>
+                  </component>
+                  <component id="330b8" class="javax.swing.JPasswordField" binding="ossAccessKeySecretPasswordField">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="81ac5" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss BucketName"/>
+                      <toolTipText value="yourBucketName"/>
+                    </properties>
+                  </component>
+                  <component id="7395" class="javax.swing.JTextField" binding="ossBucketNameTextField">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="2682" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss Directory Prefix"/>
+                      <toolTipText value="oss 存储文件空间的地址前缀可以为空( abc/efg/ 为前缀  abc/efg/123.jpg)"/>
+                    </properties>
+                  </component>
+                  <component id="674e9" class="javax.swing.JTextField" binding="ossDirectoryPrefixTextField">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <hspacer id="519f2">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </hspacer>
+                  <component id="49e8c" class="javax.swing.JButton" binding="ossSettingCheckButton">
+                    <constraints>
+                      <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss 配置检测"/>
+                    </properties>
+                  </component>
+                  <component id="2c4c8" class="com.intellij.ui.components.labels.LinkLabel" binding="ossHelpLink" custom-create="true">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss Help"/>
+                    </properties>
+                  </component>
+                  <component id="9be6e" class="javax.swing.JLabel" binding="ossCheckMsgLabel">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
         </children>
-      </grid>
-      <component id="e90c2" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Spring Static  Context Ognl Setting"/>
-          <toolTipText value="@XXXCLass@xxStaticField 静态的spring context完整路径"/>
-        </properties>
-      </component>
-      <component id="6f8ab" class="javax.swing.JTextField" binding="springContextStaticOgnlExpressionTextFiled">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="48c8c" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Invoke Count(-n)"/>
-          <toolTipText value="watch trace 调用次数"/>
-        </properties>
-      </component>
-      <component id="819cc" class="javax.swing.JSpinner" binding="invokeCountField">
-        <constraints>
-          <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="511a2" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Invoke Monitor Count(-n)"/>
-          <toolTipText value="监控次数"/>
-        </properties>
-      </component>
-      <component id="f108e" class="javax.swing.JSpinner" binding="invokeMonitorCountField">
-        <constraints>
-          <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="ad4ae" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Depth  Print Property (-x)"/>
-          <toolTipText value="指定输出结果的属性遍历深度"/>
-        </properties>
-      </component>
-      <component id="b72f0" class="javax.swing.JSpinner" binding="depthPrintPropertyField">
-        <constraints>
-          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="a0878" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Trace skipJDKMethod"/>
-          <toolTipText value="默认是否跳过jdk方法"/>
-        </properties>
-      </component>
-      <component id="4d5a4" class="javax.swing.JRadioButton" binding="traceSkipJdkRadio">
-        <constraints>
-          <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="跳过Jdk 方法"/>
-        </properties>
-      </component>
-      <component id="fbc59" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Invoke MoInitor Interval(--cycle)"/>
-          <toolTipText value="调用监控的时间间隔"/>
-        </properties>
-      </component>
-      <component id="933dd" class="javax.swing.JSpinner" binding="invokeMonitorIntervalField">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="1bb6e" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Default Condition Express Display"/>
-          <toolTipText value="默认条件表达式展示否"/>
-        </properties>
-      </component>
-      <component id="6ae03" class="javax.swing.JRadioButton" binding="conditionExpressDisplayRadio">
-        <constraints>
-          <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="是否展示默认的条件表达式 1==1"/>
-        </properties>
-      </component>
-      <component id="8ab87" class="com.intellij.ui.components.labels.LinkLabel" binding="selectLink" custom-create="true">
-        <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="as.sh --select 指定进程的名称"/>
-          <toolTipText value="as.sh --select -c '命令' auto redfine"/>
-        </properties>
-      </component>
-      <component id="75dd6" class="javax.swing.JTextField" binding="selectProjectNameTextField">
-        <constraints>
-          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="c1425" class="com.intellij.ui.components.labels.LinkLabel" binding="batchSupportLink" custom-create="true">
-        <constraints>
-          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="-c batch support"/>
-        </properties>
-      </component>
+      </tabbedpane>
     </children>
   </grid>
 </form>
