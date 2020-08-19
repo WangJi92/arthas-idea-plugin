@@ -3,7 +3,13 @@ package com.github.wangji92.arthas.plugin.utils;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.CompilerModuleExtension;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.psi.*;
+import com.intellij.psi.search.GlobalSearchScope;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -273,6 +279,25 @@ public class OgnlPsUtils {
             return httpMethodWithQuotes.substring(1, httpMethodWithQuotes.length() - 1);
         }
         return "";
+    }
+
+    /**
+     * 找到 编译的出口地址
+     *
+     * @param project
+     * @param ideaClassName
+     * @return
+     */
+    public static String getCompilerOutputPath(Project project, String ideaClassName) {
+        //选择了.class 文件 必须要处理 不然获取不到module 的信息,这里重新获取class 原文件的信息
+        //根据类的全限定名查询PsiClass，下面这个方法是查询Project域 https://blog.csdn.net/ExcellentYuXiao/article/details/80273448
+        PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(ideaClassName, GlobalSearchScope.projectScope(project));
+        // https://jetbrains.org/intellij/sdk/docs/basics/project_structure.html
+        // https://jetbrains.org/intellij/sdk/docs/reference_guide/project_model/module.html
+        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+        //找到编译的 出口位置
+        String outputPath = ModuleRootManager.getInstance(module).getModifiableModel().getModuleExtension(CompilerModuleExtension.class).getCompilerOutputPath().getPath();
+        return outputPath;
     }
 
 }

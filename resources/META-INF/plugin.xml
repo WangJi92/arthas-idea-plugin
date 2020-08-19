@@ -405,6 +405,8 @@
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="$Paste"/>
+<!--            右键到文件夹区的处理-->
+            <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="$Paste"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <separator />
             <reference ref="ArthasWatch"/>
