@@ -191,7 +191,7 @@ public class ArthasHotRedefineCommandAction extends AnAction {
         if (!settings.aliYunOss) {
             command = String.format(CLIPBOARD_HOT_REDEFINE, base64RedefineSh);
             ClipboardUtils.setClipboardString(command);
-            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas 【由于没有使用其他存储 执行的脚本比较长】");
+            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas 【由于没有使用其他存储 执行的脚本比较长,推荐配置阿里云oss】");
             return;
         }
         OSS oss = null;

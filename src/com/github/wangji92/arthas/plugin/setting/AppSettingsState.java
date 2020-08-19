@@ -97,17 +97,50 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public boolean aliYunOss = false;
 
+    /**
+     * spring context 全局默认配置
+     */
+    public boolean springContextGlobalSetting = true;
+
+    /**
+     * oss 全局默认配置
+     */
+    public boolean ossGlobalSetting = true;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
         // 配置检查.. 兼容老版本
-        if (appSettingsState.staticSpringContextOgnl.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
+        if (appSettingsState.staticSpringContextOgnl.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING) || StringUtils.isBlank(appSettingsState.staticSpringContextOgnl)) {
             String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
             // 最早的版本设置过配置的！ 使用那个配置作为当前工程的配置
             if (StringUtils.isNotBlank(springContextValue) && !ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue) && springContextValue.contains("@")) {
                 appSettingsState.staticSpringContextOgnl = springContextValue;
+                appSettingsState.springContextGlobalSetting = true;
             }
 
+        }
+
+        String endPoint1 = PropertiesComponentUtils.getValue("endpoint");
+        String bucketName1 = PropertiesComponentUtils.getValue("bucketName");
+        String accessKeyId1 = PropertiesComponentUtils.getValue("accessKeyId");
+        String accessKeySecret1 = PropertiesComponentUtils.getValue("accessKeySecret");
+        String directoryPrefix1 = PropertiesComponentUtils.getValue("directoryPrefix");
+        // 如果之前有设置过就打开了
+        if (!appSettingsState.aliYunOss && StringUtils.isBlank(appSettingsState.endpoint)
+                && StringUtils.isBlank(appSettingsState.bucketName)
+                && StringUtils.isBlank(appSettingsState.accessKeyId)
+                && StringUtils.isBlank(appSettingsState.accessKeySecret)
+                && StringUtils.isNotBlank(bucketName1)
+                && StringUtils.isNotBlank(endPoint1)
+                && StringUtils.isNotBlank(accessKeyId1)
+                && StringUtils.isNotBlank(accessKeySecret1)) {
+            appSettingsState.aliYunOss = true;
+            appSettingsState.endpoint = endPoint1;
+            appSettingsState.accessKeyId = accessKeyId1;
+            appSettingsState.bucketName = bucketName1;
+            appSettingsState.accessKeySecret = accessKeySecret1;
+            appSettingsState.directoryPrefix = directoryPrefix1;
         }
         return appSettingsState;
     }

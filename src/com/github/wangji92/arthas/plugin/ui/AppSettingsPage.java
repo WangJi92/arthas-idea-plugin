@@ -126,6 +126,14 @@ public class AppSettingsPage implements Configurable {
      * 阿里云Oss Setting Pane
      */
     private JPanel aliyunOssSettingPane;
+    /**
+     * 全局spring context 开关
+     */
+    private JRadioButton springContextGlobalSettingRadioButton;
+    /**
+     * oss 全局开关
+     */
+    private JRadioButton ossGlobalSettingRadioButton;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -218,6 +226,8 @@ public class AppSettingsPage implements Configurable {
                 || !selectProjectNameTextField.getText().equals(settings.selectProjectName)
                 || traceSkipJdkRadio.isSelected() != settings.traceSkipJdk
                 || conditionExpressDisplayRadio.isSelected() != settings.conditionExpressDisplay
+                || ossGlobalSettingRadioButton.isSelected() != settings.ossGlobalSetting
+                || springContextGlobalSettingRadioButton.isSelected() != settings.springContextGlobalSetting
                 || aliYunOssRadioButton.isSelected() != settings.aliYunOss;
 
         if (modify) {
@@ -260,6 +270,12 @@ public class AppSettingsPage implements Configurable {
                 }
             }
             settings.staticSpringContextOgnl = springContextStaticOgnlExpressionTextFiled.getText();
+            settings.springContextGlobalSetting = springContextGlobalSettingRadioButton.isSelected();
+            //全局设置
+            if (springContextGlobalSettingRadioButton.isSelected()) {
+                PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, springContextStaticOgnlExpressionTextFiled.getText());
+            }
+
         }
         if (((int) invokeCountField.getValue()) <= 0) {
             error.append("invokeCountField <= 0 ");
@@ -297,6 +313,14 @@ public class AppSettingsPage implements Configurable {
                 settings.bucketName = ossBucketNameTextField.getText();
                 settings.directoryPrefix = ossDirectoryPrefixTextField.getText();
                 settings.aliYunOss = true;
+                settings.ossGlobalSetting = ossGlobalSettingRadioButton.isSelected();
+                if (ossGlobalSettingRadioButton.isSelected()) {
+                    PropertiesComponentUtils.setValue("endpoint", settings.endpoint);
+                    PropertiesComponentUtils.setValue("accessKeyId", settings.accessKeyId);
+                    PropertiesComponentUtils.setValue("accessKeySecret", settings.accessKeySecret);
+                    PropertiesComponentUtils.setValue("bucketName", settings.bucketName);
+                    PropertiesComponentUtils.setValue("directoryPrefix", settings.directoryPrefix);
+                }
                 oss.shutdown();
             } catch (Exception e) {
                 StackTraceUtils.printSanitizedStackTrace(e);
@@ -342,6 +366,8 @@ public class AppSettingsPage implements Configurable {
             aliYunOssRadioButton.setSelected(false);
             aliyunOssSettingPane.setVisible(false);
         }
+        springContextGlobalSettingRadioButton.setSelected(settings.springContextGlobalSetting);
+        ossGlobalSettingRadioButton.setSelected(settings.ossGlobalSetting);
         initEvent();
     }
 

@@ -17,6 +17,12 @@ exit_on_err() {
   exit ${1}
 }
 
+# check arthas permission
+check_permission() {
+  [ ! -w "${HOME}" ] &&
+    exit_on_err 1 "permission denied, ${HOME} is not writable."
+}
+
 createFile() {
   if [ ! -f $1 ]; then
     mkdir -p "$(dirname "$1")" && touch $1 >/dev/null 2>&1 && echo "File $1 created." || return 1
@@ -67,7 +73,10 @@ redefineResult() {
 arthasIdeaPluginBase64AndPathCommand="${arthasIdeaPluginBase64AndPathCommand}"
 # the main function
 main() {
+
   banner_simple "arthas idea plugin redefine beigin;start script full path: $(pwd)/arthas-idea-plugin-redefine.sh"
+
+  check_permission
 
   installArthas
   if [ $? -ne 0 ]; then

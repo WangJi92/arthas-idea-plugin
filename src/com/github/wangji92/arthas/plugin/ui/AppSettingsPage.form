@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.wangji92.arthas.plugin.ui.AppSettingsPage">
-  <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="723" height="408"/>
+      <xy x="20" y="20" width="835" height="415"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <vspacer id="ed2e1">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-        </constraints>
-      </vspacer>
       <tabbedpane id="87b09" binding="settingTabPane">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="200" height="200"/>
           </grid>
         </constraints>
         <properties/>
-        <border type="none"/>
+        <border type="etched"/>
         <children>
-          <grid id="a5445" binding="basicSettingPane" layout-manager="GridLayoutManager" row-count="10" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a5445" binding="basicSettingPane" layout-manager="GridLayoutManager" row-count="9" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <tabbedpane title="Basic Setting"/>
             </constraints>
             <properties/>
-            <border type="none"/>
+            <border type="etched"/>
             <children>
               <component id="8adc" class="javax.swing.JLabel">
                 <constraints>
@@ -42,7 +37,7 @@
               </component>
               <vspacer id="c6b4f">
                 <constraints>
-                  <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="2e7dc" class="com.intellij.ui.components.labels.LinkLabel" binding="linkLabel" custom-create="true">
@@ -64,7 +59,7 @@
               </component>
               <component id="6f8ab" class="javax.swing.JTextField" binding="springContextStaticOgnlExpressionTextFiled">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
@@ -164,34 +159,18 @@
                   <text value="是否展示默认的条件表达式 1==1"/>
                 </properties>
               </component>
-              <component id="8ab87" class="com.intellij.ui.components.labels.LinkLabel" binding="selectLink" custom-create="true">
+              <component id="88a85" class="javax.swing.JRadioButton" binding="springContextGlobalSettingRadioButton">
                 <constraints>
-                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="as.sh --select 指定进程的名称"/>
-                  <toolTipText value="as.sh --select -c '命令' auto redfine"/>
+                  <text value="Spring Context 全局配置"/>
+                  <toolTipText value="当前配置设置为全局默认配置"/>
                 </properties>
-              </component>
-              <component id="c1425" class="com.intellij.ui.components.labels.LinkLabel" binding="batchSupportLink" custom-create="true">
-                <constraints>
-                  <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="-c batch support"/>
-                </properties>
-              </component>
-              <component id="75dd6" class="javax.swing.JTextField" binding="selectProjectNameTextField">
-                <constraints>
-                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties/>
               </component>
             </children>
           </grid>
-          <grid id="f4b0a" binding="hotRedefineSettingPane" layout-manager="GridLayoutManager" row-count="3" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="f4b0a" binding="hotRedefineSettingPane" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <tabbedpane title="Hot Redefine Setting"/>
@@ -210,7 +189,7 @@
               </component>
               <vspacer id="d59d5">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="bf4f" class="javax.swing.JRadioButton" binding="clipboardRadioButton">
@@ -224,7 +203,7 @@
               </component>
               <hspacer id="5ec22">
                 <constraints>
-                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="4" row-span="1" col-span="2" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
               </hspacer>
               <component id="ebf7f" class="javax.swing.JRadioButton" binding="aliYunOssRadioButton">
@@ -244,15 +223,15 @@
                   <text value="redefine help"/>
                 </properties>
               </component>
-              <grid id="4aed9" binding="aliyunOssSettingPane" layout-manager="GridLayoutManager" row-count="7" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
+              <grid id="4aed9" binding="aliyunOssSettingPane" layout-manager="GridLayoutManager" row-count="8" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="5" left="5" bottom="5" right="5"/>
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                  <grid row="1" column="0" row-span="1" col-span="6" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="0" height="51"/>
                   </grid>
                 </constraints>
                 <properties/>
-                <border type="none"/>
+                <border type="etched"/>
                 <children>
                   <component id="5af5c" class="javax.swing.JLabel">
                     <constraints>
@@ -265,12 +244,12 @@
                   </component>
                   <vspacer id="762ac">
                     <constraints>
-                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </vspacer>
                   <component id="2adae" class="javax.swing.JTextField" binding="ossEndpointTextField">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                      <grid row="0" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -287,7 +266,7 @@
                   </component>
                   <component id="50202" class="javax.swing.JPasswordField" binding="ossAccessKeyIdPasswordField">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="1" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -304,7 +283,7 @@
                   </component>
                   <component id="330b8" class="javax.swing.JPasswordField" binding="ossAccessKeySecretPasswordField">
                     <constraints>
-                      <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="2" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -321,7 +300,7 @@
                   </component>
                   <component id="7395" class="javax.swing.JTextField" binding="ossBucketNameTextField">
                     <constraints>
-                      <grid row="3" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="3" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -338,7 +317,7 @@
                   </component>
                   <component id="674e9" class="javax.swing.JTextField" binding="ossDirectoryPrefixTextField">
                     <constraints>
-                      <grid row="4" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="4" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -346,12 +325,12 @@
                   </component>
                   <hspacer id="519f2">
                     <constraints>
-                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </hspacer>
                   <component id="49e8c" class="javax.swing.JButton" binding="ossSettingCheckButton">
                     <constraints>
-                      <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Oss 配置检测"/>
@@ -359,7 +338,7 @@
                   </component>
                   <component id="2c4c8" class="com.intellij.ui.components.labels.LinkLabel" binding="ossHelpLink" custom-create="true">
                     <constraints>
-                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Oss Help"/>
@@ -367,18 +346,71 @@
                   </component>
                   <component id="9be6e" class="javax.swing.JLabel" binding="ossCheckMsgLabel">
                     <constraints>
-                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value=""/>
                     </properties>
                   </component>
+                  <component id="91a8a" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss Setting Scope"/>
+                      <toolTipText value="Oss 设置作用范围"/>
+                    </properties>
+                  </component>
+                  <hspacer id="d3714">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </hspacer>
+                  <component id="2936b" class="javax.swing.JRadioButton" binding="ossGlobalSettingRadioButton">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Oss 全局配置"/>
+                      <toolTipText value="是否当前配置作为全局默认配置"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
+              <component id="fab47" class="com.intellij.ui.components.labels.LinkLabel" binding="selectLink" custom-create="true">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="as.sh --select 指定进程的名称"/>
+                  <toolTipText value="as.sh --select -c '命令' auto redfine"/>
+                </properties>
+              </component>
+              <component id="f5bcd" class="javax.swing.JTextField" binding="selectProjectNameTextField">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="d39d0" class="com.intellij.ui.components.labels.LinkLabel" binding="batchSupportLink" custom-create="true">
+                <constraints>
+                  <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="-c batch support"/>
+                </properties>
+              </component>
             </children>
           </grid>
         </children>
       </tabbedpane>
+      <vspacer id="ed2e1">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
     </children>
   </grid>
 </form>
