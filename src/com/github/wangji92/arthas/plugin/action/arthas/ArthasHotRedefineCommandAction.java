@@ -27,6 +27,7 @@ import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.SystemIndependent;
 
 import java.io.File;
 import java.util.*;
@@ -79,10 +80,14 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
     public void actionPerformed(@NotNull AnActionEvent event) {
         DataContext dataContext = event.getDataContext();
         Project project = CommonDataKeys.PROJECT.getData(dataContext);
+        if (project == null) {
+            return;
+        }
         VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         assert virtualFileFiles != null;
         String compilerOutputPath = "";
+        @SystemIndependent String basePath = project.getBasePath() == null ? "" : project.getBasePath();
         List<String> fullClassPackagePaths = Lists.newArrayList();
         if (virtualFileFiles.length == 1 && psiElement instanceof JvmMember) {
             //选择 当个文件 且为 编辑区选择的
@@ -148,7 +153,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             String classBase64 = IoUtils.readFileToBase64String(file);
             // shell 解析的时候 单引号''，双引号""的区别是单引号''剥夺了所有字符的特殊含义，单引号''内就变成了单纯的字符。双引号""则对于双引号""内的参数替换
             // 内部类 的时候回有问题 展示上面 结果没有影响 这里修改一下
-            String pathReplaceAll = fullClassPackagePath.replace("$", "-");
+            String pathReplaceAll = fullClassPackagePath.replace("$", "-").replace(basePath, "").replace(File.separator + "target" + File.separator + "classes", "");
             String pathAndClass = classBase64 + "|" + ArthasCommandConstants.REDEFINE_BASH_PACKAGE_PATH + pathReplaceAll;
             shellOutPaths.add(ArthasCommandConstants.REDEFINE_BASH_PACKAGE_PATH + pathReplaceAll);
             bash64FileAndPathList.add(pathAndClass);
@@ -162,6 +167,9 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
         AppSettingsState settings = AppSettingsState.getInstance(project);
         String selectProjectName = settings.selectProjectName;
+
+        //不为空就删除
+        String deleteClassFile = settings.hotRedefineDelete ? "delete" : "";
         if (StringUtils.isBlank(selectProjectName)) {
             NotifyUtils.notifyMessage(project, "必须配置才能使用 jps -l 查看名称,Hot Redefine use project name select process and batch support; as.sh --select projectName -c 'redefine /tmp/test.class'", NotificationType.ERROR);
             return;
@@ -172,6 +180,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         params.put("arthasIdeaPluginBase64AndPathCommand", arthasIdeaPluginBase64AndPathCommand);
         params.put("arthasIdeaPluginRedefineCommand", arthasIdeaPluginRedefineCommand);
         params.put("arthasIdeaPluginApplicationName", selectProjectName);
+        params.put("deleteClassFile", deleteClassFile);
 
         String redefineSh = StringUtils.stringSubstitutor("/template/arthas-idea-plugin-redefine.sh", params);
 

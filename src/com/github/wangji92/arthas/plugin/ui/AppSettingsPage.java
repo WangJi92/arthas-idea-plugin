@@ -134,6 +134,10 @@ public class AppSettingsPage implements Configurable {
      * oss 全局开关
      */
     private JRadioButton ossGlobalSettingRadioButton;
+    /**
+     * 热更新完成后删除文件
+     */
+    private JRadioButton hotRedefineDeleteFileRadioButton;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -228,7 +232,8 @@ public class AppSettingsPage implements Configurable {
                 || conditionExpressDisplayRadio.isSelected() != settings.conditionExpressDisplay
                 || ossGlobalSettingRadioButton.isSelected() != settings.ossGlobalSetting
                 || springContextGlobalSettingRadioButton.isSelected() != settings.springContextGlobalSetting
-                || aliYunOssRadioButton.isSelected() != settings.aliYunOss;
+                || aliYunOssRadioButton.isSelected() != settings.aliYunOss
+                || hotRedefineDeleteFileRadioButton.isSelected() != settings.hotRedefineDelete;
 
         if (modify) {
             return modify;
@@ -300,6 +305,7 @@ public class AppSettingsPage implements Configurable {
         settings.traceSkipJdk = traceSkipJdkRadio.isSelected();
         settings.conditionExpressDisplay = conditionExpressDisplayRadio.isSelected();
         settings.selectProjectName = selectProjectNameTextField.getText();
+        settings.hotRedefineDelete = hotRedefineDeleteFileRadioButton.isSelected();
         if (clipboardRadioButton.isSelected()) {
             settings.aliYunOss = false;
         } else {
@@ -350,6 +356,7 @@ public class AppSettingsPage implements Configurable {
         depthPrintPropertyField.setValue(Integer.parseInt(settings.depthPrintProperty));
         traceSkipJdkRadio.setSelected(settings.traceSkipJdk);
         conditionExpressDisplayRadio.setSelected(settings.conditionExpressDisplay);
+        hotRedefineDeleteFileRadioButton.setSelected(settings.hotRedefineDelete);
         selectProjectNameTextField.setText(settings.selectProjectName);
 
         ossEndpointTextField.setText(settings.endpoint);

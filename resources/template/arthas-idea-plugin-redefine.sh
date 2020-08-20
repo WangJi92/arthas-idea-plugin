@@ -19,8 +19,8 @@ exit_on_err() {
 
 # check arthas permission
 check_permission() {
-  [ ! -w "${HOME}" ] &&
-    exit_on_err 1 "permission denied, ${HOME} is not writable."
+  [ ! -w "$HOME" ] &&
+    exit_on_err 1 "permission denied, $HOME is not writable."
 }
 
 createFile() {
@@ -36,14 +36,14 @@ installArthas() {
   fi
   # download arthas
   if [ ! -f "$HOME/opt/arthas/as.sh" ]; then
-    banner_simple "arthas idea plugin download arthas as.sh"
+    banner_simple "arthas idea plugin download arthas $HOME/opt/arthas/as.sh"
     curl -sLk https://arthas.aliyun.com/as.sh --connect-timeout 60 -o $HOME/opt/arthas/as.sh || return 1
     chmod +x $HOME/opt/arthas/as.sh || return 1
   fi
 }
 # xxxClassBase64Str|xxxClassPath,xxxClass2Base64Str|xxxClass2Path
 decodebase64CLassFile() {
-  bash64FileAndPathList=$arthasIdeaPluginBase64AndPathCommand
+  bash64FileAndPathList="${arthasIdeaPluginBase64AndPathCommand}"
   commaArraybash64FilePath=(${bash64FileAndPathList//\,/ })
   for i in "${!commaArraybash64FilePath[@]}"; do
     verticalArraySingleBash64FileAndPath=(${commaArraybash64FilePath[i]//\|/ })
@@ -55,13 +55,14 @@ decodebase64CLassFile() {
 
 # Usage: doStarteRedefine
 doStarteRedefine() {
-  echo $(tput bold)"arthas start commnad ：$HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName}  -c \"${arthasIdeaPluginRedefineCommand}\"  >/tmp/redefine.out"$(tput sgr0)
-  $HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName} -c "${arthasIdeaPluginRedefineCommand}" >/tmp/redefine.out
+  createFile $HOME/opt/arthas/redefine/redefineArthas.out
+  echo $(tput bold)"arthas start commnad ：$HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName}  -c \"${arthasIdeaPluginRedefineCommand}\"  >$HOME/opt/arthas/redefine/redefineArthas.out"$(tput sgr0)
+  $HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName} -c "${arthasIdeaPluginRedefineCommand}" >$HOME/opt/arthas/redefine/redefineArthas.out
 }
 
 redefineResult() {
-  cat /tmp/redefine.out
-  redefineResult=$(cat /tmp/redefine.out | grep "redefine success")
+  cat $HOME/opt/arthas/redefine/redefineArthas.out
+  redefineResult=$(cat $HOME/opt/arthas/redefine/redefineArthas.out | grep "redefine success")
   if [ -z "$redefineResult" ]; then
     banner_simple $(echo $(tput setaf 1)arthas idea plugin redefine error $(tput sgr0))
   else
@@ -69,8 +70,14 @@ redefineResult() {
   fi
 }
 
-# too long  to transfer parameters
-arthasIdeaPluginBase64AndPathCommand="${arthasIdeaPluginBase64AndPathCommand}"
+#delete file
+doClenFile() {
+  if [ ! -z "${deleteClassFile}" ]; then
+    rm -rf $HOME/opt/arthas/redefine
+    echo "arthas idea plugin delete class file $HOME/opt/arthas/redefine ok"
+  fi
+}
+
 # the main function
 main() {
 
@@ -91,6 +98,8 @@ main() {
   doStarteRedefine
 
   redefineResult
+
+  doClenFile
 }
 
 main "${@}"

@@ -107,6 +107,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public boolean ossGlobalSetting = true;
 
+    /**
+     * 热更新完成后删除文件
+     */
+    public boolean hotRedefineDelete = true;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
