@@ -30,6 +30,25 @@ public class OgnlPsUtils {
 
     /**
      * 获取内部类、匿名类的class的 ognl 名称
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getCommonOrInnerOrAnonymousClassName(@NotNull PsiElement psiElement) {
+        if (psiElement instanceof PsiMethod) {
+            return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiMethod) psiElement);
+        }
+        if (psiElement instanceof PsiField) {
+            return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiField) psiElement);
+        }
+        if (psiElement instanceof PsiClass) {
+            return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiClass) psiElement);
+        }
+        throw new IllegalArgumentException("非法参数");
+    }
+
+    /**
+     * 获取内部类、匿名类的class的 ognl 名称
      * <p>
      * 内部类  OuterClass$InnerClass
      * 匿名类  Outer*$*

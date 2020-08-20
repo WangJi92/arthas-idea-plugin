@@ -11,7 +11,7 @@ public interface ArthasCommandConstants {
     /**
      * arthas 热更新 基础包名称
      */
-    String REDEFINE_BASH_PACKAGE_PATH = "/tmp/arthasIdeaPluginRedefine/";
+    String REDEFINE_BASH_PACKAGE_PATH = "$HOME/opt/arthas/redefine/class/";
 
     /**
      * 默认条件表达式

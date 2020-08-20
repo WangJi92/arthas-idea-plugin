@@ -16,7 +16,10 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -81,49 +84,22 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         assert virtualFileFiles != null;
         String compilerOutputPath = "";
         List<String> fullClassPackagePaths = Lists.newArrayList();
-        if (psiElement != null && virtualFileFiles.length == 1 && psiElement instanceof JvmMember) {
+        if (virtualFileFiles.length == 1 && psiElement instanceof JvmMember) {
             //选择 当个文件 且为 编辑区选择的
-            String pathClassName = "";
-            String ideaClassName = "";
-            boolean isAnonymousClass = false;
-            if (psiElement instanceof PsiMethod) {
-                PsiMethod psiMethod = (PsiMethod) psiElement;
-                //处理内部类 匿名类获取class的问题
-                pathClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
-                if (pathClassName.contains("*$*")) {
-                    isAnonymousClass = true;
-                } else {
-                    ideaClassName = psiMethod.getContainingClass().getQualifiedName();
-                }
-            }
-            if (psiElement instanceof PsiField) {
-                PsiField psiField = (PsiField) psiElement;
-                pathClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
-                if (pathClassName.contains("*$*")) {
-                    isAnonymousClass = true;
-                } else {
-                    ideaClassName = psiField.getContainingClass().getQualifiedName();
 
-                }
-            }
-            if (psiElement instanceof PsiClass) {
-                PsiClass psiClass = (PsiClass) psiElement;
-                pathClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass);
-                ideaClassName = psiClass.getQualifiedName();
-            }
+            String packageName = ((PsiJavaFile) psiElement.getContainingFile()).getPackageName();
+            String className = FilenameUtils.getBaseName(psiElement.getContainingFile().getName());
+            String ideaClassName = packageName + "." + className;
 
-            if (isAnonymousClass) {
-                String packageName = ((PsiJavaFile) psiElement.getContainingFile()).getPackageName();
-                String outClassName = FilenameUtils.getBaseName(psiElement.getContainingFile().getName());
-                // 匿名类 获取当前最外层的outer的类
-                ideaClassName = packageName + "." + outClassName;
-
-            }
+            //主要是根据模块查询 当前编译后的路径的信息
             compilerOutputPath = OgnlPsUtils.getCompilerOutputPath(project, ideaClassName);
 
+            //全路径包含 匿名类的处理
+            String pathClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
+            //处理内部类 匿名类获取class的问题
+            boolean isAnonymousClass = pathClassName.contains("*$*");
             if (isAnonymousClass) {
                 // 匿名类要处理遍历
-                final String packageName = ((PsiJavaFile) psiElement.getContainingFile()).getPackageName();
                 String packageNamePath = packageName.replaceAll("\\.", File.separator);
                 String outClassName = FilenameUtils.getBaseName(psiElement.getContainingFile().getName());
                 // 查找当前类下面的所有的匿名类的信息
@@ -141,7 +117,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             List<PsiFile> psiFileJavaFiles = Arrays.stream(virtualFileFiles).map(PsiManager.getInstance(project)::findFile).filter(psiFileElement -> psiFileElement instanceof PsiJavaFile).collect(Collectors.toList());
 
             if (CollectionUtils.isEmpty(psiFileJavaFiles)) {
-                NotifyUtils.notifyMessage(project, "请选择.java 或者 .class文件", NotificationType.ERROR);
+                NotifyUtils.notifyMessage(project, "请选择.java 先编译 Control /Command F9 编译 或者 .class文件", NotificationType.ERROR);
                 return;
             }
             fullClassPackagePaths = psiFileJavaFiles.stream().flatMap(psiFileJavaFile -> {
