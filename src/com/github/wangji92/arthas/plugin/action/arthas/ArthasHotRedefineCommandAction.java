@@ -205,7 +205,6 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         } catch (Exception e) {
             StackTraceUtils.printSanitizedStackTrace(e);
             NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
-            return;
         } finally {
             if (oss != null) {
                 oss.shutdown();

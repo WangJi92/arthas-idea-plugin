@@ -30,6 +30,7 @@ public abstract class BaseArthasPluginAction extends AnAction {
         //获取当前事件触发时，光标所在的元素
         Project project = CommonDataKeys.PROJECT.getData(dataContext);
         if (project == null) {
+            e.getPresentation().setEnabled(false);
             return;
         }
         VirtualFile[] virtualFileFiles = e.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);

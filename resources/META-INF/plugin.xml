@@ -400,6 +400,12 @@
                 description="Redefine">
         </action>
 
+        <action id="LocalFileUploadToOssAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.LocalFileUploadToOssAction"
+                text="Local File Upload To Oss"
+                description="LocalFileUploadToOssAction">
+        </action>
+
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
             <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
@@ -420,6 +426,7 @@
                 <reference ref="ArthasJvmCommandAction"/>
                 <reference ref="ArthasPerCountCommandAction"/>
                 <reference ref="ArthasVmOptionCommandAction"/>
+                <reference ref="LocalFileUploadToOssAction"/>
             </group>
             <reference ref="ArthasInstallCommand"/>
             <reference ref="ArthasSpecial"/>
@@ -470,6 +477,7 @@
                 <reference ref="ArthasJvmCommandAction"/>
                 <reference ref="ArthasPerCountCommandAction"/>
                 <reference ref="ArthasVmOptionCommandAction"/>
+                <reference ref="LocalFileUploadToOssAction"/>
             </group>
             <separator/>
             <reference ref="ArthasInstallCommand"/>
