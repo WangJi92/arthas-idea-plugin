@@ -194,15 +194,15 @@
 
     <extensions defaultExtensionNs="com.intellij">
         // parentId = "tools"
-        <projectConfigurable  instance="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
-                                 id="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
-                                 displayName="Arthas Idea Plugin"/>
+        <projectConfigurable instance="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
+                             id="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
+                             displayName="Arthas Idea Plugin"/>
         <projectService serviceImplementation="com.github.wangji92.arthas.plugin.setting.AppSettingsState"/>
     </extensions>
 
-<!--    <extensions defaultExtensionNs="com.intellij">-->
-<!--        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>-->
-<!--    </extensions>-->
+    <!--    <extensions defaultExtensionNs="com.intellij">-->
+    <!--        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>-->
+    <!--    </extensions>-->
 
     <depends>com.intellij.modules.platform</depends>
 
@@ -234,7 +234,8 @@
                 text="Ognl To Get Static Method Field"
                 description="Arthas ognl static">
         </action>
-        <action id="ArthasSimpleGetStaticCommand" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSimpleGetStaticCommandAction"
+        <action id="ArthasSimpleGetStaticCommand"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSimpleGetStaticCommandAction"
                 text="Simple Get Static Field"
                 description="Simple getStatic field">
         </action>
@@ -401,16 +402,40 @@
                 description="Redefine">
         </action>
 
+        <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
+            <!--            version control 修改变更那里 找了好久-->
+            <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
+            <reference ref="ArthasHotCommandAction"/>
+            <reference ref="ArthasDashboardCommandAction"/>
+            <reference ref="ArthasJadCommandAction"/>
+            <reference ref="ArthasLoggerCommandAction"/>
+            <reference ref="ArthasClassLoaderLoadClassCommandAction"/>
+            <reference ref="ArthasAsyncProfilerCommandAction"/>
+            <separator/>
+            <group id="arthas-plugin-other-ChangesViewPopupMenu" popup="true" text="Other">
+                <reference ref="ArthasSc"/>
+                <reference ref="ArthasSmCommandAction"/>
+                <reference ref="ArthasClassloaderCommandAction"/>
+                <reference ref="ArthasDumpCommandAction"/>
+                <reference ref="ArthasHeapDumpCommandAction"/>
+                <reference ref="ArthasThreadAction"/>
+                <reference ref="ArthasJvmCommandAction"/>
+                <reference ref="ArthasPerCountCommandAction"/>
+                <reference ref="ArthasVmOptionCommandAction"/>
+            </group>
+            <reference ref="ArthasInstallCommand"/>
+            <reference ref="ArthasSpecial"/>
+            <separator/>
+            <reference ref="ArthasHelpCommand"/>
+            <reference ref="HelpArthasDocumentPageAction"/>
+        </group>
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="$Paste"/>
-<!--            右键到文件夹区的处理-->
+            <!--            右键到文件夹区的处理-->
             <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="$Paste"/>
-<!--            version control 修改变更那里 找了好久-->
-            <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
-
             <add-to-group group-id="ToolsMenu" anchor="first"/>
-            <separator />
+            <separator/>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
             <reference ref="ArthasTraceMultipleCommand"/>
