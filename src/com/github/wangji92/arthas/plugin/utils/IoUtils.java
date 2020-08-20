@@ -2,10 +2,11 @@ package com.github.wangji92.arthas.plugin.utils;
 
 import com.google.common.io.BaseEncoding;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -20,12 +21,9 @@ public class IoUtils {
      * @return
      */
     public static String getResourceFile(String filePath) {
-        try {
-            URL resource = IoUtils.class.getClassLoader().getResource(filePath);
-            if (resource == null) {
-                throw new IllegalArgumentException("文件不存在");
-            }
-            return FileUtils.readFileToString(new File(resource.getFile()), StandardCharsets.UTF_8);
+        // 沙箱的文件地址在外面 插件中在jar包中有问题
+        try (InputStream resourceAsStream = IoUtils.class.getClassLoader().getResourceAsStream(filePath)) {
+            return IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new IllegalArgumentException("读取文件异常");
         }
