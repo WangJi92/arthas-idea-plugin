@@ -70,7 +70,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
     /**
      * 游戏规则
      * 1、文件导航多选 psiElement ==null psiFile==null virtualFileFiles>2
-     * 2、文件导航单选 psiElement !=null  等同于选择了class
+     * 2、文件导航单选 psiElement !=null  等同于选择了class psiElement 可能为空
      * 3、编辑框里面处理 psiElement !=null  内部类  psiFile = OutClass  psiElement == InnerCLass
      * 匿名类  psiFile = OutClass  psiElement == PsiAnonymousClass
      *
