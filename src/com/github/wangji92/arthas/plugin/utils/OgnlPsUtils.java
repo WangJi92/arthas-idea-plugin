@@ -3,6 +3,8 @@ package com.github.wangji92.arthas.plugin.utils;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -298,6 +300,16 @@ public class OgnlPsUtils {
         //找到编译的 出口位置
         String outputPath = ModuleRootManager.getInstance(module).getModifiableModel().getModuleExtension(CompilerModuleExtension.class).getCompilerOutputPath().getPath();
         return outputPath;
+    }
+
+    /**
+     * http://cache.baiducontent.com/c?m=Tnjg0Yh1MVwmR9iP4ZjO9t6Lw-n_-niXq_L9H_1xQzCQD0pv_sDWB6J-X9JKi_UtVCGlZIedbyoLZ_7IjppgHtJZ3dxPAqPe9_uktmcqP4E6hzObIGskfxHC-Cj01eIj758qcQovyc7U9VjxucwQzxU5KXRQR4Zh6eG-JKymkQoBzPnRgv1fYs79X7MHqE0BALGQB_CeklaXd118YvLS2s0btNlD6hoXlD9nxw9UHPX1y-XWRP4Achz2eTsjx4dW9gYgkL4nWsl7lWMU1o1W1a&p=882a9646d2dd5de442acdc2d021496&newp=c3759a46d5c757fc57efd234450582231615d70e3fd4d5126b82c825d7331b001c3bbfb42328170fd6c37d6100a54a5debf03274360927a3dda5c91d9fb4c574799e&s=cfcd208495d565ef&user=baidu&fm=sc&query=idea+plugin+get+path+of+plugin&qid=8a9012d00004780b&p1=9
+     * 获取插件的地址  沙箱的地址和 真实的不一样，沙箱是解压的文件，真实的是一个jar包
+     *
+     * @return
+     */
+    public static String getPluginPath() {
+        return PluginManager.getPlugin(PluginId.getId("com.github.wangji92.arthas.plugin")).getPath().getPath();
     }
 
 }
