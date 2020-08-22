@@ -71,7 +71,7 @@ public class LocalFileUploadToOssAction extends AnAction {
         OSS oss = null;
         try {
             oss = AliyunOssUtils.buildOssClient(project);
-            String filePathKey = settings.depthPrintProperty + UUID.randomUUID().toString();
+            String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
             String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, selectVirtualFile.getInputStream());
             String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
             String command = String.format(OSS_UP_LOAD_FILE, presignedUrl, selectVirtualFile.getName());
