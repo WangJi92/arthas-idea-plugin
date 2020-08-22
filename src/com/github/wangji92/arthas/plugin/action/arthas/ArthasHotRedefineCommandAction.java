@@ -47,11 +47,11 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
     /**
      * oss 获取到链接
      */
-    public static final String OSS_HOT_REDEFINE = "curl -sLk  %s --connect-timeout 60 | base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
+    public static final String OSS_HOT_REDEFINE = "curl -Lk  \"%s\" | base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
     /**
      * 剪切板处理字符串
      */
-    public static final String CLIPBOARD_HOT_REDEFINE = "echo %s |base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
+    public static final String CLIPBOARD_HOT_REDEFINE = "echo \"%s\" |base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
 
     @Override
     public void update(@NotNull AnActionEvent e) {
