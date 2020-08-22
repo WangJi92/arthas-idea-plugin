@@ -196,7 +196,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         OSS oss = null;
         try {
             oss = AliyunOssUtils.buildOssClient(project);
-            String filePathKey = settings.depthPrintProperty + UUID.randomUUID().toString();
+            String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
             String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, base64RedefineSh);
             String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
             command = String.format(OSS_HOT_REDEFINE, presignedUrl);
