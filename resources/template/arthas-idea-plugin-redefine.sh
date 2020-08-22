@@ -37,7 +37,7 @@ installArthas() {
   # download arthas
   if [ ! -f "$HOME/opt/arthas/as.sh" ]; then
     banner_simple "arthas idea plugin download arthas $HOME/opt/arthas/as.sh"
-    curl -sLk https://arthas.aliyun.com/as.sh --connect-timeout 60 -o $HOME/opt/arthas/as.sh || return 1
+    curl -Lk https://arthas.aliyun.com/as.sh  -o $HOME/opt/arthas/as.sh || return 1
     chmod +x $HOME/opt/arthas/as.sh || return 1
   fi
 }
