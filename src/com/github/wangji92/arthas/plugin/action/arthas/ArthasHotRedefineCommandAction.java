@@ -3,7 +3,12 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.aliyun.oss.OSS;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
-import com.github.wangji92.arthas.plugin.utils.*;
+import com.github.wangji92.arthas.plugin.utils.AliyunOssUtils;
+import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
+import com.github.wangji92.arthas.plugin.utils.IoUtils;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.BaseEncoding;
@@ -30,7 +35,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.SystemIndependent;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -86,7 +95,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         assert virtualFileFiles != null;
-        String compilerOutputPath = "";
+
         @SystemIndependent String basePath = project.getBasePath() == null ? "" : project.getBasePath();
         List<String> fullClassPackagePaths = Lists.newArrayList();
         if (virtualFileFiles.length == 1 && psiElement instanceof JvmMember) {
@@ -97,23 +106,31 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             String ideaClassName = packageName + "." + className;
 
             //主要是根据模块查询 当前编译后的路径的信息
-            compilerOutputPath = OgnlPsUtils.getCompilerOutputPath(project, ideaClassName);
+            final String compilerOutputPath = OgnlPsUtils.getCompilerOutputPath(project, ideaClassName);
 
             //全路径包含 匿名类的处理
             String pathClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
+
+            String packageNamePath = packageName.replaceAll("\\.", File.separator);
             //处理内部类 匿名类获取class的问题
             boolean isAnonymousClass = pathClassName.contains("*$*");
             if (isAnonymousClass) {
                 // 匿名类要处理遍历
-                String packageNamePath = packageName.replaceAll("\\.", File.separator);
                 String outClassName = FilenameUtils.getBaseName(psiElement.getContainingFile().getName());
                 // 查找当前类下面的所有的匿名类的信息
-                List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(compilerOutputPath + File.separator + packageNamePath), new RegexFileFilter(outClassName + ".*[\\$](\\d{0,4}).class$"), FalseFileFilter.INSTANCE));
-                final String compilerOutputPathBack = compilerOutputPath;
-                fullClassPackagePaths = files.stream().map(file -> String.format("%s%s%s", compilerOutputPathBack + File.separator, packageNamePath + File.separator, file.getName())).collect(Collectors.toList());
+                List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(compilerOutputPath + File.separator + packageNamePath), new RegexFileFilter("^(" + outClassName + "\\$).*(\\d\\.class)$"), FalseFileFilter.INSTANCE));
+                fullClassPackagePaths = files.stream().map(file -> String.format("%s%s%s", compilerOutputPath + File.separator, packageNamePath + File.separator, file.getName())).collect(Collectors.toList());
             } else {
+                // this is maybe inner class
+                String currentClassName = pathClassName.replace(packageName+".", "").replace("$","\\$");
+                List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(compilerOutputPath + File.separator + packageNamePath), new RegexFileFilter("^(" + currentClassName + "\\$).*\\.class$"), FalseFileFilter.INSTANCE));
+                List<String> currentClassFullPaths = files.stream().map(file -> String.format("%s%s%s", compilerOutputPath + File.separator, packageNamePath + File.separator, file.getName())).collect(Collectors.toList());
+
+                //add current class
+                fullClassPackagePaths.addAll(currentClassFullPaths);
                 String path = compilerOutputPath + File.separator + pathClassName.replaceAll("\\.", File.separator) + ".class";
                 fullClassPackagePaths.add(path);
+
             }
 
         } else {
@@ -132,7 +149,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 String qualifiedName = packageNameBack + "." + className;
                 String qualifiedNamePath = qualifiedName.replaceAll("\\.", File.separator);
                 String currentCompilerOutputPath = OgnlPsUtils.getCompilerOutputPath(project, qualifiedName);
-                List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(currentCompilerOutputPath + File.separator + packageNamePath), new RegexFileFilter(className + ".*[\\$](\\d{0,4}).class$"), FalseFileFilter.INSTANCE));
+                List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(currentCompilerOutputPath + File.separator + packageNamePath), new RegexFileFilter("^(" + className + "\\$).*\\.class$"), FalseFileFilter.INSTANCE));
                 List<String> currentClassFullPaths = files.stream().map(file -> String.format("%s%s%s", currentCompilerOutputPath + File.separator, packageNamePath + File.separator, file.getName())).collect(Collectors.toList());
                 currentClassFullPaths.add(currentCompilerOutputPath + File.separator + qualifiedNamePath + ".class");
                 return currentClassFullPaths.stream();
