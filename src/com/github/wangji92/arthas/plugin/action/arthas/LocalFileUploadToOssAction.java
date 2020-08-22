@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 public class LocalFileUploadToOssAction extends AnAction {
 
-    public static final String OSS_UP_LOAD_FILE = "curl -sLk  %s --connect-timeout 60 > %s";
+    public static final String OSS_UP_LOAD_FILE = "curl -Lk  \"%s\" > \"%s\"";
 
     @Override
     public void update(@NotNull AnActionEvent event) {
