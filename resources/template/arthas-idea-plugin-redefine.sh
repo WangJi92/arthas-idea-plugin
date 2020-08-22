@@ -81,7 +81,7 @@ doClenFile() {
 # the main function
 main() {
 
-  banner_simple "arthas idea plugin redefine beigin;start script full path: $(pwd)/arthas-idea-plugin-redefine.sh"
+  banner_simple "arthas idea plugin redefine begin;start script path: $(pwd)/arthas-idea-plugin-redefine.sh"
 
   check_permission
 
