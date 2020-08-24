@@ -34,10 +34,10 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.SystemIndependent;
-import org.jetbrains.concurrency.Promise;
 
 import java.io.File;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -245,38 +245,44 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Hot Swap Redefine") {
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 // Set the progress bar percentage and text
-                progressIndicator.setFraction(0.10);
-                progressIndicator.setText("90% to compile select file");
-                // 这里的版本有兼容性问题 目前占时可以使用
-                // Deprecated method ProjectTaskManager.compile(...) is invoked in ArthasHotRedefineCommandAction$1.run(...). This method will be removed in 2020.1
-                if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() < 201) {
-                    ProjectTaskManager.getInstance(project).compile(virtualFileFiles, projectTaskResult -> {
-                        if (projectTaskResult.getErrors() > 0) {
-                            NotifyUtils.notifyMessage(project, "Java文件编译编译错误 请处理");
-                            progressIndicator.cancel();
-                            return;
-                        }
-                        if (progressIndicator.isCanceled() || projectTaskResult.isAborted()) {
-                            NotifyUtils.notifyMessage(project, "任务已经取消");
-                            return;
-                        }
-                        progressIndicator.setFraction(0.70);
-                        progressIndicator.setText("30% to upload bash script file to oss");
-                        runnable.run();
-
-                        progressIndicator.setFraction(1.0);
-                        progressIndicator.setText("finished");
-                    });
-                } else {
-                    ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
-                    try {
-                        Promise promise = (Promise) MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
-                        promise.onSuccess((Object -> {
+                try {
+                    progressIndicator.setFraction(0.10);
+                    progressIndicator.setText("90% to compile select file");
+                    // 这里的版本有兼容性问题 目前占时可以使用
+                    // Deprecated method ProjectTaskManager.compile(...) is invoked in ArthasHotRedefineCommandAction$1.run(...). This method will be removed in 2020.1
+                    if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() < 201) {
+                        ProjectTaskManager.getInstance(project).compile(virtualFileFiles, projectTaskResult -> {
+                            if (projectTaskResult.getErrors() > 0) {
+                                NotifyUtils.notifyMessage(project, "Java文件编译编译错误 请处理");
+                                progressIndicator.cancel();
+                                return;
+                            }
+                            if (progressIndicator.isCanceled() || projectTaskResult.isAborted()) {
+                                NotifyUtils.notifyMessage(project, "任务已经取消");
+                                return;
+                            }
+                            progressIndicator.setFraction(0.70);
+                            progressIndicator.setText("30% to upload bash script file to oss");
                             runnable.run();
-                        }));
-                    } catch (Exception e) {
-                        LOG.error("编译错误", e);
+
+                            progressIndicator.setFraction(1.0);
+                            progressIndicator.setText("finished");
+                        });
+                    } else {
+                        ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
+                        try {
+                            Object promise = MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
+                            MethodUtils.invokeMethod(promise, "onSuccess", (Consumer) o -> {
+                                runnable.run();
+                            });
+                        } catch (Exception e) {
+                            LOG.error("编译错误", e);
+                            runnable.run();
+                        }
                     }
+                } catch (Exception e) {
+                    LOG.error("版本错误", e);
+                    runnable.run();
                 }
 
             }
