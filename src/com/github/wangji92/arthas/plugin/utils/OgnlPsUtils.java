@@ -3,8 +3,6 @@ package com.github.wangji92.arthas.plugin.utils;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -327,8 +325,20 @@ public class OgnlPsUtils {
      *
      * @return
      */
-    public static String getPluginPath() {
-        return PluginManager.getPlugin(PluginId.getId("com.github.wangji92.arthas.plugin")).getPath().getPath();
+
+     //arthas idea 2.17 uses deprecated API, which may be removed in future releases leading to binary and source code incompatibilities
+//    public static String getPluginPath() {
+//        return PluginManager.getPlugin(PluginId.getId("com.github.wangji92.arthas.plugin")).getPath().getPath();
+//    }
+
+
+    /**
+     * 当前是psi 的这个几种类型？ psiElement instanceof JvmMember 兼容性不好 修改为这个 Experimental API interface JvmElement is. This interface can be changed in a future release leading to incompatibilities
+     * @param psiElement
+     * @return
+     */
+    public static boolean isPsiFieldOrMethodOrClass(PsiElement psiElement){
+        return  psiElement instanceof PsiField || psiElement instanceof PsiClass || psiElement instanceof PsiMethod;
     }
 
 }

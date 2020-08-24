@@ -1,7 +1,6 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.intellij.lang.jvm.JvmMember;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -72,7 +71,7 @@ public abstract class BaseArthasPluginAction extends AnAction {
         String className = "";
         String methodName = "";
         assert virtualFileFiles != null;
-        if (virtualFileFiles.length == 1 && psiElement instanceof JvmMember) {
+        if (virtualFileFiles.length == 1 && OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiMethod) {
                 PsiMethod psiMethod = (PsiMethod) psiElement;
                 //处理内部类 匿名类获取class的问题

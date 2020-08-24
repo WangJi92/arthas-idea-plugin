@@ -3,16 +3,10 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.aliyun.oss.OSS;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
-import com.github.wangji92.arthas.plugin.utils.AliyunOssUtils;
-import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
-import com.github.wangji92.arthas.plugin.utils.IoUtils;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.github.wangji92.arthas.plugin.utils.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.BaseEncoding;
-import com.intellij.lang.jvm.JvmMember;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -35,11 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.SystemIndependent;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,10 +56,19 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();
-
+        Project project = CommonDataKeys.PROJECT.getData(dataContext);
+        if (project == null) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
         //右侧选择了一个或者多个文件
-        VirtualFile[] files = e.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
-        if (files != null && files.length > 0) {
+        VirtualFile[] virtualFileFiles = e.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
+        if (virtualFileFiles == null) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
+        List<PsiFile> psiFileJavaFiles = Arrays.stream(virtualFileFiles).map(PsiManager.getInstance(project)::findFile).filter(psiFileElement -> psiFileElement instanceof PsiJavaFile).collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(psiFileJavaFiles)) {
             e.getPresentation().setEnabled(true);
             return;
         }
@@ -98,7 +97,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
         @SystemIndependent String basePath = project.getBasePath() == null ? "" : project.getBasePath();
         List<String> fullClassPackagePaths = Lists.newArrayList();
-        if (virtualFileFiles.length == 1 && psiElement instanceof JvmMember) {
+        if (virtualFileFiles.length == 1 && OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             //选择 当个文件 且为 编辑区选择的
 
             String packageName = ((PsiJavaFile) psiElement.getContainingFile()).getPackageName();
@@ -122,7 +121,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 fullClassPackagePaths = files.stream().map(file -> String.format("%s%s%s", compilerOutputPath + File.separator, packageNamePath + File.separator, file.getName())).collect(Collectors.toList());
             } else {
                 // this is maybe inner class
-                String currentClassName = pathClassName.replace(packageName+".", "").replace("$","\\$");
+                String currentClassName = pathClassName.replace(packageName + ".", "").replace("$", "\\$");
                 List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(compilerOutputPath + File.separator + packageNamePath), new RegexFileFilter("^(" + currentClassName + "\\$).*\\.class$"), FalseFileFilter.INSTANCE));
                 List<String> currentClassFullPaths = files.stream().map(file -> String.format("%s%s%s", compilerOutputPath + File.separator, packageNamePath + File.separator, file.getName())).collect(Collectors.toList());
 
