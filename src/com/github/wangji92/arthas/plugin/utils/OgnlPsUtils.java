@@ -3,10 +3,20 @@ package com.github.wangji92.arthas.plugin.utils;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.CompilerModuleExtension;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.psi.*;
+import com.intellij.psi.search.GlobalSearchScope;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * 获取Java类型构造ognl的默认值信息
@@ -15,6 +25,25 @@ import java.util.*;
  * @date 22-12-2019
  */
 public class OgnlPsUtils {
+
+    /**
+     * 获取内部类、匿名类的class的 ognl 名称
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getCommonOrInnerOrAnonymousClassName(@NotNull PsiElement psiElement) {
+        if (psiElement instanceof PsiMethod) {
+            return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiMethod) psiElement);
+        }
+        if (psiElement instanceof PsiField) {
+            return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiField) psiElement);
+        }
+        if (psiElement instanceof PsiClass) {
+            return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiClass) psiElement);
+        }
+        throw new IllegalArgumentException("非法参数");
+    }
 
     /**
      * 获取内部类、匿名类的class的 ognl 名称
@@ -67,10 +96,12 @@ public class OgnlPsUtils {
             //endregion
 
             PsiJavaFile javaFile = (PsiJavaFile) anonymousClass.getContainingFile();
+            //这里获取的是文件名哦
+            String outClassName = FilenameUtils.getBaseName(javaFile.getName());
             String packageName = javaFile.getPackageName();
             // 匿名内部类 这里获取当前方法对应的方法有点问题.. 先通过匹配处理
             // 匿名内部类 获取到的不是非常准确
-            return packageName + "*" + ArthasCommandConstants.OGNL_INNER_CLASS_SEPARATOR + "*";
+            return packageName + "." + outClassName + "*" + ArthasCommandConstants.OGNL_INNER_CLASS_SEPARATOR + "*";
         }
         PsiClass nextContainingClass = currentContainingClass.getContainingClass();
         if (nextContainingClass == null) {
@@ -267,6 +298,47 @@ public class OgnlPsUtils {
             return httpMethodWithQuotes.substring(1, httpMethodWithQuotes.length() - 1);
         }
         return "";
+    }
+
+    /**
+     * 找到 编译的出口地址
+     *
+     * @param project
+     * @param ideaClassName
+     * @return
+     */
+    public static String getCompilerOutputPath(Project project, String ideaClassName) {
+        //选择了.class 文件 必须要处理 不然获取不到module 的信息,这里重新获取class 原文件的信息
+        //根据类的全限定名查询PsiClass，下面这个方法是查询Project域 https://blog.csdn.net/ExcellentYuXiao/article/details/80273448
+        PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(ideaClassName, GlobalSearchScope.projectScope(project));
+        // https://jetbrains.org/intellij/sdk/docs/basics/project_structure.html
+        // https://jetbrains.org/intellij/sdk/docs/reference_guide/project_model/module.html
+        Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+        //找到编译的 出口位置
+        String outputPath = ModuleRootManager.getInstance(module).getModifiableModel().getModuleExtension(CompilerModuleExtension.class).getCompilerOutputPath().getPath();
+        return outputPath;
+    }
+
+    /**
+     * http://cache.baiducontent.com/c?m=Tnjg0Yh1MVwmR9iP4ZjO9t6Lw-n_-niXq_L9H_1xQzCQD0pv_sDWB6J-X9JKi_UtVCGlZIedbyoLZ_7IjppgHtJZ3dxPAqPe9_uktmcqP4E6hzObIGskfxHC-Cj01eIj758qcQovyc7U9VjxucwQzxU5KXRQR4Zh6eG-JKymkQoBzPnRgv1fYs79X7MHqE0BALGQB_CeklaXd118YvLS2s0btNlD6hoXlD9nxw9UHPX1y-XWRP4Achz2eTsjx4dW9gYgkL4nWsl7lWMU1o1W1a&p=882a9646d2dd5de442acdc2d021496&newp=c3759a46d5c757fc57efd234450582231615d70e3fd4d5126b82c825d7331b001c3bbfb42328170fd6c37d6100a54a5debf03274360927a3dda5c91d9fb4c574799e&s=cfcd208495d565ef&user=baidu&fm=sc&query=idea+plugin+get+path+of+plugin&qid=8a9012d00004780b&p1=9
+     * 获取插件的地址  沙箱的地址和 真实的不一样，沙箱是解压的文件，真实的是一个jar包
+     *
+     * @return
+     */
+
+     //arthas idea 2.17 uses deprecated API, which may be removed in future releases leading to binary and source code incompatibilities
+//    public static String getPluginPath() {
+//        return PluginManager.getPlugin(PluginId.getId("com.github.wangji92.arthas.plugin")).getPath().getPath();
+//    }
+
+
+    /**
+     * 当前是psi 的这个几种类型？ psiElement instanceof JvmMember 兼容性不好 修改为这个 Experimental API interface JvmElement is. This interface can be changed in a future release leading to incompatibilities
+     * @param psiElement
+     * @return
+     */
+    public static boolean isPsiFieldOrMethodOrClass(PsiElement psiElement){
+        return  psiElement instanceof PsiField || psiElement instanceof PsiClass || psiElement instanceof PsiMethod;
     }
 
 }

@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.16</version>
+    <version>2.17</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,77 +42,69 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      <p>2.0-RELEASE</p>
+     <p>2.17-RELEASE</p>
       <ul>
-        <li>1.supports Arthas commands such as watch, trace, ognl static, ognl bean method, etc.</li>
+        <li>Support Hot Swap Redefine </li>
       </ul>
       <ul>
-        <li>1.支持Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method</li>
+       <li>支持热更新 Hot Swap Redefine，支持单选多选，OSS 配置 </li>
       </ul>
-       <p>2.1-RELEASE</p>
+     <p>2.16-RELEASE</p>
       <ul>
-        <li>1.supports Arthas commands Trace -E,The trace command will only trace the subcalls in the method to the trace, and will not trace down multiple layers. Because traces are expensive, multi-layer traces can lead to a lot of classes and methods that ultimately have to be traced..</li>
-      </ul>
-      <ul>
-        <li>1.trace命令只会trace匹配到的函数里的子调用，并不会向下trace多层。因为trace是代价比较贵的，多层trace可能会导致最终要trace的类和函数非常多。因此Arthas 官方支持 trace -E 特殊获取多个，该插件支持一下trace -E</li>
-      </ul>
-      <p>2.2-RELEASE</p>
-      <ul>
-        <li>1.support ognl invoke spring bean field</li>
-        <li>2.support cache ognl -c hash value</li>
+        <li>Optimize Support AnonymousClass and InnerClass</li>
+        <li>Add Support Class Load load class</li>
+         <li>Add Support Project Setting </li>
       </ul>
       <ul>
-        <li>1.支持ognl通过获取spring context 调用field</li>
-        <li>2.支持缓存ognl -c 参数 classloader的hash值，方便下次使用直接获取信息</li>
+       <li>增加针对内部类和匿名类的支持</li>
+       <li>增加Class Load load class</li>
+       <li>增加Project Setting</li>
       </ul>
-       <p>2.3-RELEASE</p>
+      <p>2.14~15-RELEASE</p>
       <ul>
-        <li>1.ognl invoke static field bug fix</li>
-        <li>2.support Monitor,Monitor method execution statistics, e.g. total/success/failure count, average rt, fail rate, etc.</li>
-        <li>3.support Stack,Display the stack trace for the specified class and method</li>
-      </ul>
-      <ul>
-        <li>1.ognl调用static field 多一个空格bug</li>
-        <li>2.支持Monitor,主要用途一段时间的执行的性能监控</li>
-        <li>3.支持Stack,主要用途方法从哪里开始被调用(很多时候我们都知道一个方法被执行，但这个方法被执行的路径非常多，或者你根本就不知道这个方法是从那里被执行)</li>
-      </ul>
-       <p>2.4-RELEASE</p>
-      <ul>
-        <li>1.support time tunnel tt command</li>
+        <li>Optimize the right-click display of high version 2020</li>
+        <li>Add support for the Arthas command getstatic</li>
       </ul>
       <ul>
-        <li>1.支持时光隧道 tt 命令，支持常用的tt命令</li>
+       <li>优化高版本右键展示问题</li>
+       <li>增加支持arthas 命令 getstatic</li>
       </ul>
-      </ul>
-       <p>2.5-RELEASE</p>
+      <p>2.13-RELEASE</p>
       <ul>
-        <li>1.support set static field command</li>
-      </ul>
-      <ul>
-        <li>1.支持通过ognl 设置静态变量的值</li>
-      </ul>
-      <p>2.6-RELEASE</p>
-      <ul>
-        <li>1.support get selected spring property command</li>
-        <li>2.support get all spring property command</li>
+        <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler</li>
+        <li>support tt watch invoke spring context invoke method field get spring property</li>
       </ul>
       <ul>
-        <li>1.支持通过获取选中的text在spring中环境变量的值</li>
-        <li>2.支持获取所有在spring中环境变量的值</li>
+       <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler 火焰图命令支持</li>
+       <li>支持tt watch invoke spring context invoke method field 这个命令中增加快捷获取spring 环境变量</li>
       </ul>
-      <p>2.7-RELEASE</p>
+       <p>2.12-RELEASE</p>
       <ul>
-        <li>1.support set static final field command <a href="https://github.com/alibaba/arthas/issues/641">issue</a></li>
-      </ul>
-      <ul>
-        <li>1.支持设置static final的值 <a href="https://github.com/alibaba/arthas/issues/641">issue</a></li>
-      </ul>
-       <p>2.8-RELEASE</p>
-      <ul>
-        <li>1.support  Decompile class command jad --source-only java.lang.String</li>
+        <li>1.Builder Static Ognl Grammar Help Watch Static Content</li>
+        <li>2.Add some commmon command eg jvm、dashboard、classloader、vmoption</li>
+        <li>3.Enhance watch command,eg: watch com.wangji92.arthas.plugin.demo.controller.StaticTest * '{params,returnObj,throwExp,target.filedValue}' -n 5 -x 3 'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'</li>
       </ul>
       <ul>
-        <li>1.支持反编译命令 jad --source-only java.lang.String toString 支持方法、和整个类</li>
+        <li>1.增加一个watch 观察静态部分的后半部分信息的构造 @xxxClass@method、field、class</li>
+        <li>2.增加一些常用的命令 eg jvm、dashboard、classloader、vmoption</li>
+        <li>3.接受同事的banghong建议对于trace -E 获取命令后不清空，可能排查问题还需要继续添加，手动清空比较好</li>
+        <li>4.watch 功能增强，方法watch 获取成员变量，将光标放置在watch 类的字段上即可使用</li>
+      </ul>
+       <p>2.11-RELEASE</p>
+      <ul>
+        <li>1.logger:Print logger info, and update the logger level</li>
+      </ul>
+      <ul>
+        <li>1.logger:动态更新日志等级</li>
+      </ul>
+       <p>2.10-RELEASE</p>
+      <ul>
+        <li>1.support tt invoke spring context invoke method field </li>
+        <li>2.tip optimization </li>
+      </ul>
+      <ul>
+        <li>1.support tt invoke spring context invoke method field </li>
+        <li>2.tip optimization </li>
       </ul>
        <p>2.9-RELEASE</p>
       <ul>
@@ -127,82 +119,95 @@
         <li>3.heapdump /tmp/dump.hprof </li>
         <li>4.thread -i 3000 -n 5 </li>
       </ul>
-       <p>2.10-RELEASE</p>
+       <p>2.8-RELEASE</p>
       <ul>
-        <li>1.support tt invoke spring context invoke method field </li>
-        <li>2.tip optimization </li>
+        <li>1.support  Decompile class command jad --source-only java.lang.String</li>
       </ul>
       <ul>
-        <li>1.support tt invoke spring context invoke method field </li>
-        <li>2.tip optimization </li>
+        <li>1.支持反编译命令 jad --source-only java.lang.String toString 支持方法、和整个类</li>
       </ul>
-       <p>2.11-RELEASE</p>
+      <p>2.7-RELEASE</p>
       <ul>
-        <li>1.logger:Print logger info, and update the logger level</li>
-      </ul>
-      <ul>
-        <li>1.logger:动态更新日志等级</li>
-      </ul>
-      <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
-       <p>2.12-RELEASE</p>
-      <ul>
-        <li>1.Builder Static Ognl Grammar Help Watch Static Content</li>
-        <li>2.Add some commmon command eg jvm、dashboard、classloader、vmoption</li>
-        <li>3.Enhance watch command,eg: watch com.wangji92.arthas.plugin.demo.controller.StaticTest * '{params,returnObj,throwExp,target.filedValue}' -n 5 -x 3 'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'</li>
+        <li>1.support set static final field command <a href="https://github.com/alibaba/arthas/issues/641">issue</a></li>
       </ul>
       <ul>
-        <li>1.增加一个watch 观察静态部分的后半部分信息的构造 @xxxClass@method、field、class</li>
-        <li>2.增加一些常用的命令 eg jvm、dashboard、classloader、vmoption</li>
-        <li>3.接受同事的banghong建议对于trace -E 获取命令后不清空，可能排查问题还需要继续添加，手动清空比较好</li>
-        <li>4.watch 功能增强，方法watch 获取成员变量，将光标放置在watch 类的字段上即可使用</li>
+        <li>1.支持设置static final的值 <a href="https://github.com/alibaba/arthas/issues/641">issue</a></li>
       </ul>
-      <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
-      <p>2.13-RELEASE</p>
+      <p>2.6-RELEASE</p>
       <ul>
-        <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler</li>
-        <li>support tt watch invoke spring context invoke method field get spring property</li>
+        <li>1.support get selected spring property command</li>
+        <li>2.support get all spring property command</li>
       </ul>
       <ul>
-       <li>Async Profiler. https://github.com/jvm-profiling-tools/async-profiler 火焰图命令支持</li>
-       <li>支持tt watch invoke spring context invoke method field 这个命令中增加快捷获取spring 环境变量</li>
+        <li>1.支持通过获取选中的text在spring中环境变量的值</li>
+        <li>2.支持获取所有在spring中环境变量的值</li>
       </ul>
-      <p>2.14~15-RELEASE</p>
+
+       <p>2.5-RELEASE</p>
       <ul>
-        <li>Optimize the right-click display of high version 2020</li>
-        <li>Add support for the Arthas command getstatic</li>
-      </ul>
-      <ul>
-       <li>优化高版本右键展示问题</li>
-       <li>增加支持arthas 命令 getstatic</li>
-      </ul>
-       <p>2.16-RELEASE</p>
-      <ul>
-        <li>Optimize Support AnonymousClass and InnerClass</li>
-        <li>Add Support Class Load load class</li>
-         <li>Add Support Project Setting </li>
+        <li>1.support set static field command</li>
       </ul>
       <ul>
-       <li>增加针对类部类和匿名类的支持</li>
-       <li>增加Class Load load class</li>
-       <li>增加Project Setting</li>
+        <li>1.支持通过ognl 设置静态变量的值</li>
       </ul>
-      <p>More <a href="https://github.com/WangJi92/arthas-idea-plugin">Help Info</a>.</p>
-    ]]></change-notes>
+      <p>2.4-RELEASE</p>
+      <ul>
+        <li>1.support time tunnel tt command</li>
+      </ul>
+      <ul>
+        <li>1.支持时光隧道 tt 命令，支持常用的tt命令</li>
+      </ul>
+      </ul>
+      <p>2.3-RELEASE</p>
+      <ul>
+        <li>1.ognl invoke static field bug fix</li>
+        <li>2.support Monitor,Monitor method execution statistics, e.g. total/success/failure count, average rt, fail rate, etc.</li>
+        <li>3.support Stack,Display the stack trace for the specified class and method</li>
+      </ul>
+      <ul>
+        <li>1.ognl调用static field 多一个空格bug</li>
+        <li>2.支持Monitor,主要用途一段时间的执行的性能监控</li>
+        <li>3.支持Stack,主要用途方法从哪里开始被调用(很多时候我们都知道一个方法被执行，但这个方法被执行的路径非常多，或者你根本就不知道这个方法是从那里被执行)</li>
+      </ul>
+      <p>2.2-RELEASE</p>
+      <ul>
+        <li>1.support ognl invoke spring bean field</li>
+        <li>2.support cache ognl -c hash value</li>
+      </ul>
+      <ul>
+        <li>1.支持ognl通过获取spring context 调用field</li>
+        <li>2.支持缓存ognl -c 参数 classloader的hash值，方便下次使用直接获取信息</li>
+      </ul>
+       <p>2.1-RELEASE</p>
+      <ul>
+        <li>1.supports Arthas commands Trace -E,The trace command will only trace the subcalls in the method to the trace, and will not trace down multiple layers. Because traces are expensive, multi-layer traces can lead to a lot of classes and methods that ultimately have to be traced..</li>
+      </ul>
+      <ul>
+        <li>1.trace命令只会trace匹配到的函数里的子调用，并不会向下trace多层。因为trace是代价比较贵的，多层trace可能会导致最终要trace的类和函数非常多。因此Arthas 官方支持 trace -E 特殊获取多个，该插件支持一下trace -E</li>
+      </ul>
+       <p>2.0-RELEASE</p>
+      <ul>
+        <li>1.supports Arthas commands such as watch, trace, ognl static, ognl bean method, etc.</li>
+      </ul>
+      <ul>
+        <li>1.支持Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method</li>
+      </ul>]]>
+    </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="162"/>
 
     <extensions defaultExtensionNs="com.intellij">
         // parentId = "tools"
-        <projectConfigurable  instance="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
-                                 id="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
-                                 displayName="Arthas Idea Plugin"/>
+        <projectConfigurable instance="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
+                             id="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
+                             displayName="Arthas Idea Plugin"/>
         <projectService serviceImplementation="com.github.wangji92.arthas.plugin.setting.AppSettingsState"/>
     </extensions>
 
-<!--    <extensions defaultExtensionNs="com.intellij">-->
-<!--        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>-->
-<!--    </extensions>-->
+    <!--    <extensions defaultExtensionNs="com.intellij">-->
+    <!--        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>-->
+    <!--    </extensions>-->
 
     <depends>com.intellij.modules.platform</depends>
 
@@ -234,7 +239,8 @@
                 text="Ognl To Get Static Method Field"
                 description="Arthas ognl static">
         </action>
-        <action id="ArthasSimpleGetStaticCommand" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSimpleGetStaticCommandAction"
+        <action id="ArthasSimpleGetStaticCommand"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSimpleGetStaticCommandAction"
                 text="Simple Get Static Field"
                 description="Simple getStatic field">
         </action>
@@ -395,12 +401,53 @@
                 text="Classloader Load Class"
                 description="Classloader load class">
         </action>
+        <action id="ArthasHotCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
+                text="(Hot Swap)  Redefine"
+                description="Redefine">
+        </action>
 
+        <action id="LocalFileUploadToOssAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.LocalFileUploadToOssAction"
+                text="Local File Upload To Oss"
+                description="LocalFileUploadToOssAction">
+        </action>
+
+        <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
+            <!--            version control 修改变更那里 找了好久-->
+            <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
+            <reference ref="ArthasHotCommandAction"/>
+            <reference ref="ArthasDashboardCommandAction"/>
+            <reference ref="ArthasJadCommandAction"/>
+            <reference ref="ArthasLoggerCommandAction"/>
+            <reference ref="ArthasClassLoaderLoadClassCommandAction"/>
+            <reference ref="ArthasAsyncProfilerCommandAction"/>
+            <separator/>
+            <group id="arthas-plugin-other-ChangesViewPopupMenu" popup="true" text="Other">
+                <reference ref="ArthasSc"/>
+                <reference ref="ArthasSmCommandAction"/>
+                <reference ref="ArthasClassloaderCommandAction"/>
+                <reference ref="ArthasDumpCommandAction"/>
+                <reference ref="ArthasHeapDumpCommandAction"/>
+                <reference ref="ArthasThreadAction"/>
+                <reference ref="ArthasJvmCommandAction"/>
+                <reference ref="ArthasPerCountCommandAction"/>
+                <reference ref="ArthasVmOptionCommandAction"/>
+                <reference ref="LocalFileUploadToOssAction"/>
+            </group>
+            <reference ref="ArthasInstallCommand"/>
+            <reference ref="ArthasSpecial"/>
+            <separator/>
+            <reference ref="ArthasHelpCommand"/>
+            <reference ref="HelpArthasDocumentPageAction"/>
+        </group>
 
         <group id="arthas-plugin" popup="true" text="Arthas Command">
             <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="$Paste"/>
+            <!--            右键到文件夹区的处理-->
+            <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="$Paste"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
-            <separator />
+            <separator/>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
             <reference ref="ArthasTraceMultipleCommand"/>
@@ -425,6 +472,7 @@
             <reference ref="ArthasLoggerCommandAction"/>
             <reference ref="ArthasClassLoaderLoadClassCommandAction"/>
             <reference ref="ArthasAsyncProfilerCommandAction"/>
+            <reference ref="ArthasHotCommandAction"/>
             <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
                 <reference ref="ArthasSc"/>
@@ -436,6 +484,7 @@
                 <reference ref="ArthasJvmCommandAction"/>
                 <reference ref="ArthasPerCountCommandAction"/>
                 <reference ref="ArthasVmOptionCommandAction"/>
+                <reference ref="LocalFileUploadToOssAction"/>
             </group>
             <separator/>
             <reference ref="ArthasInstallCommand"/>

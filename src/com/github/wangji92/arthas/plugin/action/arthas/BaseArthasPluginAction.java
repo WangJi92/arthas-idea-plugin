@@ -5,13 +5,16 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.*;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 汪小哥
@@ -23,30 +26,32 @@ public abstract class BaseArthasPluginAction extends AnAction {
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();
-        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
-        boolean enabled = true;
-        if (editor == null) {
-            e.getPresentation().setEnabled(false);
-            return;
-        }
         //获取当前事件触发时，光标所在的元素
-        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
-        if (psiElement == null) {
+        Project project = CommonDataKeys.PROJECT.getData(dataContext);
+        if (project == null) {
             e.getPresentation().setEnabled(false);
             return;
         }
-
-        if (psiElement instanceof PsiClass) {
-            enabled = true;
-        } else if (psiElement instanceof PsiMethod) {
-            enabled = true;
-        } else if (psiElement instanceof PsiField) {
-            enabled = true;
-        } else {
-            enabled = false;
+        VirtualFile[] virtualFileFiles = e.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
+        if (virtualFileFiles == null) {
+            e.getPresentation().setEnabled(false);
+            return;
         }
-
-        e.getPresentation().setEnabled(enabled);
+        if (virtualFileFiles.length >= 2) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
+        /**
+         * 1、文件导航多选 psiElement ==null psiFile==null virtualFileFiles>2
+         * 2、文件导航单选 psiElement !=null  等同于选择了class   [ psiElement 可能为空]   psiFile !=null virtualFileFiles !=null
+         * 3、编辑框里面处理 psiElement !=null  内部类  psiFile = OutClass  psiElement == InnerCLass 匿名类  psiFile = OutClass  psiElement == PsiAnonymousClass  virtualFileFiles !=null
+         */
+        List<PsiFile> psiFileJavaFiles = Arrays.stream(virtualFileFiles).map(PsiManager.getInstance(project)::findFile).filter(psiFileElement -> psiFileElement instanceof PsiJavaFile).collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(psiFileJavaFiles)) {
+            e.getPresentation().setEnabled(true);
+            return;
+        }
+        e.getPresentation().setEnabled(false);
 
 
     }
@@ -57,32 +62,41 @@ public abstract class BaseArthasPluginAction extends AnAction {
          * {@link com.intellij.ide.actions.CopyReferenceAction}
          */
         DataContext dataContext = event.getDataContext();
-        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
         Project project = CommonDataKeys.PROJECT.getData(dataContext);
-        if (editor == null || project == null) {
+        if (project == null) {
             return;
         }
+        VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = "";
         String methodName = "";
-        if (psiElement instanceof PsiMethod) {
-            PsiMethod psiMethod = (PsiMethod) psiElement;
-            //处理内部类 匿名类获取class的问题
-            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
-            methodName = psiMethod.getNameIdentifier().getText();
-        }
-        if (psiElement instanceof PsiClass) {
-            PsiClass psiClass = (PsiClass) psiElement;
-            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass);
-            methodName = "*";
-        }
+        assert virtualFileFiles != null;
+        if (virtualFileFiles.length == 1 && OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) psiElement;
+                //处理内部类 匿名类获取class的问题
+                className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
+                methodName = psiMethod.getNameIdentifier().getText();
+            }
+            if (psiElement instanceof PsiClass) {
+                PsiClass psiClass = (PsiClass) psiElement;
+                className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass);
+                methodName = "*";
+            }
 
-        if (psiElement instanceof PsiField) {
-            PsiField psiField = (PsiField) psiElement;
-            className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
+            if (psiElement instanceof PsiField) {
+                PsiField psiField = (PsiField) psiElement;
+                className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
+                methodName = "*";
+            }
+        } else {
+            PsiFile psiFileJavaFile = PsiManager.getInstance(project).findFile(virtualFileFiles[0]);
+            String packageName = ((PsiJavaFile) psiFileJavaFile.getContainingFile()).getPackageName();
+            String shortClassName = FilenameUtils.getBaseName(psiFileJavaFile.getContainingFile().getName());
+            className = packageName + "." + shortClassName;
             methodName = "*";
         }
-        doCommand(className, methodName, project,psiElement);
+        doCommand(className, methodName, project, psiElement);
     }
 
     /**
@@ -94,7 +108,7 @@ public abstract class BaseArthasPluginAction extends AnAction {
      * @param psiElement
      * @return
      */
-    public void doCommand(String className, String methodName, Project project,PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
     }
 
 

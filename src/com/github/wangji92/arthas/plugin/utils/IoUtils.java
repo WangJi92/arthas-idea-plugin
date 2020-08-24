@@ -1,0 +1,57 @@
+package com.github.wangji92.arthas.plugin.utils;
+
+import com.google.common.io.BaseEncoding;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+/**
+ * @author 汪小哥
+ * @date 17-08-2020
+ */
+public class IoUtils {
+    /**
+     * 读取arthas 插件目录下的脚本文件
+     *
+     * @param filePath
+     * @return
+     */
+    public static String getResourceFile(String filePath) {
+        // 沙箱的文件地址在外面 插件中在jar包中有问题
+        try (InputStream resourceAsStream = IoUtils.class.getClassLoader().getResourceAsStream(filePath)) {
+            return IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("读取文件异常");
+        }
+
+    }
+
+    /**
+     * 读取文件
+     *
+     * @param file
+     * @return
+     */
+    public static byte[] readFileToByteArray(File file) {
+        try {
+            return FileUtils.readFileToByteArray(file);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("读取文件异常");
+        }
+    }
+
+    /**
+     * 读取文件 base64 加密
+     *
+     * @param file
+     * @return
+     */
+    public static String readFileToBase64String(File file) {
+        byte[] bytes = IoUtils.readFileToByteArray(file);
+        return BaseEncoding.base64().encode(bytes);
+    }
+}
