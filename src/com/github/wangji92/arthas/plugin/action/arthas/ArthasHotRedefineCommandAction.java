@@ -12,6 +12,8 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.application.ApplicationInfo;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
@@ -23,16 +25,16 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.task.ProjectTaskManager;
-import com.intellij.task.ProjectTaskNotification;
-import com.intellij.task.ProjectTaskResult;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.SystemIndependent;
+import org.jetbrains.concurrency.Promise;
 
 import java.io.File;
 import java.util.*;
@@ -46,6 +48,7 @@ import java.util.stream.Collectors;
  * @date 16-08-2020
  */
 public class ArthasHotRedefineCommandAction extends AnAction implements DumbAware {
+    private static final Logger LOG = Logger.getInstance(ArthasHotRedefineCommandAction.class);
 
 
     public ArthasHotRedefineCommandAction() {
@@ -244,9 +247,10 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 // Set the progress bar percentage and text
                 progressIndicator.setFraction(0.10);
                 progressIndicator.setText("90% to compile select file");
-                ProjectTaskManager.getInstance(project).compile(virtualFileFiles, new ProjectTaskNotification() {
-                    @Override
-                    public void finished(@NotNull ProjectTaskResult projectTaskResult) {
+                // 这里的版本有兼容性问题 目前占时可以使用
+                // Deprecated method ProjectTaskManager.compile(...) is invoked in ArthasHotRedefineCommandAction$1.run(...). This method will be removed in 2020.1
+                if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() < 201) {
+                    ProjectTaskManager.getInstance(project).compile(virtualFileFiles, projectTaskResult -> {
                         if (projectTaskResult.getErrors() > 0) {
                             NotifyUtils.notifyMessage(project, "Java文件编译编译错误 请处理");
                             progressIndicator.cancel();
@@ -262,8 +266,19 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
                         progressIndicator.setFraction(1.0);
                         progressIndicator.setText("finished");
+                    });
+                } else {
+                    ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
+                    try {
+                        Promise promise = (Promise) MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
+                        promise.onSuccess((Object -> {
+                            runnable.run();
+                        }));
+                    } catch (Exception e) {
+                        LOG.error("编译错误", e);
                     }
-                });
+                }
+
             }
         });
     }
