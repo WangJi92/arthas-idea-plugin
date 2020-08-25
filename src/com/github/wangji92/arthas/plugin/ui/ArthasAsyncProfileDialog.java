@@ -81,6 +81,7 @@ public class ArthasAsyncProfileDialog extends JDialog {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         closeButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
@@ -93,7 +94,7 @@ public class ArthasAsyncProfileDialog extends JDialog {
         // https://github.com/jvm-profiling-tools/async-profiler
         // Wall-clock profiler is most useful in per-thread mode: -t
         eventComboBox.addItemListener(e -> {
-            if (e.getItem().toString().equals("wall")) {
+            if ("wall".equals(e.getItem().toString())) {
                 differentThreadsSeparatelyRadioButton.setSelected(true);
             } else {
                 differentThreadsSeparatelyRadioButton.setSelected(false);

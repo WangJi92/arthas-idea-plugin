@@ -1,6 +1,5 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
@@ -36,6 +35,7 @@ public class ArthasOgnlSetStaticFieldCommandAction extends AnAction {
      */
     private static final String INVOKE_STATIC_FINAL_FIELD_ALL = "'#field=@%s@class.getDeclaredField(\"%s\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),#field.set(null,%s),#modifiers.setInt(#field,#field.getModifiers()& ~@java.lang.reflect.Modifier@FINAL)'";
 
+    @Override
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();
