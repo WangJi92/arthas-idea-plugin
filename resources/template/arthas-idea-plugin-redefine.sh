@@ -56,7 +56,7 @@ decodebase64CLassFile() {
 # Usage: doStarteRedefine
 doStarteRedefine() {
   createFile $HOME/opt/arthas/redefine/redefineArthas.out
-  echo $(tput bold)"arthas start commnad ：$HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName}  -c \"${arthasIdeaPluginRedefineCommand}\"  >$HOME/opt/arthas/redefine/redefineArthas.out"$(tput sgr0)
+  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName}  -c \"${arthasIdeaPluginRedefineCommand}\"  >$HOME/opt/arthas/redefine/redefineArthas.out"$(tput sgr0)
   $HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName} -c "${arthasIdeaPluginRedefineCommand}" >$HOME/opt/arthas/redefine/redefineArthas.out
 }
 

@@ -110,7 +110,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             //全路径包含 匿名类的处理
             String pathClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
 
-            String packageNamePath = packageName.replaceAll("\\.", File.separator);
+            String packageNamePath = packageName.replace(".", File.separator);
             //处理内部类 匿名类获取class的问题
             boolean isAnonymousClass = pathClassName.contains("*$*");
             if (isAnonymousClass) {
@@ -127,7 +127,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
                 //add current class
                 fullClassPackagePaths.addAll(currentClassFullPaths);
-                String path = compilerOutputPath + File.separator + pathClassName.replaceAll("\\.", File.separator) + ".class";
+                String path = compilerOutputPath + File.separator + pathClassName.replace(".", File.separator) + ".class";
                 fullClassPackagePaths.add(path);
 
             }
@@ -143,10 +143,10 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             }
             fullClassPackagePaths = psiFileJavaFiles.stream().flatMap(psiFileJavaFile -> {
                 String packageNameBack = ((PsiJavaFile) psiFileJavaFile.getContainingFile()).getPackageName();
-                String packageNamePath = packageNameBack.replaceAll("\\.", File.separator);
+                String packageNamePath = packageNameBack.replace(".", File.separator);
                 String className = FilenameUtils.getBaseName(psiFileJavaFile.getContainingFile().getName());
                 String qualifiedName = packageNameBack + "." + className;
-                String qualifiedNamePath = qualifiedName.replaceAll("\\.", File.separator);
+                String qualifiedNamePath = qualifiedName.replace(".", File.separator);
                 String currentCompilerOutputPath = OgnlPsUtils.getCompilerOutputPath(project, qualifiedName);
                 List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(currentCompilerOutputPath + File.separator + packageNamePath), new RegexFileFilter("^(" + className + "\\$).*\\.class$"), FalseFileFilter.INSTANCE));
                 List<String> currentClassFullPaths = files.stream().map(file -> String.format("%s%s%s", currentCompilerOutputPath + File.separator, packageNamePath + File.separator, file.getName())).collect(Collectors.toList());
@@ -167,9 +167,11 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 return;
             }
             String classBase64 = IoUtils.readFileToBase64String(file);
-            // shell 解析的时候 单引号''，双引号""的区别是单引号''剥夺了所有字符的特殊含义，单引号''内就变成了单纯的字符。双引号""则对于双引号""内的参数替换
-            // 内部类 的时候回有问题 展示上面 结果没有影响 这里修改一下
-            String pathReplaceAll = fullClassPackagePath.replace("$", "-").replace(basePath, "").replace(File.separator + "target" + File.separator + "classes", "");
+            // 内部类 的时候回有问题 展示上面 结果没有影响 这里修改一下，windows的文件描述符 和 linux的不一样，最后的生成的路径要修改一下
+            String pathReplaceAll = fullClassPackagePath.substring(fullClassPackagePath.indexOf(File.separator + "target" + File.separator + "classes") + 15)
+                    .replace("$", "\\$")
+                    //需要将Windows的文件描述符转换为Linux的，最后一个多余了/.class要转换回来
+                    .replace(File.separator, "/").replace("/.class", ".class");
             String pathAndClass = classBase64 + "|" + ArthasCommandConstants.REDEFINE_BASH_PACKAGE_PATH + pathReplaceAll;
             shellOutPaths.add(ArthasCommandConstants.REDEFINE_BASH_PACKAGE_PATH + pathReplaceAll);
             bash64FileAndPathList.add(pathAndClass);
@@ -217,7 +219,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
             command = String.format(OSS_HOT_REDEFINE, presignedUrl);
             ClipboardUtils.setClipboardString(command);
-            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas");
+            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas。");
         } catch (Exception e) {
             StackTraceUtils.printSanitizedStackTrace(e);
             NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
