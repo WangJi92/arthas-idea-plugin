@@ -169,7 +169,7 @@ public class OgnlPsUtils {
         String canonicalText = psiType.getCanonicalText();
 
         //基本类型  boolean
-        if (PsiType.BOOLEAN.equals(psiType) || canonicalText.equals("java.lang.Boolean")) {
+        if (PsiType.BOOLEAN.equals(psiType) || "java.lang.Boolean".equals(canonicalText)) {
             result = "true";
             return result;
         }
