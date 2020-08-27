@@ -21,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -95,14 +96,22 @@ public class LocalFileUploadToOssAction extends AnAction {
 
         // https://stackoverflow.com/questions/18725340/create-a-background-task-in-intellij-plugin
         ProgressManager.getInstance().run(new Backgroundable(project, "Upload To AliYun Oss") {
+            @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 // Set the progress bar percentage and text
-                progressIndicator.setFraction(0.30);
-                progressIndicator.setText("70% to finish");
-                runnable.run();
-                // Finished
-                progressIndicator.setFraction(1.0);
-                progressIndicator.setText("finished");
+                try {
+                    progressIndicator.setFraction(0.30);
+                    progressIndicator.setText("70% to finish");
+                    runnable.run();
+                    // Finished
+                    progressIndicator.setFraction(1.0);
+                    progressIndicator.setText("finished");
+                } catch (Exception e) {
+                    try {
+                        SwingUtilities.invokeAndWait(runnable::run);
+                    } catch (Exception ex) {
+                    }
+                }
             }
         });
 

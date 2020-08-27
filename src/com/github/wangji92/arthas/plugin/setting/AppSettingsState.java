@@ -112,6 +112,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public boolean hotRedefineDelete = true;
 
+    /**
+     * 热更新之前先编译
+     */
+    public boolean redefineBeforeCompile = false;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
