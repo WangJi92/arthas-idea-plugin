@@ -102,7 +102,7 @@ public class ArthasOgnlSetStaticFieldCommandAction extends AnAction {
                 invokeCommand = String.format(INVOKE_STATIC_FINAL_FIELD, className, fileName, defaultFieldValue);
             }
             builder.append(invokeCommand);
-            new ArthasActionStaticDialog(project, className, builder.toString(), "").open("arthas ognl set static field");
+            new ArthasActionStaticDialog(project, className, builder.toString(), "").open("Ognl Reflect To Modify Static Field");
         }
     }
 }

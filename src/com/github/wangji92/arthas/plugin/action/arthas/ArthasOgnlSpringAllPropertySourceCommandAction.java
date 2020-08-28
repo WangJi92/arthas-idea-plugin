@@ -51,7 +51,7 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
 
             String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, join, springContextValue);
 
-            new ArthasActionStaticDialog(project, className, command, "").open("arthas ognl spring get all property");
+            new ArthasActionStaticDialog(project, className, command, "").open("Ognl get all spring property");
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;
