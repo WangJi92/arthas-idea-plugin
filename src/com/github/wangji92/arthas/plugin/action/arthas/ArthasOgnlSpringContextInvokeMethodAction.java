@@ -157,7 +157,7 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             String staticSpringContextGetBeanVariable = SpringStaticContextUtils.getStaticSpringContextGetBeanVariable(project,lowCamelBeanName);
             String aopTargetOgnlExpression = String.format(STATIC_SPRING_AOP_TARGET, staticSpringContextGetBeanVariable);
 
-            new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("arthas ognl invoke spring bean method、field");
+            new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("Static spring context invoke  method field");
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;
