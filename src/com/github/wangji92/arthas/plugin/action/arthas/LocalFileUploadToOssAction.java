@@ -12,12 +12,16 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task.Backgroundable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -68,25 +72,48 @@ public class LocalFileUploadToOssAction extends AnAction {
             return;
         }
 
-        OSS oss = null;
-        try {
-            oss = AliyunOssUtils.buildOssClient(project);
-            String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
-            String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, selectVirtualFile.getInputStream());
-            String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
-            String command = String.format(OSS_UP_LOAD_FILE, presignedUrl, selectVirtualFile.getName());
-            ClipboardUtils.setClipboardString(command);
-            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行下载文件");
-        } catch (Exception e) {
-            StackTraceUtils.printSanitizedStackTrace(e);
-            NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
-            return;
-        } finally {
-            if (oss != null) {
-                oss.shutdown();
+        Runnable runnable = () -> {
+            OSS oss = null;
+            try {
+                oss = AliyunOssUtils.buildOssClient(project);
+                String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
+                String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, selectVirtualFile.getInputStream());
+                String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
+                String command = String.format(OSS_UP_LOAD_FILE, presignedUrl, selectVirtualFile.getName());
+                ClipboardUtils.setClipboardString(command);
+                NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行下载文件");
+            } catch (Exception e) {
+                StackTraceUtils.printSanitizedStackTrace(e);
+                NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
+                return;
+            } finally {
+                if (oss != null) {
+                    oss.shutdown();
+                }
+                IOUtils.closeQuietly();
             }
-            IOUtils.closeQuietly();
-        }
+        };
+
+        // https://stackoverflow.com/questions/18725340/create-a-background-task-in-intellij-plugin
+        ProgressManager.getInstance().run(new Backgroundable(project, "Upload To AliYun Oss") {
+            @Override
+            public void run(@NotNull ProgressIndicator progressIndicator) {
+                // Set the progress bar percentage and text
+                try {
+                    progressIndicator.setFraction(0.30);
+                    progressIndicator.setText("70% to finish");
+                    runnable.run();
+                    // Finished
+                    progressIndicator.setFraction(1.0);
+                    progressIndicator.setText("finished");
+                } catch (Exception e) {
+                    try {
+                        SwingUtilities.invokeAndWait(runnable::run);
+                    } catch (Exception ex) {
+                    }
+                }
+            }
+        });
 
 
     }
