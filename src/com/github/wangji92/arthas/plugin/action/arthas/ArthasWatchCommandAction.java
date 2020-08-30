@@ -38,13 +38,14 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
                 watchContentBuilder.append(",@").append(className).append("@").append(fieldName);
                 conditionExpress = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
             }
-        }else {
+        } else {
             conditionExpress = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
         }
         watchContentBuilder.append("}'");
         String invokeCount = instance.invokeCount;
         String depthPrintPropertyX = instance.depthPrintProperty;
-        String command = String.join(" ", "watch", className, methodName, watchContentBuilder.toString(), "-n", invokeCount, "-x", depthPrintPropertyX, conditionExpress);
+        String printConditionExpress = instance.printConditionExpress ? "-v" : "";
+        String command = String.join(" ", "watch", className, methodName, watchContentBuilder.toString(), printConditionExpress, "-n", invokeCount, "-x", depthPrintPropertyX, conditionExpress);
         ClipboardUtils.setClipboardString(command);
         NotifyUtils.notifyMessage(project, "支持表达式(默认1==1) 更多搜索 [arthas 入门最佳实践],可以将光标放置在字段上watch获取值 ");
     }

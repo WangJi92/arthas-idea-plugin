@@ -21,7 +21,8 @@ public class ArthasTraceCommandAction extends BaseArthasPluginAction {
         boolean skipJdkMethod = instance.traceSkipJdk;
         String skpJdkMethodCommand = skipJdkMethod ? "" : ArthasCommandConstants.DEFAULT_SKIP_JDK_FALSE;
         String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
-        String command = String.join(" ", "trace", className, methodName, "-n", invokeCount, conditionExpressDisplay, skpJdkMethodCommand);
+        String printConditionExpress = instance.printConditionExpress ? "-v" : "";
+        String command = String.join(" ", "trace", className, methodName, printConditionExpress, "-n", invokeCount, skpJdkMethodCommand, conditionExpressDisplay);
         ClipboardUtils.setClipboardString(command);
         NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) 更多搜索 [arthas 入门最佳实践] --skipJDKMethod 不跳过JDK 函数");
 
