@@ -2,8 +2,10 @@
 ### 联系方式
 有问题直接加我微信wj983433479 或者 扫码添加钉钉群 32102545 沟通
 ### 帮助文档链接
-   * [语雀arthas 插件使用](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
-   * [爱上Java诊断利器Arthas之Arthas idea plugin 的前世今生 体验demo](https://github.com/WangJi92/arthas-plugin-demo)
+   * [语雀arthas idea plugin 使用文档](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
+   * [arthas idea plugin 变更记录](https://www.yuque.com/wangji-yunque/ikhsmq/pa45y2)
+   * [arthas + arhtas idea plugin 实战视频](https://www.bilibili.com/video/BV1yz4y1f7iz/)
+   * [爱上Java诊断利器Arthas之Arthas idea plugin 的前世今生 体验demo--参加arthas 官方征文活动](https://github.com/WangJi92/arthas-plugin-demo)
    **好好跟着体验demo的视频走一遍流程，通过arthas idea plugin 插件，arthas 将对于你排查线上问题更加的方便。**
    * [issue 中有部分功能用法简介](https://github.com/WangJi92/arthas-idea-plugin/issues) 有兴趣的可以看一下。
    * 最新博客 [arthas 入门最佳实践](https://wangji.blog.csdn.net/article/details/106964278)
