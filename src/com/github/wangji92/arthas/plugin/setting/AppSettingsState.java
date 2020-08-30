@@ -112,6 +112,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public boolean hotRedefineDelete = true;
 
+    /**
+     * watch/trace/monitor support verbose option, print ConditionExpress result #1348
+     */
+    public boolean printConditionExpress = true;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);

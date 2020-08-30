@@ -124,7 +124,8 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
             AppSettingsState instance = AppSettingsState.getInstance(project);
             boolean skipJdkMethod = instance.traceSkipJdk;
             String skpJdkMethodCommand = skipJdkMethod ? "" : ArthasCommandConstants.DEFAULT_SKIP_JDK_FALSE;
-            String command = String.join(" ", traceECommand, ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS, skpJdkMethodCommand);
+            String printConditionExpress = instance.printConditionExpress ? "-v" : "";
+            String command = String.join(" ", traceECommand, printConditionExpress, skpJdkMethodCommand,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
             ClipboardUtils.setClipboardString(command);
             NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) 更多搜索 [arthas 入门最佳实践],trace -E 支持trace多个方法,方法中的方法");
         }

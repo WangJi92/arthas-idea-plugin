@@ -138,6 +138,12 @@ public class AppSettingsPage implements Configurable {
      * 热更新完成后删除文件
      */
     private JRadioButton hotRedefineDeleteFileRadioButton;
+    /**
+     * watch/trace/monitor support verbose option, print ConditionExpress result #1348
+     */
+    private JRadioButton printConditionExpressRadioButton;
+
+    private LinkLabel printConditionExpressLink;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -212,6 +218,13 @@ public class AppSettingsPage implements Configurable {
             }
         });
         ossHelpLink.setPaintUnderline(false);
+        printConditionExpressLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+            @Override
+            public void actionPerformed(AnActionEvent anActionEvent) {
+                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/1348");
+            }
+        });
+        printConditionExpressLink.setPaintUnderline(false);
     }
 
     @Nullable
@@ -233,7 +246,8 @@ public class AppSettingsPage implements Configurable {
                 || ossGlobalSettingRadioButton.isSelected() != settings.ossGlobalSetting
                 || springContextGlobalSettingRadioButton.isSelected() != settings.springContextGlobalSetting
                 || aliYunOssRadioButton.isSelected() != settings.aliYunOss
-                || hotRedefineDeleteFileRadioButton.isSelected() != settings.hotRedefineDelete;
+                || hotRedefineDeleteFileRadioButton.isSelected() != settings.hotRedefineDelete
+                || printConditionExpressRadioButton.isSelected() != settings.printConditionExpress;
 
         if (modify) {
             return modify;
@@ -306,6 +320,7 @@ public class AppSettingsPage implements Configurable {
         settings.conditionExpressDisplay = conditionExpressDisplayRadio.isSelected();
         settings.selectProjectName = selectProjectNameTextField.getText();
         settings.hotRedefineDelete = hotRedefineDeleteFileRadioButton.isSelected();
+        settings.printConditionExpress = printConditionExpressRadioButton.isSelected();
         if (clipboardRadioButton.isSelected()) {
             settings.aliYunOss = false;
         } else {
@@ -357,6 +372,7 @@ public class AppSettingsPage implements Configurable {
         traceSkipJdkRadio.setSelected(settings.traceSkipJdk);
         conditionExpressDisplayRadio.setSelected(settings.conditionExpressDisplay);
         hotRedefineDeleteFileRadioButton.setSelected(settings.hotRedefineDelete);
+        printConditionExpressRadioButton.setSelected(settings.printConditionExpress);
         selectProjectNameTextField.setText(settings.selectProjectName);
 
         ossEndpointTextField.setText(settings.endpoint);
