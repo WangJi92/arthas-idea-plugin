@@ -196,7 +196,10 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
             //不为空就删除
             String deleteClassFile = settings.hotRedefineDelete ? "delete" : "";
-            if (StringUtils.isBlank(selectProjectName)) {
+            if (settings.manualSelectPid) {
+                // 手动选择pid
+                selectProjectName = "";
+            } else if (StringUtils.isBlank(selectProjectName)) {
                 NotifyUtils.notifyMessage(project, "必须配置才能使用 jps -l 查看名称,Hot Redefine use project name select process and batch support; as.sh --select projectName -c 'redefine /tmp/test.class'", NotificationType.ERROR);
                 return;
             }
@@ -277,7 +280,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                     }
 
                 } catch (Exception e) {
-                   // LOG.error("版本错误", e);
+                    // LOG.error("版本错误", e);
                     try {
                         SwingUtilities.invokeAndWait(runnable::run);
                     } catch (Exception ex) {
