@@ -122,6 +122,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public boolean printConditionExpress = true;
 
+    /**
+     * 手动选择pid的配置
+     */
+    public boolean manualSelectPid = true;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
