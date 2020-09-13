@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="835" height="469"/>
+      <xy x="20" y="20" width="851" height="514"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -194,7 +194,7 @@
               </component>
             </children>
           </grid>
-          <grid id="f4b0a" binding="hotRedefineSettingPane" layout-manager="GridLayoutManager" row-count="6" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="f4b0a" binding="hotRedefineSettingPane" layout-manager="GridLayoutManager" row-count="7" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <tabbedpane title="Hot Swap Redefine Setting"/>
@@ -213,7 +213,7 @@
               </component>
               <vspacer id="d59d5">
                 <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="bf4f" class="javax.swing.JRadioButton" binding="clipboardRadioButton">
@@ -401,34 +401,9 @@
                   </component>
                 </children>
               </grid>
-              <component id="fab47" class="com.intellij.ui.components.labels.LinkLabel" binding="selectLink" custom-create="true">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="as.sh --select 指定进程的名称"/>
-                  <toolTipText value="as.sh --select -c '命令' auto redfine"/>
-                </properties>
-              </component>
-              <component id="f5bcd" class="javax.swing.JTextField" binding="selectProjectNameTextField">
-                <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties/>
-              </component>
-              <component id="d39d0" class="com.intellij.ui.components.labels.LinkLabel" binding="batchSupportLink" custom-create="true">
-                <constraints>
-                  <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="-c batch support"/>
-                </properties>
-              </component>
               <component id="462f2" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Hot Swap Redefine Delete Class File"/>
@@ -436,7 +411,7 @@
               </component>
               <component id="63008" class="javax.swing.JRadioButton" binding="hotRedefineDeleteFileRadioButton">
                 <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="热更新完成后删除文件"/>
@@ -445,7 +420,7 @@
               </component>
               <component id="e5115" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Redefine Before Compile"/>
@@ -453,10 +428,79 @@
               </component>
               <component id="bdcae" class="javax.swing.JRadioButton" binding="redefineBeforeCompileRadioButton">
                 <constraints>
-                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="热更新之前先编译"/>
+                </properties>
+              </component>
+              <grid id="5fc4e" binding="preConfigurationSelectPidPanel" layout-manager="FormLayout">
+                <rowspec value="center:d:grow"/>
+                <colspec value="fill:d:noGrow"/>
+                <colspec value="left:4dlu:noGrow"/>
+                <colspec value="fill:d:grow"/>
+                <colspec value="left:4dlu:noGrow"/>
+                <colspec value="fill:max(d;4px):noGrow"/>
+                <colspec value="left:4dlu:noGrow"/>
+                <colspec value="fill:max(d;4px):noGrow"/>
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="6" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="fab47" class="com.intellij.ui.components.labels.LinkLabel" binding="selectLink" custom-create="true">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="as.sh --select 指定进程的名称"/>
+                      <toolTipText value="as.sh --select -c '命令' auto redfine"/>
+                    </properties>
+                  </component>
+                  <component id="d39d0" class="com.intellij.ui.components.labels.LinkLabel" binding="batchSupportLink" custom-create="true">
+                    <constraints>
+                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="-c batch support"/>
+                    </properties>
+                  </component>
+                  <component id="f5bcd" class="javax.swing.JTextField" binding="selectProjectNameTextField">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                      <forms defaultalign-horz="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                </children>
+              </grid>
+              <component id="1c575" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="进程选择配置"/>
+                </properties>
+              </component>
+              <component id="64342" class="javax.swing.JRadioButton" binding="manualSelectPidRadioButton">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value=" 手动选择Pid"/>
+                </properties>
+              </component>
+              <component id="cea1e" class="javax.swing.JRadioButton" binding="preConfigurationSelectPidRadioButton">
+                <constraints>
+                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="预先配置 --select  project name (jps -l)"/>
                 </properties>
               </component>
             </children>

@@ -148,6 +148,9 @@ public class AppSettingsPage implements Configurable {
      * 热更新之前先编译
      */
     private JRadioButton redefineBeforeCompileRadioButton;
+    private JRadioButton manualSelectPidRadioButton;
+    private JRadioButton preConfigurationSelectPidRadioButton;
+    private JPanel preConfigurationSelectPidPanel;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -252,7 +255,8 @@ public class AppSettingsPage implements Configurable {
                 || aliYunOssRadioButton.isSelected() != settings.aliYunOss
                 || hotRedefineDeleteFileRadioButton.isSelected() != settings.hotRedefineDelete
                 || redefineBeforeCompileRadioButton.isSelected() != settings.redefineBeforeCompile
-                || printConditionExpressRadioButton.isSelected() != settings.printConditionExpress;
+                || printConditionExpressRadioButton.isSelected() != settings.printConditionExpress
+                || manualSelectPidRadioButton.isSelected() != settings.manualSelectPid;
 
         if (modify) {
             return modify;
@@ -324,6 +328,7 @@ public class AppSettingsPage implements Configurable {
         settings.traceSkipJdk = traceSkipJdkRadio.isSelected();
         settings.conditionExpressDisplay = conditionExpressDisplayRadio.isSelected();
         settings.selectProjectName = selectProjectNameTextField.getText();
+        settings.manualSelectPid =  manualSelectPidRadioButton.isSelected();
         settings.hotRedefineDelete = hotRedefineDeleteFileRadioButton.isSelected();
         settings.redefineBeforeCompile = redefineBeforeCompileRadioButton.isSelected();
         settings.printConditionExpress = printConditionExpressRadioButton.isSelected();
@@ -396,6 +401,15 @@ public class AppSettingsPage implements Configurable {
             aliYunOssRadioButton.setSelected(false);
             aliyunOssSettingPane.setVisible(false);
         }
+        if (settings.manualSelectPid) {
+            preConfigurationSelectPidPanel.setVisible(false);
+            preConfigurationSelectPidRadioButton.setSelected(false);
+            manualSelectPidRadioButton.setSelected(true);
+        } else {
+            preConfigurationSelectPidPanel.setVisible(true);
+            preConfigurationSelectPidRadioButton.setSelected(true);
+            manualSelectPidRadioButton.setSelected(false);
+        }
         springContextGlobalSettingRadioButton.setSelected(settings.springContextGlobalSetting);
         ossGlobalSettingRadioButton.setSelected(settings.ossGlobalSetting);
         initEvent();
@@ -437,6 +451,21 @@ public class AppSettingsPage implements Configurable {
         };
         aliYunOssRadioButton.addItemListener(itemListener);
         clipboardRadioButton.addItemListener(itemListener);
+
+        // 设置是否手动选择pid
+        ItemListener itemListenerSelectPid = e -> {
+            if (e.getSource().equals(manualSelectPidRadioButton) && e.getStateChange() == ItemEvent.SELECTED || e.getSource().equals(preConfigurationSelectPidRadioButton) && e.getStateChange() == ItemEvent.DESELECTED) {
+                preConfigurationSelectPidPanel.setVisible(false);
+                preConfigurationSelectPidRadioButton.setSelected(false);
+                manualSelectPidRadioButton.setSelected(true);
+            } else if (e.getSource().equals(preConfigurationSelectPidRadioButton) && e.getStateChange() == ItemEvent.SELECTED || e.getSource().equals(manualSelectPidRadioButton) && e.getStateChange() == ItemEvent.DESELECTED) {
+                preConfigurationSelectPidPanel.setVisible(true);
+                preConfigurationSelectPidRadioButton.setSelected(true);
+                manualSelectPidRadioButton.setSelected(false);
+            }
+        };
+        manualSelectPidRadioButton.addItemListener(itemListenerSelectPid);
+        preConfigurationSelectPidRadioButton.addItemListener(itemListenerSelectPid);
     }
 
     @Override

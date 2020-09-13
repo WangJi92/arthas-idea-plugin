@@ -1,5 +1,76 @@
 #!/usr/bin/env bash
 
+TARGET_PID=
+JAVA_HOME=
+SELECT_VALUE=${arthasIdeaPluginApplicationName}
+# reset arthas work environment
+# reset some options for env
+reset_for_env() {
+  # if env define the JAVA_HOME, use it first
+  # if is alibaba opts, use alibaba ops's default JAVA_HOME
+  [ -z "${JAVA_HOME}" ] && [ -d /opt/taobao/java ] && JAVA_HOME=/opt/taobao/java
+
+  if [[ (-z "${JAVA_HOME}") && (-e "/usr/libexec/java_home") ]]; then
+    # for mac
+    JAVA_HOME=$(/usr/libexec/java_home)
+  fi
+
+  # iterater throught candidates to find a proper JAVA_HOME at least contains tools.jar which is required by arthas.
+  if [ ! -d "${JAVA_HOME}" ]; then
+    JAVA_HOME_CANDIDATES=($(ps aux | grep java | grep -v 'grep java' | awk '{print $11}' | sed -n 's/\/bin\/java$//p'))
+    for JAVA_HOME_TEMP in ${JAVA_HOME_CANDIDATES[@]}; do
+      if [ -f "${JAVA_HOME_TEMP}/lib/tools.jar" ]; then
+        JAVA_HOME=$(rreadlink "${JAVA_HOME_TEMP}")
+        break
+      fi
+    done
+  fi
+
+  if [ -z "${JAVA_HOME}" ]; then
+    exit_on_err 1 "Can not find JAVA_HOME, please set \$JAVA_HOME bash env first."
+  fi
+
+  echo "[INFO] JAVA_HOME: ${JAVA_HOME}"
+
+  # reset CHARSET for alibaba opts, we use GBK
+  [[ -x /opt/taobao/java ]] && JVM_OPTS="-Dinput.encoding=GBK ${JVM_OPTS} "
+
+}
+select_pid() {
+  local IFS=$'\n'
+  CANDIDATES=($(${JAVA_HOME}/bin/jps -l | grep -v sun.tools.jps.Jps | awk '{print $0}'))
+
+  index=0
+  suggest=1
+  # auto select tomcat/pandora-boot process
+  for process in "${CANDIDATES[@]}"; do
+    index=$(($index + 1))
+    if [ $(echo ${process} | grep -c org.apache.catalina.startup.Bootstrap) -eq 1 ] ||
+      [ $(echo ${process} | grep -c com.taobao.pandora.boot.loader.SarLauncher) -eq 1 ]; then
+      suggest=${index}
+      break
+    fi
+  done
+
+  index=0
+  for process in "${CANDIDATES[@]}"; do
+    index=$(($index + 1))
+    if [ ${index} -eq ${suggest} ]; then
+      echo "* [$index]: ${process}"
+    else
+      echo "  [$index]: ${process}"
+    fi
+  done
+
+  read choice
+
+  if [ -z ${choice} ]; then
+    choice=${suggest}
+  fi
+
+  TARGET_PID=$(echo ${CANDIDATES[$(($choice - 1))]} | cut -d ' ' -f 1)
+}
+
 # Usage: banner_simple "my title"
 banner_simple() {
   local msg="* $* *"
@@ -37,7 +108,7 @@ installArthas() {
   # download arthas
   if [ ! -f "$HOME/opt/arthas/as.sh" ]; then
     banner_simple "arthas idea plugin download arthas $HOME/opt/arthas/as.sh"
-    curl -Lk https://arthas.aliyun.com/as.sh  -o $HOME/opt/arthas/as.sh || return 1
+    curl -Lk https://arthas.aliyun.com/as.sh -o $HOME/opt/arthas/as.sh || return 1
     chmod +x $HOME/opt/arthas/as.sh || return 1
   fi
 }
@@ -56,8 +127,8 @@ decodebase64CLassFile() {
 # Usage: doStarteRedefine
 doStarteRedefine() {
   createFile $HOME/opt/arthas/redefine/redefineArthas.out
-  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName}  -c \"${arthasIdeaPluginRedefineCommand}\"  >$HOME/opt/arthas/redefine/redefineArthas.out"$(tput sgr0)
-  $HOME/opt/arthas/as.sh --select ${arthasIdeaPluginApplicationName} -c "${arthasIdeaPluginRedefineCommand}" >$HOME/opt/arthas/redefine/redefineArthas.out
+  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --select ${SELECT_VALUE}  -c \"${arthasIdeaPluginRedefineCommand}\"  >$HOME/opt/arthas/redefine/redefineArthas.out"$(tput sgr0)
+  $HOME/opt/arthas/as.sh --select ${SELECT_VALUE} -c "${arthasIdeaPluginRedefineCommand}" >$HOME/opt/arthas/redefine/redefineArthas.out
 }
 
 redefineResult() {
@@ -93,6 +164,16 @@ main() {
   decodebase64CLassFile
   if [ $? -ne 0 ]; then
     exit_on_err 1 "arthas idea plugin decodebase64CLass error"
+  fi
+
+  if [ -z ${SELECT_VALUE} ]; then
+    reset_for_env
+    select_pid
+    SELECT_VALUE=${TARGET_PID}
+  fi
+
+  if [ -z ${SELECT_VALUE} ]; then
+    exit_on_err 1 "select target process by classname or JARfilename Target pid is empty"
   fi
 
   doStarteRedefine
