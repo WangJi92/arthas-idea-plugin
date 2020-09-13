@@ -42,6 +42,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.20-RELEASE</p>
+      <ul>
+        <li>Support Manual Select Pid to Hot Redefine，thanks 禹徒 </li>
+      </ul>
+      <ul>
+       <li>支持手动选择进程去进行热更新、默认开启，也可以使用 --select 预配置的模式，thanks 禹徒</li>
+      </ul>
     <p>2.19-RELEASE</p>
       <ul>
         <li>Support Setting -v watch/trace/monitor support verbose option, print ConditionExpress result #1348</li>
