@@ -13,6 +13,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationInfo;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -265,18 +266,19 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                                     NotifyUtils.notifyMessage(project, "任务已经取消");
                                     return;
                                 }
-                                runnable.run();
+                                WriteAction.runAndWait(runnable::run);
                             });
                         } else {
                             ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
 
                             Object promise = MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
                             MethodUtils.invokeMethod(promise, "onSuccess", (Consumer) o -> {
-                                runnable.run();
+                                WriteAction.runAndWait(runnable::run);
                             });
                         }
                     } else {
-                        runnable.run();
+                        WriteAction.runAndWait(runnable::run);
+
                     }
 
                 } catch (Exception e) {
