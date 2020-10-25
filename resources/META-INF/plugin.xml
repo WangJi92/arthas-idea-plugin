@@ -42,6 +42,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.21-RELEASE</p>
+      <ul>
+        <li>Fix bug Hot Redefine </li>
+      </ul>
+      <ul>
+       <li>修改bug 热更新 有时候会报错，不同版本影响不一样 2019.2 正常,2018.2报错 </li>
+      </ul>
     <p>2.20-RELEASE</p>
       <ul>
         <li>Support Manual Select Pid to Hot Redefine，thanks 禹徒 </li>
