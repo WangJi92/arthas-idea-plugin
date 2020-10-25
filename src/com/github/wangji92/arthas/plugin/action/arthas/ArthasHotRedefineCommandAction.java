@@ -13,6 +13,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationInfo;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -34,7 +35,6 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
@@ -255,36 +255,42 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                         // 这里的版本有兼容性问题 目前占时可以使用
                         // Deprecated method ProjectTaskManager.compile(...) is invoked in ArthasHotRedefineCommandAction$1.run(...). This method will be removed in 2020.1
                         if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() <= 201) {
-                            ProjectTaskManager.getInstance(project).compile(virtualFileFiles, projectTaskResult -> {
-                                if (projectTaskResult.getErrors() > 0) {
-                                    NotifyUtils.notifyMessage(project, "Java文件编译编译错误 请处理");
-                                    progressIndicator.cancel();
-                                    return;
-                                }
-                                if (progressIndicator.isCanceled() || projectTaskResult.isAborted()) {
-                                    NotifyUtils.notifyMessage(project, "任务已经取消");
-                                    return;
-                                }
-                                runnable.run();
+                            //2018.2 编译报错
+                            WriteAction.runAndWait(() -> {
+                                ProjectTaskManager.getInstance(project).compile(virtualFileFiles, projectTaskResult -> {
+                                    if (projectTaskResult.getErrors() > 0) {
+                                        NotifyUtils.notifyMessage(project, "Java文件编译编译错误 请处理");
+                                        progressIndicator.cancel();
+                                        return;
+                                    }
+                                    if (progressIndicator.isCanceled() || projectTaskResult.isAborted()) {
+                                        NotifyUtils.notifyMessage(project, "任务已经取消");
+                                        return;
+                                    }
+                                    WriteAction.runAndWait(runnable::run);
+                                });
                             });
-                        } else {
-                            ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
 
-                            Object promise = MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
-                            MethodUtils.invokeMethod(promise, "onSuccess", (Consumer) o -> {
-                                runnable.run();
+                        } else {
+                            WriteAction.runAndWait(() -> {
+                                ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
+
+                                Object promise = MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
+                                MethodUtils.invokeMethod(promise, "onSuccess", (Consumer) o -> {
+                                    WriteAction.runAndWait(runnable::run);
+                                });
                             });
                         }
                     } else {
-                        runnable.run();
+                        WriteAction.runAndWait(runnable::run);
+
                     }
 
                 } catch (Exception e) {
-                    // LOG.error("版本错误", e);
                     try {
-                        SwingUtilities.invokeAndWait(runnable::run);
+                        WriteAction.runAndWait(runnable::run);
                     } catch (Exception ex) {
-                        //LOG.error("版本错误", e);
+
                     }
                 }
 
