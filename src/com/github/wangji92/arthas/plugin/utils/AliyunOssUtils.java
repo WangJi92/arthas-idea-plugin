@@ -7,6 +7,7 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.internal.OSSUtils;
 import com.aliyun.oss.model.BucketMetadata;
 import com.aliyun.oss.model.OSSObject;
+import com.aliyun.oss.model.BucketInfo;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.intellij.openapi.project.Project;
