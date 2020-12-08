@@ -65,10 +65,10 @@ public class AliyunOssUtils {
      */
     public static void checkBuckNameExist(String bucketName, OSS ossClient) {
         // 检查是否存在
-        BucketMetadata bucketMetadata = null;
+        BucketInfo bucketInfo = null;
         try {
-            bucketMetadata = ossClient.getBucketMetadata(bucketName);
-            if (bucketMetadata == null) {
+            bucketInfo = ossClient.getBucketInfo(bucketName);
+            if (bucketInfo == null) {
                 throw new IllegalArgumentException("配置aliyun oss参数错误 无法获取 bucketName");
             }
         } catch (OSSException | ClientException e) {
