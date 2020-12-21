@@ -1,13 +1,16 @@
 package com.github.wangji92.arthas.plugin.utils;
 
+import com.github.wangji92.arthas.plugin.common.exception.CompilerFileNotFoundException;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.CompilerModuleExtension;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import org.apache.commons.io.FilenameUtils;
@@ -25,6 +28,8 @@ import java.util.Set;
  * @date 22-12-2019
  */
 public class OgnlPsUtils {
+
+    private static final Logger LOG = Logger.getInstance(OgnlPsUtils.class);
 
     /**
      * 获取内部类、匿名类的class的 ognl 名称
@@ -311,12 +316,22 @@ public class OgnlPsUtils {
         //选择了.class 文件 必须要处理 不然获取不到module 的信息,这里重新获取class 原文件的信息
         //根据类的全限定名查询PsiClass，下面这个方法是查询Project域 https://blog.csdn.net/ExcellentYuXiao/article/details/80273448
         PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(ideaClassName, GlobalSearchScope.projectScope(project));
+        if (psiClass == null) {
+            throw new CompilerFileNotFoundException(String.format("not find class  %s in this project", ideaClassName));
+        }
         // https://jetbrains.org/intellij/sdk/docs/basics/project_structure.html
         // https://jetbrains.org/intellij/sdk/docs/reference_guide/project_model/module.html
         Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+        if (module == null) {
+            throw new CompilerFileNotFoundException(String.format("not find class  %s module in this project", ideaClassName));
+        }
+
         //找到编译的 出口位置
-        String outputPath = ModuleRootManager.getInstance(module).getModifiableModel().getModuleExtension(CompilerModuleExtension.class).getCompilerOutputPath().getPath();
-        return outputPath;
+        VirtualFile compilerOutputVirtualFile = ModuleRootManager.getInstance(module).getModifiableModel().getModuleExtension(CompilerModuleExtension.class).getCompilerOutputPath();
+        if (compilerOutputVirtualFile == null) {
+            throw new CompilerFileNotFoundException(String.format("not find compile class file %s in target compile class dir", ideaClassName));
+        }
+        return compilerOutputVirtualFile.getPath();
     }
 
     /**
@@ -326,7 +341,7 @@ public class OgnlPsUtils {
      * @return
      */
 
-     //arthas idea 2.17 uses deprecated API, which may be removed in future releases leading to binary and source code incompatibilities
+    //arthas idea 2.17 uses deprecated API, which may be removed in future releases leading to binary and source code incompatibilities
 //    public static String getPluginPath() {
 //        return PluginManager.getPlugin(PluginId.getId("com.github.wangji92.arthas.plugin")).getPath().getPath();
 //    }
@@ -334,11 +349,12 @@ public class OgnlPsUtils {
 
     /**
      * 当前是psi 的这个几种类型？ psiElement instanceof JvmMember 兼容性不好 修改为这个 Experimental API interface JvmElement is. This interface can be changed in a future release leading to incompatibilities
+     *
      * @param psiElement
      * @return
      */
-    public static boolean isPsiFieldOrMethodOrClass(PsiElement psiElement){
-        return  psiElement instanceof PsiField || psiElement instanceof PsiClass || psiElement instanceof PsiMethod;
+    public static boolean isPsiFieldOrMethodOrClass(PsiElement psiElement) {
+        return psiElement instanceof PsiField || psiElement instanceof PsiClass || psiElement instanceof PsiMethod;
     }
 
 }

@@ -42,6 +42,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.22-RELEASE</p>
+      <ul>
+        <li>Fix bug Hot Redefine </li>
+      </ul>
+      <ul>
+       <li>增强热更新报错体验优化、增加相关异常场景的判断</li>
+      </ul>
     <p>2.21-RELEASE</p>
       <ul>
         <li>Fix bug Hot Redefine </li>
