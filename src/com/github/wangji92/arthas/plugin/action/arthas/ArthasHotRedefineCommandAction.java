@@ -108,7 +108,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         Runnable runnable = () -> {
             List<String> fullClassPackagePaths = Lists.newArrayList();
             try {
-                fullClassPackagePaths = this.getAllFullTargetCLassFilePath(project, virtualFileFiles, psiElement);
+                fullClassPackagePaths = this.getAllFullTargetClassFilePath(project, virtualFileFiles, psiElement);
             } catch (Exception e) {
                 if (e instanceof CompilerFileNotFoundException) {
                     LOG.warn("maybe compiler error", e);
@@ -264,7 +264,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
     }
 
     @Nullable
-    private List<String> getAllFullTargetCLassFilePath(Project project, VirtualFile[] virtualFileFiles, PsiElement psiElement) {
+    private List<String> getAllFullTargetClassFilePath(Project project, VirtualFile[] virtualFileFiles, PsiElement psiElement) {
         List<String> fullClassPackagePaths = Lists.newArrayList();
         if (virtualFileFiles.length == 1 && OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             //选择 当个文件 且为 编辑区选择的
