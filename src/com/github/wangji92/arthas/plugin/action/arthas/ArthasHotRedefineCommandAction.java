@@ -136,9 +136,16 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                     String classBase64 = IoUtils.readFileToBase64String(file);
                     // 内部类 的时候回有问题 展示上面 结果没有影响 这里修改一下，windows的文件描述符 和 linux的不一样，最后的生成的路径要修改一下
                     String pathReplaceAll = fullClassPackagePath.substring(fullClassPackagePath.indexOf(File.separator + "target" + File.separator + "classes") + 15)
-                            .replace("$", "\\$")
                             //需要将Windows的文件描述符转换为Linux的，最后一个多余了/.class要转换回来
-                            .replace(File.separator, "/").replace("/.class", ".class");
+                            .replace(File.separator, "/").replace("/.class", ".class")
+                            // https://github.com/WangJi92/arthas-idea-plugin/issues/23 为什么要转义 shell 脚本执行的时候这个字符特殊不能直接使用
+                            // 最初使用 replace("$","\\$") mac 没有问题  windows有问题
+
+                            // https://blog.csdn.net/xrt95050/article/details/6651571 替换$ 为 \$
+                            // 要把 $ 替换成 \$ ，则要使用 \\\\\\& 来替换，因为一个 \ 要使用 \\\ 来进行替换，
+                            // 而一个 $ 要使用 \\$ 来进行替换，因 \ 与  $ 在作为替换内容时都属于特殊字符：$ 字符表示反向引用组，而 \ 字符又是用来转义 $ 字符的
+                            .replaceAll("\\$", "\\\\\\$");
+
                     String pathAndClass = classBase64 + "|" + ArthasCommandConstants.REDEFINE_BASH_PACKAGE_PATH + pathReplaceAll;
                     shellOutPaths.add(ArthasCommandConstants.REDEFINE_BASH_PACKAGE_PATH + pathReplaceAll);
                     bash64FileAndPathList.add(pathAndClass);
@@ -252,10 +259,12 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
                 } catch (Exception e) {
                     LOG.error("record arthas hot redefine error", e);
+                    NotifyUtils.notifyMessage(project, "热更新未知错误", NotificationType.ERROR);
                     try {
                         WriteAction.runAndWait(runnable::run);
                     } catch (Exception ex) {
                         LOG.error("record arthas hot redefine try again error", ex);
+                        NotifyUtils.notifyMessage(project, "热更新未知错误", NotificationType.ERROR);
                     }
                 }
 
