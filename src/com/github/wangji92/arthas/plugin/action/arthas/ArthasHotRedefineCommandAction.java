@@ -36,6 +36,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import redis.clients.jedis.Jedis;
 
 import java.io.File;
 import java.util.*;
@@ -56,11 +57,16 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
     /**
      * oss 获取到链接
      */
-    public static final String OSS_HOT_REDEFINE = "curl -Lk  \"%s\" | base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
+    private static final String OSS_HOT_REDEFINE = "curl -Lk  \"%s\" | base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
     /**
      * 剪切板处理字符串
      */
-    public static final String CLIPBOARD_HOT_REDEFINE = "echo \"%s\" |base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
+    private static final String CLIPBOARD_HOT_REDEFINE = "echo \"%s\" |base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
+
+    /**
+     * redis
+     */
+    private static final String REDIS_HOT_REDEFINE = "echo `redis-cli -h '%s' -p %s  get %s`|base64 --decode >arthas-idea-plugin-redefine.sh;chmod a+x arthas-idea-plugin-redefine.sh;./arthas-idea-plugin-redefine.sh;";
 
     @Override
     public void update(@NotNull AnActionEvent e) {
@@ -182,29 +188,14 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 String base64RedefineSh = BaseEncoding.base64().encode(redefineSh.getBytes());
 
                 String command = "";
-                if (!settings.aliYunOss) {
+                if (settings.aliYunOss) {
+                    this.uploadBase64FileToOss(project, settings, base64RedefineSh);
+                } else if (settings.hotRedefineRedis) {
+                    this.uploadBase64FileToRedis(project, settings, base64RedefineSh);
+                } else {
                     command = String.format(CLIPBOARD_HOT_REDEFINE, base64RedefineSh);
                     ClipboardUtils.setClipboardString(command);
-                    NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas 【由于没有使用其他存储 执行的脚本比较长,推荐配置阿里云oss】");
-                    return;
-                }
-                OSS oss = null;
-                try {
-                    oss = AliyunOssUtils.buildOssClient(project);
-                    String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
-                    String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, base64RedefineSh);
-                    String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
-                    command = String.format(OSS_HOT_REDEFINE, presignedUrl);
-                    ClipboardUtils.setClipboardString(command);
-                    NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas。");
-                } catch (Exception e) {
-                    LOG.error("record arthas hot redefine upload to oss error", e);
-                    StackTraceUtils.printSanitizedStackTrace(e);
-                    NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
-                } finally {
-                    if (oss != null) {
-                        oss.shutdown();
-                    }
+                    NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas 【由于没有使用其他存储 执行的脚本比较长,推荐配置阿里云oss or redis】");
                 }
             } catch (Exception e) {
                 LOG.error("未知错误", e);
@@ -270,6 +261,61 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
             }
         });
+    }
+
+    /**
+     * 保存数据上传到redis
+     *
+     * @param project
+     * @param settings
+     * @param base64RedefineSh
+     */
+    private void uploadBase64FileToRedis(Project project, AppSettingsState settings, String base64RedefineSh) {
+        try (Jedis jedis = JedisUtils.buildJedisClient(settings.redisAddress, settings.redisPort, 5000, settings.redisAuth)) {
+            String command;
+            StringBuilder portAndAuth = new StringBuilder("" + settings.redisPort);
+            if (!StringUtils.isBlank(settings.redisAuth)) {
+                portAndAuth.append(" -a ").append(settings.redisAuth);
+            }
+
+            String cacheKey = settings.redisCacheKey + "_" + UUID.randomUUID().toString();
+            jedis.setex(cacheKey, settings.redisCacheKeyTtl, base64RedefineSh);
+            command = String.format(REDIS_HOT_REDEFINE, settings.redisAddress, portAndAuth, cacheKey);
+            ClipboardUtils.setClipboardString(command);
+            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas。【目标服务器服务器环境需要有 redis cli 命令】");
+        } catch (Exception e) {
+            LOG.error("record arthas hot redefine upload to redis error", e);
+            NotifyUtils.notifyMessage(project, "上传命令到redis 失败" + e.getMessage(), NotificationType.ERROR);
+        }
+    }
+
+    /**
+     * 上传热更新 文件到oss
+     *
+     * @param project
+     * @param settings
+     * @param base64RedefineSh
+     */
+    private void uploadBase64FileToOss(Project project, AppSettingsState settings, String base64RedefineSh) {
+        String command;
+        OSS oss = null;
+        try {
+            oss = AliyunOssUtils.buildOssClient(project);
+            String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
+            String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, base64RedefineSh);
+            String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
+            command = String.format(OSS_HOT_REDEFINE, presignedUrl);
+            ClipboardUtils.setClipboardString(command);
+            NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas。");
+        } catch (Exception e) {
+            LOG.error("record arthas hot redefine upload to oss error", e);
+            StackTraceUtils.printSanitizedStackTrace(e);
+            NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage(), NotificationType.ERROR);
+        } finally {
+            if (oss != null) {
+                oss.shutdown();
+            }
+        }
     }
 
     @Nullable
