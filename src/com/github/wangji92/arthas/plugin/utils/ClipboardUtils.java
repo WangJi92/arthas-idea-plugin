@@ -1,7 +1,5 @@
 package com.github.wangji92.arthas.plugin.utils;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -14,7 +12,6 @@ import java.awt.datatransfer.Transferable;
  * @author 汪小哥
  * @date 20-11-2019
  */
-@Slf4j
 public class ClipboardUtils {
 
     public static final String CLIPBOARD_TEXT = "%s 已复制到剪切板";
@@ -57,7 +54,7 @@ public class ClipboardUtils {
             // 把文本内容设置到系统剪贴板
             clipboard.setContents(trans, null);
         } catch (Exception e) {
-           //
+            //
         }
     }
 
