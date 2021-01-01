@@ -9,6 +9,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -127,9 +128,88 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public boolean manualSelectPid = true;
 
+    /**
+     * 是否使用redis
+     */
+    public boolean hotRedefineRedis = false;
+
+    /**
+     * redis 的链接地址
+     */
+    public String redisAddress = "127.0.0.1";
+
+    /**
+     * redis 的端口
+     */
+    public Integer redisPort = 6379;
+
+    /**
+     * redis 密码
+     */
+    public String redisAuth;
+
+    /**
+     * 热更新的缓存Key
+     */
+    public String redisCacheKey = "arthasIdeaPluginRedefineCacheKey";
+
+    /**
+     * 缓存过期时间
+     */
+    public Integer redisCacheKeyTtl = 60 * 60 * 2;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
+        // 检测全局的static spring context
+        checkGlobalStaticSpringContextAndSettingCurrentProjectIfEmpty(appSettingsState);
+
+        // 检测 全局的阿里云oss
+        checkGlobalAliyunOssAndSettingCurrentProjectIfEmpty(appSettingsState);
+
+        // 检测全局的redis 配置
+        checkGlobalRedisAndSettingCurrentProjectIfEmpty(appSettingsState);
+        return appSettingsState;
+    }
+
+    /**
+     * 检测全局配置中是否有redis，且当前 oss 没有配置  【优先级 阿里云oss > redis > console 】
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalRedisAndSettingCurrentProjectIfEmpty(AppSettingsState appSettingsState) {
+        String redisAddress = PropertiesComponentUtils.getValue("redisAddress");
+        String redisPort = PropertiesComponentUtils.getValue("redisPort");
+        String redisAuth = PropertiesComponentUtils.getValue("redisAuth");
+        String redisCacheKey = PropertiesComponentUtils.getValue("redisCacheKey");
+        String redisCacheKeyTtl = PropertiesComponentUtils.getValue("redisCacheKeyTtl");
+        if (!appSettingsState.aliYunOss
+                && !appSettingsState.hotRedefineRedis
+                && (StringUtils.isBlank(appSettingsState.redisAddress)
+                || "127.0.0.1".equals(appSettingsState.redisAddress)
+                || "localhost".equals(appSettingsState.redisAddress))) {
+            appSettingsState.aliYunOss = true;
+            appSettingsState.redisAddress = redisAddress;
+            if (NumberUtils.isDigits(redisPort)) {
+                appSettingsState.redisPort = Integer.parseInt(redisPort);
+            }
+            appSettingsState.redisAuth = redisAuth;
+            appSettingsState.redisCacheKey = redisCacheKey;
+            if (NumberUtils.isDigits(redisPort)) {
+                appSettingsState.redisCacheKeyTtl = Integer.parseInt(redisCacheKeyTtl);
+            }
+            appSettingsState.hotRedefineRedis = true;
+        }
+
+    }
+
+
+    /**
+     * 检测全局是否配置static spring context  如果当前工程为空配置
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalStaticSpringContextAndSettingCurrentProjectIfEmpty(AppSettingsState appSettingsState) {
         // 配置检查.. 兼容老版本
         if (appSettingsState.staticSpringContextOgnl.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING) || StringUtils.isBlank(appSettingsState.staticSpringContextOgnl)) {
             String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
@@ -140,7 +220,14 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
             }
 
         }
+    }
 
+    /**
+     * 检查全局是否有配置阿里云oss 如果存在且当前工程没有配置 带入配置
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalAliyunOssAndSettingCurrentProjectIfEmpty(AppSettingsState appSettingsState) {
         String endPoint1 = PropertiesComponentUtils.getValue("endpoint");
         String bucketName1 = PropertiesComponentUtils.getValue("bucketName");
         String accessKeyId1 = PropertiesComponentUtils.getValue("accessKeyId");
@@ -155,14 +242,15 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
                 && StringUtils.isNotBlank(endPoint1)
                 && StringUtils.isNotBlank(accessKeyId1)
                 && StringUtils.isNotBlank(accessKeySecret1)) {
-            appSettingsState.aliYunOss = true;
+            if (!appSettingsState.hotRedefineRedis) {
+                appSettingsState.aliYunOss = true;
+            }
             appSettingsState.endpoint = endPoint1;
             appSettingsState.accessKeyId = accessKeyId1;
             appSettingsState.bucketName = bucketName1;
             appSettingsState.accessKeySecret = accessKeySecret1;
             appSettingsState.directoryPrefix = directoryPrefix1;
         }
-        return appSettingsState;
     }
 
     @Nullable

@@ -15,5 +15,6 @@
     <orderEntry type="library" name="org.apache.commons:commons-text:1.9" level="project" />
     <orderEntry type="library" name="com.google.guava:guava:23.0" level="project" />
     <orderEntry type="library" name="commons-collections:commons-collections:3.2.2" level="project" />
+    <orderEntry type="library" name="redis.clients:jedis:3.4.1" level="project" />
   </component>
 </module>

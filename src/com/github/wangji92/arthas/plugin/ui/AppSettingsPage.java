@@ -3,10 +3,7 @@ package com.github.wangji92.arthas.plugin.ui;
 import com.aliyun.oss.OSS;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
-import com.github.wangji92.arthas.plugin.utils.AliyunOssUtils;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
-import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.notification.NotificationType;
@@ -17,9 +14,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.ui.components.labels.LinkLabel;
-import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
+import redis.clients.jedis.Jedis;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
@@ -151,6 +148,39 @@ public class AppSettingsPage implements Configurable {
     private JRadioButton manualSelectPidRadioButton;
     private JRadioButton preConfigurationSelectPidRadioButton;
     private JPanel preConfigurationSelectPidPanel;
+    /**
+     * redis 选择 按钮
+     */
+    private JRadioButton redisRadioButton;
+    private JPanel redisSettingPane;
+    /**
+     * redis 地址
+     */
+    private JTextField redisAddressTextField;
+    /**
+     * redis 端口
+     */
+    private JSpinner redisPortField;
+    /**
+     * redis 密码
+     */
+    private JPasswordField redisPasswordField;
+    /**
+     * redis 检测 button
+     */
+    private JButton redisCheckConfigButton;
+    /**
+     * 错误信息
+     */
+    private JLabel redisMessageLabel;
+    /**
+     * cache key
+     */
+    private JTextField redisCacheKeyTextField;
+    /**
+     * cache key ttl
+     */
+    private JSpinner redisCacheKeyTtl;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -253,6 +283,7 @@ public class AppSettingsPage implements Configurable {
                 || ossGlobalSettingRadioButton.isSelected() != settings.ossGlobalSetting
                 || springContextGlobalSettingRadioButton.isSelected() != settings.springContextGlobalSetting
                 || aliYunOssRadioButton.isSelected() != settings.aliYunOss
+                || redisRadioButton.isSelected() != settings.hotRedefineRedis
                 || hotRedefineDeleteFileRadioButton.isSelected() != settings.hotRedefineDelete
                 || redefineBeforeCompileRadioButton.isSelected() != settings.redefineBeforeCompile
                 || printConditionExpressRadioButton.isSelected() != settings.printConditionExpress
@@ -267,6 +298,14 @@ public class AppSettingsPage implements Configurable {
                     || !settings.accessKeySecret.equals(String.valueOf(ossAccessKeySecretPasswordField.getPassword()))
                     || !settings.bucketName.equals(ossBucketNameTextField.getText())
                     || !settings.directoryPrefix.equals(ossDirectoryPrefixTextField.getText());
+        }
+
+        if (redisRadioButton.isSelected()) {
+            modify = !settings.redisAddress.equals(redisAddressTextField.getText())
+                    || !settings.redisPort.equals((redisPortField.getValue()))
+                    || !settings.redisAuth.equals(String.valueOf(redisPasswordField.getPassword()))
+                    || !settings.redisCacheKey.equals(redisCacheKeyTextField.getText())
+                    || !settings.redisCacheKeyTtl.equals(redisCacheKeyTtl.getValue());
         }
         return modify;
     }
@@ -286,25 +325,7 @@ public class AppSettingsPage implements Configurable {
      */
     private void saveSettings() {
         StringBuilder error = new StringBuilder();
-        String staticOgnlExpressionTextFiledText = springContextStaticOgnlExpressionTextFiled.getText();
-        if (StringUtils.isBlank(staticOgnlExpressionTextFiledText) || !staticOgnlExpressionTextFiledText.contains("@")) {
-            error.append("配置静态spring context 错误");
-        } else {
-            if (!springContextStaticOgnlExpressionTextFiled.getText().equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
-                String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
-                // 有一个地方设置 默认设置为全局的！
-                if (StringUtils.isBlank(springContextValue) || springContextValue.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
-                    PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, springContextStaticOgnlExpressionTextFiled.getText());
-                }
-            }
-            settings.staticSpringContextOgnl = springContextStaticOgnlExpressionTextFiled.getText();
-            settings.springContextGlobalSetting = springContextGlobalSettingRadioButton.isSelected();
-            //全局设置
-            if (springContextGlobalSettingRadioButton.isSelected()) {
-                PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, springContextStaticOgnlExpressionTextFiled.getText());
-            }
-
-        }
+        this.saveStaticSpringContext(error);
         if (((int) invokeCountField.getValue()) <= 0) {
             error.append("invokeCountField <= 0 ");
         } else {
@@ -328,47 +349,116 @@ public class AppSettingsPage implements Configurable {
         settings.traceSkipJdk = traceSkipJdkRadio.isSelected();
         settings.conditionExpressDisplay = conditionExpressDisplayRadio.isSelected();
         settings.selectProjectName = selectProjectNameTextField.getText();
-        settings.manualSelectPid =  manualSelectPidRadioButton.isSelected();
+        settings.manualSelectPid = manualSelectPidRadioButton.isSelected();
         settings.hotRedefineDelete = hotRedefineDeleteFileRadioButton.isSelected();
         settings.redefineBeforeCompile = redefineBeforeCompileRadioButton.isSelected();
         settings.printConditionExpress = printConditionExpressRadioButton.isSelected();
         if (clipboardRadioButton.isSelected()) {
             settings.aliYunOss = false;
-        } else {
-            OSS oss = null;
-            try {
-                oss = AliyunOssUtils.buildOssClient(ossEndpointTextField.getText(), String.valueOf(ossAccessKeyIdPasswordField.getPassword()), String.valueOf(ossAccessKeySecretPasswordField.getPassword()), ossBucketNameTextField.getText(), ossDirectoryPrefixTextField.getText());
-                AliyunOssUtils.checkBuckNameExist(ossBucketNameTextField.getText(), oss);
-                settings.endpoint = ossEndpointTextField.getText();
-                settings.accessKeyId = String.valueOf(ossAccessKeyIdPasswordField.getPassword());
-                settings.accessKeySecret = String.valueOf(ossAccessKeySecretPasswordField.getPassword());
-                settings.bucketName = ossBucketNameTextField.getText();
-                settings.directoryPrefix = ossDirectoryPrefixTextField.getText();
-                settings.aliYunOss = true;
-                settings.ossGlobalSetting = ossGlobalSettingRadioButton.isSelected();
-                if (ossGlobalSettingRadioButton.isSelected()) {
-                    PropertiesComponentUtils.setValue("endpoint", settings.endpoint);
-                    PropertiesComponentUtils.setValue("accessKeyId", settings.accessKeyId);
-                    PropertiesComponentUtils.setValue("accessKeySecret", settings.accessKeySecret);
-                    PropertiesComponentUtils.setValue("bucketName", settings.bucketName);
-                    PropertiesComponentUtils.setValue("directoryPrefix", settings.directoryPrefix);
-                }
-                oss.shutdown();
-            } catch (Exception e) {
-                StackTraceUtils.printSanitizedStackTrace(e);
-                error.append(e.getMessage());
-            } finally {
-                if (oss != null) {
-                    oss.shutdown();
-                }
-            }
+            settings.hotRedefineRedis = false;
+        } else if (aliYunOssRadioButton.isSelected()) {
+            this.saveAliyunOssConfig(error);
+        } else if (redisRadioButton.isSelected()) {
+            this.saveRedisConfig(error);
         }
-
 
         if (StringUtils.isNotBlank(error)) {
             NotifyUtils.notifyMessage(project, error.toString(), NotificationType.ERROR);
         }
 
+    }
+
+    /**
+     * 保存spring static 配置信息
+     *
+     * @param error
+     */
+    private void saveStaticSpringContext(StringBuilder error) {
+        String staticOgnlExpressionTextFiledText = springContextStaticOgnlExpressionTextFiled.getText();
+        if (StringUtils.isBlank(staticOgnlExpressionTextFiledText) || !staticOgnlExpressionTextFiledText.contains("@")) {
+            error.append("配置静态spring context 错误");
+        } else {
+            if (!springContextStaticOgnlExpressionTextFiled.getText().equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
+                String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
+                // 有一个地方设置 默认设置为全局的！
+                if (StringUtils.isBlank(springContextValue) || springContextValue.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
+                    PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, springContextStaticOgnlExpressionTextFiled.getText());
+                }
+            }
+            settings.staticSpringContextOgnl = springContextStaticOgnlExpressionTextFiled.getText();
+            settings.springContextGlobalSetting = springContextGlobalSettingRadioButton.isSelected();
+            //全局设置
+            if (springContextGlobalSettingRadioButton.isSelected()) {
+                PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, springContextStaticOgnlExpressionTextFiled.getText());
+            }
+
+        }
+    }
+
+    /**
+     * 保存redis的配置信息
+     *
+     * @param error
+     */
+    private void saveRedisConfig(StringBuilder error) {
+        if (((int) redisCacheKeyTtl.getValue()) <= 0) {
+            error.append("redisCacheKeyTtl <= 0 ");
+        } else {
+            settings.redisCacheKeyTtl = (Integer) redisCacheKeyTtl.getValue();
+        }
+        if (StringUtils.isBlank(redisCacheKeyTextField.getText())) {
+            settings.redisCacheKey = "arthasIdeaPluginRedefineCacheKey";
+        }
+        try (Jedis jedis = JedisUtils.buildJedisClient(redisAddressTextField.getText(), (Integer) redisPortField.getValue(), 5000, String.valueOf(redisPasswordField.getPassword()));) {
+            JedisUtils.checkRedisClient(jedis);
+            settings.redisAddress = redisAddressTextField.getText();
+            settings.redisPort = (Integer) redisPortField.getValue();
+            settings.redisAuth = String.valueOf(redisPasswordField.getPassword());
+            settings.hotRedefineRedis = true;
+            settings.aliYunOss = false;
+            PropertiesComponentUtils.setValue("redisAddress", settings.redisAddress);
+            PropertiesComponentUtils.setValue("redisPort", "" + settings.redisPort);
+            PropertiesComponentUtils.setValue("redisAuth", settings.redisAuth);
+            PropertiesComponentUtils.setValue("redisCacheKey", settings.redisCacheKey);
+            PropertiesComponentUtils.setValue("redisCacheKeyTtl", "" + settings.redisCacheKeyTtl);
+        } catch (Exception ex) {
+            error.append(ex.getMessage());
+        }
+    }
+
+    /**
+     * 保存 阿里云oss的配置
+     *
+     * @param error
+     */
+    private void saveAliyunOssConfig(StringBuilder error) {
+        OSS oss = null;
+        try {
+            oss = AliyunOssUtils.buildOssClient(ossEndpointTextField.getText(), String.valueOf(ossAccessKeyIdPasswordField.getPassword()), String.valueOf(ossAccessKeySecretPasswordField.getPassword()), ossBucketNameTextField.getText(), ossDirectoryPrefixTextField.getText());
+            AliyunOssUtils.checkBuckNameExist(ossBucketNameTextField.getText(), oss);
+            settings.endpoint = ossEndpointTextField.getText();
+            settings.accessKeyId = String.valueOf(ossAccessKeyIdPasswordField.getPassword());
+            settings.accessKeySecret = String.valueOf(ossAccessKeySecretPasswordField.getPassword());
+            settings.bucketName = ossBucketNameTextField.getText();
+            settings.directoryPrefix = ossDirectoryPrefixTextField.getText();
+            settings.aliYunOss = true;
+            settings.hotRedefineRedis = false;
+            settings.ossGlobalSetting = ossGlobalSettingRadioButton.isSelected();
+            if (ossGlobalSettingRadioButton.isSelected()) {
+                PropertiesComponentUtils.setValue("endpoint", settings.endpoint);
+                PropertiesComponentUtils.setValue("accessKeyId", settings.accessKeyId);
+                PropertiesComponentUtils.setValue("accessKeySecret", settings.accessKeySecret);
+                PropertiesComponentUtils.setValue("bucketName", settings.bucketName);
+                PropertiesComponentUtils.setValue("directoryPrefix", settings.directoryPrefix);
+            }
+            oss.shutdown();
+        } catch (Exception e) {
+            error.append(e.getMessage());
+        } finally {
+            if (oss != null) {
+                oss.shutdown();
+            }
+        }
     }
 
     /**
@@ -392,14 +482,27 @@ public class AppSettingsPage implements Configurable {
         ossAccessKeySecretPasswordField.setText(settings.accessKeySecret);
         ossBucketNameTextField.setText(settings.bucketName);
         ossDirectoryPrefixTextField.setText(settings.directoryPrefix);
+        redisAddressTextField.setText(settings.redisAddress);
+        redisPortField.setValue(settings.redisPort);
+        redisPasswordField.setText(settings.redisAuth);
+        redisCacheKeyTtl.setValue(settings.redisCacheKeyTtl);
+        redisCacheKeyTextField.setText(settings.redisCacheKey);
+
         if (settings.aliYunOss) {
+            // 阿里云oss
             aliYunOssRadioButton.setSelected(true);
-            clipboardRadioButton.setSelected(false);
+            redisSettingPane.setVisible(false);
             aliyunOssSettingPane.setVisible(true);
-        } else {
-            clipboardRadioButton.setSelected(true);
-            aliYunOssRadioButton.setSelected(false);
+        } else if (settings.hotRedefineRedis) {
+            // redis
             aliyunOssSettingPane.setVisible(false);
+            redisRadioButton.setSelected(true);
+            redisSettingPane.setVisible(true);
+        } else {
+            // 剪切板
+            clipboardRadioButton.setSelected(true);
+            aliyunOssSettingPane.setVisible(false);
+            redisSettingPane.setVisible(false);
         }
         if (settings.manualSelectPid) {
             preConfigurationSelectPidPanel.setVisible(false);
@@ -415,7 +518,7 @@ public class AppSettingsPage implements Configurable {
         initEvent();
     }
 
-    void initEvent() {
+    private void initEvent() {
         ossCheckMsgLabel.setText("");
         ossCheckMsgLabel.setForeground(JBColor.BLACK);
         ossSettingCheckButton.addActionListener(e -> {
@@ -436,21 +539,39 @@ public class AppSettingsPage implements Configurable {
             }
         });
 
-        ItemListener itemListener = e -> {
-            if (e.getSource().equals(aliYunOssRadioButton) && e.getStateChange() == ItemEvent.SELECTED || e.getSource().equals(clipboardRadioButton) && e.getStateChange() == ItemEvent.DESELECTED) {
-                aliyunOssSettingPane.setVisible(true);
-                clipboardRadioButton.setSelected(false);
-                aliYunOssRadioButton.setSelected(true);
-                ossCheckMsgLabel.setText("");
-            } else if (e.getSource().equals(clipboardRadioButton) && e.getStateChange() == ItemEvent.SELECTED || e.getSource().equals(aliYunOssRadioButton) && e.getStateChange() == ItemEvent.DESELECTED) {
-                aliyunOssSettingPane.setVisible(false);
-                aliYunOssRadioButton.setSelected(false);
-                clipboardRadioButton.setSelected(true);
-                ossCheckMsgLabel.setText("");
+        redisCheckConfigButton.addActionListener(e -> {
+            try (Jedis jedis = JedisUtils.buildJedisClient(redisAddressTextField.getText(), (Integer) redisPortField.getValue(), 5000, String.valueOf(redisPasswordField.getPassword()));) {
+                JedisUtils.checkRedisClient(jedis);
+                redisMessageLabel.setText("redis setting check success");
+                redisMessageLabel.setForeground(JBColor.BLACK);
+            } catch (Exception ex) {
+                redisMessageLabel.setText(ex.getMessage());
+                redisMessageLabel.setForeground(JBColor.RED);
             }
+        });
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(aliYunOssRadioButton);
+        group.add(clipboardRadioButton);
+        group.add(redisRadioButton);
+        ItemListener itemListener = e -> {
+            if (e.getSource().equals(aliYunOssRadioButton) && e.getStateChange() == ItemEvent.SELECTED) {
+                aliyunOssSettingPane.setVisible(true);
+                redisSettingPane.setVisible(false);
+            } else if (e.getSource().equals(clipboardRadioButton) && e.getStateChange() == ItemEvent.SELECTED) {
+                aliyunOssSettingPane.setVisible(false);
+                redisSettingPane.setVisible(false);
+
+            } else if (e.getSource().equals(redisRadioButton) && e.getStateChange() == ItemEvent.SELECTED) {
+                aliyunOssSettingPane.setVisible(false);
+                redisSettingPane.setVisible(true);
+            }
+            ossCheckMsgLabel.setText("");
+            redisMessageLabel.setText("");
         };
         aliYunOssRadioButton.addItemListener(itemListener);
         clipboardRadioButton.addItemListener(itemListener);
+        redisRadioButton.addItemListener(itemListener);
 
         // 设置是否手动选择pid
         ItemListener itemListenerSelectPid = e -> {
