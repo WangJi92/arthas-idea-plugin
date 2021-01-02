@@ -1,7 +1,6 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.ui.ArthasOptionsDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -10,12 +9,12 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *[jvm 命令](https://arthas.aliyun.com/doc/jvm.html)
+ * options 命令
+ *
  * @author 汪小哥
- * @date 20-06-2020
+ * @date 01-01-2021
  */
-public class ArthasJvmCommandAction extends AnAction {
-
+public class ArthasOptionsCommandAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         DataContext dataContext = event.getDataContext();
@@ -23,7 +22,6 @@ public class ArthasJvmCommandAction extends AnAction {
         if (project == null) {
             return;
         }
-        ClipboardUtils.setClipboardString("jvm");
-        NotifyUtils.notifyMessage(project, "查看当前JVM信息,命令已复制到剪切板");
+        new ArthasOptionsDialog(project).open();
     }
 }

@@ -448,6 +448,11 @@
                 description="LocalFileUploadToOssAction">
         </action>
 
+        <action id="ArthasOptionsCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOptionsCommandAction"
+                text="Global Options Setting"
+                description="Global options setting"/>
+
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
             <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
@@ -457,6 +462,7 @@
             <reference ref="ArthasSmCommandAction"/>
             <reference ref="ArthasLoggerCommandAction"/>
             <reference ref="ArthasAsyncProfilerCommandAction"/>
+            <reference ref="ArthasOptionsCommandAction"/>
             <separator/>
             <group id="arthas-plugin-other-ChangesViewPopupMenu" popup="true" text="Other">
                 <reference ref="ArthasDashboardCommandAction"/>
@@ -508,6 +514,7 @@
             <reference ref="ArthasSmCommandAction"/>
             <reference ref="ArthasLoggerCommandAction"/>
             <reference ref="ArthasAsyncProfilerCommandAction"/>
+            <reference ref="ArthasOptionsCommandAction"/>
             <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
                 <reference ref="ArthasDashboardCommandAction"/>

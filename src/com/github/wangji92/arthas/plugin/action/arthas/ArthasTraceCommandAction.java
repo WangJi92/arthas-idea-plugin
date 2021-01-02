@@ -24,7 +24,7 @@ public class ArthasTraceCommandAction extends BaseArthasPluginAction {
         String printConditionExpress = instance.printConditionExpress ? "-v" : "";
         String command = String.join(" ", "trace", className, methodName, printConditionExpress, "-n", invokeCount, skpJdkMethodCommand, conditionExpressDisplay);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) 更多搜索 [arthas 入门最佳实践] --skipJDKMethod 不跳过JDK 函数");
+        NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) 更多搜索 [arthas 入门最佳实践] --skipJDKMethod 不跳过JDK 函数,命令已复制到剪切板");
 
     }
 }
