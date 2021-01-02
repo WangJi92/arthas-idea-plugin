@@ -26,6 +26,6 @@ public class ArthasJadCommandAction extends BaseArthasPluginAction {
         }
         String command = String.join(" ", "jad --source-only", className, methodName);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project,"反编译目标方法或者类的代码，线上一致性检查非常方便");
+        NotifyUtils.notifyMessage(project,"反编译目标方法或者类的代码，线上一致性检查非常方便,命令已复制到剪切板");
     }
 }
