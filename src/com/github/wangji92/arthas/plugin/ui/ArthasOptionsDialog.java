@@ -57,7 +57,7 @@ public class ArthasOptionsDialog extends JDialog {
         optionsButton.addActionListener(new OptionActionListener("options", project, "获取全局配置"));
         optionUnsafeButton.addActionListener(new OptionActionListener("options unsafe true", project, "支持对系统级别的类进行增强，打开该开关可能导致把JVM搞挂，请慎重选择！"));
         optionDumpButton.addActionListener(new OptionActionListener("options dump true", project, "trace、watch等增强class动作增强class会被dump到具体目录"));
-        optionJsonButton.addActionListener(new OptionActionListener("options json true", project, "观察表达式返回值以json输出"));
+        optionJsonButton.addActionListener(new OptionActionListener("options json-format true", project, "观察表达式返回值以json输出"));
         optionSaveResultButton.addActionListener(new OptionActionListener("options save-result true", project, "观察表达式返回的结果保存到具体文件 ~/logs/arthas-cache/result.log"));
     }
 

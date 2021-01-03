@@ -51,7 +51,7 @@
       <ul>
        <li>windows 环境热更新含有内部类匿名类信息收集异常 <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/23">bug #23</a></li>
        <li>热更新支持redis 缓存，方便没有阿里云Oss的开发者,服务器环境需要 redis cli 在环境变量中 <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/25">Redis存储</a></li>
-       <li>支持options常见的命令 options dump【trace、watch等增强class动作增强class会被dump到具体目录】、unsafe【支持对系统级别的类进行增强，打开该开关可能导致把JVM搞挂】、json【观察表达式返回值以json输出】、save-result【观察表达式返回的结果保存到具体文件】</li>
+       <li>支持options常见的命令 options dump【trace、watch等增强class动作增强class会被dump到具体目录】、unsafe【支持对系统级别的类进行增强，打开该开关可能导致把JVM搞挂】、json-format【观察表达式返回值以json输出】、save-result【观察表达式返回的结果保存到具体文件】</li>
       </ul>
     <p>2.22-RELEASE</p>
       <ul>
