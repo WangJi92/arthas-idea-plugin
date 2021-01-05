@@ -354,6 +354,7 @@ public class AppSettingsPage implements Configurable {
         settings.redefineBeforeCompile = redefineBeforeCompileRadioButton.isSelected();
         settings.printConditionExpress = printConditionExpressRadioButton.isSelected();
         if (clipboardRadioButton.isSelected()) {
+            settings.hotRedefineClipboard = true;
             settings.aliYunOss = false;
             settings.hotRedefineRedis = false;
         } else if (aliYunOssRadioButton.isSelected()) {
