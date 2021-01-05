@@ -4,7 +4,13 @@ import com.aliyun.oss.OSS;
 import com.github.wangji92.arthas.plugin.common.exception.CompilerFileNotFoundException;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
-import com.github.wangji92.arthas.plugin.utils.*;
+import com.github.wangji92.arthas.plugin.utils.AliyunOssUtils;
+import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
+import com.github.wangji92.arthas.plugin.utils.IoUtils;
+import com.github.wangji92.arthas.plugin.utils.JedisUtils;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.BaseEncoding;
@@ -39,7 +45,11 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Jedis;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -285,7 +295,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行，无需打开arthas。【目标服务器服务器环境需要有 redis cli 命令】");
         } catch (Exception e) {
             LOG.error("record arthas hot redefine upload to redis error", e);
-            NotifyUtils.notifyMessage(project, "上传命令到redis 失败" + e.getMessage(), NotificationType.ERROR);
+            NotifyUtils.notifyMessage(project, "上传文件到redis 失败" + e.getMessage(), NotificationType.ERROR);
         }
     }
 
@@ -310,7 +320,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         } catch (Exception e) {
             LOG.error("record arthas hot redefine upload to oss error", e);
             StackTraceUtils.printSanitizedStackTrace(e);
-            NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage(), NotificationType.ERROR);
+            NotifyUtils.notifyMessage(project, "上传文件到oss 失败" + e.getMessage(), NotificationType.ERROR);
         } finally {
             if (oss != null) {
                 oss.shutdown();
