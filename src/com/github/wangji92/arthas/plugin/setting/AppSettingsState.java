@@ -134,6 +134,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean hotRedefineRedis = false;
 
     /**
+     * 剪切板
+     */
+    public boolean hotRedefineClipboard = false;
+
+    /**
      * redis 的链接地址
      */
     public String redisAddress = "127.0.0.1";
@@ -188,7 +193,6 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
                 && (StringUtils.isBlank(appSettingsState.redisAddress)
                 || "127.0.0.1".equals(appSettingsState.redisAddress)
                 || "localhost".equals(appSettingsState.redisAddress))) {
-            appSettingsState.aliYunOss = true;
             appSettingsState.redisAddress = redisAddress;
             if (NumberUtils.isDigits(redisPort)) {
                 appSettingsState.redisPort = Integer.parseInt(redisPort);
@@ -198,7 +202,10 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
             if (NumberUtils.isDigits(redisPort)) {
                 appSettingsState.redisCacheKeyTtl = Integer.parseInt(redisCacheKeyTtl);
             }
-            appSettingsState.hotRedefineRedis = true;
+
+            if (!appSettingsState.aliYunOss && !appSettingsState.hotRedefineClipboard) {
+                appSettingsState.hotRedefineRedis = true;
+            }
         }
 
     }
@@ -242,7 +249,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
                 && StringUtils.isNotBlank(endPoint1)
                 && StringUtils.isNotBlank(accessKeyId1)
                 && StringUtils.isNotBlank(accessKeySecret1)) {
-            if (!appSettingsState.hotRedefineRedis) {
+            if (!appSettingsState.hotRedefineRedis && !appSettingsState.hotRedefineClipboard) {
                 appSettingsState.aliYunOss = true;
             }
             appSettingsState.endpoint = endPoint1;
