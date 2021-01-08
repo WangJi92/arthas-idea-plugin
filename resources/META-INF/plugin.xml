@@ -44,7 +44,7 @@
     <change-notes><![CDATA[
     <p>2.25-RELEASE</p>
       <ul>
-        <li><a href="https://github.com/WangJi92/arthas-idea-plugin/issues/29">Support Watch/trace constructor method</a>< </li>
+        <li><a href="https://github.com/WangJi92/arthas-idea-plugin/issues/29">Support Watch/trace constructor method</a></li>
       </ul>
     <p>2.23~24-RELEASE</p>
       <ul>
