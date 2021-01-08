@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.23</version>
+    <version>2.25</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,7 +42,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
-    <p>2.23-RELEASE</p>
+    <p>2.25-RELEASE</p>
+      <ul>
+        <li><a href="https://github.com/WangJi92/arthas-idea-plugin/issues/29">Support Watch/trace constructor method</a>< </li>
+      </ul>
+    <p>2.23~24-RELEASE</p>
       <ul>
         <li>Fix bug Hot Redefine in windows have inner or anonymous class <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/23">bug #23</a></li>
         <li>Hot Redefine Support <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/25">Redis Storage</a></li>
