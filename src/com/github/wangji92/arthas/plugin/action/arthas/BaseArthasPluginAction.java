@@ -77,6 +77,9 @@ public abstract class BaseArthasPluginAction extends AnAction {
                 //处理内部类 匿名类获取class的问题
                 className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
                 methodName = psiMethod.getNameIdentifier().getText();
+                if(psiMethod.isConstructor()){
+                    methodName ="<init>";
+                }
             }
             if (psiElement instanceof PsiClass) {
                 PsiClass psiClass = (PsiClass) psiElement;
