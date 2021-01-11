@@ -453,8 +453,14 @@
         </action>
         <action id="ArthasHotCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
-                text="(Hot Swap)  Redefine"
+                text="(Hot Swap) Redefine"
                 description="Redefine">
+        </action>
+
+        <action id="ArthasHotRetransformCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
+                text="(Hot Swap) Retransform"
+                description="Retransform">
         </action>
 
         <action id="LocalFileUploadToOssAction"
@@ -471,6 +477,7 @@
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
             <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
+            <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
@@ -523,6 +530,7 @@
             <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
             <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
             <separator/>
+            <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
