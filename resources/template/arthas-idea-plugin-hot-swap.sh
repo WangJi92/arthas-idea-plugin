@@ -188,33 +188,33 @@ decodebase64CLassFile() {
 
 # Usage: doStarteRedefine
 doStarteRedefine() {
-  createFile $HOME/opt/arthas/redefine/redefineArthas.out
-  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --select ${SELECT_VALUE}  -c \"${arthasIdeaPluginRedefineCommand}\"  >$HOME/opt/arthas/redefine/redefineArthas.out"$(tput sgr0)
-  $HOME/opt/arthas/as.sh --select ${SELECT_VALUE} -c "${arthasIdeaPluginRedefineCommand}" >$HOME/opt/arthas/redefine/redefineArthas.out
+  createFile $HOME/opt/arthas/hotSwapResult.out
+  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --select ${SELECT_VALUE}  -c \"${arthasIdeaPluginRedefineCommand}\"  | tee $HOME/opt/arthas/hotSwapResult.out"$(tput sgr0)
+  $HOME/opt/arthas/as.sh --select ${SELECT_VALUE} -c "${arthasIdeaPluginRedefineCommand}" | tee $HOME/opt/arthas/hotSwapResult.out
 }
 
 redefineResult() {
-  cat $HOME/opt/arthas/redefine/redefineArthas.out
-  redefineResult=$(cat $HOME/opt/arthas/redefine/redefineArthas.out | grep "redefine success")
+  cat $HOME/opt/arthas/hotSwapResult.out
+  redefineResult=$(cat $HOME/opt/arthas/hotSwapResult.out | grep -E "retransform success|redefine success")
   if [ -z "$redefineResult" ]; then
     banner_simple $(echo $(tput setaf 1)arthas idea plugin redefine error $(tput sgr0))
   else
-    banner_simple "arthas idea plugin redefine success"
+    banner_simple "arthas idea plugin hot swap class success"
   fi
 }
 
 #delete file
 doClenFile() {
   if [ ! -z "${deleteClassFile}" ]; then
-    rm -rf $HOME/opt/arthas/redefine
-    echo "arthas idea plugin delete class file $HOME/opt/arthas/redefine ok"
+    rm -rf $HOME/opt/arthas/hotSwap
+    echo "arthas idea plugin delete class file $HOME/opt/arthas/hotSwap ok"
   fi
 }
 
 # the main function
 main() {
 
-  banner_simple "arthas idea plugin redefine begin;start script path: $(pwd)/arthas-idea-plugin-redefine.sh"
+  banner_simple "arthas idea plugin hot swap begin;start script path: $(pwd)/arthas-idea-plugin-hot-swap.sh"
 
   check_permission
 
