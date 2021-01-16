@@ -14,7 +14,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationInfo;
-import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -233,7 +232,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                         // Deprecated method ProjectTaskManager.compile(...) is invoked in ArthasHotRedefineCommandAction$1.run(...). This method will be removed in 2020.1
                         if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() <= 201) {
                             //2018.2 编译报错
-                            WriteAction.runAndWait(() -> {
+                            WriteActionCompatibleUtils.runAndWait(() -> {
                                 ProjectTaskManager.getInstance(project).compile(virtualFileFiles, projectTaskResult -> {
                                     if (projectTaskResult.getErrors() > 0) {
                                         NotifyUtils.notifyMessage(project, "Java文件编译编译错误 请处理。(最好热更新之前确保最少编译好一次整个工程)这里只会局部编译当前文件", NotificationType.ERROR);
@@ -244,22 +243,22 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                                         NotifyUtils.notifyMessage(project, "任务已经取消");
                                         return;
                                     }
-                                    WriteAction.runAndWait(runnable::run);
+                                    WriteActionCompatibleUtils.runAndWait(runnable::run);
                                 });
                             });
 
                         } else {
-                            WriteAction.runAndWait(() -> {
+                            WriteActionCompatibleUtils.runAndWait(() -> {
                                 ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
 
                                 Object promise = MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
                                 MethodUtils.invokeMethod(promise, "onSuccess", (Consumer) o -> {
-                                    WriteAction.runAndWait(runnable::run);
+                                    WriteActionCompatibleUtils.runAndWait(runnable::run);
                                 });
                             });
                         }
                     } else {
-                        WriteAction.runAndWait(runnable::run);
+                        WriteActionCompatibleUtils.runAndWait(runnable::run);
 
                     }
 
@@ -267,7 +266,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                     LOG.error("record arthas hot swap error", e);
                     NotifyUtils.notifyMessage(project, "热更新未知错误", NotificationType.ERROR);
                     try {
-                        WriteAction.runAndWait(runnable::run);
+                        WriteActionCompatibleUtils.runAndWait(runnable::run);
                     } catch (Exception ex) {
                         LOG.error("record arthas hot swap try again error", ex);
                         NotifyUtils.notifyMessage(project, "热更新未知错误", NotificationType.ERROR);
