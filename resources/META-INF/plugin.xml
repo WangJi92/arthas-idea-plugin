@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.25</version>
+    <version>2.26</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.26-RELEASE</p>
+      <ul>
+        <li><a href="https://www.yuque.com/wangji-yunque/ikhsmq/lyevb2">Support Hot Swap Retransform Command</a></li>
+        <li>Compatible with low version 2016+ idea jetbrains</li>
+      </ul>
     <p>2.25-RELEASE</p>
       <ul>
         <li><a href="https://github.com/WangJi92/arthas-idea-plugin/issues/29">Support Watch/trace constructor method</a></li>
@@ -245,7 +250,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="182"/>
+    <idea-version since-build="162"/>
 
     <extensions defaultExtensionNs="com.intellij">
         // parentId = "tools"
@@ -453,8 +458,14 @@
         </action>
         <action id="ArthasHotCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
-                text="(Hot Swap)  Redefine"
+                text="(Hot Swap) Redefine"
                 description="Redefine">
+        </action>
+
+        <action id="ArthasHotRetransformCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
+                text="(Hot Swap) Retransform"
+                description="Retransform">
         </action>
 
         <action id="LocalFileUploadToOssAction"
@@ -471,6 +482,7 @@
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
             <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
+            <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
@@ -523,6 +535,7 @@
             <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
             <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
             <separator/>
+            <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
