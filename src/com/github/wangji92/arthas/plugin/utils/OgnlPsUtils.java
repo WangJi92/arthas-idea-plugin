@@ -213,11 +213,11 @@ public class OgnlPsUtils {
         }
 
         //基本类型  数字
-        if (PsiType.INT.equals(psiType) || canonicalText.equals("java.lang.Integer")
+        if (PsiType.INT.equals(psiType) || "java.lang.Integer".equals(canonicalText)
                 ||
-                PsiType.BYTE.equals(psiType) || canonicalText.equals("java.lang.Byte")
+                PsiType.BYTE.equals(psiType) || "java.lang.Byte".equals(canonicalText)
                 ||
-                PsiType.SHORT.equals(psiType) || canonicalText.equals("java.lang.Short")) {
+                PsiType.SHORT.equals(psiType) || "java.lang.Short".equals(canonicalText)) {
             result = "0";
             return result;
         }
@@ -272,7 +272,7 @@ public class OgnlPsUtils {
         }
         //注解上没有获取值，使用默认的名称首字母小写
         if (StringUtils.isBlank(beanName)) {
-            beanName = StringUtils.toLowerFristChar(psiClass.getName());
+            beanName = StringUtils.uncapitalize(psiClass.getName());
         }
         return beanName;
 

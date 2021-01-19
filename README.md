@@ -25,25 +25,20 @@
 
 
 ## 2.1 watch
-![image](https://user-images.githubusercontent.com/20874972/71365531-43464b80-25da-11ea-98bf-de363d8f08c8.png)
 ```bash
-watch StringUtils toLowerFristChar '{params,returnObj,throwExp}' -n 5 -x 3
+watch StringUtils uncapitalize '{params,returnObj,throwExp}' -n 5 -x 3
 ```
 
-<a name="yrbvX"></a>
 ## 2.2 trace 
 
 ```bash
 trace StringUtils toLowerFristChar -n 5
 ```
 
-<a name="M5hj0"></a>
 ## 2.3 static ognl (字段或者方法)
-![image](https://user-images.githubusercontent.com/20874972/71365634-8ef8f500-25da-11ea-90e7-d5e63eec63a5.png)
 
-<a name="qFcTH"></a>
 ### 2.3.1 右键static ognl
-<a name="Mj3eY"></a>
+
 ### 2.3.2 获取classload命令
 必须要获取，不然会找不到classload，arthas 官方获取问题系统的classload，spring 项目应该无法获取到这个class的信息，因此首先执行一下这个命令
 
@@ -51,63 +46,54 @@ trace StringUtils toLowerFristChar -n 5
 sc -d StringUtils
 ```
 
-![image](https://user-images.githubusercontent.com/20874972/71365668-a932d300-25da-11ea-9ed6-49a43e4afbef.png)
-
-<a name="6Q1ae"></a>
 ### 2.3.2 复制到界面，获取命令，执行即可
-![image](https://user-images.githubusercontent.com/20874972/71365687-b94ab280-25da-11ea-9af8-0ae0dd4cde97.png)
-
 
 ```bash
-ognl  -x  3  '@StringUtils@toLowerFristChar(" ")' -c 8bed358
+ognl  -x  3  '@StringUtils@uncapitalize(" ")' -c 8bed358
 ```
 
-<a name="DzhKQ"></a>
 ## 2.4 Invoke Bean Method
- 实际上就是根据当前的spring项目中的获取静态的spring context这样可以直接根据这个context直接获取任何的Bean方法，一般在Java后端服务中都有这样的Utils类，因此这个可以看为一个常量! 可以参考:[http://www.dcalabresi.com/blog/java/spring-context-static-class/](http://www.dcalabresi.com/blog/java/spring-context-static-class/) 有了这个，我们可以跟进一步的进行数据简化，由于在idea这个环节中，可以获取方法参数，spring bean的名称等等，非常的方便。
+ 实际上就是根据当前的spring项目中的获取静态的spring context这样可以直接根据这个context直接获取任何的Bean方法，一般在Java后端服务中都有这样的Utils类，因此这个可以看为一个常量! 可以参考:[arthas idea demo](https://github.com/WangJi92/arthas-plugin-demo/blob/master/src/main/java/com/wangji92/arthas/plugin/demo/common/ApplicationContextProvider.java) 有了这个，我们可以跟进一步的进行数据简化，由于在idea这个环节中，可以获取方法参数，spring bean的名称等等，非常的方便。
 
 ```java
+package com.wangji92.arthas.plugin.demo.common;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
+
+/**
+ * 提供给arthas ognl 获取context的信息
+ *
+ * @author 汪小哥
+ * @date 30-28-2020
+ */
+@Component
 public class ApplicationContextProvider implements ApplicationContextAware {
-    
     private static ApplicationContext context;
- 
+
     public ApplicationContext getApplicationContext() {
         return context;
     }
- 
+
     @Override
     public void setApplicationContext(ApplicationContext ctx) {
         context = ctx;
     }
 }
+
 ```
-<a name="ofj0b"></a>
+
 ### 2.4.1 设置获取spring context的上下文
-> ps 这里可以使用@applicationContextProvider@context 这样，比如还行进行函数调用可以直接使用ognl逗号分割可以继续执行的语法，比如 @applicationContextProvider@context,#springContext.getBean("name").todo() 后续我们需要在界面调用任何的方法都会添加上这句话。
-
-![image](https://user-images.githubusercontent.com/20874972/71365722-ce274600-25da-11ea-9794-9a8db5571141.png)
-
-
-<a name="KuN43"></a>
+ [arthas idea plugin 配置](https://www.yuque.com/wangji-yunque/ikhsmq/ugrc8n)
+ 
 ### 2.4.2 右键点击需要调用的方法
-这里的策略和static ognl 一样的，本质还是ognl的调用。<br />
-![image](https://user-images.githubusercontent.com/20874972/71365745-e1d2ac80-25da-11ea-8e05-34e2f051d172.png)
+这里的策略和static ognl 一样的，本质还是ognl的调用。
 
 ```bash
 ognl  -x  3  '#springContext=@applicationContextProvider@context,#springContext.getBean("arthasInstallCommandAction").actionPerformed(new com.intellij.openapi.actionSystem.AnActionEvent())' -c desw22
 ```
 
-**特别说明** 
-> 太复杂的参数不太适用于对于线上问题的诊断，因此方法参数尽可能的简单，这里有一套规则，因为ognl的语法和Java类似的，在获取到参数的时候会进行默认的参数构造处理。
-> String ——> ""
-> Number、Byte 、Char ——> 0
-> Map ——> #{"":" "}  ognl 语法
-> List ——>{}
-> 数组 int[] ——>new int[]{}
-> other ——> new XXXClass() 参数太复杂了默认直接new了一个
-> Special 你的参数可能是从springContext中获取，你可以修改表达式
-> ......,#newParam= #springContext.getBean("beanName").todo(),#springContext.getBean("other").to(#newParam)
-> 这样使用参数定义到你的bash脚本中去，这种属于特殊用法，不具有一般的通用性
 
 #### 特别说明对于ognl 字段类型的处理
 [代码地址 ](https://github.com/WangJi92/arthas-idea-plugin/blob/master/src/com/github/wangji92/arthas/plugin/utils/OgnlPsUtils.java)
@@ -179,8 +165,6 @@ public static String getDefaultString(PsiType psiType) {
     }
 ```
 
-
-<a name="Cybim"></a>
 ## 2.5  install(linux)
 安装脚本，可以一键的通过as.sh 进行执行
 

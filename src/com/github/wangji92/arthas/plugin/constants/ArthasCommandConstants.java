@@ -8,6 +8,8 @@ package com.github.wangji92.arthas.plugin.constants;
  */
 public interface ArthasCommandConstants {
 
+    String AT = "@";
+
     /**
      * arthas 热更新 基础包名称
      */

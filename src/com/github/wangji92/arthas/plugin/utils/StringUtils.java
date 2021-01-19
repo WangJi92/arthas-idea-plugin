@@ -18,7 +18,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @param string
      * @return
      */
-    public static String toLowerFristChar(String string) {
+    public static String uncapitalize(String string) {
         if (Character.isLowerCase(string.charAt(0))) {
             return string;
         } else {

@@ -22,6 +22,8 @@ import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.AT;
+
 /**
  * https://jetbrains.org/intellij/sdk/docs/reference_guide/settings_guide.html 属性配置 参考
  * https://github.com/pwielgolaski/shellcheck-plugin
@@ -376,7 +378,7 @@ public class AppSettingsPage implements Configurable {
      */
     private void saveStaticSpringContext(StringBuilder error) {
         String staticOgnlExpressionTextFiledText = springContextStaticOgnlExpressionTextFiled.getText();
-        if (StringUtils.isBlank(staticOgnlExpressionTextFiledText) || !staticOgnlExpressionTextFiledText.contains("@")) {
+        if (StringUtils.isBlank(staticOgnlExpressionTextFiledText) || !staticOgnlExpressionTextFiledText.contains(AT)) {
             error.append("配置静态spring context 错误");
         } else {
             if (!springContextStaticOgnlExpressionTextFiled.getText().equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.AT;
 import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING;
 
 /**
@@ -221,7 +222,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         if (appSettingsState.staticSpringContextOgnl.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING) || StringUtils.isBlank(appSettingsState.staticSpringContextOgnl)) {
             String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
             // 最早的版本设置过配置的！ 使用那个配置作为当前工程的配置
-            if (StringUtils.isNotBlank(springContextValue) && !ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue) && springContextValue.contains("@")) {
+            if (StringUtils.isNotBlank(springContextValue) && !ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue) && springContextValue.contains(AT)) {
                 appSettingsState.staticSpringContextOgnl = springContextValue;
                 appSettingsState.springContextGlobalSetting = true;
             }
