@@ -197,7 +197,7 @@ redefineResult() {
   cat $HOME/opt/arthas/hotSwapResult.out
   redefineResult=$(cat $HOME/opt/arthas/hotSwapResult.out | grep -E "retransform success|redefine success")
   if [ -z "$redefineResult" ]; then
-    banner_simple $(echo $(tput setaf 1)arthas idea plugin redefine error $(tput sgr0))
+    banner_simple $(echo $(tput setaf 1)arthas idea plugin hot swap error $(tput sgr0))
   else
     banner_simple "arthas idea plugin hot swap class success"
   fi
