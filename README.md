@@ -32,7 +32,7 @@ watch StringUtils uncapitalize '{params,returnObj,throwExp}' -n 5 -x 3
 ## 2.2 trace 
 
 ```bash
-trace StringUtils toLowerFristChar -n 5
+trace StringUtils uncapitalize -n 5
 ```
 
 ## 2.3 static ognl (字段或者方法)
