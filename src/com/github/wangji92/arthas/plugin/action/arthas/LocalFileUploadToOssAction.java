@@ -78,7 +78,7 @@ public class LocalFileUploadToOssAction extends AnAction {
                 oss = AliyunOssUtils.buildOssClient(project);
                 String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
                 String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, selectVirtualFile.getInputStream());
-                String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
+                String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 24*365*3600L * 1000));
                 String command = String.format(OSS_UP_LOAD_FILE, presignedUrl, selectVirtualFile.getName());
                 ClipboardUtils.setClipboardString(command);
                 NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行下载文件");

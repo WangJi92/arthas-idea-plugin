@@ -3,6 +3,9 @@
 TARGET_PID=
 SELECT_VALUE=${arthasIdeaPluginApplicationName}
 
+#arthas package zip download url = https://arthas.aliyun.com/download/latest_version?mirror=aliyun
+ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL="${arthasPackageZipDownloadUrl}"
+
 # SYNOPSIS
 #   rreadlink <fileOrDirPath>
 # DESCRIPTION
@@ -123,6 +126,9 @@ select_pid() {
       echo "  [$index]: ${process}"
     fi
   done
+  echo " "
+  echo "$(echo $(tput setaf 1) 请手动选择进程或者idea 预先配置jps -l 工程名称自动执行$(tput sgr0))"
+  echo " "
 
   read choice
 
@@ -168,10 +174,19 @@ installArthas() {
     mkdir -p $HOME/opt/arthas || return 1
   fi
   # download arthas
-  if [ ! -f "$HOME/opt/arthas/as.sh" ]; then
-    banner_simple "arthas idea plugin download arthas $HOME/opt/arthas/as.sh"
-    curl -Lk https://arthas.aliyun.com/as.sh -o $HOME/opt/arthas/as.sh || return 1
-    chmod +x $HOME/opt/arthas/as.sh || return 1
+
+  if [ ! -f "$HOME/opt/arthas/arthas-agent.jar" ]; then
+    # 这里选择判断是否下载zip 包 没有使用 arthas-packaging-latest-version-bin.zip 这个名词 由于手动上传解压到当前目录名词可能不一致，选择一个中性的判断比较灵活
+    local temp_target_lib_zip="$HOME/opt/arthas/arthas-packaging-latest-version-bin.zip"
+    echo "arthas idea plugin download arthas zip package ${temp_target_lib_zip} download url=${ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL}"
+    echo " "
+    echo "$(echo $(tput setaf 1)如果网络无法访问 https://arthas.aliyun.com/download/latest_version?mirror=aliyun $(tput sgr0))"
+    echo "$(echo $(tput setaf 1)idea设置网络可以访问的arthas 完整zip包的下载地址 或者直接下载解压到服务器 $HOME/opt/arthas 目录 $(tput sgr0))"
+    echo "$(echo $(tput setaf 1)如果配置的是oss 存储,arthas 命令 other分组下面 Local File Upload To Oss命令可以上传文件 有效期1年,配置到arthas zip包地址$(tput sgr0))"
+    echo " "
+    curl  -Lk "${ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL}" -o  "${temp_target_lib_zip}" || retrun 1
+    cd "$HOME/opt/arthas" && unzip -o "${temp_target_lib_zip}"
+    chmod +x "$HOME/opt/arthas/as.sh" || return 1
   fi
 }
 # xxxClassBase64Str|xxxClassPath,xxxClass2Base64Str|xxxClass2Path
