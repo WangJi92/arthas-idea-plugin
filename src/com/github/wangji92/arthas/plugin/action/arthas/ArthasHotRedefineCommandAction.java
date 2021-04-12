@@ -187,6 +187,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 params.put("arthasIdeaPluginRedefineCommand", arthasIdeaPluginRedefineCommand);
                 params.put("arthasIdeaPluginApplicationName", selectProjectName);
                 params.put("deleteClassFile", deleteClassFile);
+                params.put("arthasPackageZipDownloadUrl",settings.arthasPackageZipDownloadUrl);
 
 
                 String redefineSh = StringUtils.stringSubstitutor("/template/arthas-idea-plugin-hot-swap.sh", params);

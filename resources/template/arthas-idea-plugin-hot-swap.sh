@@ -3,6 +3,9 @@
 TARGET_PID=
 SELECT_VALUE=${arthasIdeaPluginApplicationName}
 
+#arthas package zip download url = https://arthas.aliyun.com/download/latest_version?mirror=aliyun
+ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL=${arthasPackageZipDownloadUrl}
+
 # SYNOPSIS
 #   rreadlink <fileOrDirPath>
 # DESCRIPTION
@@ -123,6 +126,9 @@ select_pid() {
       echo "  [$index]: ${process}"
     fi
   done
+  echo " "
+  echo "$(echo $(tput setaf 1) 请手动选择进程或者idea 预先配置jps -l 工程名称自动执行$(tput sgr0))"
+  echo " "
 
   read choice
 
@@ -168,10 +174,17 @@ installArthas() {
     mkdir -p $HOME/opt/arthas || return 1
   fi
   # download arthas
-  if [ ! -f "$HOME/opt/arthas/as.sh" ]; then
-    banner_simple "arthas idea plugin download arthas $HOME/opt/arthas/as.sh"
-    curl -Lk https://arthas.aliyun.com/as.sh -o $HOME/opt/arthas/as.sh || return 1
-    chmod +x $HOME/opt/arthas/as.sh || return 1
+
+  if [ ! -f "$HOME/opt/arthas/arthas-packaging-latest-version-bin.zip" ]; then
+    local temp_target_lib_zip="$HOME/opt/arthas/arthas-packaging-latest-version-bin.zip"
+    echo "arthas idea plugin download arthas zip package ${temp_target_lib_zip}"
+    echo " "
+    echo "$(echo $(tput setaf 1)如果内网访问不到 https://arthas.aliyun.com/download/latest_version?mirror=aliyun $(tput sgr0))"
+    echo "$(echo $(tput setaf 1)idea设置能够访问的完整包的下载地址 或者直接下载解压到服务器 $HOME/opt/arthas 目录 $(tput sgr0))"
+    echo " "
+    curl  -Lk "${ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL}" -o  "${temp_target_lib_zip}" || retrun 1
+    cd "$HOME/opt/arthas" && unzip -o "${temp_target_lib_zip}"
+    chmod +x "$HOME/opt/arthas/as.sh" || return 1
   fi
 }
 # xxxClassBase64Str|xxxClassPath,xxxClass2Base64Str|xxxClass2Path

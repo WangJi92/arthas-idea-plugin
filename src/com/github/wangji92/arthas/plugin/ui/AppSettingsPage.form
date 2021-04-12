@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="930" height="696"/>
+      <xy x="20" y="20" width="1046" height="696"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -645,7 +645,8 @@
                   <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Arthas Package Zip Address"/>
+                  <text value="Arthas Package Zip Download Url"/>
+                  <toolTipText value="如果内网无法访问阿里云的地址 可以手动指定 完整包的地址"/>
                 </properties>
               </component>
               <component id="9325e" class="javax.swing.JTextField" binding="arthasPackageZipDownloadUrlTextField">
@@ -656,6 +657,14 @@
                 </constraints>
                 <properties>
                   <text value=""/>
+                </properties>
+              </component>
+              <component id="89eb7" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="7" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="内网无法访问指定完整包下载地址"/>
                 </properties>
               </component>
             </children>
