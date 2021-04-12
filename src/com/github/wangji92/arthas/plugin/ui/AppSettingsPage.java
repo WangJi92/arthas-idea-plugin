@@ -23,7 +23,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.AT;
-import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL;
 
 /**
  * https://jetbrains.org/intellij/sdk/docs/reference_guide/settings_guide.html 属性配置 参考
@@ -363,11 +362,8 @@ public class AppSettingsPage implements Configurable {
         settings.redefineBeforeCompile = redefineBeforeCompileRadioButton.isSelected();
         settings.printConditionExpress = printConditionExpressRadioButton.isSelected();
         settings.arthasPackageZipDownloadUrl = arthasPackageZipDownloadUrlTextField.getText();
-
-        if (!settings.arthasPackageZipDownloadUrl.equalsIgnoreCase(DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL)) {
-            // 设置到全局
-            PropertiesComponentUtils.setValue("arthasPackageZipDownloadUrl", arthasPackageZipDownloadUrlTextField.getText());
-        }
+        // 设置到全局
+        PropertiesComponentUtils.setValue("arthasPackageZipDownloadUrl", arthasPackageZipDownloadUrlTextField.getText());
         if (clipboardRadioButton.isSelected()) {
             settings.hotRedefineClipboard = true;
             settings.aliYunOss = false;
