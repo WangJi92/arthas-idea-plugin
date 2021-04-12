@@ -13,8 +13,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.AT;
-import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING;
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.*;
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -137,7 +136,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     /**
      * 剪切板
      */
-    public boolean hotRedefineClipboard = false;
+    public boolean hotRedefineClipboard = true;
 
     /**
      * redis 的链接地址
@@ -164,6 +163,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public Integer redisCacheKeyTtl = 60 * 60 * 2;
 
+    /**
+     * 默认下载地址
+     */
+    public String arthasPackageZipDownloadUrl = DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
@@ -175,7 +179,26 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
         // 检测全局的redis 配置
         checkGlobalRedisAndSettingCurrentProjectIfEmpty(appSettingsState);
+
+        // 检查全局的 arthas zip 包的下载地址
+        checkGlobalArthasPackageZipDownloadUrl(appSettingsState);
         return appSettingsState;
+    }
+
+
+    /**
+     * 设置一个 arthas zip 包的下载地址 （部分内网无法访问需要自己下载上传）
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalArthasPackageZipDownloadUrl(AppSettingsState appSettingsState) {
+        String globalArthasPackageZipDownloadUrl = PropertiesComponentUtils.getValue("arthasPackageZipDownloadUrl");
+        if (StringUtils.isNotBlank(appSettingsState.arthasPackageZipDownloadUrl) && !DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL.equalsIgnoreCase(appSettingsState.arthasPackageZipDownloadUrl)) {
+            return;
+        }
+        if (StringUtils.isNotBlank(globalArthasPackageZipDownloadUrl) && !DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL.equalsIgnoreCase(globalArthasPackageZipDownloadUrl)) {
+            appSettingsState.arthasPackageZipDownloadUrl = globalArthasPackageZipDownloadUrl;
+        }
     }
 
     /**

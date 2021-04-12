@@ -78,4 +78,9 @@ public interface ArthasCommandConstants {
      * 获取spring 所有的环境变量的表达式
      */
     String SPRING_ALL_PROPERTY = "%s '%s,#allProperties={},#standardServletEnvironment=#propertySourceIterator=#springContext.getEnvironment(),#propertySourceIterator=#standardServletEnvironment.getPropertySources().iterator(),#propertySourceIterator.{#key=#this.getName(),#allProperties.add(\"                \"),#allProperties.add(\"------------------------- name:\"+#key),#this.getSource() instanceof java.util.Map ?#this.getSource().entrySet().iterator.{#key=#this.key,#allProperties.add(#key+\"=\"+#standardServletEnvironment.getProperty(#key))}:#{}},#allProperties'";
+
+    /**
+     * 默认的 arthas zip 完整包的下载地址
+     */
+    String DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL = "https://arthas.aliyun.com/download/latest_version?mirror=aliyun";
 }
