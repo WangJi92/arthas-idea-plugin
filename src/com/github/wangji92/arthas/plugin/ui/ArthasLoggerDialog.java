@@ -114,7 +114,7 @@ public class ArthasLoggerDialog extends JDialog {
     private void getLoggerClassHashLoader() {
         String loggerName = loggerExpressionEditor.getText();
         ClipboardUtils.setClipboardString(loggerName);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessage(project,"通过logger -name 获取当前class的classloader hash值");
     }
 
     private void createUIComponents() {

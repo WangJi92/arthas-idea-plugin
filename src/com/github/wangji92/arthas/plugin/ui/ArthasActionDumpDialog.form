@@ -43,7 +43,7 @@
           <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="获取classload命令"/>
+          <text value="获取classloader命令"/>
           <toolTipText value="sc -d 加上当前的class的信息"/>
         </properties>
       </component>
@@ -77,7 +77,7 @@
         </constraints>
         <properties>
           <text value="清除缓存"/>
-          <toolTipText value="应用层面缓存曾经使用过的classLoadHash值"/>
+          <toolTipText value="应用层面缓存曾经使用过的classLoadHasher值"/>
           <verticalAlignment value="0"/>
           <verticalTextPosition value="0"/>
         </properties>
