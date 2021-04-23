@@ -77,7 +77,7 @@
         </constraints>
         <properties>
           <text value="清除缓存"/>
-          <toolTipText value="应用层面缓存曾经使用过的classLoadHasher值"/>
+          <toolTipText value="应用层面缓存曾经使用过的classLoader hash值"/>
           <verticalAlignment value="0"/>
           <verticalTextPosition value="0"/>
         </properties>
