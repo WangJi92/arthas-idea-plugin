@@ -11,6 +11,11 @@ public interface ArthasCommandConstants {
     String AT = "@";
 
     /**
+     * mybatis mapper 热更新未知
+     */
+    String MYBATIS_MAPPER_RELOAD_BASH_PACKAGE_PATH = "$HOME/opt/arthas/mybatis/mapper";
+
+    /**
      * arthas 热更新 基础包名称
      */
     String HOT_SWAMP_BASH_PACKAGE_PATH = "$HOME/opt/arthas/hotSwap/classes";

@@ -486,6 +486,11 @@
                 text="Global Options Setting"
                 description="Global options setting"/>
 
+        <action id="ArthasMybatisMapperReloadAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasMybatisMapperReloadAction"
+                text="Mybatis Mapper Xml Reload"
+                description="Mybatis mapper xml reload"/>
+
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
             <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
@@ -544,6 +549,7 @@
             <separator/>
             <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
+            <reference ref="ArthasMybatisMapperReloadAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
             <reference ref="ArthasSmCommandAction"/>
