@@ -195,19 +195,17 @@ banner_simple() {
 }
 
 # check arthas permission
-check_permission()
-{
-    [ ! -w "${HOME}" ] \
-        && exit_on_err 1 "permission denied, ${HOME} is not writable."
+check_permission() {
+  [ ! -w "${HOME}" ] &&
+    exit_on_err 1 "permission denied, ${HOME} is not writable."
 }
 
 # exit shell with err_code
 # $1 : err_code
 # $2 : err_msg
-exit_on_err()
-{
-    [[ ! -z "${2}" ]] && echo "${2}" 1>&2
-    exit ${1}
+exit_on_err() {
+  [[ ! -z "${2}" ]] && echo "${2}" 1>&2
+  exit ${1}
 }
 
 createFile() {
@@ -232,9 +230,18 @@ installArthas() {
     echo "$(echo $(tput setaf 1)idea设置网络可以访问的arthas 完整zip包的下载地址 或者直接下载解压到服务器 $HOME/opt/arthas 目录 $(tput sgr0))"
     echo "$(echo $(tput setaf 1)如果配置的是oss 存储,arthas 命令 other分组下面 Local File Upload To Oss命令可以上传文件 有效期1年,配置到arthas zip包地址$(tput sgr0))"
     echo " "
-    curl  -Lk "${ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL}" -o  "${temp_target_lib_zip}" || retrun 1
+    curl -Lk "${ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL}" -o "${temp_target_lib_zip}" || retrun 1
     cd "$HOME/opt/arthas" && unzip -o "${temp_target_lib_zip}"
     chmod +x "$HOME/opt/arthas/as.sh" || return 1
   fi
 }
 
+# execute arthtas batch command
+# $1 : resultFle
+# $2 : command
+executeArthasCommand() {
+  createFile "${1}"
+  # " 里面的 " 要进行转义 \"
+  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --select ${SELECT_VALUE}  -c \"${2}\" | tee ${1}"$(tput sgr0)
+  ${HOME}/opt/arthas/as.sh --select ${SELECT_VALUE} -c "${2}" | tee ${1}
+}
