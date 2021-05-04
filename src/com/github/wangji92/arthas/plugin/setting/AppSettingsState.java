@@ -168,6 +168,15 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public String arthasPackageZipDownloadUrl = DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL;
 
+    /**
+     * {@literal https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start}
+     */
+    public String mybatisMapperReloadServiceBeanName = DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME;
+    /**
+     * {@literal https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start}
+     */
+    public String mybatisMapperReloadMethodName = DEFAULT_MYBATIS_MAPPER_RELOAD_METHOD_NAME;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
@@ -182,7 +191,27 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
         // 检查全局的 arthas zip 包的下载地址
         checkGlobalArthasPackageZipDownloadUrl(appSettingsState);
+
+        // 检查设置全局的mybatis mapper bean的名称
+        checkGlobalMybatisMapper(appSettingsState);
         return appSettingsState;
+    }
+
+    /**
+     * 设置全局的 mapper bean的名称
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalMybatisMapper(AppSettingsState appSettingsState) {
+        String globalMybatisMapperReloadServiceBeanName = PropertiesComponentUtils.getValue("mybatisMapperReloadServiceBeanName");
+        String globalMybatisMapperReloadMethodName = PropertiesComponentUtils.getValue("mybatisMapperReloadMethodName");
+
+        if (StringUtils.isNotBlank(globalMybatisMapperReloadServiceBeanName) && !DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME.equalsIgnoreCase(globalMybatisMapperReloadServiceBeanName)) {
+            appSettingsState.mybatisMapperReloadServiceBeanName = globalMybatisMapperReloadServiceBeanName;
+        }
+        if (StringUtils.isNotBlank(globalMybatisMapperReloadMethodName) && !DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME.equalsIgnoreCase(globalMybatisMapperReloadMethodName)) {
+            appSettingsState.mybatisMapperReloadMethodName = globalMybatisMapperReloadMethodName;
+        }
     }
 
 
@@ -192,10 +221,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      * @param appSettingsState
      */
     private static void checkGlobalArthasPackageZipDownloadUrl(AppSettingsState appSettingsState) {
+
         String globalArthasPackageZipDownloadUrl = PropertiesComponentUtils.getValue("arthasPackageZipDownloadUrl");
-        if (StringUtils.isNotBlank(appSettingsState.arthasPackageZipDownloadUrl) && !DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL.equalsIgnoreCase(appSettingsState.arthasPackageZipDownloadUrl)) {
-            return;
-        }
         if (StringUtils.isNotBlank(globalArthasPackageZipDownloadUrl) && !DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL.equalsIgnoreCase(globalArthasPackageZipDownloadUrl)) {
             appSettingsState.arthasPackageZipDownloadUrl = globalArthasPackageZipDownloadUrl;
         }

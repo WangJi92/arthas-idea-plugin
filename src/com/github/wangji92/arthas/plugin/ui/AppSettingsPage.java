@@ -4,15 +4,10 @@ import com.aliyun.oss.OSS;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
-import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.ui.components.labels.LinkLabel;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +35,7 @@ public class AppSettingsPage implements Configurable {
      * arthas -n
      */
     private JSpinner invokeCountField;
-    private LinkLabel linkLabel;
+    private LinkLabel springContextProviderLink;
 
     private JPanel contentPane;
     /**
@@ -188,6 +183,18 @@ public class AppSettingsPage implements Configurable {
      * arthas zip 信息的地址
      */
     private JTextField arthasPackageZipDownloadUrlTextField;
+    /**
+     * spring service bean 的名称
+     */
+    private JTextField mybatisMapperReloadServiceBeanNameTextField;
+    /**
+     * spring bean 方法的名称
+     */
+    private JTextField mybatisMapperReloadMethodNameTextField;
+    /**
+     * 更多链接
+     */
+    private LinkLabel mybatisMapperReloadHelpLink;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -216,59 +223,16 @@ public class AppSettingsPage implements Configurable {
     public AppSettingsPage(Project project) {
         this.project = project;
         settings = AppSettingsState.getInstance(this.project);
-        springContextStaticOgnlExpressionTextFiled.setText(settings.staticSpringContextOgnl);
-        invokeCountField.setValue(1);
-
-
     }
 
     private void createUIComponents() {
-        linkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-plugin-demo/blob/master/src/main/java/com/wangji92/arthas/plugin/demo/common/ApplicationContextProvider.java");
-            }
-        });
-        linkLabel.setPaintUnderline(false);
-
-        selectLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/doc/advanced-use.html");
-            }
-        });
-        selectLink.setPaintUnderline(false);
-
-        batchSupportLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/doc/batch-support.html");
-            }
-        });
-        batchSupportLink.setPaintUnderline(false);
-
-        redefineHelpLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/doc/redefine.html#");
-            }
-        });
-        redefineHelpLinkLabel.setPaintUnderline(false);
-
-        ossHelpLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://helpcdn.aliyun.com/document_detail/84781.html?spm=a2c4g.11186623.6.823.148d1144LOadRS");
-            }
-        });
-        ossHelpLink.setPaintUnderline(false);
-        printConditionExpressLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/1348");
-            }
-        });
-        printConditionExpressLink.setPaintUnderline(false);
+        springContextProviderLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-plugin-demo/blob/master/src/main/java/com/wangji92/arthas/plugin/demo/common/ApplicationContextProvider.java");
+        selectLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/advanced-use.html");
+        batchSupportLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/batch-support.html");
+        redefineHelpLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/redefine.html#");
+        ossHelpLink = ActionLinkUtils.newActionLink("https://helpcdn.aliyun.com/document_detail/84781.html?spm=a2c4g.11186623.6.823.148d1144LOadRS");
+        printConditionExpressLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/1348");
+        mybatisMapperReloadHelpLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start");
     }
 
     @Nullable
@@ -295,7 +259,9 @@ public class AppSettingsPage implements Configurable {
                 || redefineBeforeCompileRadioButton.isSelected() != settings.redefineBeforeCompile
                 || printConditionExpressRadioButton.isSelected() != settings.printConditionExpress
                 || manualSelectPidRadioButton.isSelected() != settings.manualSelectPid
-                || !arthasPackageZipDownloadUrlTextField.getText().equalsIgnoreCase(settings.arthasPackageZipDownloadUrl);
+                || !arthasPackageZipDownloadUrlTextField.getText().equalsIgnoreCase(settings.arthasPackageZipDownloadUrl)
+                || !mybatisMapperReloadMethodNameTextField.getText().equalsIgnoreCase(settings.mybatisMapperReloadMethodName)
+                || !mybatisMapperReloadServiceBeanNameTextField.getText().equalsIgnoreCase(settings.mybatisMapperReloadServiceBeanName);
 
         if (modify) {
             return modify;
@@ -334,6 +300,7 @@ public class AppSettingsPage implements Configurable {
     private void saveSettings() {
         StringBuilder error = new StringBuilder();
         this.saveStaticSpringContext(error);
+        this.saveMybatisMapperSetting();
         if (((int) invokeCountField.getValue()) <= 0) {
             error.append("invokeCountField <= 0 ");
         } else {
@@ -378,6 +345,21 @@ public class AppSettingsPage implements Configurable {
             NotifyUtils.notifyMessage(project, error.toString(), NotificationType.ERROR);
         }
 
+    }
+
+    /**
+     * 保存mybatis mapper reload 配置
+     */
+    private void saveMybatisMapperSetting() {
+        String mybatisMapperReloadServiceBeanNameTex = mybatisMapperReloadServiceBeanNameTextField.getText();
+        String mybatisMapperReloadMethodNameText = mybatisMapperReloadMethodNameTextField.getText();
+        if (StringUtils.isBlank(mybatisMapperReloadMethodNameText) || StringUtils.isBlank(mybatisMapperReloadServiceBeanNameTex)) {
+            return;
+        }
+        settings.mybatisMapperReloadMethodName = mybatisMapperReloadMethodNameText;
+        settings.mybatisMapperReloadServiceBeanName = mybatisMapperReloadServiceBeanNameTex;
+        PropertiesComponentUtils.setValue("mybatisMapperReloadMethodName", mybatisMapperReloadMethodNameText);
+        PropertiesComponentUtils.setValue("mybatisMapperReloadServiceBeanName", mybatisMapperReloadServiceBeanNameTex);
     }
 
     /**
@@ -530,6 +512,8 @@ public class AppSettingsPage implements Configurable {
 
         // 设置远程的下载地址
         arthasPackageZipDownloadUrlTextField.setText(settings.arthasPackageZipDownloadUrl);
+        mybatisMapperReloadMethodNameTextField.setText(settings.mybatisMapperReloadMethodName);
+        mybatisMapperReloadServiceBeanNameTextField.setText(settings.mybatisMapperReloadServiceBeanName);
         initEvent();
     }
 
