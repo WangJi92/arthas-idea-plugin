@@ -1,15 +1,12 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
+import com.github.wangji92.arthas.plugin.utils.CommonExecuteScriptUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.google.common.collect.Lists;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.ui.components.labels.LinkLabel;
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,6 +28,7 @@ public class ArthasLoggerDialog extends JDialog {
     private JButton closeButton;
     private LinkLabel helpLink;
     private LinkLabel loggerBestLink;
+    private JButton shellScriptCommandButton;
 
 
     private Project project;
@@ -109,29 +107,32 @@ public class ArthasLoggerDialog extends JDialog {
         this.closeButton.addActionListener(e -> onCancel());
         String loggerEx = String.join(" ", "logger", "--name", this.className);
         this.loggerExpressionEditor.setText(loggerEx);
+        shellScriptCommandButton.addActionListener(e -> {
+            List<String> commands = Lists.newArrayList();
+            String loggerName = loggerExpressionEditor.getText();
+            commands.add(loggerName);
+            //更新level
+            String currentLoggerLevel = (String) logLevelComboBox.getSelectedItem();
+            if (StringUtils.isNotBlank(currentLoggerLevel)) {
+                commands.add("--level");
+                commands.add(currentLoggerLevel);
+            }
+            String joinCommands = String.join(" ", commands);
+            // logger --name xxx class 这里的表达式不是 classLoaderHash   18b4aac2 统一一下格式
+            String scCommand = String.join(" ", "sc", "-d", className);
+            CommonExecuteScriptUtils.executeCommonScript(project, scCommand, joinCommands, "");
+            dispose();
+        });
     }
 
     private void getLoggerClassHashLoader() {
         String loggerName = loggerExpressionEditor.getText();
         ClipboardUtils.setClipboardString(loggerName);
-        NotifyUtils.notifyMessage(project,"通过logger -name 获取当前class的classloader hash值");
+        NotifyUtils.notifyMessage(project, "通过logger -name 获取当前class的classloader hash值");
     }
 
     private void createUIComponents() {
-        loggerBestLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/7");
-            }
-        });
-        loggerBestLink.setPaintUnderline(false);
-
-        helpLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/doc/logger.html");
-            }
-        });
-        helpLink.setPaintUnderline(false);
+        loggerBestLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin/issues/7");
+        helpLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/logger.html");
     }
 }

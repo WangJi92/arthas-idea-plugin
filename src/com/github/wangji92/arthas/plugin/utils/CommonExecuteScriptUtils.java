@@ -18,7 +18,7 @@ public class CommonExecuteScriptUtils {
      * 直接执行脚本的命令
      *
      * @param project
-     * @param scCommand
+     * @param scCommand 获取classloader hash value（不一定是sc -d  也可以是 logger --name xxx class）
      * @param command
      * @param appendTip
      */

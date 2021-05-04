@@ -47,7 +47,7 @@ public class ArthasActionStaticDialog extends JDialog {
     /**
      * 直接执行脚本
      */
-    private JButton directScriptCommandButton;
+    private JButton shellScriptCommandButton;
 
 
     private String className;
@@ -112,7 +112,7 @@ public class ArthasActionStaticDialog extends JDialog {
             NotifyUtils.notifyMessage(project, "【命令已复制到剪切板】");
         });
 
-        directScriptCommandButton.addActionListener(e -> {
+        shellScriptCommandButton.addActionListener(e -> {
             String ognCurrentExpression = ognlExpressionEditor.getText();
             String scCommand = String.join(" ", "sc", "-d", className);
             CommonExecuteScriptUtils.executeCommonScript(project, scCommand, ognCurrentExpression, "");
