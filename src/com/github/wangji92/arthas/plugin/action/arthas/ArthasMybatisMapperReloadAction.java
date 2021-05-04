@@ -5,6 +5,7 @@ import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
 import com.google.common.collect.Maps;
 import com.google.common.io.BaseEncoding;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -73,56 +74,59 @@ public class ArthasMybatisMapperReloadAction extends AnAction implements DumbAwa
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String mapperXmlName = psiElement.getContainingFile().getName();
 
+        try {
+            AppSettingsState settings = AppSettingsState.getInstance(project);
 
-        // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
-        String classNameClassLoaderGet = SpringStaticContextUtils.getStaticSpringContextClassName(project);
-        String springContextScCommand = String.join(" ", "sc", "-d", classNameClassLoaderGet);
+            // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
+            String classNameClassLoaderGet = SpringStaticContextUtils.getStaticSpringContextClassName(project);
+            String springContextScCommand = String.join(" ", "sc", "-d", classNameClassLoaderGet);
 
-        //com.github.wangji92.mybatis.reload.core.MybatisMapperXmlFileReloadService#reloadAllSqlSessionFactoryMapper
-        String mybatisMapperXmlReloadServiceBeanName = "mybatisMapperXmlFileReloadService";
-        String mybatisMapperXmlReloadServiceMethodName = "reloadAllSqlSessionFactoryMapper";
-        String mybatisMapperXmlReloadServiceMapperPath = ArthasCommandConstants.MYBATIS_MAPPER_RELOAD_BASH_PACKAGE_PATH + "/" + mapperXmlName;
-        String mybatisMapperXmlReloadServiceMethodAndParam = String.format("%s(\"%s\")", mybatisMapperXmlReloadServiceMethodName, mybatisMapperXmlReloadServiceMapperPath);
+            //com.github.wangji92.mybatis.reload.core.MybatisMapperXmlFileReloadService#reloadAllSqlSessionFactoryMapper
+            String mybatisMapperXmlReloadServiceBeanName = settings.mybatisMapperReloadServiceBeanName;
+            String mybatisMapperXmlReloadServiceMethodName = settings.mybatisMapperReloadMethodName;
+            String mybatisMapperXmlReloadServiceMapperPath = ArthasCommandConstants.MYBATIS_MAPPER_RELOAD_BASH_PACKAGE_PATH + "/" + mapperXmlName;
+            String mybatisMapperXmlReloadServiceMethodAndParam = String.format("%s(\"%s\")", mybatisMapperXmlReloadServiceMethodName, mybatisMapperXmlReloadServiceMapperPath);
 
 
-        AppSettingsState settings = AppSettingsState.getInstance(project);
+            //region 构建spring static context  调用 mybatisMapperXmlReloadService method
+            //#springContext=填充,#springContext.getBean("%s")
+            String staticSpringContextGetBeanPrefix = SpringStaticContextUtils.getStaticSpringContextGetBeanPrefix(project, mybatisMapperXmlReloadServiceBeanName);
+            String join = String.join(" ", "ognl", "-x", settings.depthPrintProperty);
+            StringBuilder arthasOgnlReloadMapperCommand = new StringBuilder(join);
+            arthasOgnlReloadMapperCommand.append(" '").append(staticSpringContextGetBeanPrefix).append(".").append(mybatisMapperXmlReloadServiceMethodAndParam).append("'");
+            arthasOgnlReloadMapperCommand.append(" -c ").append("$CLASSLOADER_HASH_VALUE");
+            String arthasIdeaPluginMybatisMapperXmlReloadCommand = arthasOgnlReloadMapperCommand.toString();
 
-        //region 构建spring static context  调用 mybatisMapperXmlReloadService method
-        //#springContext=填充,#springContext.getBean("%s")
-        String staticSpringContextGetBeanPrefix = SpringStaticContextUtils.getStaticSpringContextGetBeanPrefix(project, mybatisMapperXmlReloadServiceBeanName);
-        String join = String.join(" ", "ognl", "-x", settings.depthPrintProperty);
-        StringBuilder arthasOgnlReloadMapperCommand = new StringBuilder(join);
-        arthasOgnlReloadMapperCommand.append(" '").append(staticSpringContextGetBeanPrefix).append(".").append(mybatisMapperXmlReloadServiceMethodAndParam).append("'");
-        arthasOgnlReloadMapperCommand.append(" -c ").append("$CLASSLOADER_HASH_VALUE");
-        String arthasIdeaPluginMybatisMapperXmlReloadCommand = arthasOgnlReloadMapperCommand.toString();
+            // 坑 这里需要对 "" 中的 "进行转义
+            arthasIdeaPluginMybatisMapperXmlReloadCommand = arthasIdeaPluginMybatisMapperXmlReloadCommand.replaceAll("\"", "\\\\\"");
+            //endregion
+            VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
+            assert virtualFileFiles != null;
+            String mapperXmlContent = IoUtils.readVirtualFile(virtualFileFiles[0]);
+            String base64MapperXmlContent = BaseEncoding.base64().encode(mapperXmlContent.getBytes());
+            String arthasIdeaPluginBase64MapperXmlAndPath = String.join("|", base64MapperXmlContent, mybatisMapperXmlReloadServiceMapperPath);
 
-        // 坑 这里需要对 "" 中的 "进行转义
-        arthasIdeaPluginMybatisMapperXmlReloadCommand = arthasIdeaPluginMybatisMapperXmlReloadCommand.replaceAll("\"", "\\\\\"");
-        //endregion
-        VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
-        assert virtualFileFiles != null;
-        String mapperXmlContent = IoUtils.readVirtualFile(virtualFileFiles[0]);
-        String base64MapperXmlContent = BaseEncoding.base64().encode(mapperXmlContent.getBytes());
-        String arthasIdeaPluginBase64MapperXmlAndPath = String.join("|", base64MapperXmlContent, mybatisMapperXmlReloadServiceMapperPath);
+            String selectProjectName = settings.selectProjectName;
+            Map<String, String> params = Maps.newHashMap();
+            params.put("arthasIdeaPluginApplicationName", selectProjectName);
+            params.put("arthasPackageZipDownloadUrl", settings.arthasPackageZipDownloadUrl);
+            params.put("arthasIdeaPluginMybatisMapperXmlReloadCommand", arthasIdeaPluginMybatisMapperXmlReloadCommand);
+            params.put("BASE64_TXT_AND_PATH", arthasIdeaPluginBase64MapperXmlAndPath);
+            params.put("SC_COMMAND", springContextScCommand);
 
-        String selectProjectName = settings.selectProjectName;
-        Map<String, String> params = Maps.newHashMap();
-        params.put("arthasIdeaPluginApplicationName", selectProjectName);
-        params.put("arthasPackageZipDownloadUrl", settings.arthasPackageZipDownloadUrl);
-        params.put("arthasIdeaPluginMybatisMapperXmlReloadCommand", arthasIdeaPluginMybatisMapperXmlReloadCommand);
-        params.put("BASE64_TXT_AND_PATH", arthasIdeaPluginBase64MapperXmlAndPath);
-        params.put("SC_COMMAND", springContextScCommand);
-
-        String commonFunctionSh = StringUtils.stringSubstitutor("/template/plugin-common-function.sh", params);
-        String mybatisMapperReloadSh = StringUtils.stringSubstitutor("/template/mybatis-mapper-xml-reload.sh", params);
-        mybatisMapperReloadSh = commonFunctionSh + "\n" + mybatisMapperReloadSh;
-        String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes());
-        DirectScriptUtils.buildDirectScript(project, settings, base64MybatisMapperReloadSh, "arthas-idea-plugin-mybatis-mapper-xml-reload.sh", directScriptResult -> {
-            if (directScriptResult.getResult()) {
-                NotifyUtils.notifyMessage(project, directScriptResult.getTip().toString());
-            }
-        });
-
+            String commonFunctionSh = StringUtils.stringSubstitutor("/template/plugin-common-function.sh", params);
+            String mybatisMapperReloadSh = StringUtils.stringSubstitutor("/template/mybatis-mapper-xml-reload.sh", params);
+            mybatisMapperReloadSh = commonFunctionSh + "\n" + mybatisMapperReloadSh;
+            String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes());
+            DirectScriptUtils.buildDirectScript(project, settings, base64MybatisMapperReloadSh, "arthas-idea-plugin-mybatis-mapper-xml-reload.sh", directScriptResult -> {
+                if (directScriptResult.getResult()) {
+                    directScriptResult.getTip().append("mapper reload 使用参考插件配置界面");
+                    NotifyUtils.notifyMessage(project, directScriptResult.getTip().toString());
+                }
+            });
+        } catch (Exception e) {
+            NotifyUtils.notifyMessage(project, e.getMessage(), NotificationType.ERROR);
+        }
 
     }
 
