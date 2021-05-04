@@ -114,8 +114,8 @@ public class ArthasMybatisMapperReloadAction extends AnAction implements DumbAwa
             params.put("BASE64_TXT_AND_PATH", arthasIdeaPluginBase64MapperXmlAndPath);
             params.put("SC_COMMAND", springContextScCommand);
 
-            String commonFunctionSh = StringUtils.stringSubstitutor("/template/plugin-common-function.sh", params);
-            String mybatisMapperReloadSh = StringUtils.stringSubstitutor("/template/mybatis-mapper-xml-reload.sh", params);
+            String commonFunctionSh = StringUtils.stringSubstitutorFromFilePath("/template/plugin-common-function.sh", params);
+            String mybatisMapperReloadSh = StringUtils.stringSubstitutorFromFilePath("/template/mybatis-mapper-xml-reload.sh", params);
             mybatisMapperReloadSh = commonFunctionSh + "\n" + mybatisMapperReloadSh;
             String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes());
             DirectScriptUtils.buildDirectScript(project, settings, base64MybatisMapperReloadSh, "arthas-idea-plugin-mybatis-mapper-xml-reload.sh", directScriptResult -> {

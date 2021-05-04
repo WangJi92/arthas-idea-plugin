@@ -35,7 +35,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @param param
      * @return
      */
-    public static String stringSubstitutor(String filePath, Map<String, String> param) {
+    public static String stringSubstitutorFromFilePath(String filePath, Map<String, String> param) {
         String templateString = IoUtils.getResourceFile(filePath);
         StringSubstitutor stringSubstitutor = new StringSubstitutor(param);
         //key value 字符串替换

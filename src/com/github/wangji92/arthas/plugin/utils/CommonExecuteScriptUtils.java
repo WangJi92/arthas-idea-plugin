@@ -38,8 +38,8 @@ public class CommonExecuteScriptUtils {
         command = command.replaceAll("\"", "\\\\\"");
         params.put("arthasCommonScriptCommand", command);
 
-        String commonFunctionSh = StringUtils.stringSubstitutor("/template/plugin-common-function.sh", params);
-        String mybatisMapperReloadSh = StringUtils.stringSubstitutor("/template/common-execution-script.sh", params);
+        String commonFunctionSh = StringUtils.stringSubstitutorFromFilePath("/template/plugin-common-function.sh", params);
+        String mybatisMapperReloadSh = StringUtils.stringSubstitutorFromFilePath("/template/common-execution-script.sh", params);
         mybatisMapperReloadSh = commonFunctionSh + "\n" + mybatisMapperReloadSh;
         String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes());
         DirectScriptUtils.buildDirectScript(project, settings, base64MybatisMapperReloadSh, "arthas-idea-plugin-common-execution-script.sh", directScriptResult -> {
