@@ -146,6 +146,9 @@ public class OgnlPsUtils {
         // Experimental API method JvmField.getName() is invoked in Action.arthas.ArthasOgnlStaticCommandAction.actionPerformed().
         // This method can be changed in a future release leading to incompatibilities
         String methodName = psiMethod.getNameIdentifier().getText();
+        if (psiMethod.isConstructor()) {
+            methodName = "<init>";
+        }
         StringBuilder builder = new StringBuilder(methodName).append("(");
         PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
         if (parameters.length > 0) {
