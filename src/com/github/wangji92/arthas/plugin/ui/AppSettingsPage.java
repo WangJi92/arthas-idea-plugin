@@ -195,6 +195,26 @@ public class AppSettingsPage implements Configurable {
      * 更多链接
      */
     private LinkLabel mybatisMapperReloadHelpLink;
+    /**
+     * retransform 帮助文档
+     */
+    private LinkLabel retransformHelpLink;
+    /**
+     * arthas retransformer 热更新功能浅析
+     */
+    private LinkLabel analysisRetransformerLink;
+    /**
+     * github 地址
+     */
+    private LinkLabel arthasIdeaGithubLink;
+    /**
+     * demo 地址
+     */
+    private LinkLabel arthasIdeaDemoLink;
+    /**
+     * 语雀知识库链接
+     */
+    private LinkLabel arthasYuQueDocumentLink;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -226,13 +246,19 @@ public class AppSettingsPage implements Configurable {
     }
 
     private void createUIComponents() {
-        springContextProviderLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-plugin-demo/blob/master/src/main/java/com/wangji92/arthas/plugin/demo/common/ApplicationContextProvider.java");
-        selectLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/advanced-use.html");
-        batchSupportLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/batch-support.html");
-        redefineHelpLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/redefine.html#");
-        ossHelpLink = ActionLinkUtils.newActionLink("https://helpcdn.aliyun.com/document_detail/84781.html?spm=a2c4g.11186623.6.823.148d1144LOadRS");
-        printConditionExpressLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/1348");
-        mybatisMapperReloadHelpLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start");
+        this.springContextProviderLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-plugin-demo/blob/master/src/main/java/com/wangji92/arthas/plugin/demo/common/ApplicationContextProvider.java");
+        this.selectLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/advanced-use.html");
+        this.batchSupportLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/batch-support.html");
+        this.redefineHelpLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/redefine.html#");
+        this.ossHelpLink = ActionLinkUtils.newActionLink("https://helpcdn.aliyun.com/document_detail/84781.html?spm=a2c4g.11186623.6.823.148d1144LOadRS");
+        this.printConditionExpressLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/1348");
+        this.mybatisMapperReloadHelpLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start");
+        this.retransformHelpLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/retransform.html");
+        this.analysisRetransformerLink = ActionLinkUtils.newActionLink("https://www.yuque.com/wangji-yunque/ikhsmq/lyevb2");
+        this.arthasIdeaGithubLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin");
+        this.arthasIdeaDemoLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-plugin-demo");
+        this.arthasYuQueDocumentLink = ActionLinkUtils.newActionLink("https://www.yuque.com/wangji-yunque/ikhsmq/aqe9gr");
+
     }
 
     @Nullable

@@ -58,9 +58,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public String depthPrintProperty = ArthasCommandConstants.RESULT_X;
 
     /**
-     * 是否展示默认的条件表达式
+     * 是否展示默认的条件表达式 [修改 部分低版本不支持]
      */
-    public boolean conditionExpressDisplay = true;
+    public boolean conditionExpressDisplay = false;
 
     /**
      * {@literal https://arthas.aliyun.com/doc/batch-support.html 批处理支持}
