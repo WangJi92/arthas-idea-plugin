@@ -2,10 +2,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
-import com.github.wangji92.arthas.plugin.utils.DirectScriptUtils;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
-import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.github.wangji92.arthas.plugin.utils.*;
 import com.google.common.collect.Maps;
 import com.google.common.io.BaseEncoding;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -29,6 +26,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * 重新加载 mapper xml 文件
+ * {@literal https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start}
+ *
  * @author 汪小哥
  * @date 03-05-2021
  */
@@ -99,11 +99,10 @@ public class ArthasMybatisMapperReloadAction extends AnAction implements DumbAwa
         // 坑 这里需要对 "" 中的 "进行转义
         arthasIdeaPluginMybatisMapperXmlReloadCommand = arthasIdeaPluginMybatisMapperXmlReloadCommand.replaceAll("\"", "\\\\\"");
         //endregion
-
-        //todo text
-        String mapperXmlContent = psiElement.getText();
+        VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
+        assert virtualFileFiles != null;
+        String mapperXmlContent = IoUtils.readVirtualFile(virtualFileFiles[0]);
         String base64MapperXmlContent = BaseEncoding.base64().encode(mapperXmlContent.getBytes());
-        ;
         String arthasIdeaPluginBase64MapperXmlAndPath = String.join("|", base64MapperXmlContent, mybatisMapperXmlReloadServiceMapperPath);
 
         String selectProjectName = settings.selectProjectName;
