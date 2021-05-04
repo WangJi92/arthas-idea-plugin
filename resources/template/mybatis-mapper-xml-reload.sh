@@ -47,6 +47,9 @@ main() {
 
   banner_simple "first: get spring static spring context class1oader hash value"
   getFirstClassLoaderHashValue
+  if [ -z ${CLASSLOADER_HASH_VALUE} ]; then
+    exit_on_err 1 "not found classloader hash value"
+  fi
 
   banner_simple "last: invoke spring bean to reload mybatis mapper xml file"
   doStartMybatisMaperReloadCommand

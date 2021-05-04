@@ -120,7 +120,7 @@ public class ArthasMybatisMapperReloadAction extends AnAction implements DumbAwa
             String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes());
             DirectScriptUtils.buildDirectScript(project, settings, base64MybatisMapperReloadSh, "arthas-idea-plugin-mybatis-mapper-xml-reload.sh", directScriptResult -> {
                 if (directScriptResult.getResult()) {
-                    directScriptResult.getTip().append("mapper reload 使用参考插件配置界面");
+                    directScriptResult.getTip().append("【mybatis mapper reload 使用参考插件配置界面】");
                     NotifyUtils.notifyMessage(project, directScriptResult.getTip().toString());
                 }
             });
