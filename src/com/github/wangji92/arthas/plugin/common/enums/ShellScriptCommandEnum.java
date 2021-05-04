@@ -10,25 +10,53 @@ import com.github.wangji92.arthas.plugin.common.enums.base.EnumCodeMsg;
  */
 public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     /**
+     * watch
+     */
+    WATCH("watch "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
+            + "'{params,returnObj,throwExp}'"
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode(), "watch", true, false, true, false),
+
+    GETSTATIC("getstatic "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.FIELD_NAME.getCode(), "Get Simple Static Field", true, true, false, true),
+    /**
+     * trace
+     */
+    TRACE("trace "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
+            + ShellScriptVariableEnum.SKIP_JDK_METHOD.getCode(), "trace ", true, false, true, false),
+
+
+    /**
      * dashboard
      */
     DASHBOARD_N_1("dashboard -n 1", "Dashboard Info", false, false, false, false),
-    DUMP("dump ${className} -d /tmp/output", "Dump Class Byte Array from JVM", true, true, false, false),
-    GETSTATIC("getstatic ${className} ${fieldName} ", "Get Simple Static Field", true, true, true, false),
-    TRACE("trace ${className} ${methodName} -v -n 5 --skipJDKMethod false", "Get Simple Static Field", false, true, false, true),
-    WATCH("watch ${className} ${methodName} '{params,returnObj,throwExp}' -v -n 5 -x 3 ", "Get Simple Static Field", false, true, false, true),
+    /**
+     * dump
+     */
+    DUMP("dump "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode()
+            + " -d /tmp/output "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(), "Dump Class Byte Array from JVM", true, false, false, false),
 
 
     ;
 
 
-    ShellScriptCommandEnum(String code, String msg, boolean needHash, boolean needClass, boolean needField, boolean needMethod) {
+    ShellScriptCommandEnum(String code, String msg, boolean needClass, boolean needField, boolean needMethod, boolean needStatic) {
         this.code = code;
         this.msg = msg;
-        this.needHash = needHash;
         this.needClass = needClass;
         this.needField = needField;
         this.needMethod = needMethod;
+        this.needStatic = needStatic;
     }
 
     /**
@@ -40,16 +68,15 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      * 提示信息
      */
     private String msg;
-    /**
-     * 是否需要classloader hash value
-     */
-    private Boolean needHash;
 
     private Boolean needClass;
 
     private Boolean needField;
 
     private Boolean needMethod;
+
+    private Boolean needStatic;
+
 
     @Override
     public String getEnumMsg() {
@@ -73,13 +100,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         this.msg = msg;
     }
 
-    public Boolean getNeedHash() {
-        return needHash;
-    }
-
-    public void setNeedHash(Boolean needHash) {
-        this.needHash = needHash;
-    }
 
     public Boolean getNeedClass() {
         return needClass;
@@ -108,5 +128,13 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     @Override
     public String toString() {
         return this.getCode();
+    }
+
+    public Boolean getNeedStatic() {
+        return needStatic;
+    }
+
+    public void setNeedStatic(Boolean needStatic) {
+        this.needStatic = needStatic;
     }
 }

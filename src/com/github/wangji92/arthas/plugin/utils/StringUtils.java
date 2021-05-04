@@ -37,7 +37,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      */
     public static String stringSubstitutorFromFilePath(String filePath, Map<String, String> param) {
         String templateString = IoUtils.getResourceFile(filePath);
+        //禁止循环的进行遍历替换  Infinite loop in property interpolation
         StringSubstitutor stringSubstitutor = new StringSubstitutor(param);
+        //key value 字符串替换
+        return stringSubstitutor.replace(templateString);
+    }
+
+    /**
+     * 模板处理
+     *
+     * @param templateString
+     * @param param
+     * @return
+     */
+    public static String stringSubstitutorFromText(String templateString, Map<String, String> param) {
+        StringSubstitutor stringSubstitutor = new StringSubstitutor(param);
+        stringSubstitutor.setDisableSubstitutionInValues(true);
         //key value 字符串替换
         return stringSubstitutor.replace(templateString);
     }

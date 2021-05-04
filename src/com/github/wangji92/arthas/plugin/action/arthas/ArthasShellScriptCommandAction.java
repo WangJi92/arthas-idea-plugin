@@ -8,14 +8,12 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * 直接执行脚本
+ *
  * @author 汪小哥
  * @date 04-05-2021
  */
@@ -53,17 +51,21 @@ public class ArthasShellScriptCommandAction extends AnAction {
         String className = "";
         String fieldName = "";
         String methodName = "";
-        String methodInfo = "";
+        String executeInfo = "";
+        boolean modifyStatic = false;
         if (virtualFileFiles.length == 1 && OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiMethod) {
                 PsiMethod psiMethod = (PsiMethod) psiElement;
                 //处理内部类 匿名类获取class的问题
                 className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
                 // complexParameterCall(#{" ":" "})
-                methodInfo = OgnlPsUtils.getMethodParameterDefault(psiMethod);
+                executeInfo = OgnlPsUtils.getMethodParameterDefault(psiMethod);
                 methodName = psiMethod.getNameIdentifier().getText();
                 if (psiMethod.isConstructor()) {
                     methodName = "<init>";
+                }
+                if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
+                    modifyStatic = true;
                 }
             }
             if (psiElement instanceof PsiClass) {
@@ -77,9 +79,13 @@ public class ArthasShellScriptCommandAction extends AnAction {
                 className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
                 fieldName = psiField.getNameIdentifier().getText();
                 methodName = "*";
+                executeInfo = fieldName;
+                if (psiField.hasModifierProperty(PsiModifier.STATIC)) {
+                    modifyStatic = true;
+                }
             }
         }
-        ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(project, className, fieldName, methodName, methodInfo);
+        ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(project, className, fieldName, methodName, executeInfo, modifyStatic);
         dialog.open("shell script command");
     }
 }

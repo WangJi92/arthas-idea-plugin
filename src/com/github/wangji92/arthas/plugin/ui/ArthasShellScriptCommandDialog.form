@@ -37,6 +37,7 @@
         </constraints>
         <properties>
           <text value="shell script command"/>
+          <toolTipText value="直接执行脚本无需打开arthas"/>
         </properties>
       </component>
       <hspacer id="a7d70">
