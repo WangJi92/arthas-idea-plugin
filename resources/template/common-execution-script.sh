@@ -2,7 +2,7 @@
 ARTHAS_COMMON_SCRIPT_COMMAND="${arthasCommonScriptCommand}"
 # 调用执行方法的信息
 doStartArthasCommonScriptCommand() {
-  executeArthasCommand "${HOME}/opt/arthas/arthasCommonScriptCommand.out" "${ARTHAS_COMMON_SCRIPT_COMMAND}"
+  executeArthasCommand "${HOME}/opt/arthas/arthasCommonScriptCommand.out" "${arthasCommonScriptCommand}"
   banner_simple "you can get execute result in ${HOME}/opt/arthas/arthasCommonScriptCommand.out"
 }
 
@@ -35,10 +35,10 @@ main() {
       exit_on_err 1 "not found classloader hash value,maybe class not load in jvm"
     fi
     # maybe some get classloader is null sc -d java.lang.String
-    if [ -n "${CLASSLOADER_HASH_VALUE}" ]; then
-      CLASSLOADER_HASH_VALUE=$(echo ${CLASSLOADER_HASH_VALUE} | sed 's/null//g')
-      ARTHAS_COMMON_SCRIPT_COMMAND=$(echo ${ARTHAS_COMMON_SCRIPT_COMMAND} | sed 's/-c//g')
-    fi
+    #    if [ -n "${CLASSLOADER_HASH_VALUE}" ]; then
+    #      CLASSLOADER_HASH_VALUE=$(echo ${CLASSLOADER_HASH_VALUE} | sed 's/null//g')
+    #      ARTHAS_COMMON_SCRIPT_COMMAND=$(echo ${ARTHAS_COMMON_SCRIPT_COMMAND} | sed 's/-c//g')
+    #    fi
   fi
 
   banner_simple "last: execute arthas command"

@@ -18,11 +18,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "'{params,returnObj,throwExp}'"
             + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
-            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode(), "watch", true, false, true, false),
-
-    GETSTATIC("getstatic "
-            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
-            + ShellScriptVariableEnum.FIELD_NAME.getCode(), "Get Simple Static Field", true, true, false, true),
+            + " -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode(),
+            "watch", true, false, true, false),
     /**
      * trace
      */
@@ -31,7 +29,25 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
             + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
-            + ShellScriptVariableEnum.SKIP_JDK_METHOD.getCode(), "trace ", true, false, true, false),
+            + ShellScriptVariableEnum.SKIP_JDK_METHOD.getCode(),
+            "trace ", true, false, true, false),
+
+    /**
+     * 调用静态变量 或者方法
+     */
+    OGNL_GETSTATIC("ognl "
+            + " -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode()
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "Ognl To Get Static Method Field", true, false, false, true),
+
+    GETSTATIC("getstatic "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.FIELD_NAME.getCode(),
+            "Get Simple Static Field", true, true, false, true),
 
 
     /**
@@ -44,7 +60,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     DUMP("dump "
             + ShellScriptVariableEnum.CLASS_NAME.getCode()
             + " -d /tmp/output "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(), "Dump Class Byte Array from JVM", true, false, false, false),
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "Dump Class Byte Array from JVM", true, false, false, false),
 
 
     ;

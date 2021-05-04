@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.utils;
 
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.google.common.collect.Maps;
 import com.google.common.io.BaseEncoding;
@@ -27,10 +28,8 @@ public class CommonExecuteScriptUtils {
         Map<String, String> params = Maps.newHashMap();
         params.put("arthasIdeaPluginApplicationName", settings.selectProjectName);
         params.put("arthasPackageZipDownloadUrl", settings.arthasPackageZipDownloadUrl);
-        if (StringUtils.isNotBlank(scCommand)) {
-            if (!command.contains("$CLASSLOADER_HASH_VALUE")) {
-                command = command + " -c ${CLASSLOADER_HASH_VALUE} ";
-            }
+        if (StringUtils.isNotBlank(scCommand) && !command.contains(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode())) {
+            command = String.join(" ", command, "-c", ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode());
         }
         params.put("SC_COMMAND", scCommand);
 

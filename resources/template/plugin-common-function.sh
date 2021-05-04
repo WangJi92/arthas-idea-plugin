@@ -271,6 +271,7 @@ decodeBase64AndCreateFile() {
 # 获取第一个classloader hashvalue
 getFirstClassLoaderHashValue() {
   local arthasClassLoaderHashValueResult="${HOME}/opt/arthas/class1oaderHashValue.out"
+  createFile ${arthasClassLoaderHashValueResult}
   executeArthasCommand "${arthasClassLoaderHashValueResult}" "${SC_COMMAND}"
   CLASSLOADER_HASH_VALUE=$(cat "${arthasClassLoaderHashValueResult}" | awk '/classLoaderHash/{print $2;}' | head -1)
 }
