@@ -14,6 +14,9 @@ import com.github.wangji92.arthas.plugin.common.enums.base.EnumCodeMsg;
  * @date 21-03-2020
  */
 public enum TimeTunnelCommandEnum implements EnumCodeMsg<String> {
+    /**
+     * 重新触发一下
+     */
     START_ONE_TIME("tt -p -i 1000", "重新触发一次, -play(Replay the time fragment specified by index)"),
     START_MANY_TIME("tt -p --replay-times 5 --replay-interval 2000 -i 1000", "重新触发5次，每次时间间隔 2秒"),
     WATCH_EXPRESS("tt -w '{method.name,params,returnObj,throwExp}' -x 3 -i 1000", "观察表达式入参返回值 -w, -watch-express( watch the time fragment by ognl express)"),

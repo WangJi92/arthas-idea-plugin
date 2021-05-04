@@ -41,7 +41,7 @@ main() {
     fi
   fi
 
-  banner_simple "last: invoke spring bean to reload mybatis mapper xml file"
+  banner_simple "last: execute arthas command"
   doStartArthasCommonScriptCommand
 
 }

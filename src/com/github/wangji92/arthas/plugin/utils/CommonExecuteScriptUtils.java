@@ -29,7 +29,7 @@ public class CommonExecuteScriptUtils {
         params.put("arthasPackageZipDownloadUrl", settings.arthasPackageZipDownloadUrl);
         if (StringUtils.isNotBlank(scCommand)) {
             if (!command.contains("$CLASSLOADER_HASH_VALUE")) {
-                command = command + " -c $CLASSLOADER_HASH_VALUE ";
+                command = command + " -c ${CLASSLOADER_HASH_VALUE} ";
             }
         }
         params.put("SC_COMMAND", scCommand);

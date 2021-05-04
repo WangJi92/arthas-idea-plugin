@@ -490,6 +490,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasMybatisMapperReloadAction"
                 text="Mybatis Mapper Xml Reload"
                 description="Mybatis mapper xml reload"/>
+        <action id="ArthasShellScriptCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasShellScriptCommandAction"
+                text="Shell Script Command"
+                description="Shell script command"/>
 
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
@@ -550,6 +554,7 @@
             <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
             <reference ref="ArthasMybatisMapperReloadAction"/>
+            <reference ref="ArthasShellScriptCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
             <reference ref="ArthasSmCommandAction"/>
