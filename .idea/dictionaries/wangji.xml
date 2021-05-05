@@ -9,9 +9,13 @@
       <w>getstatic</w>
       <w>heapdump</w>
       <w>jedis</w>
+      <w>perfcounter</w>
       <w>presigned</w>
       <w>retransform</w>
       <w>retransformer</w>
+      <w>sysenv</w>
+      <w>sysprop</w>
+      <w>vmoption</w>
       <w>wangji</w>
     </words>
   </dictionary>

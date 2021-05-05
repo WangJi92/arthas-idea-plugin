@@ -48,12 +48,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.FIELD_NAME.getCode(),
             "Get Simple Static Field", true, true, false, true),
-
-
-    /**
-     * dashboard
-     */
-    DASHBOARD_N_1("dashboard -n 1", "Dashboard Info", false, false, false, false),
     /**
      * dump
      */
