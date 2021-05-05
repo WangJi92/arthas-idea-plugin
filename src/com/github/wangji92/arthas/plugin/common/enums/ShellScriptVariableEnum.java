@@ -15,6 +15,11 @@ public enum ShellScriptVariableEnum implements EnumCodeMsg<String> {
      * 方法名称
      */
     METHOD_NAME("${METHOD_NAME}", "METHOD_NAME"),
+
+    /**
+     * 非 * 的 methodName
+     */
+    METHOD_NAME_NOT_STAR("${METHOD_NAME_NOT_STAR}", "METHOD_NAME_NOT_STAR"),
     /**
      * 字段名称
      */
@@ -51,6 +56,10 @@ public enum ShellScriptVariableEnum implements EnumCodeMsg<String> {
      * 打印条件表达式
      */
     PRINT_CONDITION_RESULT("${PRINT_CONDITION_RESULT}", "PRINT_CONDITION_RESULT"),
+    /**
+     * 条件表达式默认值
+     */
+    CONDITION_EXPRESS_DEFAULT("${CONDITION_EXPRESS_DEFAULT}", "CONDITION_EXPRESS_DEFAULT"),
     /**
      * classloader hash value
      */

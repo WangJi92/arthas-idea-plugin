@@ -16,6 +16,12 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 快捷命令
+ *
+ * @author 汪小哥
+ * @date 05-05-2021
+ */
 public class ArthasShellScriptCommandDialog extends JDialog {
     private JPanel contentPane;
     private JComboBox shellScriptComboBox;
@@ -96,10 +102,14 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         params.put(ShellScriptVariableEnum.INVOKE_MONITOR_INTERVAL.getEnumMsg(), instance.invokeMonitorInterval);
         String skpJdkMethodCommand = instance.traceSkipJdk ? "" : ArthasCommandConstants.DEFAULT_SKIP_JDK_FALSE;
         params.put(ShellScriptVariableEnum.SKIP_JDK_METHOD.getEnumMsg(), skpJdkMethodCommand);
-        String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
-        params.put(ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getEnumMsg(), conditionExpressDisplay);
-        params.put(ShellScriptVariableEnum.EXECUTE_INFO.getEnumMsg(), conditionExpressDisplay);
+        String printConditionExpress = instance.printConditionExpress ? "-v" : "";
+        params.put(ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getEnumMsg(), printConditionExpress);
+        params.put(ShellScriptVariableEnum.EXECUTE_INFO.getEnumMsg(), this.executeInfo);
         params.put(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getEnumMsg(), "${CLASSLOADER_HASH_VALUE}");
+        String methodNameNotStar = "*".equals(this.methodName) ? "" : this.methodName;
+        params.put(ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getEnumMsg(), methodNameNotStar);
+        String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
+        params.put(ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getEnumMsg(), conditionExpressDisplay);
         this.contextParams = params;
     }
 

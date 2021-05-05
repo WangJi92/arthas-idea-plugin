@@ -19,8 +19,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
             + " -x "
-            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode(),
-            "watch", true, false, true, false),
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
+            "display the input/output parameter, return object, and thrown exception of specified method invocation", true, false, true, false),
     /**
      * trace
      */
@@ -29,8 +30,54 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
             + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
-            + ShellScriptVariableEnum.SKIP_JDK_METHOD.getCode(),
-            "trace ", true, false, true, false),
+            + ShellScriptVariableEnum.SKIP_JDK_METHOD.getCode() + " "
+            + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
+            "trace the execution time of specified method invocation. ", true, false, true, false),
+
+    /**
+     * trace
+     */
+    STACK("stack "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
+            + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
+            "display the stack trace for the specified class and method", true, false, true, false),
+    /**
+     * monitor
+     */
+    MONITOR("monitor "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_MONITOR_COUNT.getCode() + " "
+            + ShellScriptVariableEnum.INVOKE_MONITOR_COUNT.getCode() + "  --cycle "
+            + ShellScriptVariableEnum.INVOKE_MONITOR_INTERVAL.getCode() + " "
+            + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
+            "monitor method execution statistics ", true, false, true, false),
+
+    /**
+     * jad
+     */
+    JAD("jad --source-only "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode(),
+            "decompile class", true, false, false, false),
+    /**
+     * sc
+     */
+    SC("sc -d "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode(),
+            "search all the classes loaded by jvm", true, false, false, false),
+    /**
+     * sc
+     */
+    SM("sm -d "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME.getCode(),
+            "search the method of classes loaded by jvm", true, false, false, false),
+
 
     /**
      * 调用静态变量 或者方法
@@ -42,12 +89,25 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode()
             + " -c "
             + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
-            "Ognl To Get Static Method Field", true, false, false, true),
-
+            "ognl to get static method field", true, false, false, true),
+    /**
+     * 简单的字段
+     */
     GETSTATIC("getstatic "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.FIELD_NAME.getCode(),
-            "Get Simple Static Field", true, true, false, true),
+            "get simple static field", true, true, false, true),
+    /**
+     * logger
+     */
+    LOGGER("logger --name "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + "--level debug "
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "--level debug 可以编辑修改为 info、error", true, false, false, false),
+
+
     /**
      * dump
      */
@@ -56,7 +116,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -d /tmp/output "
             + " -c "
             + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
-            "Dump Class Byte Array from JVM", true, false, false, false),
+            "dump class byte array from jvm", true, false, false, false),
 
 
     ;
