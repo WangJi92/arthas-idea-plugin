@@ -5,6 +5,7 @@ import com.github.wangji92.arthas.plugin.common.combox.CustomDefaultListCellRend
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptConstantEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
+import com.github.wangji92.arthas.plugin.common.param.ScriptParam;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
@@ -44,24 +45,38 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     private String className;
 
     private String fieldName;
+
     private String methodName;
 
     private String executeInfo;
 
+    /**
+     * 是否静态方法 字段
+     */
     private boolean modifierStatic;
+
+    /**
+     * bean 的名称
+     */
+    private String beanName;
+
+    private Boolean anonymousClass;
+
 
     /**
      * 当前执行上下文
      */
     private Map<String, String> contextParams = new HashMap<>(10);
 
-    public ArthasShellScriptCommandDialog(Project project, String className, String fieldName, String methodName, String executeInfo, boolean modifierStatic) {
-        this.className = className;
-        this.project = project;
-        this.fieldName = fieldName;
-        this.methodName = methodName;
-        this.executeInfo = executeInfo;
-        this.modifierStatic = modifierStatic;
+    public ArthasShellScriptCommandDialog(ScriptParam scriptParam) {
+        this.className = scriptParam.getClassName();
+        this.project = scriptParam.getProject();
+        this.fieldName = scriptParam.getFieldName();
+        this.methodName = scriptParam.getMethodName();
+        this.executeInfo = scriptParam.getExecuteInfo();
+        this.modifierStatic = scriptParam.getModifierStatic();
+        this.beanName = scriptParam.getBeanName();
+        this.anonymousClass = scriptParam.getAnonymousClass();
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(closeScriptButton);
@@ -110,6 +125,11 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         params.put(ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getEnumMsg(), methodNameNotStar);
         String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
         params.put(ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getEnumMsg(), conditionExpressDisplay);
+        if (StringUtils.isNotBlank(className) && (className.contains("java.lang.") || className.contains("java.util."))) {
+            params.put(ShellScriptVariableEnum.SPRING_BEAN_NAME.getEnumMsg(), "");
+        } else {
+            params.put(ShellScriptVariableEnum.SPRING_BEAN_NAME.getEnumMsg(), this.beanName);
+        }
         this.contextParams = params;
     }
 
@@ -148,6 +168,11 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             String scCommand = "";
             if (selectedItemStr.contains(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode())) {
                 scCommand = String.join(" ", "sc", "-d", this.className);
+                if (selectedItemStr.contains("#springContext=")) {
+                    // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
+                    String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(project);
+                    scCommand = String.join(" ", "sc", "-d", springContextClassName);
+                }
             }
             // 这里再次处理一下上下文信息
             String finalStr = StringUtils.stringSubstitutorFromText(selectedItemStr, contextParams);
@@ -184,7 +209,14 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             if (Boolean.TRUE.equals(shellScript.getNeedStatic()) && Boolean.FALSE.equals(this.modifierStatic)) {
                 continue;
             }
+
             if (Boolean.FALSE.equals(shellScript.getNeedStatic()) && Boolean.TRUE.equals(this.modifierStatic)) {
+                continue;
+            }
+            if (Boolean.TRUE.equals(shellScript.getNotAnonymousClass()) && Boolean.TRUE.equals(this.anonymousClass)) {
+                continue;
+            }
+            if (Boolean.TRUE.equals(shellScript.getNeedSpringBean()) && StringUtils.isNotBlank(beanName) && (className.contains("java.lang.") || className.contains("java.util."))) {
                 continue;
             }
             String codeValue = shellScript.getCode();

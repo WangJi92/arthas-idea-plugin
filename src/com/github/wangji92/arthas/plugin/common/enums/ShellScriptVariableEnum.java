@@ -12,6 +12,10 @@ public enum ShellScriptVariableEnum implements EnumCodeMsg<String> {
      */
     CLASS_NAME("${CLASS_NAME}", "CLASS_NAME"),
     /**
+     * spring bean 的名称
+     */
+    SPRING_BEAN_NAME("${SPRING_BEAN_NAME}", "SPRING_BEAN_NAME"),
+    /**
      * 方法名称
      */
     METHOD_NAME("${METHOD_NAME}", "METHOD_NAME"),

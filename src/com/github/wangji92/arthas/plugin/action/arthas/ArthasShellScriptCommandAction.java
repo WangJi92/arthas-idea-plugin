@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
+import com.github.wangji92.arthas.plugin.common.param.ScriptParam;
 import com.github.wangji92.arthas.plugin.ui.ArthasShellScriptCommandDialog;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -48,44 +49,45 @@ public class ArthasShellScriptCommandAction extends AnAction {
         VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
         assert virtualFileFiles != null;
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
-        String className = "";
-        String fieldName = "";
-        String methodName = "";
-        String executeInfo = "";
-        boolean modifyStatic = false;
+        ScriptParam scriptParam = new ScriptParam();
+        scriptParam.setProject(project);
         if (virtualFileFiles.length == 1 && OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
+            scriptParam.setClassName(className);
+            String executeInfo = OgnlPsUtils.getExecuteInfo(psiElement);
+            String methodName = OgnlPsUtils.getMethodName(psiElement);
+            scriptParam.setMethodName(methodName);
+            scriptParam.setExecuteInfo(executeInfo);
             if (psiElement instanceof PsiMethod) {
                 PsiMethod psiMethod = (PsiMethod) psiElement;
-                //处理内部类 匿名类获取class的问题
-                className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
-                // complexParameterCall(#{" ":" "})
-                executeInfo = OgnlPsUtils.getMethodParameterDefault(psiMethod);
-                methodName = psiMethod.getNameIdentifier().getText();
-                if (psiMethod.isConstructor()) {
-                    methodName = "<init>";
-                }
                 if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
-                    modifyStatic = true;
+                    scriptParam.setModifierStatic(true);
+                }
+                if (!(psiMethod.getContainingClass() instanceof PsiAnonymousClass)) {
+                    String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiMethod.getContainingClass());
+                    scriptParam.setBeanName(lowCamelBeanName);
+                } else {
+                    scriptParam.setAnonymousClass(true);
                 }
             }
-            if (psiElement instanceof PsiClass) {
-                PsiClass psiClass = (PsiClass) psiElement;
-                className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass);
-                methodName = "*";
-            }
-
             if (psiElement instanceof PsiField) {
                 PsiField psiField = (PsiField) psiElement;
-                className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
-                fieldName = psiField.getNameIdentifier().getText();
-                methodName = "*";
-                executeInfo = fieldName;
+                String fieldName = psiField.getNameIdentifier().getText();
+                scriptParam.setFieldName(fieldName);
                 if (psiField.hasModifierProperty(PsiModifier.STATIC)) {
-                    modifyStatic = true;
+                    scriptParam.setModifierStatic(true);
+                }
+                if (!(psiField.getContainingClass() instanceof PsiAnonymousClass)) {
+                    String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiField.getContainingClass());
+                    scriptParam.setBeanName(lowCamelBeanName);
+                } else {
+                    scriptParam.setAnonymousClass(true);
                 }
             }
         }
-        ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(project, className, fieldName, methodName, executeInfo, modifyStatic);
+
+
+        ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(scriptParam);
         dialog.open("shell script command");
     }
 }

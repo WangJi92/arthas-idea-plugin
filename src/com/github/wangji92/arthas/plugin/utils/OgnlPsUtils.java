@@ -137,6 +137,42 @@ public class OgnlPsUtils {
     }
 
     /**
+     * 获取方法名称
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getMethodName(@NotNull PsiElement psiElement) {
+        String methodName = "";
+        if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+            methodName = "*";
+            if (psiElement instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) psiElement;
+                methodName = psiMethod.getNameIdentifier().getText();
+                if (psiMethod.isConstructor()) {
+                    methodName = "<init>";
+                }
+            }
+        }
+        return methodName;
+    }
+
+    /**
+     * 获取可以执行的参数
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getExecuteInfo(@NotNull PsiElement psiElement) {
+        if (psiElement instanceof PsiField) {
+            return ((PsiField) psiElement).getNameIdentifier().getText();
+        } else if (psiElement instanceof PsiMethod) {
+            return getMethodParameterDefault((PsiMethod) psiElement);
+        }
+        return "";
+    }
+
+    /**
      * 构造方法的参数信息  complexParameterCall(#{" ":" "}) 后面这个部分需要构造
      *
      * @param psiMethod

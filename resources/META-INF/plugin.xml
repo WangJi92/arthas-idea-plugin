@@ -280,7 +280,8 @@
     <!--    but the plugin does not declare explicit dependency on the Java plugin, via <depends>com.intellij.modules.java</depends>.-->
     <!--    Java functionality was extracted from the IntelliJ Platform to a separate plugin in IDEA 2019.2.-->
     <!--    For more info refer to https://blog.jetbrains.com/platform/2019/06/java-functionality-extracted-as-a-plugin-->
-    <depends>com.intellij.modules.java</depends>.
+    <depends>com.intellij.modules.java</depends>
+
 
     <actions>
         <!-- Add your actions here -->
