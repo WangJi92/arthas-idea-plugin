@@ -172,16 +172,19 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         });
         shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox));
         for (ShellScriptCommandEnum shellScript : ShellScriptCommandEnum.values()) {
-            if (shellScript.getNeedClass() && StringUtils.isBlank(this.className)) {
+            if (Boolean.TRUE.equals(shellScript.getNeedClass()) && StringUtils.isBlank(this.className)) {
                 continue;
             }
-            if (shellScript.getNeedField() && StringUtils.isBlank(this.fieldName)) {
+            if (Boolean.TRUE.equals(shellScript.getNeedField()) && StringUtils.isBlank(this.fieldName)) {
                 continue;
             }
-            if (shellScript.getNeedMethod() && StringUtils.isBlank(this.methodName)) {
+            if (Boolean.TRUE.equals(shellScript.getNeedMethod()) && (StringUtils.isBlank(this.methodName) || "*".equalsIgnoreCase(this.methodName))) {
                 continue;
             }
-            if (shellScript.getNeedStatic() && Boolean.FALSE.equals(this.modifierStatic)) {
+            if (Boolean.TRUE.equals(shellScript.getNeedStatic()) && Boolean.FALSE.equals(this.modifierStatic)) {
+                continue;
+            }
+            if (Boolean.FALSE.equals(shellScript.getNeedStatic()) && Boolean.TRUE.equals(this.modifierStatic)) {
                 continue;
             }
             String codeValue = shellScript.getCode();

@@ -10,6 +10,50 @@ import com.github.wangji92.arthas.plugin.common.enums.base.EnumCodeMsg;
  */
 public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     /**
+     * 调用静态变量 或者方法
+     */
+    OGNL_GETSTATIC("ognl "
+            + " -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode()
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "ognl to get static method field 注意需要编执行方法的参数", true, null, null, true),
+    /**
+     * 简单的字段
+     */
+    GETSTATIC("getstatic "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.FIELD_NAME.getCode(),
+            "get simple static field", true, true, null, true),
+
+    /**
+     * watch static field
+     */
+    WATCH_STATIC_FILED("watch "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " * "
+            + " '{params,returnObj,throwExp,@" + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@" + ShellScriptVariableEnum.FIELD_NAME.getCode() + "}'"
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
+            + " -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
+            "watch  static field", true, true, null, true),
+    /**
+     * watch non static field
+     */
+    WATCH_NON_STATIC_FILED("watch "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
+            + " '{params,returnObj,throwExp,target." + ShellScriptVariableEnum.FIELD_NAME.getCode() + "}'"
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
+            + " -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + "'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'",
+            "watch non static field", true, true, null, false),
+    /**
      * watch
      */
     WATCH("watch "
@@ -21,7 +65,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "display the input/output parameter, return object, and thrown exception of specified method invocation", true, false, true, false),
+            "display the input/output parameter, return object, and thrown exception of specified method invocation", true, null, null, null),
+
     /**
      * trace
      */
@@ -32,7 +77,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
             + ShellScriptVariableEnum.SKIP_JDK_METHOD.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "trace the execution time of specified method invocation. ", true, false, true, false),
+            "trace the execution time of specified method invocation. ", true, null, null, null),
 
     /**
      * trace
@@ -43,7 +88,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "display the stack trace for the specified class and method", true, false, true, false),
+            "display the stack trace for the specified class and method", true, null, null, null),
     /**
      * monitor
      */
@@ -51,52 +96,56 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
             + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
-            + ShellScriptVariableEnum.INVOKE_MONITOR_COUNT.getCode() + " "
             + ShellScriptVariableEnum.INVOKE_MONITOR_COUNT.getCode() + "  --cycle "
             + ShellScriptVariableEnum.INVOKE_MONITOR_INTERVAL.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "monitor method execution statistics ", true, false, true, false),
-
+            "monitor method execution statistics ", true, null, null, null),
     /**
      * jad
      */
     JAD("jad --source-only "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode(),
-            "decompile class", true, false, false, false),
+            "decompile class", true, null, null, null),
     /**
      * sc
      */
     SC("sc -d "
             + ShellScriptVariableEnum.CLASS_NAME.getCode(),
-            "search all the classes loaded by jvm", true, false, false, false),
+            "search all the classes loaded by jvm", true, null, null, null),
     /**
      * sc
      */
     SM("sm -d "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.METHOD_NAME.getCode(),
-            "search the method of classes loaded by jvm", true, false, false, false),
+            "search the method of classes loaded by jvm", true, null, null, null),
 
 
     /**
-     * 调用静态变量 或者方法
+     * watch * to execute static method
      */
-    OGNL_GETSTATIC("ognl "
+    WATCH_EXECUTE_STATIC_METHOD("watch "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " * "
+            + " '{params,returnObj,throwExp,@" + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@" + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "}'"
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
             + " -x "
-            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
-            + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
-            + ShellScriptVariableEnum.EXECUTE_INFO.getCode()
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
-            "ognl to get static method field", true, false, false, true),
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
+            "watch * to execute static method 注意需要编辑执行静态方法的参数", true, null, true, true),
     /**
-     * 简单的字段
+     * watch 执行 非静态方法
      */
-    GETSTATIC("getstatic "
-            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
-            + ShellScriptVariableEnum.FIELD_NAME.getCode(),
-            "get simple static field", true, true, false, true),
+    WATCH_EXECUTE_NO_STATIC_METHOD("watch "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " * "
+            + " '{params,returnObj,throwExp,target." + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "}'"
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
+            + " -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + "'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'",
+            "watch * to execute method 注意需要编执行方法的参数", true, null, true, false),
     /**
      * logger
      */
@@ -105,7 +154,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "--level debug "
             + " -c "
             + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
-            "--level debug 可以编辑修改为 info、error", true, false, false, false),
+            "--level debug 可以编辑修改为 info、error", true, null, null, null),
 
 
     /**
@@ -116,13 +165,21 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -d /tmp/output "
             + " -c "
             + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
-            "dump class byte array from jvm", true, false, false, false),
+            "dump class byte array from jvm", true, null, null, null),
 
 
     ;
 
-
-    ShellScriptCommandEnum(String code, String msg, boolean needClass, boolean needField, boolean needMethod, boolean needStatic) {
+    /**
+     * true 一定需要  false 一定不需要  null 不关心
+     * @param code
+     * @param msg
+     * @param needClass
+     * @param needField
+     * @param needMethod
+     * @param needStatic
+     */
+    ShellScriptCommandEnum(String code, String msg, Boolean needClass, Boolean needField, Boolean needMethod, Boolean needStatic) {
         this.code = code;
         this.msg = msg;
         this.needClass = needClass;
