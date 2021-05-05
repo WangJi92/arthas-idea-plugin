@@ -7,9 +7,7 @@ import com.github.wangji92.arthas.plugin.common.enums.ShellScriptConstantEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
-import com.github.wangji92.arthas.plugin.utils.CommonExecuteScriptUtils;
-import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
-import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 
@@ -32,6 +30,8 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     private JButton commonShellScriptCommandButton;
     private JButton closeScriptButton;
     private JRadioButton selectCommandCloseDialogRadioButton;
+    private JButton dyCopyCommandButton;
+    private JButton commonCopyCommandButton;
 
     private Project project;
 
@@ -146,6 +146,20 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             }
             this.doCloseDialog();
         });
+
+        dyCopyCommandButton.addActionListener(e -> {
+            Object selectedItem = shellScriptComboBox.getSelectedItem();
+            assert selectedItem != null;
+            String selectedItemStr = selectedItem.toString();
+            ClipboardUtils.setClipboardString(selectedItemStr);
+            if (selectedItemStr.contains(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode())) {
+                NotifyUtils.notifyMessage(project, "命令已复制到剪切板,部分命令需要classloader hash value 直接执行不可以");
+            } else {
+                NotifyUtils.notifyMessage(project, "命令已复制到剪切板,到服务启动arthas 粘贴执行");
+            }
+
+
+        });
         shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox));
         for (ShellScriptCommandEnum shellScript : ShellScriptCommandEnum.values()) {
             if (shellScript.getNeedClass() && StringUtils.isBlank(this.className)) {
@@ -201,6 +215,19 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                 CommonExecuteScriptUtils.executeCommonScript(project, "", selectedItemStr, "");
             }
             this.doCloseDialog();
+        });
+        commonCopyCommandButton.addActionListener(e -> {
+            Object selectedItem = commonShellScriptComboBox.getSelectedItem();
+            assert selectedItem != null;
+            String selectedItemStr = selectedItem.toString();
+            ClipboardUtils.setClipboardString(selectedItemStr);
+            if (selectedItemStr.contains(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode())) {
+                NotifyUtils.notifyMessage(project, "命令已复制到剪切板,部分命令需要classloader hash value 直接执行不可以");
+            } else {
+                NotifyUtils.notifyMessage(project, "命令已复制到剪切板,到服务启动arthas 粘贴执行（部分为批量脚本不能执行，需手动修改)");
+            }
+
+
         });
     }
 

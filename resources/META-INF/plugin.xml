@@ -492,12 +492,13 @@
                 description="Mybatis mapper xml reload"/>
         <action id="ArthasShellScriptCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasShellScriptCommandAction"
-                text="Shell Script Command"
+                text="Quickly Shell Script"
                 description="Shell script command"/>
 
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
             <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
+            <reference ref="ArthasShellScriptCommandAction"/>
             <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
@@ -532,6 +533,7 @@
             <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="$Paste"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <separator/>
+            <reference ref="ArthasShellScriptCommandAction"/>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
             <reference ref="ArthasTraceMultipleCommand"/>
@@ -554,7 +556,6 @@
             <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
             <reference ref="ArthasMybatisMapperReloadAction"/>
-            <reference ref="ArthasShellScriptCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
             <reference ref="ArthasSmCommandAction"/>
