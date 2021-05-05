@@ -1,18 +1,19 @@
 package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.common.combox.CustomComboBoxItem;
+import com.github.wangji92.arthas.plugin.common.combox.CustomDefaultListCellRenderer;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptConstantEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.CommonExecuteScriptUtils;
+import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxEditor;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,16 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     private JPanel contentPane;
     private JComboBox shellScriptComboBox;
     private JButton shellScriptCommandButton;
+    /**
+     * 通用脚本
+     */
+    private JComboBox commonShellScriptComboBox;
+    /**
+     * 通用脚本点击
+     */
+    private JButton commonShellScriptCommandButton;
+    private JButton closeScriptButton;
+    private JRadioButton selectCommandCloseDialogRadioButton;
 
     private Project project;
 
@@ -33,7 +44,9 @@ public class ArthasShellScriptCommandDialog extends JDialog {
 
     private boolean modifierStatic;
 
-
+    /**
+     * 当前执行上下文
+     */
     private Map<String, String> contextParams = new HashMap<>(10);
 
     public ArthasShellScriptCommandDialog(Project project, String className, String fieldName, String methodName, String executeInfo, boolean modifierStatic) {
@@ -45,18 +58,11 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         this.modifierStatic = modifierStatic;
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(shellScriptCommandButton);
-
-        shellScriptCommandButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        // call onCancel() when cross is clicked
+        getRootPane().setDefaultButton(closeScriptButton);
+        closeScriptButton.addActionListener(e -> onOK());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
@@ -99,6 +105,32 @@ public class ArthasShellScriptCommandDialog extends JDialog {
 
     @SuppressWarnings("unchecked")
     private void init() {
+        this.initDynamicShellScript();
+        this.commonScriptInit();
+        this.initSelectCommandCloseDialogSetting();
+    }
+
+    private void initSelectCommandCloseDialogSetting() {
+        selectCommandCloseDialogRadioButton.addItemListener(e -> {
+            if (e.getSource().equals(selectCommandCloseDialogRadioButton)) {
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    PropertiesComponentUtils.setValue("scriptDialogCloseWhenSelectedCommand", "n");
+                } else if (e.getStateChange() == ItemEvent.SELECTED) {
+                    PropertiesComponentUtils.setValue("scriptDialogCloseWhenSelectedCommand", "y");
+                }
+            }
+        });
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        if ("y".equalsIgnoreCase(instance.scriptDialogCloseWhenSelectedCommand)) {
+            selectCommandCloseDialogRadioButton.setSelected(true);
+        }
+    }
+
+    /**
+     * 初始化动态执行脚本
+     */
+    @SuppressWarnings("unchecked")
+    private void initDynamicShellScript() {
         shellScriptCommandButton.addActionListener(e -> {
             Object selectedItem = shellScriptComboBox.getSelectedItem();
             assert selectedItem != null;
@@ -112,30 +144,9 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             if (StringUtils.isNotBlank(finalStr)) {
                 CommonExecuteScriptUtils.executeCommonScript(project, scCommand, finalStr, "");
             }
+            this.doCloseDialog();
         });
-        //值太长展示不全处理 https://www.java-forums.org/awt-swing/16196-item-too-big-jshellScriptComboBox.html
-        shellScriptComboBox.setRenderer(new DefaultListCellRenderer() {
-
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                                                          int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                String tipText = value.toString();
-                if (value instanceof CustomComboBoxItem) {
-                    tipText = ((CustomComboBoxItem) value).getTipText();
-                }
-                if (isSelected) {
-                    shellScriptComboBox.setToolTipText(tipText);
-                }
-                setToolTipText(tipText);
-                return this;
-            }
-
-        });
-        shellScriptComboBox.setEditor(new BasicComboBoxEditor());
-
-
+        shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox));
         for (ShellScriptCommandEnum shellScript : ShellScriptCommandEnum.values()) {
             if (shellScript.getNeedClass() && StringUtils.isBlank(this.className)) {
                 continue;
@@ -157,8 +168,40 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             boxItem.setTipText(shellScript.getEnumMsg());
             shellScriptComboBox.addItem(boxItem);
         }
+    }
 
+    /**
+     * 关闭窗口
+     */
+    private void doCloseDialog() {
+        AppSettingsState instance = AppSettingsState.getInstance(project);
+        if ("y".equalsIgnoreCase(instance.scriptDialogCloseWhenSelectedCommand)) {
+            dispose();
+        }
+    }
 
+    /**
+     * 常用脚本添加
+     */
+    @SuppressWarnings("unchecked")
+    private void commonScriptInit() {
+        for (ShellScriptConstantEnum scriptConstantEnum : ShellScriptConstantEnum.values()) {
+            CustomComboBoxItem<ShellScriptConstantEnum> boxItem = new CustomComboBoxItem<ShellScriptConstantEnum>();
+            boxItem.setContentObject(scriptConstantEnum);
+            boxItem.setDisplay(scriptConstantEnum.getCode());
+            boxItem.setTipText(scriptConstantEnum.getEnumMsg());
+            commonShellScriptComboBox.addItem(boxItem);
+        }
+        commonShellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(commonShellScriptComboBox));
+        commonShellScriptCommandButton.addActionListener(e -> {
+            Object selectedItem = commonShellScriptComboBox.getSelectedItem();
+            assert selectedItem != null;
+            String selectedItemStr = selectedItem.toString();
+            if (StringUtils.isNotBlank(selectedItemStr)) {
+                CommonExecuteScriptUtils.executeCommonScript(project, "", selectedItemStr, "");
+            }
+            this.doCloseDialog();
+        });
     }
 
     private void onOK() {
@@ -177,7 +220,6 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     public void open(String title) {
         setTitle(title);
         pack();
-        setMinimumSize(new Dimension(800, 50));
         //两个屏幕处理出现问题，跳到主屏幕去了
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
         setVisible(true);

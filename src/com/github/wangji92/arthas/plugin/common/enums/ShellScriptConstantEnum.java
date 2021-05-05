@@ -13,8 +13,8 @@ public enum ShellScriptConstantEnum implements EnumCodeMsg<String> {
      * thread
      */
     BATCH_THREAD("thread -i 3000 -n 5;thread -b;thread --state BLOCKED;", "batch thread"),
-    PROFILER("profiler start --event cpu --interval 10000000 --format jfr -duration 180", "支持jfr格式的工具来查看,JDK Mission Control or JProfiler"),
-    PROFILER_ALLOC("profiler start --event alloc --interval 10000000 --threads --format svg -duration 180 --threads", "火焰图"),
+    PROFILER("profiler start --event cpu --interval 10000000 --format jfr -duration 180", "采集cpu jfr，支持jfr格式的工具来查看,JDK Mission Control or JProfiler 执行 180秒自动结束"),
+    PROFILER_ALLOC("profiler start --event alloc --interval 10000000 --threads --format svg -duration 180 --threads", "采集alloc 火焰图 执行 180秒自动结束"),
     HEAPDUMP("heapdump /tmp/dump.hprof", "heap dump,heapdump --live /tmp/dump.hprof"),
     JVM("jvm", "display the target jvm information"),
     CLASSLOADER("classloader;classloader -l;classloader -t;", "show classloader info"),

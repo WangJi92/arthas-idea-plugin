@@ -177,6 +177,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public String mybatisMapperReloadMethodName = DEFAULT_MYBATIS_MAPPER_RELOAD_METHOD_NAME;
 
+    /**
+     * 快捷脚本 选择命令后关闭窗口
+     */
+    public String scriptDialogCloseWhenSelectedCommand = "y";
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
@@ -194,7 +199,24 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
         // 检查设置全局的mybatis mapper bean的名称
         checkGlobalMybatisMapper(appSettingsState);
+
+        /**
+         * 检查快捷脚本是否关闭窗口
+         */
+        checkGlobalScriptDialogCloseWhenSelectedCommand(appSettingsState);
         return appSettingsState;
+    }
+
+    /**
+     * 选择命令后关闭窗口
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalScriptDialogCloseWhenSelectedCommand(AppSettingsState appSettingsState) {
+        String globalScriptDialogCloseWhenSelectedCommand = PropertiesComponentUtils.getValue("scriptDialogCloseWhenSelectedCommand");
+        if (StringUtils.isNotBlank(globalScriptDialogCloseWhenSelectedCommand) && !"y".equalsIgnoreCase(globalScriptDialogCloseWhenSelectedCommand)) {
+            appSettingsState.scriptDialogCloseWhenSelectedCommand = globalScriptDialogCloseWhenSelectedCommand;
+        }
     }
 
     /**
