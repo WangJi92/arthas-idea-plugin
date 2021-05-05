@@ -46,7 +46,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     WATCH_NON_STATIC_FILED("watch "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
-            + " '{params,returnObj,throwExp,target." + ShellScriptVariableEnum.FIELD_NAME.getCode() + "}'"
+            + " '{params,returnObj,throwExp,target." + ShellScriptVariableEnum.FIELD_NAME.getCode() + "}' "
             + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
             + " -x "
