@@ -73,6 +73,21 @@ public class SpringStaticContextUtils {
         return springContextCLassLists.get(0);
     }
 
+    /**
+     * 是否配置 static spring context 上下文
+     *
+     * @param project
+     * @return
+     */
+    public static boolean booleanConfigStaticSpringContext(Project project) {
+        try {
+            getStaticSpringContextClassName(project);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
     /**
      * 获取spring static context的配置

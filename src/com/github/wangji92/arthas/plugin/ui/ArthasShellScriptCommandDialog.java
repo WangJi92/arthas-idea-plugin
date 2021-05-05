@@ -216,7 +216,13 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             if (Boolean.TRUE.equals(shellScript.getNotAnonymousClass()) && Boolean.TRUE.equals(this.anonymousClass)) {
                 continue;
             }
-            if (Boolean.TRUE.equals(shellScript.getNeedSpringBean()) && StringUtils.isNotBlank(beanName) && (className.contains("java.lang.") || className.contains("java.util."))) {
+            if (Boolean.TRUE.equals(shellScript.getNeedSpringBean())
+                    // 有bean的名称
+                    && StringUtils.isNotBlank(beanName)
+                    // 有配置 static spring context
+                    && SpringStaticContextUtils.booleanConfigStaticSpringContext(project)
+                    // 非 java.lang
+                    && (className.contains("java.lang.") || className.contains("java.util."))) {
                 continue;
             }
             String codeValue = shellScript.getCode();
