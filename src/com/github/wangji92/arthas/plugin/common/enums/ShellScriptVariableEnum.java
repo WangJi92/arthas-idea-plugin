@@ -29,6 +29,10 @@ public enum ShellScriptVariableEnum implements EnumCodeMsg<String> {
      */
     FIELD_NAME("${FIELD_NAME}", "FIELD_NAME"),
     /**
+     * 获取默认值
+     */
+    DEFAULT_FIELD_VALUE("${DEFAULT_FIELD_VALUE}", "DEFAULT_FIELD_VALUE"),
+    /**
      * 可以是字段 xxField
      * 可以是方法 xxMethod(xxx)
      */

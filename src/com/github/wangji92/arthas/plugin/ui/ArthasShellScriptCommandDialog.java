@@ -109,6 +109,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         params.put(ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getEnumMsg(), conditionExpressDisplay);
         String beanName = OgnlPsUtils.getSpringBeanName(scriptParam.getPsiElement());
         params.put(ShellScriptVariableEnum.SPRING_BEAN_NAME.getEnumMsg(), beanName);
+        params.put(ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getEnumMsg(), OgnlPsUtils.getFieldDefaultValue(scriptParam.getPsiElement()));
         this.contextParams = params;
     }
 

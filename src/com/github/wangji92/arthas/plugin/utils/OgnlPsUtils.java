@@ -107,6 +107,26 @@ public class OgnlPsUtils {
     }
 
     /**
+     * isFinalField
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isFinalField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiField) {
+                PsiField psiField = (PsiField) psiElement;
+                if (psiField.hasModifierProperty(PsiModifier.FINAL)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
      * 非静态字段
      *
      * @param psiElement
@@ -376,6 +396,20 @@ public class OgnlPsUtils {
         }
         builder.append(")");
         return builder.toString();
+    }
+
+    /**
+     * 获取字段的默认值
+     *
+     * @return
+     */
+    public static String getFieldDefaultValue(PsiElement psiElement) {
+        String defaultFieldValue = "";
+        if (psiElement instanceof PsiField) {
+            PsiField psiField = (PsiField) psiElement;
+            defaultFieldValue = OgnlPsUtils.getDefaultString(psiField.getType());
+        }
+        return defaultFieldValue;
     }
 
     /**

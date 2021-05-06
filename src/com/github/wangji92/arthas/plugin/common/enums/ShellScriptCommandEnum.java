@@ -16,8 +16,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     /**
      * 调用静态变量 或者方法
      */
-    OGNL_GETSTATIC("ognl "
-            + " -x "
+    OGNL_GETSTATIC("ognl -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode()
@@ -33,6 +32,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return OgnlPsUtils.isStaticMethodOrField(param.getPsiElement());
         }
     },
+
     /**
      * 简单的字段
      */
@@ -229,7 +229,42 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
         }
     },
-
+    /**
+     * ognl reflect to modify static field 注意需要被修改的字段的值
+     */
+    OGNL_TO_MODIFY_NO_FINAL_STATIC_FIELD("ognl -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() +
+            " '#field=@"
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@class.getDeclaredField(\"" + ShellScriptVariableEnum.FIELD_NAME.getCode() + "\"),#field.setAccessible(true),#field.set(null,"
+            + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "ognl reflect to modify static  not final field 注意需要被修改的字段的值") {
+        @Override
+        public boolean support(ScriptParam param) {
+            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+                return false;
+            }
+            return OgnlPsUtils.isStaticField(param.getPsiElement()) && !OgnlPsUtils.isFinalField(param.getPsiElement());
+        }
+    },
+    /**
+     * ognl reflect to modify static final field 注意需要被修改的字段的值
+     */
+    OGNL_TO_MODIFY_FINAL_STATIC_FIELD("ognl -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() +
+            " '#field=@"
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@class.getDeclaredField(\"" + ShellScriptVariableEnum.FIELD_NAME.getCode() + "\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),#field.set(null,"
+            + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "ognl reflect to modify static  final field 注意需要被修改的字段的值") {
+        @Override
+        public boolean support(ScriptParam param) {
+            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+                return false;
+            }
+            return OgnlPsUtils.isStaticField(param.getPsiElement()) && OgnlPsUtils.isFinalField(param.getPsiElement());
+        }
+    },
 
     /**
      * watch * to execute static method
@@ -251,6 +286,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return OgnlPsUtils.isStaticMethod(param.getPsiElement());
         }
     },
+
     /**
      * watch 执行 非静态方法
      */
