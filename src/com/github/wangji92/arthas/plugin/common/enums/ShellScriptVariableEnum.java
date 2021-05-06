@@ -33,6 +33,10 @@ public enum ShellScriptVariableEnum implements EnumCodeMsg<String> {
      */
     DEFAULT_FIELD_VALUE("${DEFAULT_FIELD_VALUE}", "DEFAULT_FIELD_VALUE"),
     /**
+     * 首字母大写
+     */
+    CAPITALIZE_FIELD_VALUE("${CAPITALIZE_FIELD_VALUE}", "CAPITALIZE_FIELD_VALUE"),
+    /**
      * 可以是字段 xxField
      * 可以是方法 xxMethod(xxx)
      */

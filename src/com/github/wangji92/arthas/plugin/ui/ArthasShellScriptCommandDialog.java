@@ -87,13 +87,14 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         String methodName = OgnlPsUtils.getMethodName(scriptParam.getPsiElement());
         String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(scriptParam.getPsiElement());
         this.className = className;
+        String fieldName = OgnlPsUtils.getFieldName(scriptParam.getPsiElement());
         String executeInfo = OgnlPsUtils.getExecuteInfo(scriptParam.getPsiElement());
         Map<String, String> params = new HashMap<>(10);
         params.put(ShellScriptVariableEnum.PROPERTY_DEPTH.getEnumMsg(), instance.depthPrintProperty);
         params.put(ShellScriptVariableEnum.CLASS_NAME.getEnumMsg(), className);
         params.put(ShellScriptVariableEnum.METHOD_NAME.getEnumMsg(), methodName);
         params.put(ShellScriptVariableEnum.EXECUTE_INFO.getEnumMsg(), executeInfo);
-        params.put(ShellScriptVariableEnum.FIELD_NAME.getEnumMsg(), OgnlPsUtils.getFieldName(scriptParam.getPsiElement()));
+        params.put(ShellScriptVariableEnum.FIELD_NAME.getEnumMsg(), fieldName);
         params.put(ShellScriptVariableEnum.SPRING_CONTEXT.getEnumMsg(), instance.staticSpringContextOgnl);
         params.put(ShellScriptVariableEnum.INVOKE_COUNT.getEnumMsg(), instance.invokeCount);
         params.put(ShellScriptVariableEnum.INVOKE_MONITOR_COUNT.getEnumMsg(), instance.invokeMonitorCount);
@@ -110,6 +111,10 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         String beanName = OgnlPsUtils.getSpringBeanName(scriptParam.getPsiElement());
         params.put(ShellScriptVariableEnum.SPRING_BEAN_NAME.getEnumMsg(), beanName);
         params.put(ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getEnumMsg(), OgnlPsUtils.getFieldDefaultValue(scriptParam.getPsiElement()));
+        if (StringUtils.isNotBlank(fieldName)) {
+            String capitalizeFieldName = StringUtils.capitalize(fieldName);
+            params.put(ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getEnumMsg(), capitalizeFieldName);
+        }
         this.contextParams = params;
     }
 

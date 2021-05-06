@@ -5,6 +5,9 @@ import com.github.wangji92.arthas.plugin.common.param.ScriptParam;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
 
 /**
  * 可以直接执行的脚本通用信息
@@ -129,7 +132,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     SPRING_GET_BEAN("ognl "
             + " -x "
             + "'#springContext=" + ShellScriptVariableEnum.SPRING_CONTEXT.getCode() + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\")."
-            + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + " "
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' "
             + " -c "
             + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
             "invoke static spring bean【手动编辑填写参数】【bean名称可能不正确,可以手动修改】 ") {
@@ -157,6 +160,59 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
+        }
+    },
+    /**
+     * spring get bean to set field
+     */
+    SPRING_GET_BEAN_SET_FIELD("ognl "
+            + " -x "
+            + "'#springContext=" + ShellScriptVariableEnum.SPRING_CONTEXT.getCode()
+            + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\").set" + ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getCode() + "(" + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' "
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "invoke static spring bean set field method 【需要编辑set方法的值】【bean名称可能不正确,可以手动修改】 ") {
+        @Override
+        public boolean support(ScriptParam param) {
+            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+                return false;
+            }
+            // 必须要配置spring static context
+            if (!SpringStaticContextUtils.booleanConfigStaticSpringContext(param.getProject())) {
+                return false;
+            }
+            // 构造方法不支持
+            if (OgnlPsUtils.isConstructor(param.getPsiElement())) {
+                return false;
+            }
+            // spring bean 的名称
+            String springBeanName = OgnlPsUtils.getSpringBeanName(param.getPsiElement());
+            if (StringUtils.isBlank(springBeanName) || "errorBeanName".equals(springBeanName)) {
+                return false;
+            }
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            // 非 java.lang
+            if (className.contains("java.lang.") || className.contains("java.util.")) {
+                return false;
+            }
+            if (!OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement())) {
+                return false;
+            }
+            // 含有set 字段的方法
+            if (param.getPsiElement() instanceof PsiField) {
+                PsiField psiField = (PsiField) param.getPsiElement();
+                String fieldName = OgnlPsUtils.getFieldName(param.getPsiElement());
+                String capitalizeFieldName = StringUtils.capitalize(fieldName);
+                PsiClass containingClass = psiField.getContainingClass();
+                if (containingClass != null) {
+                    for (PsiMethod method : containingClass.getMethods()) {
+                        if (method.getName().equals("set" + capitalizeFieldName)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     },
 
