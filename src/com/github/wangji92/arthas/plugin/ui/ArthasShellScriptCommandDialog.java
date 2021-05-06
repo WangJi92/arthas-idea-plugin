@@ -42,25 +42,9 @@ public class ArthasShellScriptCommandDialog extends JDialog {
 
     private Project project;
 
+    private ScriptParam scriptParam;
+
     private String className;
-
-    private String fieldName;
-
-    private String methodName;
-
-    private String executeInfo;
-
-    /**
-     * 是否静态方法 字段
-     */
-    private boolean modifierStatic;
-
-    /**
-     * bean 的名称
-     */
-    private String beanName;
-
-    private Boolean anonymousClass;
 
 
     /**
@@ -69,14 +53,8 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     private Map<String, String> contextParams = new HashMap<>(10);
 
     public ArthasShellScriptCommandDialog(ScriptParam scriptParam) {
-        this.className = scriptParam.getClassName();
         this.project = scriptParam.getProject();
-        this.fieldName = scriptParam.getFieldName();
-        this.methodName = scriptParam.getMethodName();
-        this.executeInfo = scriptParam.getExecuteInfo();
-        this.modifierStatic = scriptParam.getModifierStatic();
-        this.beanName = scriptParam.getBeanName();
-        this.anonymousClass = scriptParam.getAnonymousClass();
+        this.scriptParam = scriptParam;
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(closeScriptButton);
@@ -106,11 +84,16 @@ public class ArthasShellScriptCommandDialog extends JDialog {
      */
     private void initContextParam() {
         AppSettingsState instance = AppSettingsState.getInstance(project);
+        String methodName = OgnlPsUtils.getMethodName(scriptParam.getPsiElement());
+        String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(scriptParam.getPsiElement());
+        this.className = className;
+        String executeInfo = OgnlPsUtils.getExecuteInfo(scriptParam.getPsiElement());
         Map<String, String> params = new HashMap<>(10);
         params.put(ShellScriptVariableEnum.PROPERTY_DEPTH.getEnumMsg(), instance.depthPrintProperty);
-        params.put(ShellScriptVariableEnum.CLASS_NAME.getEnumMsg(), this.className);
-        params.put(ShellScriptVariableEnum.METHOD_NAME.getEnumMsg(), this.methodName);
-        params.put(ShellScriptVariableEnum.FIELD_NAME.getEnumMsg(), this.fieldName);
+        params.put(ShellScriptVariableEnum.CLASS_NAME.getEnumMsg(), className);
+        params.put(ShellScriptVariableEnum.METHOD_NAME.getEnumMsg(), methodName);
+        params.put(ShellScriptVariableEnum.EXECUTE_INFO.getEnumMsg(), executeInfo);
+        params.put(ShellScriptVariableEnum.FIELD_NAME.getEnumMsg(), OgnlPsUtils.getFieldName(scriptParam.getPsiElement()));
         params.put(ShellScriptVariableEnum.SPRING_CONTEXT.getEnumMsg(), instance.staticSpringContextOgnl);
         params.put(ShellScriptVariableEnum.INVOKE_COUNT.getEnumMsg(), instance.invokeCount);
         params.put(ShellScriptVariableEnum.INVOKE_MONITOR_COUNT.getEnumMsg(), instance.invokeMonitorCount);
@@ -119,17 +102,13 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         params.put(ShellScriptVariableEnum.SKIP_JDK_METHOD.getEnumMsg(), skpJdkMethodCommand);
         String printConditionExpress = instance.printConditionExpress ? "-v" : "";
         params.put(ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getEnumMsg(), printConditionExpress);
-        params.put(ShellScriptVariableEnum.EXECUTE_INFO.getEnumMsg(), this.executeInfo);
         params.put(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getEnumMsg(), "${CLASSLOADER_HASH_VALUE}");
-        String methodNameNotStar = "*".equals(this.methodName) ? "" : this.methodName;
+        String methodNameNotStar = "*".equals(methodName) ? "" : methodName;
         params.put(ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getEnumMsg(), methodNameNotStar);
         String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
         params.put(ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getEnumMsg(), conditionExpressDisplay);
-        if (StringUtils.isNotBlank(className) && (className.contains("java.lang.") || className.contains("java.util."))) {
-            params.put(ShellScriptVariableEnum.SPRING_BEAN_NAME.getEnumMsg(), "");
-        } else {
-            params.put(ShellScriptVariableEnum.SPRING_BEAN_NAME.getEnumMsg(), this.beanName);
-        }
+        String beanName = OgnlPsUtils.getSpringBeanName(scriptParam.getPsiElement());
+        params.put(ShellScriptVariableEnum.SPRING_BEAN_NAME.getEnumMsg(), beanName);
         this.contextParams = params;
     }
 
@@ -197,32 +176,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         });
         shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox));
         for (ShellScriptCommandEnum shellScript : ShellScriptCommandEnum.values()) {
-            if (Boolean.TRUE.equals(shellScript.getNeedClass()) && StringUtils.isBlank(this.className)) {
-                continue;
-            }
-            if (Boolean.TRUE.equals(shellScript.getNeedField()) && StringUtils.isBlank(this.fieldName)) {
-                continue;
-            }
-            if (Boolean.TRUE.equals(shellScript.getNeedMethod()) && (StringUtils.isBlank(this.methodName) || "*".equalsIgnoreCase(this.methodName))) {
-                continue;
-            }
-            if (Boolean.TRUE.equals(shellScript.getNeedStatic()) && Boolean.FALSE.equals(this.modifierStatic)) {
-                continue;
-            }
-
-            if (Boolean.FALSE.equals(shellScript.getNeedStatic()) && Boolean.TRUE.equals(this.modifierStatic)) {
-                continue;
-            }
-            if (Boolean.TRUE.equals(shellScript.getNotAnonymousClass()) && Boolean.TRUE.equals(this.anonymousClass)) {
-                continue;
-            }
-            if (Boolean.TRUE.equals(shellScript.getNeedSpringBean())
-                    // 有bean的名称
-                    && StringUtils.isNotBlank(beanName)
-                    // 有配置 static spring context
-                    && SpringStaticContextUtils.booleanConfigStaticSpringContext(project)
-                    // 非 java.lang
-                    && (className.contains("java.lang.") || className.contains("java.util."))) {
+            if (!shellScript.support(this.scriptParam)) {
                 continue;
             }
             String codeValue = shellScript.getCode();
@@ -312,27 +266,4 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         this.project = project;
     }
 
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
-    }
-
-    public String getExecuteInfo() {
-        return executeInfo;
-    }
-
-    public void setExecuteInfo(String executeInfo) {
-        this.executeInfo = executeInfo;
-    }
 }

@@ -2,14 +2,13 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.common.param.ScriptParam;
 import com.github.wangji92.arthas.plugin.ui.ArthasShellScriptCommandDialog;
-import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -51,41 +50,7 @@ public class ArthasShellScriptCommandAction extends AnAction {
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         ScriptParam scriptParam = new ScriptParam();
         scriptParam.setProject(project);
-        if (virtualFileFiles.length == 1 && OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
-            scriptParam.setClassName(className);
-            String executeInfo = OgnlPsUtils.getExecuteInfo(psiElement);
-            String methodName = OgnlPsUtils.getMethodName(psiElement);
-            scriptParam.setMethodName(methodName);
-            scriptParam.setExecuteInfo(executeInfo);
-            if (psiElement instanceof PsiMethod) {
-                PsiMethod psiMethod = (PsiMethod) psiElement;
-                if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
-                    scriptParam.setModifierStatic(true);
-                }
-                if (!(psiMethod.getContainingClass() instanceof PsiAnonymousClass)) {
-                    String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiMethod.getContainingClass());
-                    scriptParam.setBeanName(lowCamelBeanName);
-                } else {
-                    scriptParam.setAnonymousClass(true);
-                }
-            }
-            if (psiElement instanceof PsiField) {
-                PsiField psiField = (PsiField) psiElement;
-                String fieldName = psiField.getNameIdentifier().getText();
-                scriptParam.setFieldName(fieldName);
-                if (psiField.hasModifierProperty(PsiModifier.STATIC)) {
-                    scriptParam.setModifierStatic(true);
-                }
-                if (!(psiField.getContainingClass() instanceof PsiAnonymousClass)) {
-                    String lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiField.getContainingClass());
-                    scriptParam.setBeanName(lowCamelBeanName);
-                } else {
-                    scriptParam.setAnonymousClass(true);
-                }
-            }
-        }
-
+        scriptParam.setPsiElement(psiElement);
 
         ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(scriptParam);
         dialog.open("shell script command");

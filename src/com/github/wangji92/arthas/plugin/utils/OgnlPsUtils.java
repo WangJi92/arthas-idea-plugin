@@ -32,6 +32,142 @@ public class OgnlPsUtils {
     private static final Logger LOG = Logger.getInstance(OgnlPsUtils.class);
 
     /**
+     * 是否为匿名类
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isAnonymousClass(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (getCommonOrInnerOrAnonymousClassName(psiElement).contains("*$*")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 是否为静态的字段或者方法
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isStaticMethodOrField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                return isStaticMethod(psiElement);
+            } else if (psiElement instanceof PsiField) {
+                return isStaticField(psiElement);
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 静态方法
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isStaticMethod(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) psiElement;
+                if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 静态字段
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isStaticField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) psiElement;
+                if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 非静态字段
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isNonStaticField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiField) {
+                if (!isStaticField(psiElement)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 非静态方法
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isNonStaticMethod(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                if (!isStaticMethod(psiElement)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 这个是非静态的方法或者字段
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isNonStaticMethodOrField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                if (!isStaticMethod(psiElement)) {
+                    result = true;
+                }
+            } else if (psiElement instanceof PsiField) {
+                if (!isStaticField(psiElement)) {
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    /**
      * 获取内部类、匿名类的class的 ognl 名称
      *
      * @param psiElement
@@ -134,6 +270,23 @@ public class OgnlPsUtils {
         qualifiedClassName = String.join("", ognlQualifiedClassNameArray);
         return qualifiedClassName;
 
+    }
+
+    /**
+     * 字段的名称
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getFieldName(@NotNull PsiElement psiElement) {
+        String fieldName = "";
+        if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiField) {
+                PsiField psiField = (PsiField) psiElement;
+                fieldName = psiField.getNameIdentifier().getText();
+            }
+        }
+        return fieldName;
     }
 
     /**
@@ -283,6 +436,28 @@ public class OgnlPsUtils {
         result = "new " + canonicalText + "()";
         return result;
 
+    }
+
+    /**
+     * 获取spring bean 的名称 【不是非常的精确】
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getSpringBeanName(PsiElement psiElement) {
+        String beanName = "";
+        if (!isPsiFieldOrMethodOrClass(psiElement)) {
+            return beanName;
+        }
+        if (psiElement instanceof PsiMethod) {
+            beanName = OgnlPsUtils.getClassBeanName(((PsiMethod) psiElement).getContainingClass());
+            return beanName;
+        }
+        if (psiElement instanceof PsiField) {
+            beanName = OgnlPsUtils.getClassBeanName(((PsiField) psiElement).getContainingClass());
+            return beanName;
+        }
+        return beanName;
     }
 
     /**
