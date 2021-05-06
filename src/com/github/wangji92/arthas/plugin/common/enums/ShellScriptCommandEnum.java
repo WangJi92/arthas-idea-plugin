@@ -138,6 +138,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "invoke static spring bean【手动编辑填写参数】【bean名称可能不正确,可以手动修改】 ") {
         @Override
         public boolean support(ScriptParam param) {
+            //todo 判断是否为spring bean
             if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
                 return false;
             }
@@ -174,6 +175,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "invoke static spring bean set field method 【需要编辑set方法的值】【bean名称可能不正确,可以手动修改】 ") {
         @Override
         public boolean support(ScriptParam param) {
+            //todo 判断是否为spring bean
             if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
                 return false;
             }
