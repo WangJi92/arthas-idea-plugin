@@ -16,10 +16,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 获取Java类型构造ognl的默认值信息
@@ -546,6 +543,101 @@ public class OgnlPsUtils {
             beanName = StringUtils.uncapitalize(psiClass.getName());
         }
         return beanName;
+
+    }
+
+    /**
+     * 当前是否为spring bean
+     *
+     * @return
+     */
+    public static boolean isSpringBean(PsiElement psiElement) {
+        boolean result = false;
+        if (!isPsiFieldOrMethodOrClass(psiElement)) {
+            return result;
+        }
+        PsiClass psiClass = null;
+        if (psiElement instanceof PsiField) {
+            PsiField field = (PsiField) psiElement;
+            PsiAnnotation[] annotations = field.getAnnotations();
+            Set<String> annotationTypes = new HashSet<>();
+            annotationTypes.add("org.springframework.beans.factory.annotation.Autowired");
+            annotationTypes.add("org.springframework.beans.factory.annotation.Qualifier");
+            annotationTypes.add("javax.annotation.Resource");
+            annotationTypes.add("org.springframework.beans.factory.annotation.Value");
+            for (PsiAnnotation annotation : annotations) {
+                if (annotationTypes.contains(annotation.getQualifiedName())) {
+                    return true;
+                }
+            }
+            psiClass = field.getContainingClass();
+
+        }
+        if (psiElement instanceof PsiMethod) {
+            PsiMethod psiMethod = (PsiMethod) psiElement;
+            PsiAnnotation[] annotations = psiMethod.getAnnotations();
+            Set<String> annotationTypes = new HashSet<>();
+            annotationTypes.add("javax.annotation.PostConstruct");
+            annotationTypes.add("javax.annotation.PreDestroy");
+            annotationTypes.add("javax.annotation.Resource");
+            annotationTypes.add("org.springframework.beans.factory.annotation.Lookup");
+            annotationTypes.add("org.springframework.context.annotation.Bean");
+            annotationTypes.add("org.springframework.context.annotation.Conditional");
+            annotationTypes.add("org.springframework.context.annotation.Scope");
+            for (PsiAnnotation annotation : annotations) {
+                if (annotationTypes.contains(annotation.getQualifiedName())) {
+                    return true;
+                }
+            }
+            psiClass = psiMethod.getContainingClass();
+        }
+        psiClass = (PsiClass) psiElement;
+        HashSet<String> annotationTypes = Sets.newHashSet();
+        annotationTypes.add("org.springframework.stereotype.Service");
+        annotationTypes.add("org.springframework.stereotype.Controller");
+        annotationTypes.add("org.springframework.stereotype.Repository");
+        annotationTypes.add("org.springframework.web.bind.annotation.RestController");
+        annotationTypes.add("org.springframework.context.annotation.ComponentScan");
+        annotationTypes.add("org.springframework.stereotype.Component");
+        annotationTypes.add("org.springframework.context.annotation.Conditional");
+        annotationTypes.add("javax.annotation.Resources");
+        for (PsiAnnotation annotation : psiClass.getAnnotations()) {
+            assert annotation != null;
+            assert annotation.getQualifiedName() != null;
+            if (annotation.getQualifiedName().startsWith("org.springframework.") || annotationTypes.contains(annotation.getQualifiedName())) {
+                return true;
+            }
+        }
+
+        for (PsiClass anInterface : psiClass.getInterfaces()) {
+            assert anInterface != null;
+            assert anInterface.getQualifiedName() != null;
+            if (anInterface.getQualifiedName().startsWith("org.springframework.")) {
+                return true;
+            }
+            //todo
+        }
+
+        if (psiClass.getSuperClass() != null) {
+            assert psiClass.getSuperClass().getQualifiedName() != null;
+            if (psiClass.getSuperClass().getQualifiedName().startsWith("org.springframework.")) {
+
+            }
+        }
+
+        for (PsiMethod method : psiClass.getMethods()) {
+            assert method != null;
+            //todo
+
+        }
+
+        for (PsiField field : psiClass.getFields()) {
+            assert field != null;
+            // todo
+        }
+
+        return false;
+
 
     }
 
