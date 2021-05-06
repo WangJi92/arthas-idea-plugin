@@ -142,6 +142,10 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (!SpringStaticContextUtils.booleanConfigStaticSpringContext(param.getProject())) {
                 return false;
             }
+            // 构造方法不支持
+            if (OgnlPsUtils.isConstructor(param.getPsiElement())) {
+                return false;
+            }
             // spring bean 的名称
             String springBeanName = OgnlPsUtils.getSpringBeanName(param.getPsiElement());
             if (StringUtils.isBlank(springBeanName) || "errorBeanName".equals(springBeanName)) {
@@ -244,7 +248,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isNonStaticMethod(param.getPsiElement());
+            return OgnlPsUtils.isStaticMethod(param.getPsiElement());
         }
     },
     /**
@@ -261,6 +265,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "watch * to execute method 注意需要编执行方法的参数") {
         @Override
         public boolean support(ScriptParam param) {
+            if (OgnlPsUtils.isConstructor(param.getPsiElement())) {
+                return false;
+            }
             return OgnlPsUtils.isNonStaticMethod(param.getPsiElement());
         }
     },

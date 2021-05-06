@@ -95,9 +95,9 @@ public class OgnlPsUtils {
     public static boolean isStaticField(@NotNull PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
-            if (psiElement instanceof PsiMethod) {
-                PsiMethod psiMethod = (PsiMethod) psiElement;
-                if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
+            if (psiElement instanceof PsiField) {
+                PsiField psiField = (PsiField) psiElement;
+                if (psiField.hasModifierProperty(PsiModifier.STATIC)) {
                     result = true;
                 }
 
@@ -145,6 +145,26 @@ public class OgnlPsUtils {
     }
 
     /**
+     * 是否为构造方法
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isConstructor(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) psiElement;
+                if (psiMethod.isConstructor()) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
      * 这个是非静态的方法或者字段
      *
      * @param psiElement
@@ -174,6 +194,9 @@ public class OgnlPsUtils {
      * @return
      */
     public static String getCommonOrInnerOrAnonymousClassName(@NotNull PsiElement psiElement) {
+        if (!OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+            return "";
+        }
         if (psiElement instanceof PsiMethod) {
             return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiMethod) psiElement);
         }
