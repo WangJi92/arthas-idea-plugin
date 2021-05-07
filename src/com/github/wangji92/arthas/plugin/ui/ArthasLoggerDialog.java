@@ -119,7 +119,7 @@ public class ArthasLoggerDialog extends JDialog {
             }
             String joinCommands = String.join(" ", commands);
             // logger --name xxx class 这里的表达式不是 classLoaderHash   18b4aac2 统一一下格式
-            String scCommand = String.join(" ", "sc", "-d", className);
+            String scCommand = String.join(" ", "logger", "--name", className);
             CommonExecuteScriptUtils.executeCommonScript(project, scCommand, joinCommands, "");
             dispose();
         });

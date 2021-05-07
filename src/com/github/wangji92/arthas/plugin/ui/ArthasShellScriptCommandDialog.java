@@ -157,6 +157,8 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                     // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
                     String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(project);
                     scCommand = String.join(" ", "sc", "-d", springContextClassName);
+                } else if (selectedItemStr.contains("logger --name")) {
+                    scCommand = String.join(" ", "logger", "--name", this.className);
                 }
             }
             // 这里再次处理一下上下文信息
