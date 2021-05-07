@@ -249,8 +249,9 @@ installArthas() {
 executeArthasCommand() {
   createFile "${1}"
   # " 里面的 " 要进行转义 \"
-  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --select ${SELECT_VALUE}  -c \"${2}\" | tee ${1}"$(tput sgr0)
-  ${HOME}/opt/arthas/as.sh --select ${SELECT_VALUE} -c "${2}" | tee ${1}
+  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --height 100 --width 200 --select ${SELECT_VALUE}  -c \"${2}\"  | tee ${1}"$(tput sgr0)
+  # --height 100 --width 200  the data displayed by automatic execution script is too ugly,to resolve classloaderhashvalue error
+  ${HOME}/opt/arthas/as.sh --height 100 --width 200 --select ${SELECT_VALUE} -c "${2}" | tee ${1}
 }
 
 # decode base64 text and create file
