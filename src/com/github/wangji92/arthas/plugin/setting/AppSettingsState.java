@@ -58,9 +58,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public String depthPrintProperty = ArthasCommandConstants.RESULT_X;
 
     /**
-     * 是否展示默认的条件表达式
+     * 是否展示默认的条件表达式 [修改 部分低版本不支持]
      */
-    public boolean conditionExpressDisplay = true;
+    public boolean conditionExpressDisplay = false;
 
     /**
      * {@literal https://arthas.aliyun.com/doc/batch-support.html 批处理支持}
@@ -168,6 +168,20 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public String arthasPackageZipDownloadUrl = DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL;
 
+    /**
+     * {@literal https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start}
+     */
+    public String mybatisMapperReloadServiceBeanName = DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME;
+    /**
+     * {@literal https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start}
+     */
+    public String mybatisMapperReloadMethodName = DEFAULT_MYBATIS_MAPPER_RELOAD_METHOD_NAME;
+
+    /**
+     * 快捷脚本 选择命令后关闭窗口
+     */
+    public String scriptDialogCloseWhenSelectedCommand = "y";
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
@@ -182,7 +196,44 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
         // 检查全局的 arthas zip 包的下载地址
         checkGlobalArthasPackageZipDownloadUrl(appSettingsState);
+
+        // 检查设置全局的mybatis mapper bean的名称
+        checkGlobalMybatisMapper(appSettingsState);
+
+        /**
+         * 检查快捷脚本是否关闭窗口
+         */
+        checkGlobalScriptDialogCloseWhenSelectedCommand(appSettingsState);
         return appSettingsState;
+    }
+
+    /**
+     * 选择命令后关闭窗口
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalScriptDialogCloseWhenSelectedCommand(AppSettingsState appSettingsState) {
+        String globalScriptDialogCloseWhenSelectedCommand = PropertiesComponentUtils.getValue("scriptDialogCloseWhenSelectedCommand");
+        if (StringUtils.isNotBlank(globalScriptDialogCloseWhenSelectedCommand) && !"y".equalsIgnoreCase(globalScriptDialogCloseWhenSelectedCommand)) {
+            appSettingsState.scriptDialogCloseWhenSelectedCommand = globalScriptDialogCloseWhenSelectedCommand;
+        }
+    }
+
+    /**
+     * 设置全局的 mapper bean的名称
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalMybatisMapper(AppSettingsState appSettingsState) {
+        String globalMybatisMapperReloadServiceBeanName = PropertiesComponentUtils.getValue("mybatisMapperReloadServiceBeanName");
+        String globalMybatisMapperReloadMethodName = PropertiesComponentUtils.getValue("mybatisMapperReloadMethodName");
+
+        if (StringUtils.isNotBlank(globalMybatisMapperReloadServiceBeanName) && !DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME.equalsIgnoreCase(globalMybatisMapperReloadServiceBeanName)) {
+            appSettingsState.mybatisMapperReloadServiceBeanName = globalMybatisMapperReloadServiceBeanName;
+        }
+        if (StringUtils.isNotBlank(globalMybatisMapperReloadMethodName) && !DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME.equalsIgnoreCase(globalMybatisMapperReloadMethodName)) {
+            appSettingsState.mybatisMapperReloadMethodName = globalMybatisMapperReloadMethodName;
+        }
     }
 
 
@@ -192,10 +243,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      * @param appSettingsState
      */
     private static void checkGlobalArthasPackageZipDownloadUrl(AppSettingsState appSettingsState) {
+
         String globalArthasPackageZipDownloadUrl = PropertiesComponentUtils.getValue("arthasPackageZipDownloadUrl");
-        if (StringUtils.isNotBlank(appSettingsState.arthasPackageZipDownloadUrl) && !DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL.equalsIgnoreCase(appSettingsState.arthasPackageZipDownloadUrl)) {
-            return;
-        }
         if (StringUtils.isNotBlank(globalArthasPackageZipDownloadUrl) && !DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL.equalsIgnoreCase(globalArthasPackageZipDownloadUrl)) {
             appSettingsState.arthasPackageZipDownloadUrl = globalArthasPackageZipDownloadUrl;
         }

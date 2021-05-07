@@ -11,6 +11,11 @@ public interface ArthasCommandConstants {
     String AT = "@";
 
     /**
+     * mybatis mapper 热更新未知
+     */
+    String MYBATIS_MAPPER_RELOAD_BASH_PACKAGE_PATH = "$HOME/opt/arthas/mybatis/mapper";
+
+    /**
      * arthas 热更新 基础包名称
      */
     String HOT_SWAMP_BASH_PACKAGE_PATH = "$HOME/opt/arthas/hotSwap/classes";
@@ -83,4 +88,14 @@ public interface ArthasCommandConstants {
      * 默认的 arthas zip 完整包的下载地址
      */
     String DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL = "https://arthas.aliyun.com/download/latest_version?mirror=aliyun";
+    /**
+     * 默认重新加载mapper文件的方法名称
+     */
+    String DEFAULT_MYBATIS_MAPPER_RELOAD_METHOD_NAME = "reloadAllSqlSessionFactoryMapper";
+    /**
+     * 默认重新加载 mapper的服务bean名称
+     */
+    String DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME = "mybatisMapperXmlFileReloadService";
+
+
 }

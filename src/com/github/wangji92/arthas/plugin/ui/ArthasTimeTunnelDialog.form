@@ -10,7 +10,7 @@
     <colspec value="fill:271px:noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <constraints>
-      <xy x="20" y="22" width="606" height="90"/>
+      <xy x="20" y="22" width="612" height="90"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -40,7 +40,7 @@
           <forms defaultalign-horz="false"/>
         </constraints>
         <properties>
-          <text value="获取Command"/>
+          <text value="copy command"/>
         </properties>
       </component>
       <component id="118be" class="javax.swing.JComboBox" binding="comboBox">
@@ -59,7 +59,7 @@
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <text value="常用命令"/>
+          <text value=" list c"/>
           <toolTipText value="-i 参数需要根据运行时进行修改"/>
         </properties>
       </component>
@@ -69,7 +69,7 @@
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <text value="获取Command"/>
+          <text value="copy command"/>
           <toolTipText value="-i 参数需要根据运行时进行修改"/>
         </properties>
       </component>
@@ -98,7 +98,7 @@
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <text value="关闭"/>
+          <text value="close"/>
         </properties>
       </component>
       <component id="f2991" class="javax.swing.JLabel">
@@ -107,7 +107,7 @@
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <text value="常用命令 -i 参数需要运行时修改"/>
+          <text value=" -i parameter needs changed at runtime"/>
         </properties>
       </component>
     </children>

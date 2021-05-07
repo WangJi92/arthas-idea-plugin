@@ -142,7 +142,7 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             String classNameClassLoaderGet = SpringStaticContextUtils.getStaticSpringContextClassName(project);
 
             //#springContext=填充,#springContext.getBean("%s")
-            String staticSpringContextGetBeanPrefix = SpringStaticContextUtils.getStaticSpringContextGetBeanPrefix(project,lowCamelBeanName);
+            String staticSpringContextGetBeanPrefix = SpringStaticContextUtils.getStaticSpringContextGetBeanPrefix(project, lowCamelBeanName);
 
             AppSettingsState instance = AppSettingsState.getInstance(project);
             String depthPrintProperty = instance.depthPrintProperty;
@@ -154,10 +154,10 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             builder.append(" '").append(staticSpringContextGetBeanPrefix).append(".").append(suffixMethodOrFieldBuild).append("'");
 
             //#springContext=填充,#targetBean=#springContext.getBean("%s")
-            String staticSpringContextGetBeanVariable = SpringStaticContextUtils.getStaticSpringContextGetBeanVariable(project,lowCamelBeanName);
+            String staticSpringContextGetBeanVariable = SpringStaticContextUtils.getStaticSpringContextGetBeanVariable(project, lowCamelBeanName);
             String aopTargetOgnlExpression = String.format(STATIC_SPRING_AOP_TARGET, staticSpringContextGetBeanVariable);
 
-            new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("Static spring context invoke  method field");
+            new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("Static spring context invoke【手动编辑填写参数】【bean名称可能不正确,可以手动修改】");
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;

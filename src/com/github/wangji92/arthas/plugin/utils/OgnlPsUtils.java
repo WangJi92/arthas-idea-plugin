@@ -16,10 +16,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 获取Java类型构造ognl的默认值信息
@@ -32,12 +29,191 @@ public class OgnlPsUtils {
     private static final Logger LOG = Logger.getInstance(OgnlPsUtils.class);
 
     /**
+     * 是否为匿名类
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isAnonymousClass(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (getCommonOrInnerOrAnonymousClassName(psiElement).contains("*$*")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 是否为静态的字段或者方法
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isStaticMethodOrField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                return isStaticMethod(psiElement);
+            } else if (psiElement instanceof PsiField) {
+                return isStaticField(psiElement);
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 静态方法
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isStaticMethod(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) psiElement;
+                if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 静态字段
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isStaticField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiField) {
+                PsiField psiField = (PsiField) psiElement;
+                if (psiField.hasModifierProperty(PsiModifier.STATIC)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * isFinalField
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isFinalField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiField) {
+                PsiField psiField = (PsiField) psiElement;
+                if (psiField.hasModifierProperty(PsiModifier.FINAL)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 非静态字段
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isNonStaticField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiField) {
+                if (!isStaticField(psiElement)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 非静态方法
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isNonStaticMethod(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                if (!isStaticMethod(psiElement)) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 是否为构造方法
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isConstructor(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) psiElement;
+                if (psiMethod.isConstructor()) {
+                    result = true;
+                }
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 这个是非静态的方法或者字段
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isNonStaticMethodOrField(@NotNull PsiElement psiElement) {
+        boolean result = false;
+        if (isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiMethod) {
+                if (!isStaticMethod(psiElement)) {
+                    result = true;
+                }
+            } else if (psiElement instanceof PsiField) {
+                if (!isStaticField(psiElement)) {
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    /**
      * 获取内部类、匿名类的class的 ognl 名称
      *
      * @param psiElement
      * @return
      */
     public static String getCommonOrInnerOrAnonymousClassName(@NotNull PsiElement psiElement) {
+        if (!OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+            return "";
+        }
         if (psiElement instanceof PsiMethod) {
             return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiMethod) psiElement);
         }
@@ -137,6 +313,59 @@ public class OgnlPsUtils {
     }
 
     /**
+     * 字段的名称
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getFieldName(@NotNull PsiElement psiElement) {
+        String fieldName = "";
+        if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+            if (psiElement instanceof PsiField) {
+                PsiField psiField = (PsiField) psiElement;
+                fieldName = psiField.getNameIdentifier().getText();
+            }
+        }
+        return fieldName;
+    }
+
+    /**
+     * 获取方法名称
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getMethodName(@NotNull PsiElement psiElement) {
+        String methodName = "";
+        if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+            methodName = "*";
+            if (psiElement instanceof PsiMethod) {
+                PsiMethod psiMethod = (PsiMethod) psiElement;
+                methodName = psiMethod.getNameIdentifier().getText();
+                if (psiMethod.isConstructor()) {
+                    methodName = "<init>";
+                }
+            }
+        }
+        return methodName;
+    }
+
+    /**
+     * 获取可以执行的参数
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getExecuteInfo(@NotNull PsiElement psiElement) {
+        if (psiElement instanceof PsiField) {
+            return ((PsiField) psiElement).getNameIdentifier().getText();
+        } else if (psiElement instanceof PsiMethod) {
+            return getMethodParameterDefault((PsiMethod) psiElement);
+        }
+        return "";
+    }
+
+    /**
      * 构造方法的参数信息  complexParameterCall(#{" ":" "}) 后面这个部分需要构造
      *
      * @param psiMethod
@@ -146,6 +375,9 @@ public class OgnlPsUtils {
         // Experimental API method JvmField.getName() is invoked in Action.arthas.ArthasOgnlStaticCommandAction.actionPerformed().
         // This method can be changed in a future release leading to incompatibilities
         String methodName = psiMethod.getNameIdentifier().getText();
+        if (psiMethod.isConstructor()) {
+            methodName = "<init>";
+        }
         StringBuilder builder = new StringBuilder(methodName).append("(");
         PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
         if (parameters.length > 0) {
@@ -161,6 +393,20 @@ public class OgnlPsUtils {
         }
         builder.append(")");
         return builder.toString();
+    }
+
+    /**
+     * 获取字段的默认值
+     *
+     * @return
+     */
+    public static String getFieldDefaultValue(PsiElement psiElement) {
+        String defaultFieldValue = "";
+        if (psiElement instanceof PsiField) {
+            PsiField psiField = (PsiField) psiElement;
+            defaultFieldValue = OgnlPsUtils.getDefaultString(psiField.getType());
+        }
+        return defaultFieldValue;
     }
 
     /**
@@ -247,6 +493,28 @@ public class OgnlPsUtils {
     }
 
     /**
+     * 获取spring bean 的名称 【不是非常的精确】
+     *
+     * @param psiElement
+     * @return
+     */
+    public static String getSpringBeanName(PsiElement psiElement) {
+        String beanName = "";
+        if (!isPsiFieldOrMethodOrClass(psiElement)) {
+            return beanName;
+        }
+        if (psiElement instanceof PsiMethod) {
+            beanName = OgnlPsUtils.getClassBeanName(((PsiMethod) psiElement).getContainingClass());
+            return beanName;
+        }
+        if (psiElement instanceof PsiField) {
+            beanName = OgnlPsUtils.getClassBeanName(((PsiField) psiElement).getContainingClass());
+            return beanName;
+        }
+        return beanName;
+    }
+
+    /**
      * 获取Bean的名称
      *
      * @param psiClass
@@ -275,6 +543,101 @@ public class OgnlPsUtils {
             beanName = StringUtils.uncapitalize(psiClass.getName());
         }
         return beanName;
+
+    }
+
+    /**
+     * 当前是否为spring bean
+     *
+     * @return
+     */
+    public static boolean isSpringBean(PsiElement psiElement) {
+        boolean result = false;
+        if (!isPsiFieldOrMethodOrClass(psiElement)) {
+            return result;
+        }
+        PsiClass psiClass = null;
+        if (psiElement instanceof PsiField) {
+            PsiField field = (PsiField) psiElement;
+            PsiAnnotation[] annotations = field.getAnnotations();
+            Set<String> annotationTypes = new HashSet<>();
+            annotationTypes.add("org.springframework.beans.factory.annotation.Autowired");
+            annotationTypes.add("org.springframework.beans.factory.annotation.Qualifier");
+            annotationTypes.add("javax.annotation.Resource");
+            annotationTypes.add("org.springframework.beans.factory.annotation.Value");
+            for (PsiAnnotation annotation : annotations) {
+                if (annotationTypes.contains(annotation.getQualifiedName())) {
+                    return true;
+                }
+            }
+            psiClass = field.getContainingClass();
+
+        }
+        if (psiElement instanceof PsiMethod) {
+            PsiMethod psiMethod = (PsiMethod) psiElement;
+            PsiAnnotation[] annotations = psiMethod.getAnnotations();
+            Set<String> annotationTypes = new HashSet<>();
+            annotationTypes.add("javax.annotation.PostConstruct");
+            annotationTypes.add("javax.annotation.PreDestroy");
+            annotationTypes.add("javax.annotation.Resource");
+            annotationTypes.add("org.springframework.beans.factory.annotation.Lookup");
+            annotationTypes.add("org.springframework.context.annotation.Bean");
+            annotationTypes.add("org.springframework.context.annotation.Conditional");
+            annotationTypes.add("org.springframework.context.annotation.Scope");
+            for (PsiAnnotation annotation : annotations) {
+                if (annotationTypes.contains(annotation.getQualifiedName())) {
+                    return true;
+                }
+            }
+            psiClass = psiMethod.getContainingClass();
+        }
+        psiClass = (PsiClass) psiElement;
+        HashSet<String> annotationTypes = Sets.newHashSet();
+        annotationTypes.add("org.springframework.stereotype.Service");
+        annotationTypes.add("org.springframework.stereotype.Controller");
+        annotationTypes.add("org.springframework.stereotype.Repository");
+        annotationTypes.add("org.springframework.web.bind.annotation.RestController");
+        annotationTypes.add("org.springframework.context.annotation.ComponentScan");
+        annotationTypes.add("org.springframework.stereotype.Component");
+        annotationTypes.add("org.springframework.context.annotation.Conditional");
+        annotationTypes.add("javax.annotation.Resources");
+        for (PsiAnnotation annotation : psiClass.getAnnotations()) {
+            assert annotation != null;
+            assert annotation.getQualifiedName() != null;
+            if (annotation.getQualifiedName().startsWith("org.springframework.") || annotationTypes.contains(annotation.getQualifiedName())) {
+                return true;
+            }
+        }
+
+        for (PsiClass anInterface : psiClass.getInterfaces()) {
+            assert anInterface != null;
+            assert anInterface.getQualifiedName() != null;
+            if (anInterface.getQualifiedName().startsWith("org.springframework.")) {
+                return true;
+            }
+            //todo
+        }
+
+        if (psiClass.getSuperClass() != null) {
+            assert psiClass.getSuperClass().getQualifiedName() != null;
+            if (psiClass.getSuperClass().getQualifiedName().startsWith("org.springframework.")) {
+
+            }
+        }
+
+        for (PsiMethod method : psiClass.getMethods()) {
+            assert method != null;
+            //todo
+
+        }
+
+        for (PsiField field : psiClass.getFields()) {
+            assert field != null;
+            // todo
+        }
+
+        return false;
+
 
     }
 

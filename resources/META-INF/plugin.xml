@@ -280,7 +280,8 @@
     <!--    but the plugin does not declare explicit dependency on the Java plugin, via <depends>com.intellij.modules.java</depends>.-->
     <!--    Java functionality was extracted from the IntelliJ Platform to a separate plugin in IDEA 2019.2.-->
     <!--    For more info refer to https://blog.jetbrains.com/platform/2019/06/java-functionality-extracted-as-a-plugin-->
-    <depends>com.intellij.modules.java</depends>.
+    <depends>com.intellij.modules.java</depends>
+
 
     <actions>
         <!-- Add your actions here -->
@@ -486,9 +487,19 @@
                 text="Global Options Setting"
                 description="Global options setting"/>
 
+        <action id="ArthasMybatisMapperReloadAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasMybatisMapperReloadAction"
+                text="Mybatis Mapper Xml Reload"
+                description="Mybatis mapper xml reload"/>
+        <action id="ArthasShellScriptCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasShellScriptCommandAction"
+                text="Quickly Shell Script"
+                description="Shell script command"/>
+
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
             <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
+            <reference ref="ArthasShellScriptCommandAction"/>
             <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
@@ -523,6 +534,7 @@
             <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="$Paste"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <separator/>
+            <reference ref="ArthasShellScriptCommandAction"/>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
             <reference ref="ArthasTraceMultipleCommand"/>
@@ -544,6 +556,7 @@
             <separator/>
             <reference ref="ArthasHotRetransformCommandAction"/>
             <reference ref="ArthasHotCommandAction"/>
+            <reference ref="ArthasMybatisMapperReloadAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
             <reference ref="ArthasSmCommandAction"/>

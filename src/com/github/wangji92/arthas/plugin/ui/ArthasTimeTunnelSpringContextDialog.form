@@ -36,7 +36,7 @@
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="ognl 官方"/>
+          <text value="ognl help"/>
         </properties>
       </component>
       <component id="5ee1b" class="com.intellij.ui.components.labels.LinkLabel" binding="oglSpecialLink" custom-create="true">
@@ -65,7 +65,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="获取Command"/>
+          <text value="copy command"/>
         </properties>
       </component>
       <component id="efa0b" class="javax.swing.JTextField" binding="ttRequestMappingHandlerAdapterInvokeField">
@@ -87,7 +87,7 @@
         </constraints>
         <properties>
           <enabled value="true"/>
-          <text value="获取Command"/>
+          <text value="copy command"/>
           <toolTipText value="bean的名称可能不正确，可以手动修改"/>
         </properties>
       </component>
@@ -115,7 +115,7 @@
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="spring 环境变量"/>
+          <text value="spring env variables"/>
           <toolTipText value="获取当前spring 环境变量信息"/>
         </properties>
       </component>
@@ -124,7 +124,7 @@
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="spring nonProxy target"/>
+          <text value=" non proxy target"/>
           <toolTipText value="获取spring 代理对象的原始对象信息"/>
         </properties>
       </component>
@@ -141,7 +141,7 @@
           <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="获取Command"/>
+          <text value="copy command"/>
         </properties>
       </component>
     </children>

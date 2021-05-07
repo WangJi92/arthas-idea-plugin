@@ -190,7 +190,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 params.put("arthasPackageZipDownloadUrl",settings.arthasPackageZipDownloadUrl);
 
 
-                String redefineSh = StringUtils.stringSubstitutor("/template/arthas-idea-plugin-hot-swap.sh", params);
+                String redefineSh = StringUtils.stringSubstitutorFromFilePath("/template/arthas-idea-plugin-hot-swap.sh", params);
 
                 String base64RedefineSh = BaseEncoding.base64().encode(redefineSh.getBytes());
 
