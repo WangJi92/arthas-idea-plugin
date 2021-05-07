@@ -25,7 +25,7 @@ public class CustomDefaultListCellRenderer extends DefaultListCellRenderer {
         super.getListCellRendererComponent(list, value, index,
                 isSelected, cellHasFocus);
         String tipText = value.toString();
-        if (value instanceof CustomComboBoxItem) {
+        if (comboBox.getModel().getElementAt(index) instanceof CustomComboBoxItem) {
             tipText = ((CustomComboBoxItem) value).getTipText();
         }
         if (isSelected) {

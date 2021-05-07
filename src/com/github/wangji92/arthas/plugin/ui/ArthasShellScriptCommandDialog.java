@@ -39,6 +39,8 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     private JRadioButton selectCommandCloseDialogRadioButton;
     private JButton dyCopyCommandButton;
     private JButton commonCopyCommandButton;
+    private JLabel dyTipLabel;
+    private JLabel constantLabel;
 
     private Project project;
 
@@ -182,6 +184,15 @@ public class ArthasShellScriptCommandDialog extends JDialog {
 
 
         });
+        shellScriptComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (e.getItem() instanceof CustomComboBoxItem) {
+                    CustomComboBoxItem item = (CustomComboBoxItem) e.getItem();
+                    dyTipLabel.setText(item.getTipText());
+                }
+
+            }
+        });
         shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox));
         for (ShellScriptCommandEnum shellScript : ShellScriptCommandEnum.values()) {
             if (!shellScript.support(this.scriptParam)) {
@@ -219,6 +230,14 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             boxItem.setTipText(scriptConstantEnum.getEnumMsg());
             commonShellScriptComboBox.addItem(boxItem);
         }
+        commonShellScriptComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (e.getItem() instanceof CustomComboBoxItem) {
+                    CustomComboBoxItem item = (CustomComboBoxItem) e.getItem();
+                    constantLabel.setText(item.getTipText());
+                }
+            }
+        });
         commonShellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(commonShellScriptComboBox));
         commonShellScriptCommandButton.addActionListener(e -> {
             Object selectedItem = commonShellScriptComboBox.getSelectedItem();
@@ -242,6 +261,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
 
 
         });
+
     }
 
     private void onOK() {
