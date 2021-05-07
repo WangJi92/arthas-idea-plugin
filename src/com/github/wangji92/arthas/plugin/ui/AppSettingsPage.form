@@ -139,7 +139,7 @@
                   <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="跳过Jdk 方法"/>
+                  <text value="Skip Jdk method"/>
                 </properties>
               </component>
               <component id="1bb6e" class="javax.swing.JLabel">
@@ -156,7 +156,7 @@
                   <grid row="8" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="展示默认的条件表达式 1==1 "/>
+                  <text value="Show the default conditional expression 1==1 "/>
                 </properties>
               </component>
               <component id="88a85" class="javax.swing.JRadioButton" binding="springContextGlobalSettingRadioButton">
@@ -164,7 +164,7 @@
                   <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Spring Context 全局配置"/>
+                  <text value="Spring static context global configuration"/>
                   <toolTipText value="当前配置设置为全局默认配置"/>
                 </properties>
               </component>
@@ -181,7 +181,7 @@
                   <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="打印条件表达式的执行结果"/>
+                  <text value="Print the result of the execution of a conditional expression"/>
                 </properties>
               </component>
               <component id="a90de" class="com.intellij.ui.components.labels.LinkLabel" binding="printConditionExpressLink" custom-create="true">
@@ -231,7 +231,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="热更新存储配置"/>
+                  <text value="Storage configuration options"/>
                   <toolTipText value="redefine 的时候需要将更新的class 上传到目标服务器"/>
                 </properties>
               </component>
@@ -245,7 +245,7 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="直接使用剪切板"/>
+                  <text value="Clipboard"/>
                   <toolTipText value="直接使用剪切板class文件比较大剪切板的就比较长"/>
                 </properties>
               </component>
@@ -259,7 +259,7 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="阿里云oss"/>
+                  <text value="Ali Cloud oss"/>
                   <toolTipText value="使用阿里云oss 存储，本地将构造好的脚本上传到阿里云oss"/>
                 </properties>
               </component>
@@ -373,7 +373,7 @@
                       <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Oss 配置检测"/>
+                      <text value="Oss configuration detection"/>
                     </properties>
                   </component>
                   <component id="2c4c8" class="com.intellij.ui.components.labels.LinkLabel" binding="ossHelpLink" custom-create="true">
@@ -411,7 +411,7 @@
                       <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Oss 全局配置"/>
+                      <text value="Oss global configuration"/>
                       <toolTipText value="是否当前配置作为全局默认配置"/>
                     </properties>
                   </component>
@@ -438,7 +438,7 @@
                       <forms/>
                     </constraints>
                     <properties>
-                      <text value="as.sh --select 指定进程的名称"/>
+                      <text value="as.sh --select project name"/>
                       <toolTipText value="as.sh --select -c '命令' auto redfine"/>
                     </properties>
                   </component>
@@ -467,7 +467,7 @@
                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="进程选择配置"/>
+                  <text value="Script select process configuration"/>
                 </properties>
               </component>
               <component id="64342" class="javax.swing.JRadioButton" binding="manualSelectPidRadioButton">
@@ -475,7 +475,7 @@
                   <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value=" 手动选择Pid"/>
+                  <text value="Manual selection process"/>
                 </properties>
               </component>
               <component id="cea1e" class="javax.swing.JRadioButton" binding="preConfigurationSelectPidRadioButton">
@@ -483,7 +483,7 @@
                   <grid row="3" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="预先配置 --select  project name (jps -l)"/>
+                  <text value="Pre-configured project name  --select  project name (jps -l)"/>
                 </properties>
               </component>
               <component id="4829c" class="javax.swing.JRadioButton" binding="redisRadioButton" default-binding="true">
@@ -557,7 +557,7 @@
                       <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Redis 配置检测"/>
+                      <text value="edis configuration detection"/>
                     </properties>
                   </component>
                   <component id="42edc" class="javax.swing.JTextField" binding="redisAddressTextField">
@@ -647,7 +647,7 @@
                   <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="内网无法访问指定完整包下载地址"/>
+                  <text value="Server cannot access arthas download address can be specified manually"/>
                 </properties>
               </component>
             </children>
@@ -678,7 +678,7 @@
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="热更新完成后删除文件"/>
+                  <text value="Delete class files after the hot swap is complete"/>
                   <toolTipText value="热更新完成后删除文件"/>
                 </properties>
               </component>
@@ -695,7 +695,7 @@
                   <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="热更新之前先编译"/>
+                  <text value="Auto compile before build  hot  swap script"/>
                 </properties>
               </component>
               <component id="dcc07" class="com.intellij.ui.components.labels.LinkLabel" binding="redefineHelpLinkLabel" custom-create="true">

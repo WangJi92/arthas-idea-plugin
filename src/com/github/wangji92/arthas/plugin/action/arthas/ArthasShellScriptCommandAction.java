@@ -53,6 +53,6 @@ public class ArthasShellScriptCommandAction extends AnAction {
         scriptParam.setPsiElement(psiElement);
 
         ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(scriptParam);
-        dialog.open("shell script command");
+        dialog.open("shell command");
     }
 }

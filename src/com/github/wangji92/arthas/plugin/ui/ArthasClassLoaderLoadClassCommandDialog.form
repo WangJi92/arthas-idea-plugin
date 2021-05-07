@@ -43,7 +43,7 @@
           <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="获取command"/>
+          <text value="copy command"/>
         </properties>
       </component>
       <component id="297c4" class="javax.swing.JButton" binding="scCommandButton">
@@ -51,7 +51,7 @@
           <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="获取command"/>
+          <text value="copy command"/>
         </properties>
       </component>
       <component id="60d13" class="com.intellij.ui.components.labels.LinkLabel" binding="scLink" custom-create="true">
@@ -75,7 +75,7 @@
           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="获取command"/>
+          <text value="copy command"/>
         </properties>
       </component>
       <component id="f2e0c" class="javax.swing.JTextField" binding="classloaderLoadTextField">

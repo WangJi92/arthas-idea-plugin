@@ -62,7 +62,7 @@ public class ArthasActionDumpDialog extends JDialog {
 
         closeButton.addActionListener(e -> onOK());
 
-        //清除缓存的classloader的hash值的信息
+        //clear cache的classloader的hash值的信息
         clearClassloaderHashValue.addActionListener(e -> onClearClassLoaderHashValue());
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
