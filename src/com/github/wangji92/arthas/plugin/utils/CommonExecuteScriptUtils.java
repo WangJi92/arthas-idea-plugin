@@ -26,7 +26,9 @@ public class CommonExecuteScriptUtils {
     public static void executeCommonScript(Project project, String scCommand, String command, String appendTip) {
         AppSettingsState settings = AppSettingsState.getInstance(project);
         Map<String, String> params = Maps.newHashMap();
-        params.put("arthasIdeaPluginApplicationName", settings.selectProjectName);
+        if (!settings.manualSelectPid) {
+            params.put("arthasIdeaPluginApplicationName", settings.selectProjectName);
+        }
         params.put("arthasPackageZipDownloadUrl", settings.arthasPackageZipDownloadUrl);
         if (StringUtils.isNotBlank(scCommand) && !command.contains(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode())) {
             command = String.join(" ", command, "-c", ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode());

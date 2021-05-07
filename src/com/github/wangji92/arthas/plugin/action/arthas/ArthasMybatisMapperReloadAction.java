@@ -108,12 +108,13 @@ public class ArthasMybatisMapperReloadAction extends AnAction implements DumbAwa
 
             String selectProjectName = settings.selectProjectName;
             Map<String, String> params = Maps.newHashMap();
-            params.put("arthasIdeaPluginApplicationName", selectProjectName);
+            if (!settings.manualSelectPid) {
+                params.put("arthasIdeaPluginApplicationName", selectProjectName);
+            }
             params.put("arthasPackageZipDownloadUrl", settings.arthasPackageZipDownloadUrl);
             params.put("arthasIdeaPluginMybatisMapperXmlReloadCommand", arthasIdeaPluginMybatisMapperXmlReloadCommand);
             params.put("BASE64_TXT_AND_PATH", arthasIdeaPluginBase64MapperXmlAndPath);
             params.put("SC_COMMAND", springContextScCommand);
-
             String commonFunctionSh = StringUtils.stringSubstitutorFromFilePath("/template/plugin-common-function.sh", params);
             String mybatisMapperReloadSh = StringUtils.stringSubstitutorFromFilePath("/template/mybatis-mapper-xml-reload.sh", params);
             mybatisMapperReloadSh = commonFunctionSh + "\n" + mybatisMapperReloadSh;
