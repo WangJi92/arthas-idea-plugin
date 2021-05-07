@@ -129,8 +129,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     /**
      * spring get bean
      */
-    SPRING_GET_BEAN("ognl "
-            + " -x "
+    SPRING_GET_BEAN("ognl -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "'#springContext=" + ShellScriptVariableEnum.SPRING_CONTEXT.getCode() + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\")."
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' "
             + " -c "
@@ -166,8 +166,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     /**
      * spring get bean to set field
      */
-    SPRING_GET_BEAN_SET_FIELD("ognl "
-            + " -x "
+    SPRING_GET_BEAN_SET_FIELD("ognl -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "'#springContext=" + ShellScriptVariableEnum.SPRING_CONTEXT.getCode()
             + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\").set" + ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getCode() + "(" + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' "
             + " -c "
