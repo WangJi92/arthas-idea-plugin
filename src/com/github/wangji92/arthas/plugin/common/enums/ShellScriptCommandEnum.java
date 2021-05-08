@@ -35,6 +35,25 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return OgnlPsUtils.isStaticMethodOrField(param.getPsiElement());
         }
     },
+    /**
+     * 调用静态变量 或者方法 java 不需要classloader hashcode 使用默认
+     */
+    OGNL_GETSTATIC_JAVA("ognl -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode(),
+            "ognl to get static method field 注意需要编执行方法的参数") {
+        @Override
+        public boolean support(ScriptParam param) {
+            if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement()).startsWith("java.")) {
+                return false;
+            }
+            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+                return false;
+            }
+            return OgnlPsUtils.isStaticMethodOrField(param.getPsiElement());
+        }
+    },
 
     /**
      * 简单的字段
@@ -156,8 +175,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
-            // 非 java.lang
-            if (className.contains("java.lang.") || className.contains("java.util.")) {
+            // 非 java.**
+            if (className.startsWith("java.")) {
                 return false;
             }
             return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
@@ -193,8 +212,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
-            // 非 java.lang
-            if (className.contains("java.lang.") || className.contains("java.util.")) {
+            // 非 java.**
+            if (className.startsWith("java.")) {
                 return false;
             }
             if (!OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement())) {
@@ -254,10 +273,34 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      */
     JAD("jad --source-only "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode() + " "
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+
+            "decompile class") {
+        @Override
+        public boolean support(ScriptParam param) {
+            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+                return false;
+            }
+            if (OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement()).startsWith("java.")) {
+                return false;
+            }
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        }
+    },
+    /**
+     * jad
+     */
+    JAD_JAVA("jad --source-only "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode(),
             "decompile class") {
         @Override
         public boolean support(ScriptParam param) {
+            if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement()).startsWith("java.")) {
+                return false;
+            }
             if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
                 return false;
             }
