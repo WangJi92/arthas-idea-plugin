@@ -50,7 +50,7 @@ main() {
   if [ -z "${CLASSLOADER_HASH_VALUE}" ]; then
     exit_on_err 1 "not found classloader hash value"
   fi
-
+  echo " "
   banner_simple "last: invoke spring bean to reload mybatis mapper xml file"
   doStartMybatisMaperReloadCommand
 

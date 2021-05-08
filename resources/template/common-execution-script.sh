@@ -38,6 +38,7 @@ main() {
     fi
   fi
 
+  echo " "
   banner_simple "last: execute arthas command"
   doStartArthasCommonScriptCommand
 
