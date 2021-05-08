@@ -34,7 +34,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isAnonymousClass(@NotNull PsiElement psiElement) {
+    public static boolean isAnonymousClass(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (getCommonOrInnerOrAnonymousClassName(psiElement).contains("*$*")) {
@@ -50,7 +50,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isStaticMethodOrField(@NotNull PsiElement psiElement) {
+    public static boolean isStaticMethodOrField(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiMethod) {
@@ -69,7 +69,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isStaticMethod(@NotNull PsiElement psiElement) {
+    public static boolean isStaticMethod(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiMethod) {
@@ -89,7 +89,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isStaticField(@NotNull PsiElement psiElement) {
+    public static boolean isStaticField(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiField) {
@@ -109,7 +109,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isFinalField(@NotNull PsiElement psiElement) {
+    public static boolean isFinalField(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiField) {
@@ -129,7 +129,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isNonStaticField(@NotNull PsiElement psiElement) {
+    public static boolean isNonStaticField(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiField) {
@@ -148,7 +148,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isNonStaticMethod(@NotNull PsiElement psiElement) {
+    public static boolean isNonStaticMethod(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiMethod) {
@@ -167,7 +167,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isConstructor(@NotNull PsiElement psiElement) {
+    public static boolean isConstructor(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiMethod) {
@@ -187,7 +187,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static boolean isNonStaticMethodOrField(@NotNull PsiElement psiElement) {
+    public static boolean isNonStaticMethodOrField(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiMethod) {
@@ -210,7 +210,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static String getCommonOrInnerOrAnonymousClassName(@NotNull PsiElement psiElement) {
+    public static String getCommonOrInnerOrAnonymousClassName(PsiElement psiElement) {
         if (!OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             return "";
         }
@@ -235,7 +235,7 @@ public class OgnlPsUtils {
      * @param psiField
      * @return
      */
-    public static String getCommonOrInnerOrAnonymousClassName(@NotNull PsiField psiField) {
+    public static String getCommonOrInnerOrAnonymousClassName(PsiField psiField) {
         return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(Objects.requireNonNull(psiField.getContainingClass()));
     }
 
@@ -318,7 +318,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static String getFieldName(@NotNull PsiElement psiElement) {
+    public static String getFieldName(PsiElement psiElement) {
         String fieldName = "";
         if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             if (psiElement instanceof PsiField) {
@@ -335,7 +335,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static String getMethodName(@NotNull PsiElement psiElement) {
+    public static String getMethodName(PsiElement psiElement) {
         String methodName = "";
         if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             methodName = "*";
@@ -356,7 +356,7 @@ public class OgnlPsUtils {
      * @param psiElement
      * @return
      */
-    public static String getExecuteInfo(@NotNull PsiElement psiElement) {
+    public static String getExecuteInfo(PsiElement psiElement) {
         if (psiElement instanceof PsiField) {
             return ((PsiField) psiElement).getNameIdentifier().getText();
         } else if (psiElement instanceof PsiMethod) {

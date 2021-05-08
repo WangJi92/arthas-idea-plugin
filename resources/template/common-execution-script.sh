@@ -10,7 +10,7 @@ doStartArthasCommonScriptCommand() {
 
 main() {
 
-  banner_simple "arthas idea plugin hot swap begin;start script path: $(pwd)/arthas-idea-plugin-common-execution-script.sh"
+  banner_simple "arthas idea plugin  begin;start script path: $(pwd)/arthas-idea-plugin-common-execution-script.sh"
 
   check_permission
 
@@ -20,20 +20,20 @@ main() {
     exit_on_err 1 "arthas install as.sh script error"
   fi
 
-  if [ -z ${SELECT_VALUE} ]; then
+  if [ -z "${SELECT_VALUE}" ]; then
     reset_for_env
     select_pid
     SELECT_VALUE=${TARGET_PID}
   fi
 
-  if [ -z ${SELECT_VALUE} ]; then
+  if [ -z "${SELECT_VALUE}" ]; then
     exit_on_err 1 "select target process by classname or JARfilename Target pid is empty"
   fi
 
   if [ "${SC_COMMAND}" ]; then
     banner_simple "first: get  class1oader hash value"
     getFirstClassLoaderHashValue
-    if [ -z ${CLASSLOADER_HASH_VALUE} ]; then
+    if [ -z "${CLASSLOADER_HASH_VALUE}" ]; then
       exit_on_err 1 "not found classloader hash value,maybe class not load in jvm"
     fi
   fi
