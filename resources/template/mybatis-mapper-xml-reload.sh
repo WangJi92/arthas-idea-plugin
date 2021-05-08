@@ -20,7 +20,7 @@ getMybatisMapperReloadCommandResult() {
 
 main() {
 
-  banner_simple "arthas idea plugin hot swap begin;start script path: $(pwd)/arthas-idea-plugin-mybatis-mapper-xml-reload.sh"
+  banner_simple "arthas idea plugin begin;start script path: $(pwd)/arthas-idea-plugin-mybatis-mapper-xml-reload.sh"
 
   check_permission
 
@@ -35,19 +35,19 @@ main() {
     exit_on_err 1 "arthas idea plugin decodebase64MapperXmlFile error"
   fi
 
-  if [ -z ${SELECT_VALUE} ]; then
+  if [ -z "${SELECT_VALUE}" ]; then
     reset_for_env
     select_pid
-    SELECT_VALUE=${TARGET_PID}
+    SELECT_VALUE="${TARGET_PID}"
   fi
 
-  if [ -z ${SELECT_VALUE} ]; then
+  if [ -z "${SELECT_VALUE}" ]; then
     exit_on_err 1 "select target process by classname or JARfilename Target pid is empty"
   fi
 
   banner_simple "first: get spring static spring context class1oader hash value"
   getFirstClassLoaderHashValue
-  if [ -z ${CLASSLOADER_HASH_VALUE} ]; then
+  if [ -z "${CLASSLOADER_HASH_VALUE}" ]; then
     exit_on_err 1 "not found classloader hash value"
   fi
 
