@@ -13,6 +13,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +59,8 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         this.project = scriptParam.getProject();
         this.scriptParam = scriptParam;
         setContentPane(contentPane);
+        setMinimumSize(new Dimension(800,400));
+        setMaximumSize(new Dimension(1000,400));
         setModal(true);
         getRootPane().setDefaultButton(closeScriptButton);
         closeScriptButton.addActionListener(e -> onOK());

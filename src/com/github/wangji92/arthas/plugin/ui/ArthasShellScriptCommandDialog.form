@@ -10,7 +10,7 @@
     <rowspec value="center:d:grow"/>
     <colspec value="fill:d:grow"/>
     <constraints>
-      <xy x="48" y="162" width="890" height="423"/>
+      <xy x="48" y="162" width="800" height="400"/>
     </constraints>
     <properties/>
     <border type="etched"/>
