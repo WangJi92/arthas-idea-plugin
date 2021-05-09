@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.wangji92.arthas.plugin.ui.ArthasShellScriptCommandDialog">
-  <grid id="cbd77" binding="contentPane" layout-manager="FormLayout">
-    <rowspec value="center:d:grow"/>
-    <rowspec value="top:3dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
-    <rowspec value="top:3dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
-    <rowspec value="top:3dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
-    <colspec value="fill:d:grow"/>
+  <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="48" y="162" width="800" height="400"/>
+      <xy x="48" y="162" width="894" height="442"/>
     </constraints>
     <properties/>
     <border type="etched"/>
     <children>
-      <grid id="8fca5" layout-manager="GridLayoutManager" row-count="4" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="8fca5" layout-manager="GridLayoutManager" row-count="4" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="10" left="10" bottom="10" right="10"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <forms/>
         </constraints>
         <properties/>
         <border type="etched" title="dynamic commands"/>
         <children>
           <component id="fdea2" class="javax.swing.JComboBox" binding="shellScriptComboBox">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="190" height="27"/>
+              <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="100" height="27"/>
               </grid>
             </constraints>
             <properties>
@@ -36,26 +28,23 @@
           </component>
           <vspacer id="a78c7">
             <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="5" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
           </vspacer>
           <component id="da19e" class="javax.swing.JButton" binding="shellScriptCommandButton" default-binding="true">
             <constraints>
-              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="68" height="27"/>
+              </grid>
             </constraints>
             <properties>
               <text value="shell command"/>
               <toolTipText value="直接执行脚本无需打开arthas"/>
             </properties>
           </component>
-          <hspacer id="bd5c2">
-            <constraints>
-              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
           <component id="5e63d" class="javax.swing.JButton" binding="dyCopyCommandButton">
             <constraints>
-              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="copy command"/>
@@ -64,7 +53,7 @@
           </component>
           <component id="445ea" class="javax.swing.JLabel" binding="dyTipLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value=""/>
@@ -75,8 +64,7 @@
       <grid id="ff799" layout-manager="GridLayoutManager" row-count="4" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="10" left="10" bottom="10" right="10"/>
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <forms/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="etched" title="static commands"/>
@@ -96,7 +84,7 @@
           </vspacer>
           <component id="50006" class="javax.swing.JButton" binding="commonShellScriptCommandButton" default-binding="true">
             <constraints>
-              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="shell command"/>
@@ -110,7 +98,7 @@
           </hspacer>
           <component id="4de36" class="javax.swing.JButton" binding="commonCopyCommandButton">
             <constraints>
-              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="copy command"/>
@@ -131,15 +119,14 @@
       <grid id="ff3d2" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="10" left="10" bottom="10" right="10"/>
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <forms/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="etched"/>
         <children>
           <component id="41ed3" class="javax.swing.JLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="batch command  &quot;;&quot; splitting, asy task addition &gt;&gt; test.out &amp; ; ${CLASS_LOADER_HASH_VALUE} for script auto-replacement"/>
@@ -147,7 +134,7 @@
           </component>
           <component id="70f7d" class="javax.swing.JButton" binding="closeScriptButton">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="close"/>
