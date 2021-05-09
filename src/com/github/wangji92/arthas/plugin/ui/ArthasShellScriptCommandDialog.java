@@ -13,6 +13,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         this.project = scriptParam.getProject();
         this.scriptParam = scriptParam;
         setContentPane(contentPane);
+        setMinimumSize(new Dimension(800,340));
         setModal(true);
         getRootPane().setDefaultButton(closeScriptButton);
         closeScriptButton.addActionListener(e -> onOK());
@@ -223,18 +225,24 @@ public class ArthasShellScriptCommandDialog extends JDialog {
      */
     @SuppressWarnings("unchecked")
     private void commonScriptInit() {
+        boolean constantLabel = false;
         for (ShellScriptConstantEnum scriptConstantEnum : ShellScriptConstantEnum.values()) {
             CustomComboBoxItem<ShellScriptConstantEnum> boxItem = new CustomComboBoxItem<ShellScriptConstantEnum>();
             boxItem.setContentObject(scriptConstantEnum);
             boxItem.setDisplay(scriptConstantEnum.getCode());
             boxItem.setTipText(scriptConstantEnum.getEnumMsg());
             commonShellScriptComboBox.addItem(boxItem);
+            if (!constantLabel) {
+                constantLabel = true;
+                this.constantLabel.setText(scriptConstantEnum.getEnumMsg());
+            }
+
         }
         commonShellScriptComboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (e.getItem() instanceof CustomComboBoxItem) {
                     CustomComboBoxItem item = (CustomComboBoxItem) e.getItem();
-                    constantLabel.setText(item.getTipText());
+                    this.constantLabel.setText(item.getTipText());
                 }
             }
         });
