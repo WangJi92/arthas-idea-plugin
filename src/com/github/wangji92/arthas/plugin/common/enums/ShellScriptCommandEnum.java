@@ -42,7 +42,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode(),
-            "ognl to get static method field 注意需要编执行方法的参数") {
+            "ognl to get static method field 注意需要编辑执行方法的参数") {
         @Override
         public boolean support(ScriptParam param) {
             if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement()).startsWith("java.")) {
