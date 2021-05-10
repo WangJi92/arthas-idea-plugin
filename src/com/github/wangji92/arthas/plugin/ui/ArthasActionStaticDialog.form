@@ -40,7 +40,7 @@
         </constraints>
         <properties>
           <text value="copy sc command"/>
-          <toolTipText value="sc -d 加上当前的class的信息"/>
+          <toolTipText value="sc -d get classloader hash value"/>
         </properties>
       </component>
       <component id="4bddd" class="javax.swing.JTextField" binding="classloaderHashEditor">
@@ -109,7 +109,7 @@
         </constraints>
         <properties>
           <text value="copy command"/>
-          <toolTipText value="Bean 名称可能不正确，可以手动配置"/>
+          <toolTipText value="copy command paste into arthas"/>
         </properties>
       </component>
       <vspacer id="d7973">
