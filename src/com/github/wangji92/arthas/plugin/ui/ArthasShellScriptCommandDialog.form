@@ -23,6 +23,8 @@
     <rowspec value="top:3dlu:noGrow"/>
     <rowspec value="center:d:grow"/>
     <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:3dlu:noGrow"/>
     <rowspec value="center:d:grow"/>
     <rowspec value="top:9dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
@@ -92,7 +94,7 @@
       </component>
       <component id="fd86a" class="javax.swing.JLabel">
         <constraints>
-          <grid row="22" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="24" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="438" height="16"/>
           </grid>
           <forms/>
