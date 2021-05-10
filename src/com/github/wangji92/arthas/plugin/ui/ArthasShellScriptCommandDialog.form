@@ -87,7 +87,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="batch command  &quot;;&quot; splitting, asy task addition &gt;&gt; test.out &amp; "/>
+          <text value="batch command  &quot;;&quot; splitting, asy task addition &gt;&gt; test.out &amp;"/>
         </properties>
       </component>
       <component id="fd86a" class="javax.swing.JLabel">
