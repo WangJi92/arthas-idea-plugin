@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.27</version>
+    <version>2.28</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.28-RELEASE</p>
+      <ul>
+        <li>support mybatis mapper xml reload  <a href="https://www.yuque.com/wangji-yunque/ikhsmq/ctgcbg">mybatis xml reload</a> </li>
+        <li>provide a quickly action command support automation script for most arthas command<a href="https://www.yuque.com/wangji-yunque/ikhsmq/ypya57">quickly shell script</a> </li>
+      </ul>
      <p>2.27-RELEASE</p>
       <ul>
         <li>support can be configured to download arthas zip full package address,default address: https://arthas.aliyun.com/download/latest_version?mirror=aliyun</li>
