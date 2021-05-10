@@ -1,18 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.wangji92.arthas.plugin.ui.ArthasShellScriptCommandDialog">
-  <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="11" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-    <margin top="10" left="10" bottom="10" right="10"/>
+  <grid id="cbd77" binding="contentPane" layout-manager="FormLayout">
+    <rowspec value="center:9px:noGrow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:3dlu:noGrow"/>
+    <rowspec value="center:d:grow"/>
+    <rowspec value="top:9dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <colspec value="fill:max(d;4px):noGrow"/>
+    <colspec value="left:4dlu:noGrow"/>
+    <colspec value="fill:846px:grow"/>
+    <colspec value="fill:118px:noGrow"/>
     <constraints>
-      <xy x="48" y="276" width="914" height="333"/>
+      <xy x="48" y="276" width="1014" height="333"/>
     </constraints>
     <properties/>
     <border type="etched"/>
     <children>
       <component id="fdea2" class="javax.swing.JComboBox" binding="shellScriptComboBox">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="100" height="23"/>
           </grid>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
           <editable value="true"/>
@@ -20,7 +49,8 @@
       </component>
       <component id="445ea" class="javax.swing.JLabel" binding="dyTipLabel">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
         </constraints>
         <properties>
           <text value=""/>
@@ -28,9 +58,10 @@
       </component>
       <component id="3ca4d" class="javax.swing.JComboBox" binding="commonShellScriptComboBox" default-binding="true">
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="438" height="27"/>
           </grid>
+          <forms/>
         </constraints>
         <properties>
           <editable value="true"/>
@@ -38,9 +69,10 @@
       </component>
       <component id="6e316" class="javax.swing.JLabel" binding="constantLabel">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="438" height="0"/>
           </grid>
+          <forms/>
         </constraints>
         <properties>
           <enabled value="true"/>
@@ -49,9 +81,10 @@
       </component>
       <component id="9e202" class="javax.swing.JLabel">
         <constraints>
-          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="20" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="438" height="16"/>
           </grid>
+          <forms/>
         </constraints>
         <properties>
           <text value="batch command  &quot;;&quot; splitting, asy task addition &gt;&gt; test.out &amp; "/>
@@ -59,9 +92,10 @@
       </component>
       <component id="fd86a" class="javax.swing.JLabel">
         <constraints>
-          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="22" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="438" height="16"/>
           </grid>
+          <forms/>
         </constraints>
         <properties>
           <text value="${CLASS_LOADER_HASH_VALUE} for script auto-replacement"/>
@@ -69,9 +103,10 @@
       </component>
       <component id="eedb" class="javax.swing.JRadioButton" binding="selectCommandCloseDialogRadioButton">
         <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="18" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="438" height="22"/>
           </grid>
+          <forms/>
         </constraints>
         <properties>
           <text value="close this window after seleced one command"/>
@@ -79,7 +114,8 @@
       </component>
       <component id="4de36" class="javax.swing.JButton" binding="commonCopyCommandButton">
         <constraints>
-          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="16" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
           <text value="copy command"/>
@@ -88,7 +124,8 @@
       </component>
       <component id="50006" class="javax.swing.JButton" binding="commonShellScriptCommandButton" default-binding="true">
         <constraints>
-          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="14" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
           <text value="shell command"/>
@@ -97,7 +134,8 @@
       </component>
       <component id="5e63d" class="javax.swing.JButton" binding="dyCopyCommandButton">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
           <text value="copy command"/>
@@ -106,9 +144,10 @@
       </component>
       <component id="da19e" class="javax.swing.JButton" binding="shellScriptCommandButton" default-binding="true">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false">
+          <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="68" height="23"/>
           </grid>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
           <text value="shell command"/>
@@ -117,7 +156,8 @@
       </component>
       <component id="70f7d" class="javax.swing.JButton" binding="closeScriptButton">
         <constraints>
-          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="18" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
           <text value="close"/>
@@ -125,7 +165,8 @@
       </component>
       <component id="bde56" class="javax.swing.JLabel">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
         </constraints>
         <properties>
           <text value="dymastic commands"/>
@@ -133,7 +174,8 @@
       </component>
       <component id="2f83e" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
         </constraints>
         <properties>
           <text value="static commands"/>
