@@ -121,7 +121,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     /**
      * watch/trace/monitor support verbose option, print ConditionExpress result #1348
      */
-    public boolean printConditionExpress = true;
+    public boolean printConditionExpress = false;
 
     /**
      * 手动选择pid的配置
