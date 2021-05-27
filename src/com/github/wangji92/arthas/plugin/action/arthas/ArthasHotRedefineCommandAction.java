@@ -12,7 +12,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -24,13 +23,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.task.ProjectTaskManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +35,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -211,44 +207,14 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
     private void doHotRunnable(Project project, VirtualFile[] virtualFileFiles, Runnable runnable) {
         // https://stackoverflow.com/questions/18725340/create-a-background-task-in-intellij-plugin
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Hot Swap") {
+
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 // Set the progress bar percentage and text
                 try {
-                    progressIndicator.setIndeterminate(false);
-                    progressIndicator.setFraction(0.10);
-                    progressIndicator.setText("90% to compile select file");
                     AppSettingsState settings = AppSettingsState.getInstance(project);
                     if (settings.redefineBeforeCompile) {
-                        // 这里的版本有兼容性问题 目前占时可以使用
-                        // Deprecated method ProjectTaskManager.compile(...) is invoked in ArthasHotRedefineCommandAction$1.run(...). This method will be removed in 2020.1
-                        if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() <= 201) {
-                            //2018.2 编译报错
-                            WriteActionCompatibleUtils.runAndWait(() -> {
-                                ProjectTaskManager.getInstance(project).compile(virtualFileFiles, projectTaskResult -> {
-                                    if (projectTaskResult.getErrors() > 0) {
-                                        NotifyUtils.notifyMessage(project, "Java文件编译编译错误 请处理。(最好热更新之前确保最少编译好一次整个工程)这里只会局部编译当前文件", NotificationType.ERROR);
-                                        progressIndicator.cancel();
-                                        return;
-                                    }
-                                    if (progressIndicator.isCanceled() || projectTaskResult.isAborted()) {
-                                        NotifyUtils.notifyMessage(project, "任务已经取消");
-                                        return;
-                                    }
-                                    WriteActionCompatibleUtils.runAndWait(runnable::run);
-                                });
-                            });
-
-                        } else {
-                            WriteActionCompatibleUtils.runAndWait(() -> {
-                                ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
-
-                                Object promise = MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
-                                MethodUtils.invokeMethod(promise, "onSuccess", (Consumer) o -> {
-                                    WriteActionCompatibleUtils.runAndWait(runnable::run);
-                                });
-                            });
-                        }
+                        ClassCompileCompatibleUtils.compile(project, virtualFileFiles, runnable);
                     } else {
                         WriteActionCompatibleUtils.runAndWait(runnable::run);
 
