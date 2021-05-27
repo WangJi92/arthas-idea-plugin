@@ -1,6 +1,5 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.aliyun.oss.OSS;
 import com.github.wangji92.arthas.plugin.common.exception.CompilerFileNotFoundException;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
@@ -13,7 +12,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -25,21 +23,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.task.ProjectTaskManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
-import org.apache.commons.lang3.reflect.MethodUtils;
-import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.Jedis;
 
 import java.io.File;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -56,21 +51,6 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
     private static final String RETRANSFORM_NOTE = "【retransform 增强后 stop/rest 不影响,先删除retransform entry,显式触发 retransform 失效】【不能修改、添加、删除类的field和method】";
 
     private static final String REDEFINE_NOTE = "【redefine 增强后 stop/rest 不影响,watch/jad/trace 等等增强后失效】【不能修改、添加、删除类的field和method】";
-
-
-    /**
-     * oss 获取到链接
-     */
-    private static final String OSS_HOT_REDEFINE = "curl -Lk  \"%s\" | base64 --decode >arthas-idea-plugin-hot-swap.sh;chmod a+x arthas-idea-plugin-hot-swap.sh;./arthas-idea-plugin-hot-swap.sh;";
-    /**
-     * 剪切板处理字符串
-     */
-    private static final String CLIPBOARD_HOT_REDEFINE = "echo \"%s\" |base64 --decode >arthas-idea-plugin-hot-swap.sh;chmod a+x arthas-idea-plugin-hot-swap.sh;./arthas-idea-plugin-hot-swap.sh;";
-
-    /**
-     * redis
-     */
-    private static final String REDIS_HOT_REDEFINE = "echo `redis-cli -h '%s' -p %s  get %s`|base64 --decode >arthas-idea-plugin-hot-swap.sh;chmod a+x arthas-idea-plugin-hot-swap.sh;./arthas-idea-plugin-hot-swap.sh;";
 
     @Override
     public void update(@NotNull AnActionEvent e) {
@@ -187,77 +167,54 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 params.put("arthasIdeaPluginRedefineCommand", arthasIdeaPluginRedefineCommand);
                 params.put("arthasIdeaPluginApplicationName", selectProjectName);
                 params.put("deleteClassFile", deleteClassFile);
-                params.put("arthasPackageZipDownloadUrl",settings.arthasPackageZipDownloadUrl);
+                params.put("arthasPackageZipDownloadUrl", settings.arthasPackageZipDownloadUrl);
 
 
                 String redefineSh = StringUtils.stringSubstitutorFromFilePath("/template/arthas-idea-plugin-hot-swap.sh", params);
 
                 String base64RedefineSh = BaseEncoding.base64().encode(redefineSh.getBytes());
-
-                String command = "";
-                StringBuilder tipsBuilder = new StringBuilder("到服务器粘贴执行脚本无需打开arthas");
-                if ("redefine".equals(finalHotCommand)) {
-                    tipsBuilder.append(REDEFINE_NOTE);
-                } else {
-                    tipsBuilder.append(RETRANSFORM_NOTE);
-                }
-                if (settings.aliYunOss) {
-                    this.uploadBase64FileToOss(project, settings, base64RedefineSh, tipsBuilder.toString());
-                } else if (settings.hotRedefineRedis) {
-                    tipsBuilder.append("【服务器服务器需要有redis cli命令】");
-                    this.uploadBase64FileToRedis(project, settings, base64RedefineSh, tipsBuilder.toString());
-                } else {
-                    command = String.format(CLIPBOARD_HOT_REDEFINE, base64RedefineSh);
-                    ClipboardUtils.setClipboardString(command);
-                    tipsBuilder.append("【由于没有使用其他存储 执行的脚本比较长,推荐配置阿里云oss or redis】");
-                    NotifyUtils.notifyMessage(project, tipsBuilder.toString());
-                }
+                DirectScriptUtils.buildDirectScript(project, settings, base64RedefineSh, "arthas-idea-plugin-hot-swap.sh", directScriptResult -> {
+                    if (directScriptResult.getResult()) {
+                        if ("redefine".equals(finalHotCommand)) {
+                            directScriptResult.getTip().append(REDEFINE_NOTE);
+                        } else {
+                            directScriptResult.getTip().append(RETRANSFORM_NOTE);
+                        }
+                        NotifyUtils.notifyMessage(project, directScriptResult.getTip().toString());
+                    }
+                });
             } catch (Exception e) {
                 LOG.error("未知错误", e);
                 NotifyUtils.notifyMessage(project, "未知错误", NotificationType.ERROR);
             }
         };
+        try {
+            this.doHotRunnable(project, virtualFileFiles, runnable);
+        } catch (Exception e) {
+            LOG.error("record arthas hot swap error", e);
+            NotifyUtils.notifyMessage(project, "未知错误", NotificationType.ERROR);
+        }
 
+    }
+
+    /**
+     * 后台执行任务
+     *
+     * @param project
+     * @param virtualFileFiles
+     * @param runnable
+     */
+    private void doHotRunnable(Project project, VirtualFile[] virtualFileFiles, Runnable runnable) {
         // https://stackoverflow.com/questions/18725340/create-a-background-task-in-intellij-plugin
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Hot Swap") {
+
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 // Set the progress bar percentage and text
                 try {
-                    progressIndicator.setIndeterminate(false);
-                    progressIndicator.setFraction(0.10);
-                    progressIndicator.setText("90% to compile select file");
                     AppSettingsState settings = AppSettingsState.getInstance(project);
                     if (settings.redefineBeforeCompile) {
-                        // 这里的版本有兼容性问题 目前占时可以使用
-                        // Deprecated method ProjectTaskManager.compile(...) is invoked in ArthasHotRedefineCommandAction$1.run(...). This method will be removed in 2020.1
-                        if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() <= 201) {
-                            //2018.2 编译报错
-                            WriteActionCompatibleUtils.runAndWait(() -> {
-                                ProjectTaskManager.getInstance(project).compile(virtualFileFiles, projectTaskResult -> {
-                                    if (projectTaskResult.getErrors() > 0) {
-                                        NotifyUtils.notifyMessage(project, "Java文件编译编译错误 请处理。(最好热更新之前确保最少编译好一次整个工程)这里只会局部编译当前文件", NotificationType.ERROR);
-                                        progressIndicator.cancel();
-                                        return;
-                                    }
-                                    if (progressIndicator.isCanceled() || projectTaskResult.isAborted()) {
-                                        NotifyUtils.notifyMessage(project, "任务已经取消");
-                                        return;
-                                    }
-                                    WriteActionCompatibleUtils.runAndWait(runnable::run);
-                                });
-                            });
-
-                        } else {
-                            WriteActionCompatibleUtils.runAndWait(() -> {
-                                ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
-
-                                Object promise = MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
-                                MethodUtils.invokeMethod(promise, "onSuccess", (Consumer) o -> {
-                                    WriteActionCompatibleUtils.runAndWait(runnable::run);
-                                });
-                            });
-                        }
+                        ClassCompileCompatibleUtils.compile(project, virtualFileFiles, runnable);
                     } else {
                         WriteActionCompatibleUtils.runAndWait(runnable::run);
 
@@ -265,74 +222,13 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
                 } catch (Exception e) {
                     LOG.error("record arthas hot swap error", e);
-                    NotifyUtils.notifyMessage(project, "热更新未知错误", NotificationType.ERROR);
-                    try {
-                        WriteActionCompatibleUtils.runAndWait(runnable::run);
-                    } catch (Exception ex) {
-                        LOG.error("record arthas hot swap try again error", ex);
-                        NotifyUtils.notifyMessage(project, "热更新未知错误", NotificationType.ERROR);
-                    }
+                    NotifyUtils.notifyMessage(project, "未知错误", NotificationType.ERROR);
                 }
 
             }
         });
     }
 
-    /**
-     * 保存数据上传到redis
-     *
-     * @param project
-     * @param settings
-     * @param base64RedefineSh
-     */
-    private void uploadBase64FileToRedis(Project project, AppSettingsState settings, String base64RedefineSh, String tips) {
-        try (Jedis jedis = JedisUtils.buildJedisClient(settings.redisAddress, settings.redisPort, 5000, settings.redisAuth)) {
-            String command;
-            StringBuilder portAndAuth = new StringBuilder("" + settings.redisPort);
-            if (!StringUtils.isBlank(settings.redisAuth)) {
-                portAndAuth.append(" -a ").append(settings.redisAuth);
-            }
-
-            String cacheKey = settings.redisCacheKey + "_" + UUID.randomUUID().toString();
-            jedis.setex(cacheKey, settings.redisCacheKeyTtl, base64RedefineSh);
-            command = String.format(REDIS_HOT_REDEFINE, settings.redisAddress, portAndAuth, cacheKey);
-            ClipboardUtils.setClipboardString(command);
-            NotifyUtils.notifyMessage(project, tips);
-        } catch (Exception e) {
-            LOG.error("record arthas hot swap upload to redis error", e);
-            NotifyUtils.notifyMessage(project, "上传文件到redis 失败" + e.getMessage(), NotificationType.ERROR);
-        }
-    }
-
-    /**
-     * 上传热更新 文件到oss
-     *
-     * @param project
-     * @param settings
-     * @param base64RedefineSh
-     * @param tips
-     */
-    private void uploadBase64FileToOss(Project project, AppSettingsState settings, String base64RedefineSh, String tips) {
-        String command;
-        OSS oss = null;
-        try {
-            oss = AliyunOssUtils.buildOssClient(project);
-            String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
-            String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, base64RedefineSh);
-            String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
-            command = String.format(OSS_HOT_REDEFINE, presignedUrl);
-            ClipboardUtils.setClipboardString(command);
-            NotifyUtils.notifyMessage(project, tips);
-        } catch (Exception e) {
-            LOG.error("record arthas hot swap upload to oss error", e);
-            StackTraceUtils.printSanitizedStackTrace(e);
-            NotifyUtils.notifyMessage(project, "上传文件到oss 失败" + e.getMessage(), NotificationType.ERROR);
-        } finally {
-            if (oss != null) {
-                oss.shutdown();
-            }
-        }
-    }
 
     @Nullable
     private List<String> getAllFullTargetClassFilePath(Project project, VirtualFile[] virtualFileFiles, PsiElement psiElement) {

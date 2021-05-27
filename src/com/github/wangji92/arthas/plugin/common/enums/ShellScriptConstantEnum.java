@@ -10,8 +10,9 @@ import com.github.wangji92.arthas.plugin.common.enums.base.EnumCodeMsg;
  */
 public enum ShellScriptConstantEnum implements EnumCodeMsg<String> {
     /**
-     * thread
+     * force gc
      */
+    VM_TOOL_FORCE_GC("vmtool --action forceGc", "force gc"),
     BATCH_THREAD("thread -i 3000 -n 5;thread -b;thread --state BLOCKED;", "batch thread"),
     PROFILER("profiler start --event cpu --interval 10000000 --format jfr -duration 180", "采集cpu jfr，支持jfr格式的工具来查看,JDK Mission Control or JProfiler 执行 180秒自动结束"),
     PROFILER_ALLOC("profiler start --event alloc --interval 10000000 --threads --format svg -duration 180 --threads", "采集alloc 火焰图 执行 180秒自动结束"),

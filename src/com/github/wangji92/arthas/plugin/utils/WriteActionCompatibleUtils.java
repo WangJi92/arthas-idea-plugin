@@ -7,7 +7,6 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * 2018.1 以下版本 不支持  {@link com.intellij.openapi.application.WriteAction#runAndWait(com.intellij.util.ThrowableRunnable)}
@@ -30,8 +29,7 @@ public class WriteActionCompatibleUtils {
             try {
                 Class<?> writeAction = ClassUtils.getClass("com.intellij.openapi.application.WriteAction");
                 MethodUtils.invokeStaticMethod(writeAction, "runAndWait", run);
-                return;
-            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            } catch (Throwable e) {
                 LOG.error("invoke runAndWait error", e);
             }
         } else {
