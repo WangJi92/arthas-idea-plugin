@@ -27,10 +27,9 @@ public class ClassCompileCompatibleUtils {
     public static void compile(Project project, VirtualFile[] virtualFileFiles, Runnable successRunnable) {
         if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() <= 201) {
             //2018.2 编译报错
-            WriteActionCompatibleUtils.runAndWait(() -> {
+            WriteActionCompatibleUtils.runAndWait(project, () -> {
                 ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
-
-                ProjectTaskNotification projectTaskNotification = projectTaskResult -> {
+                ProjectTaskNotification taskNotification = projectTaskResult -> {
                     int errorCount = 0;
                     try {
                         errorCount = (int) MethodUtils.invokeMethod(projectTaskResult, "getErrors");
@@ -41,12 +40,12 @@ public class ClassCompileCompatibleUtils {
                         NotifyUtils.notifyMessage(project, "File compilation errors (it's best to make sure you compile the whole project at least once before a hot update) This will only partially compile the current file", NotificationType.ERROR);
                         return;
                     }
-                    WriteActionCompatibleUtils.runAndWait(successRunnable::run);
+                    WriteActionCompatibleUtils.runAndWait(project, successRunnable::run);
                 };
-                MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles, projectTaskNotification}, new Class[]{VirtualFile[].class, ProjectTaskNotification.class});
+                MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles, taskNotification}, new Class[]{VirtualFile[].class, ProjectTaskNotification.class});
             });
         } else {
-            WriteActionCompatibleUtils.runAndWait(() -> {
+            WriteActionCompatibleUtils.runAndWait(project, () -> {
                 ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
                 Object promise = MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles}, new Class[]{VirtualFile[].class});
                 Object isSucceeded = MethodUtils.invokeMethod(promise, "isSucceeded");
@@ -54,7 +53,7 @@ public class ClassCompileCompatibleUtils {
                     NotifyUtils.notifyMessage(project, "File compilation errors (it's best to make sure you compile the whole project at least once before a hot update) This will only partially compile the current file", NotificationType.ERROR);
                     return;
                 }
-                WriteActionCompatibleUtils.runAndWait(successRunnable::run);
+                WriteActionCompatibleUtils.runAndWait(project, successRunnable::run);
             });
         }
     }

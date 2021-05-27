@@ -216,7 +216,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                     if (settings.redefineBeforeCompile) {
                         ClassCompileCompatibleUtils.compile(project, virtualFileFiles, runnable);
                     } else {
-                        WriteActionCompatibleUtils.runAndWait(runnable::run);
+                        WriteActionCompatibleUtils.runAndWait(project, runnable::run);
 
                     }
 

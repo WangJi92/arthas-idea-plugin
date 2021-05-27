@@ -1,7 +1,9 @@
 package com.github.wangji92.arthas.plugin.utils;
 
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import com.intellij.util.ThrowableRunnable;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -23,7 +25,7 @@ public class WriteActionCompatibleUtils {
      *
      * @param run
      */
-    public static void runAndWait(ThrowableRunnable run) {
+    public static void runAndWait(Project project, ThrowableRunnable run) {
         if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() >= 182) {
             // 2018.2 版本不支持 com.intellij.openapi.application.WriteAction#runAndWait(com.intellij.util.ThrowableRunnable)
             try {
@@ -31,6 +33,7 @@ public class WriteActionCompatibleUtils {
                 MethodUtils.invokeStaticMethod(writeAction, "runAndWait", run);
             } catch (Throwable e) {
                 LOG.error("invoke runAndWait error", e);
+                NotifyUtils.notifyMessage(project, "backend running error look event Log", NotificationType.ERROR);
             }
         } else {
             SwingUtilities.invokeLater(() -> {
@@ -38,6 +41,7 @@ public class WriteActionCompatibleUtils {
                     run.run();
                 } catch (Throwable e) {
                     LOG.error("invokeLater", e);
+                    NotifyUtils.notifyMessage(project, "backend running error look event Log", NotificationType.ERROR);
                 }
             });
 
