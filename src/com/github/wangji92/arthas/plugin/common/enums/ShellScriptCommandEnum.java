@@ -156,7 +156,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' "
             + " -c "
             + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
-            "vmtool get instance invoke method field,you can edit express params") {
+            "vmtool get instance invoke method field,you can edit express params,find first instance") {
         @Override
         public boolean support(ScriptParam param) {
             if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
@@ -167,6 +167,21 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
+        }
+    },
+    VM_TOOL_INSTANCE("vmtool -x  1 "
+            + "--action getInstances --className "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode()
+            + " --limit 5 ",
+            "vmtool get all instance") {
+        @Override
+        public boolean support(ScriptParam param) {
+            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+                return false;
+            }
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
         }
     },
     /**
