@@ -146,6 +146,30 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     },
 
     /**
+     * vm tool
+     */
+    VM_TOOL_INVOKE("vmtool -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + "--action getInstances --className "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + " --express 'instances[0]."
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' "
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "vmtool get instance invoke method field,you can edit express params") {
+        @Override
+        public boolean support(ScriptParam param) {
+            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+                return false;
+            }
+            // 构造方法不支持
+            if (OgnlPsUtils.isConstructor(param.getPsiElement())) {
+                return false;
+            }
+            return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
+        }
+    },
+    /**
      * spring get bean
      */
     SPRING_GET_BEAN("ognl -x "

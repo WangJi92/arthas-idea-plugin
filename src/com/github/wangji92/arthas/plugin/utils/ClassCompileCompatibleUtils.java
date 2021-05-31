@@ -7,7 +7,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.task.ProjectTaskManager;
 import com.intellij.task.ProjectTaskNotification;
+import com.intellij.task.ProjectTaskResult;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
@@ -30,21 +32,24 @@ public class ClassCompileCompatibleUtils {
      */
     public static void compile(Project project, VirtualFile[] virtualFileFiles, Runnable successRunnable) {
         if (ApplicationInfo.getInstance().getBuild().getBaselineVersion() <= 201) {
-            //2021 版本开发删除掉下面的代码 
+            //编译兼容一下代码
             WriteActionCompatibleUtils.runAndWait(project, () -> {
                 ProjectTaskManager instance = ProjectTaskManager.getInstance(project);
-                ProjectTaskNotification taskNotification = projectTaskResult -> {
-                    int errorCount = 0;
-                    try {
-                        errorCount = (int) MethodUtils.invokeMethod(projectTaskResult, "getErrors");
-                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                        //ignore
+                ProjectTaskNotification taskNotification = new ProjectTaskNotification() {
+                    @Override
+                    public void finished(@NotNull ProjectTaskResult projectTaskResult) {
+                        int errorCount = 0;
+                        try {
+                            errorCount = (int) MethodUtils.invokeMethod(projectTaskResult, "getErrors");
+                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                            //ignore
+                        }
+                        if (errorCount > 0) {
+                            NotifyUtils.notifyMessage(project, "File compilation errors (it's best to make sure you compile the whole project at least once before a hot update) This will only partially compile the current file", NotificationType.ERROR);
+                            return;
+                        }
+                        WriteActionCompatibleUtils.runAndWait(project, successRunnable::run);
                     }
-                    if (errorCount > 0) {
-                        NotifyUtils.notifyMessage(project, "File compilation errors (it's best to make sure you compile the whole project at least once before a hot update) This will only partially compile the current file", NotificationType.ERROR);
-                        return;
-                    }
-                    WriteActionCompatibleUtils.runAndWait(project, successRunnable::run);
                 };
                 MethodUtils.invokeMethod(instance, "compile", new Object[]{virtualFileFiles, taskNotification}, new Class[]{VirtualFile[].class, ProjectTaskNotification.class});
             });
