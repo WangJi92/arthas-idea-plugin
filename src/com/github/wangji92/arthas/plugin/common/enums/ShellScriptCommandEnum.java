@@ -36,6 +36,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isStaticMethodOrField(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
+        }
     },
     /**
      * 调用静态变量 或者方法 java 不需要classloader hashcode 使用默认
@@ -55,6 +61,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isStaticMethodOrField(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
+        }
     },
 
     /**
@@ -70,6 +81,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             return OgnlPsUtils.isStaticField(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
         }
     },
 
@@ -92,6 +108,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isStaticField(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
+        }
     },
     /**
      * watch non static field
@@ -109,6 +130,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         @Override
         public boolean support(ScriptParam param) {
             return OgnlPsUtils.isNonStaticField(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
         }
     },
     /**
@@ -128,6 +154,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public boolean support(ScriptParam param) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
+        }
     },
 
     /**
@@ -144,6 +175,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         @Override
         public boolean support(ScriptParam param) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
         }
     },
 
@@ -170,6 +206,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
+        }
     },
     VM_TOOL_SPRING_ENV("vmtool -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
@@ -181,6 +223,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         @Override
         public boolean support(ScriptParam param) {
             return true;
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return String.join(" ", "sc", "-d", "org.springframework.core.env.ConfigurableEnvironment");
         }
     },
     VM_TOOL_INSTANCE("vmtool -x  1 "
@@ -196,6 +243,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
         }
     },
 
@@ -234,6 +287,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(param.getProject());
+            return String.join(" ", "sc", "-d", springContextClassName);
         }
     },
     /**
@@ -289,6 +348,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return false;
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(param.getProject());
+            return String.join(" ", "sc", "-d", springContextClassName);
+        }
     },
 
     /**
@@ -305,6 +370,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public boolean support(ScriptParam param) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
+        }
     },
     /**
      * monitor
@@ -320,6 +390,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         @Override
         public boolean support(ScriptParam param) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
         }
     },
     /**
@@ -342,6 +417,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
+        }
     },
     /**
      * jad
@@ -360,6 +441,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
+        }
     },
     /**
      * sc
@@ -370,6 +456,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         @Override
         public boolean support(ScriptParam param) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
         }
     },
     /**
@@ -382,6 +473,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         @Override
         public boolean support(ScriptParam param) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
         }
     },
     /**
@@ -401,6 +497,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isStaticField(param.getPsiElement()) && !OgnlPsUtils.isFinalField(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
+        }
     },
     /**
      * ognl reflect to modify static final field 注意需要被修改的字段的值
@@ -418,6 +520,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             return OgnlPsUtils.isStaticField(param.getPsiElement()) && OgnlPsUtils.isFinalField(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
         }
     },
 
@@ -440,6 +548,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isStaticMethod(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
+        }
     },
 
     /**
@@ -461,6 +574,11 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             }
             return OgnlPsUtils.isNonStaticMethod(param.getPsiElement());
         }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            return null;
+        }
     },
     /**
      * logger
@@ -477,6 +595,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            return String.join(" ", "logger", "--name", className);
         }
     },
 
@@ -496,6 +620,12 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
                 return false;
             }
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(ScriptParam param) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
         }
     },
 
@@ -529,6 +659,14 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      * @return
      */
     public abstract boolean support(ScriptParam param);
+
+    /**
+     * 获取sc-d classloader 命令的信息,return null is not need
+     *
+     * @param param
+     * @return
+     */
+    public abstract String getScCommand(ScriptParam param);
 
 
     @Override
