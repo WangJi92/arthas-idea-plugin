@@ -11,12 +11,15 @@ import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
+import org.assertj.core.util.Sets;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 快捷命令
@@ -49,6 +52,16 @@ public class ArthasShellScriptCommandDialog extends JDialog {
 
     private String className;
 
+    /**
+     * 当前选择的动态脚本
+     */
+    private CustomComboBoxItem currentSelectDyScriptVariableEnum;
+
+    /**
+     * 防止手动修改 恶意添加了 classloader
+     */
+    public static Set<String> NEED_CLASSLOADER_COMMAND = Sets.newLinkedHashSet("logger --name", "dump", "jad", "vmtool", "ognl", "${CLASSLOADER_HASH_VALUE}");
+
 
     /**
      * 当前执行上下文
@@ -59,7 +72,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         this.project = scriptParam.getProject();
         this.scriptParam = scriptParam;
         setContentPane(contentPane);
-        setMinimumSize(new Dimension(800,340));
+        setMinimumSize(new Dimension(800, 340));
         setModal(true);
         getRootPane().setDefaultButton(closeScriptButton);
         closeScriptButton.addActionListener(e -> onOK());
@@ -155,14 +168,23 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             assert selectedItem != null;
             String selectedItemStr = selectedItem.toString();
             String scCommand = "";
-            if (selectedItemStr.contains(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode())) {
-                scCommand = String.join(" ", "sc", "-d", this.className);
-                if (selectedItemStr.contains("#springContext=")) {
-                    // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
-                    String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(project);
-                    scCommand = String.join(" ", "sc", "-d", springContextClassName);
-                } else if (selectedItemStr.contains("logger --name")) {
-                    scCommand = String.join(" ", "logger", "--name", this.className);
+            if (this.currentSelectDyScriptVariableEnum != null) {
+                ShellScriptCommandEnum shellScriptCommandEnum = (ShellScriptCommandEnum) currentSelectDyScriptVariableEnum.getContentObject();
+                scCommand = shellScriptCommandEnum.getScCommand(this.scriptParam);
+                // 这里要处理一下 手动修改了comboBox的值 获取不到 是否需要classloader
+                if (StringUtils.isNotBlank(scCommand)) {
+                    final String selectedItemStrFinal = selectedItemStr;
+                    AtomicBoolean containSc = new AtomicBoolean(false);
+                    NEED_CLASSLOADER_COMMAND.forEach(needSc -> {
+                        if (selectedItemStrFinal.contains(needSc)) {
+                            containSc.set(true);
+                        }
+                    });
+                    if (containSc.get()) {
+                        selectedItemStr = String.join(" ", selectedItemStr, "-c", ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode());
+                    } else {
+                        scCommand = "";
+                    }
                 }
             }
             // 这里再次处理一下上下文信息
@@ -191,6 +213,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                 if (e.getItem() instanceof CustomComboBoxItem) {
                     CustomComboBoxItem item = (CustomComboBoxItem) e.getItem();
                     dyTipLabel.setText(item.getTipText());
+                    this.currentSelectDyScriptVariableEnum = item;
                 }
 
             }

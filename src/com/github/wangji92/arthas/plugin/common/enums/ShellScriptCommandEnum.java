@@ -24,9 +24,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     OGNL_GETSTATIC("ognl -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
-            + ShellScriptVariableEnum.EXECUTE_INFO.getCode()
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode(),
             "ognl to get static method field 注意需要编执行方法的参数") {
         @Override
         public boolean support(ScriptParam param) {
@@ -191,9 +189,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "--action getInstances --className "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + " --express 'instances[0]."
-            + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' "
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' ",
             "vmtool get instance invoke method field,you can edit express params,find first instance") {
         @Override
         public boolean support(ScriptParam param) {
@@ -216,9 +212,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     VM_TOOL_SPRING_ENV("vmtool -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
-            + " --express '#standardServletEnvironment=instances[0]," + SPRING_ALL_MAP_PROPERTY + "' "
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + " --express '#standardServletEnvironment=instances[0]," + SPRING_ALL_MAP_PROPERTY + "' ",
             "vmtool get spring all env source instance of map") {
         @Override
         public boolean support(ScriptParam param) {
@@ -233,8 +227,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     VM_TOOL_INSTANCE("vmtool -x  1 "
             + "--action getInstances --className "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode()
             + " --limit 5 ",
             "vmtool get all instance") {
         @Override
@@ -258,9 +250,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     SPRING_GET_BEAN("ognl -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "'#springContext=" + ShellScriptVariableEnum.SPRING_CONTEXT.getCode() + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\")."
-            + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' "
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' ",
             "invoke static spring bean【手动编辑填写参数】【bean名称可能不正确,可以手动修改】 ") {
         @Override
         public boolean support(ScriptParam param) {
@@ -301,9 +291,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     SPRING_GET_BEAN_SET_FIELD("ognl -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "'#springContext=" + ShellScriptVariableEnum.SPRING_CONTEXT.getCode()
-            + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\").set" + ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getCode() + "(" + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' "
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\").set" + ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getCode() + "(" + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
             "invoke static spring bean set field method 【需要编辑set方法的值】【bean名称可能不正确,可以手动修改】 ") {
         @Override
         public boolean support(ScriptParam param) {
@@ -402,9 +390,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      */
     JAD("jad --source-only "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
-            + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode() + " "
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode() + " ",
 
             "decompile class") {
         @Override
@@ -487,8 +473,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() +
             " '#field=@"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@class.getDeclaredField(\"" + ShellScriptVariableEnum.FIELD_NAME.getCode() + "\"),#field.setAccessible(true),#field.set(null,"
-            + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
             "ognl reflect to modify static  not final field 注意需要被修改的字段的值") {
         @Override
         public boolean support(ScriptParam param) {
@@ -511,8 +496,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() +
             " '#field=@"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@class.getDeclaredField(\"" + ShellScriptVariableEnum.FIELD_NAME.getCode() + "\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),#field.set(null,"
-            + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
             "ognl reflect to modify static  final field 注意需要被修改的字段的值") {
         @Override
         public boolean support(ScriptParam param) {
@@ -585,9 +569,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      */
     LOGGER("logger --name "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
-            + "--level debug "
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + "--level debug ",
             "--level debug 可以编辑修改为 info、error") {
         @Override
         public boolean support(ScriptParam param) {
@@ -610,9 +592,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      */
     DUMP("dump "
             + ShellScriptVariableEnum.CLASS_NAME.getCode()
-            + " -d /tmp/output "
-            + " -c "
-            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            + " -d /tmp/output ",
             "dump class byte array from jvm") {
         @Override
         public boolean support(ScriptParam param) {
