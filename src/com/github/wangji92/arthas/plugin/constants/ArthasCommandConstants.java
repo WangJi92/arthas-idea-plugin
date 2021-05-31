@@ -79,10 +79,15 @@ public interface ArthasCommandConstants {
      * 安装脚本
      */
     String AS_INSTALL_BASH = "curl -sk https://arthas.aliyun.com/arthas-boot.jar -o ~/.arthas-boot.jar  && echo \"alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http 2>&1'\" >> ~/.bashrc && source ~/.bashrc && echo \"source ~/.bashrc\" >> ~/.bash_profile && source ~/.bash_profile";
+
+    /**
+     * 获取所有的 map source的配置
+     */
+    String SPRING_ALL_MAP_PROPERTY = "#allProperties={},#propertySourceIterator=#standardServletEnvironment.getPropertySources().iterator(),#propertySourceIterator.{#key=#this.getName(),#allProperties.add(\"                \"),#allProperties.add(\"------------------------- name:\"+#key),#this.getSource() instanceof java.util.Map ?#this.getSource().entrySet().iterator.{#key=#this.key,#allProperties.add(#key+\"=\"+#standardServletEnvironment.getProperty(#key))}:#{}},#allProperties";
     /**
      * 获取spring 所有的环境变量的表达式
      */
-    String SPRING_ALL_PROPERTY = "%s '%s,#allProperties={},#standardServletEnvironment=#propertySourceIterator=#springContext.getEnvironment(),#propertySourceIterator=#standardServletEnvironment.getPropertySources().iterator(),#propertySourceIterator.{#key=#this.getName(),#allProperties.add(\"                \"),#allProperties.add(\"------------------------- name:\"+#key),#this.getSource() instanceof java.util.Map ?#this.getSource().entrySet().iterator.{#key=#this.key,#allProperties.add(#key+\"=\"+#standardServletEnvironment.getProperty(#key))}:#{}},#allProperties'";
+    String SPRING_ALL_PROPERTY = "%s '%s,#standardServletEnvironment=#springContext.getEnvironment(),+" + SPRING_ALL_MAP_PROPERTY + "'";
 
     /**
      * 默认的 arthas zip 完整包的下载地址

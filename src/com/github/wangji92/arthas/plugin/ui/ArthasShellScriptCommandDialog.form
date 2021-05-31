@@ -25,8 +25,6 @@
     <rowspec value="top:3dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:3dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
-    <rowspec value="top:9dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -89,18 +87,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="batch command  &quot;;&quot; splitting, asy task addition &gt;&gt; test.out &amp;"/>
-        </properties>
-      </component>
-      <component id="fd86a" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="24" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="438" height="16"/>
-          </grid>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="${CLASS_LOADER_HASH_VALUE} for script auto-replacement"/>
+          <text value="batch command  &quot;;&quot; splitting, asy task addition &gt;&gt; test.out &amp; "/>
         </properties>
       </component>
       <component id="eedb" class="javax.swing.JRadioButton" binding="selectCommandCloseDialogRadioButton">
