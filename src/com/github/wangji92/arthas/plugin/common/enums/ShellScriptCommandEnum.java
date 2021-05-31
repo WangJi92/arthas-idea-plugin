@@ -9,6 +9,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.SPRING_ALL_MAP_PROPERTY;
+
 /**
  * 可以直接执行的脚本通用信息
  *
@@ -169,6 +171,18 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
         }
     },
+    VM_TOOL_SPRING_ENV("vmtool -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
+            + " --express '#standardServletEnvironment=instances[0]," + SPRING_ALL_MAP_PROPERTY + "' "
+            + " -c "
+            + ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode(),
+            "vmtool get spring all env source instance of map") {
+        @Override
+        public boolean support(ScriptParam param) {
+            return true;
+        }
+    },
     VM_TOOL_INSTANCE("vmtool -x  1 "
             + "--action getInstances --className "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
@@ -184,6 +198,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
         }
     },
+
     /**
      * spring get bean
      */
