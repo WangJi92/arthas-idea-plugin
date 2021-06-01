@@ -9,9 +9,9 @@ import com.github.wangji92.arthas.plugin.common.param.ScriptParam;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
+import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import org.assertj.core.util.Sets;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +60,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     /**
      * 防止手动修改 恶意添加了 classloader
      */
-    public static Set<String> NEED_CLASSLOADER_COMMAND = Sets.newLinkedHashSet("logger --name", "dump", "jad", "vmtool", "ognl", "${CLASSLOADER_HASH_VALUE}");
+    public static Set<String> NEED_CLASSLOADER_COMMAND = Sets.newHashSet("logger --name", "dump", "jad", "vmtool", "ognl", "${CLASSLOADER_HASH_VALUE}");
 
 
     /**
