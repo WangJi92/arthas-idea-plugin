@@ -500,6 +500,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasShellScriptCommandAction"
                 text="Quickly Shell Script"
                 description="Shell script command"/>
+        <action id="ArthasVmtoolCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolCommandAction"
+                text="Vmtool Get Instance Invoke Method Field"
+                description="Vmtool get instance invoke method field"/>
 
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
@@ -546,6 +550,7 @@
             <reference ref="ArthasStackCommand"/>
             <reference ref="ArthasMonitorCommand"/>
             <reference ref="ArthasTimeTunnelCommand"/>
+            <reference ref="ArthasVmtoolCommandAction"/>
             <separator text="* Spring ApplicationContext getBean"/>
             <reference ref="ArthasInvokeBeanMethod"/>
             <reference ref="ArthasWatchOgnlSpringContextInvokeMethodAction"/>
