@@ -47,6 +47,6 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
         String printConditionExpress = instance.printConditionExpress ? "-v" : "";
         String command = String.join(" ", "watch", className, methodName, watchContentBuilder.toString(), printConditionExpress, "-n", invokeCount, "-x", depthPrintPropertyX, conditionExpress);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, "支持表达式(默认1==1) shellScript,可以将光标放置在字段上watch获取值,命令已复制到剪切板 ");
+        NotifyUtils.notifyMessageDefault(project);
     }
 }

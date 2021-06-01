@@ -33,6 +33,6 @@ public class ArthasClassloaderCommandAction extends AnAction {
             return;
         }
         ClipboardUtils.setClipboardString("classloader -l");
-        NotifyUtils.notifyMessage(project, "classloader -l  按类加载实例查看统计信息,classloader -a -c 327a647b 当前classloader 加载类的信息");
+        NotifyUtils.notifyMessageDefault(project);
     }
 }

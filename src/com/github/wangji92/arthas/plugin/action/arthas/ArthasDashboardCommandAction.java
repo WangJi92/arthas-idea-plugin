@@ -24,6 +24,6 @@ public class ArthasDashboardCommandAction extends AnAction {
             return;
         }
         ClipboardUtils.setClipboardString("dashboard");
-        NotifyUtils.notifyMessage(project, "当前系统的实时数据面板，按 ctrl+c 退出");
+        NotifyUtils.notifyMessageDefault(project);
     }
 }

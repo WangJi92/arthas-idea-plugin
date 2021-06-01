@@ -24,6 +24,6 @@ public class ArthasJvmCommandAction extends AnAction {
             return;
         }
         ClipboardUtils.setClipboardString("jvm");
-        NotifyUtils.notifyMessage(project, "查看当前JVM信息,命令已复制到剪切板");
+        NotifyUtils.notifyMessageDefault(project);
     }
 }

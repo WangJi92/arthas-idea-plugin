@@ -22,10 +22,10 @@ public class ArthasJadCommandAction extends BaseArthasPluginAction {
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         if ("*".equals(methodName)) {
             // 查看当前类的反编译结果
-            methodName ="";
+            methodName = "";
         }
         String command = String.join(" ", "jad --source-only", className, methodName);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project,"反编译目标方法或者类的代码，线上一致性检查非常方便,命令已复制到剪切板");
+        NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(Decompile the code of the target method or class, online consistency check is very convenient)");
     }
 }

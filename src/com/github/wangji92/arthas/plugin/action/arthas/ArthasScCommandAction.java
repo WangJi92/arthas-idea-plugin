@@ -16,6 +16,6 @@ public class ArthasScCommandAction extends BaseArthasPluginAction {
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         String command = String.join(" ", "sc", "-d", className);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, "查看JVM已加载的类信息 Search-Class,类似命令Search-Method(sm);-d 输出类的详情,加载的ClassLoader,-f:类的成员变量信息（配合-d一起使用");
+        NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(View the class information that the JVM has loaded)");
     }
 }

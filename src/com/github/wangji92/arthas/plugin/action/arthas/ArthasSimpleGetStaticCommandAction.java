@@ -75,7 +75,7 @@ public class ArthasSimpleGetStaticCommandAction extends AnAction {
             String depthPrintProperty = instance.depthPrintProperty;
             String command = String.join(" ", "getstatic", className, fileName, "-x", depthPrintProperty);
             ClipboardUtils.setClipboardString(command);
-            NotifyUtils.notifyMessage(project, "简单的获取静态变量的值 如果多个classloader 加载获取不到信息");
+            NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(Simply get the value of static variables, if multiple classloader's can't get the information)");
         }
     }
 }

@@ -108,8 +108,8 @@ public class DirectScriptUtils {
             result = false;
             LOG.error("upload  to clipboard error", e);
         }
-        StringBuilder tipsBuilder = new StringBuilder("命令已复制到剪切板 去服务器粘贴执行无需打开arthas");
-        tipsBuilder.append("【没有配置存储 执行的脚本比较长,推荐配置阿里云oss or redis】");
+        StringBuilder tipsBuilder = new StringBuilder("linux shell command has been copied to the clipboard Go to the server and paste it without open arthas");
+        tipsBuilder.append("[No storage configuration The execution script is long, recommend to configure Ali cloud oss or redis]");
 
         DirectScriptResult directScriptResult = new DirectScriptResult();
         directScriptResult.setResult(result);
@@ -143,12 +143,12 @@ public class DirectScriptUtils {
             ClipboardUtils.setClipboardString(finalCommand);
         } catch (Exception e) {
             LOG.error("upload to redis error", e);
-            NotifyUtils.notifyMessage(project, "上传文件到redis 失败" + e.getMessage(), NotificationType.ERROR);
+            NotifyUtils.notifyMessage(project, "Failed to upload file to redis" + e.getMessage(), NotificationType.ERROR);
             result = false;
         }
 
-        StringBuilder tipsBuilder = new StringBuilder("命令已复制到剪切板 去服务器粘贴执行无需打开arthas");
-        tipsBuilder.append("【服务器服务器需要有redis cli命令】");
+        StringBuilder tipsBuilder = new StringBuilder("linux shell command has been copied to the clipboard Go to the server and paste it without open arthas");
+        tipsBuilder.append("【server need redis cli command】");
         DirectScriptResult directScriptResult = new DirectScriptResult();
         directScriptResult.setResult(result);
         directScriptResult.setTip(tipsBuilder);
@@ -177,7 +177,7 @@ public class DirectScriptUtils {
             ClipboardUtils.setClipboardString(finalCommand);
         } catch (Exception e) {
             LOG.error("upload to oss error", e);
-            NotifyUtils.notifyMessage(project, "上传文件到oss 失败" + e.getMessage(), NotificationType.ERROR);
+            NotifyUtils.notifyMessage(project, "Failed to upload file to OSS" + e.getMessage(), NotificationType.ERROR);
             StackTraceUtils.printSanitizedStackTrace(e);
             result = false;
         } finally {
@@ -186,7 +186,7 @@ public class DirectScriptUtils {
             }
         }
 
-        StringBuilder tipsBuilder = new StringBuilder("命令已复制到剪切板 去服务器粘贴执行无需打开arthas");
+        StringBuilder tipsBuilder = new StringBuilder("linux shell command has been copied to the clipboard Go to the server and paste it without open arthas");
         DirectScriptResult directScriptResult = new DirectScriptResult();
         directScriptResult.setResult(result);
         directScriptResult.setTip(tipsBuilder);

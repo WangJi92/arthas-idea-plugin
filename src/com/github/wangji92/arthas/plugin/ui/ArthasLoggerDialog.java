@@ -82,7 +82,7 @@ public class ArthasLoggerDialog extends JDialog {
         }
         String joinCommands = String.join(" ", commands);
         ClipboardUtils.setClipboardString(joinCommands);
-        NotifyUtils.notifyMessage(project, "logger日志等级trace>debug>info>warn>error,-c hash值,--l 动态更新level");
+        NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(logger level trace>debug>info>warn>error,-c classloader hash value,--l logger level");
     }
 
     private void onCancel() {
@@ -128,7 +128,7 @@ public class ArthasLoggerDialog extends JDialog {
     private void getLoggerClassHashLoader() {
         String loggerName = loggerExpressionEditor.getText();
         ClipboardUtils.setClipboardString(loggerName);
-        NotifyUtils.notifyMessage(project, "通过logger -name 获取当前class的classloader hash值");
+        NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(Get classloader hash value of class through logger - name)");
     }
 
     private void createUIComponents() {

@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.github.wangji92.arthas.plugin.utils.NotifyUtils.COMMAND_COPIED;
+
 /**
  * 快捷命令
  *
@@ -200,13 +202,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             assert selectedItem != null;
             String selectedItemStr = selectedItem.toString();
             ClipboardUtils.setClipboardString(selectedItemStr);
-            if (selectedItemStr.contains(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode())) {
-                NotifyUtils.notifyMessage(project, "命令已复制到剪切板,部分命令需要classloader hash value 直接执行不可以");
-            } else {
-                NotifyUtils.notifyMessage(project, "命令已复制到剪切板,到服务启动arthas 粘贴执行");
-            }
-
-
+            NotifyUtils.notifyMessage(project, COMMAND_COPIED + "(Some commands need classloader hash value to be executed directly)");
         });
         shellScriptComboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -284,11 +280,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             assert selectedItem != null;
             String selectedItemStr = selectedItem.toString();
             ClipboardUtils.setClipboardString(selectedItemStr);
-            if (selectedItemStr.contains(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getCode())) {
-                NotifyUtils.notifyMessage(project, "命令已复制到剪切板,部分命令需要classloader hash value 直接执行不可以");
-            } else {
-                NotifyUtils.notifyMessage(project, "命令已复制到剪切板,到服务启动arthas 粘贴执行（部分为批量脚本不能执行，需手动修改)");
-            }
+            NotifyUtils.notifyMessage(project, COMMAND_COPIED + "(some of the batch scripts cannot be executed need to be modified manually)");
 
 
         });

@@ -105,12 +105,12 @@ public class ArthasTimeTunnelDialog extends JDialog {
         comboBoxValueGetButton.addActionListener(e -> {
             Object selectedItem = comboBox.getSelectedItem();
             String selectedItemStr = selectedItem.toString();
-            if(selectedItem instanceof TimeTunnelCommandEnum){
+            if (selectedItem instanceof TimeTunnelCommandEnum) {
                 selectedItemStr = ((TimeTunnelCommandEnum) selectedItem).getCode();
             }
             if (StringUtils.isNotBlank(selectedItemStr)) {
                 ClipboardUtils.setClipboardString(selectedItemStr);
-                NotifyUtils.notifyMessage(project, "选中的tt常用命令已经复制");
+                NotifyUtils.notifyMessageDefault(project);
             }
         });
         //值太长展示不全处理 https://www.java-forums.org/awt-swing/16196-item-too-big-jcombobox.html
@@ -129,8 +129,8 @@ public class ArthasTimeTunnelDialog extends JDialog {
 
                 String tipText = value.toString();
                 String codeValue = value.toString();
-                if(value instanceof  TimeTunnelCommandEnum){
-                    tipText= ((TimeTunnelCommandEnum) value).getEnumMsg();
+                if (value instanceof TimeTunnelCommandEnum) {
+                    tipText = ((TimeTunnelCommandEnum) value).getEnumMsg();
                     codeValue = ((TimeTunnelCommandEnum) value).getCode();
                 }
                 if (isSelected) {
