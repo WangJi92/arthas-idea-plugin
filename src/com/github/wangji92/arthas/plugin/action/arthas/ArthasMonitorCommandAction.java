@@ -24,8 +24,8 @@ public class ArthasMonitorCommandAction extends BaseArthasPluginAction {
         String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
         String printConditionExpress = instance.printConditionExpress ? "-v" : "";
         // 给 arthas 使用者 配置的需求 来源 交流群
-        String command = String.join(" ", "monitor", className, methodName,printConditionExpress,"-n", invokeMonitorCount, "--cycle", invokeMonitorInterval,conditionExpressDisplay);
+        String command = String.join(" ", "monitor", className, methodName, printConditionExpress, "-n", invokeMonitorCount, "--cycle", invokeMonitorInterval, conditionExpressDisplay);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, "方法执行监控,非实时 -c 统计周期（10秒）-n 执行次数统计(10次) 可以手动修改大一点，详情参看 help monitor");
+        NotifyUtils.notifyMessageDefault(project);
     }
 }

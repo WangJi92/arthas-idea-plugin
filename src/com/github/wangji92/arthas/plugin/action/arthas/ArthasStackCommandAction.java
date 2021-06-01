@@ -23,9 +23,9 @@ public class ArthasStackCommandAction extends BaseArthasPluginAction {
         String invokeCount = instance.invokeCount;
         String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
         String printConditionExpress = instance.printConditionExpress ? "-v" : "";
-        String command = String.join(" ", "stack", className, methodName, printConditionExpress,"-n", invokeCount, conditionExpressDisplay);
+        String command = String.join(" ", "stack", className, methodName, printConditionExpress, "-n", invokeCount, conditionExpressDisplay);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, "源码分析，查看方法调用栈非常方便");
+        NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(Source code analysis, view method call stack is very convenient)");
     }
 
 }

@@ -184,15 +184,15 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                     }
                 });
             } catch (Exception e) {
-                LOG.error("未知错误", e);
-                NotifyUtils.notifyMessage(project, "未知错误", NotificationType.ERROR);
+                LOG.error("unknown error", e);
+                NotifyUtils.notifyMessage(project, "unknown error", NotificationType.ERROR);
             }
         };
         try {
             this.doHotRunnable(project, virtualFileFiles, runnable);
         } catch (Exception e) {
             LOG.error("record arthas hot swap error", e);
-            NotifyUtils.notifyMessage(project, "未知错误", NotificationType.ERROR);
+            NotifyUtils.notifyMessage(project, "unknown error", NotificationType.ERROR);
         }
 
     }
@@ -222,7 +222,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
                 } catch (Exception e) {
                     LOG.error("record arthas hot swap error", e);
-                    NotifyUtils.notifyMessage(project, "未知错误", NotificationType.ERROR);
+                    NotifyUtils.notifyMessage(project, "unknown error", NotificationType.ERROR);
                 }
 
             }

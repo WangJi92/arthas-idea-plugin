@@ -70,17 +70,6 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction extends AnAction {
                 e.getPresentation().setEnabled(false);
                 return;
             }
-//            //抽象方法不处理
-//            if (psiMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
-//                e.getPresentation().setEnabled(false);
-//                return;
-//            }
-//            //默认方法不处理
-//            if (psiMethod.hasModifierProperty(PsiModifier.DEFAULT)) {
-//                e.getPresentation().setEnabled(false);
-//                return;
-//            }
-            //native 方法不处理
             if (psiMethod.hasModifierProperty(PsiModifier.NATIVE)) {
                 e.getPresentation().setEnabled(false);
                 return;

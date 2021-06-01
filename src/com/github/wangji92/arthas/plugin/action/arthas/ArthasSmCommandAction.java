@@ -30,6 +30,6 @@ public class ArthasSmCommandAction extends BaseArthasPluginAction {
         }
         String command = String.join(" ", smPreCommand, className, methodName);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, "sm 命令只能看到由当前类所声明 (declaring) 的方法，父类则无法看到。 sm -d 详情");
+        NotifyUtils.notifyMessageDefault(project);
     }
 }

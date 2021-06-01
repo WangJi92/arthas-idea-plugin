@@ -118,6 +118,6 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         }
         //endregion
         ClipboardUtils.setClipboardString(builder.toString());
-        NotifyUtils.notifyMessage(project, "watch controller home '@com.E@getTraceId()',类似这种，协助构造后面的部分静态的表达式,还不能直接使用");
+        NotifyUtils.notifyMessage(project, "watch controller home '@com.E@getTraceId()',Similar to this, it helps to construct some static expressions behind, which can't be used directly");
     }
 }

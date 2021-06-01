@@ -24,6 +24,6 @@ public class ArthasVmOptionCommandAction extends AnAction {
             return;
         }
         ClipboardUtils.setClipboardString("vmoption");
-        NotifyUtils.notifyMessage(project, "查看，更新VM诊断相关的参数 vmoption PrintGCDetails true");
+        NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(View and update VM diagnosis related parameters equals vmoption PrintGCDetails true)");
     }
 }

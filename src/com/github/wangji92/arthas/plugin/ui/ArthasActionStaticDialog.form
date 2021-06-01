@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="5" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
-      <xy x="20" y="34" width="674" height="157"/>
+      <xy x="20" y="34" width="679" height="157"/>
     </constraints>
     <properties>
       <toolTipText value=""/>
@@ -56,7 +56,8 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="-c classloader"/>
+          <text value="sc -d get classloader"/>
+          <toolTipText value="sc -d get classloader hash value"/>
         </properties>
       </component>
       <component id="201ea" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlOfficeLinkLabel" custom-create="true">

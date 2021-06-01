@@ -15,7 +15,7 @@ public class NotifyUtils {
     private static final NotificationGroup NOTIFICATION = new NotificationGroup("arthas", NotificationDisplayType.BALLOON, false);
 
 
-    public static final String COMMAND_COPIED = "命令已经复制";
+    public static final String COMMAND_COPIED = "arthas command copied to clipboard,open arthas to execute command";
 
     /**
      * 通知消息

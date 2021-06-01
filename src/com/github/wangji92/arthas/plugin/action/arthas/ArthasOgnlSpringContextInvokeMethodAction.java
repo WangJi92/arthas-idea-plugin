@@ -12,7 +12,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -42,50 +42,19 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
         }
         //获取当前事件触发时，光标所在的元素
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
-        if (psiElement == null) {
+        if (!OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             e.getPresentation().setEnabled(false);
             return;
         }
-        if (psiElement instanceof PsiClass) {
+        boolean staticField = OgnlPsUtils.isStaticField(psiElement);
+        if (staticField) {
             e.getPresentation().setEnabled(false);
             return;
         }
-
-        if (psiElement instanceof PsiField) {
-            PsiField psiField = (PsiField) psiElement;
-            if (psiField.hasModifierProperty(PsiModifier.STATIC)) {
-                e.getPresentation().setEnabled(false);
-                return;
-            }
-            e.getPresentation().setEnabled(true);
+        boolean anonymousClass = OgnlPsUtils.isAnonymousClass(psiElement);
+        if (anonymousClass) {
+            e.getPresentation().setEnabled(false);
             return;
-        }
-
-        //判断是否为静态方法
-        if (psiElement instanceof PsiMethod) {
-            /**
-             * {@link https://www.programcreek.com/java-api-examples/?class=com.intellij.psi.PsiField&method=hasModifierProperty }
-             */
-            PsiMethod psiMethod = (PsiMethod) psiElement;
-            if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
-                e.getPresentation().setEnabled(false);
-                return;
-            }
-            //抽象方法不处理
-//            if (psiMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
-//                e.getPresentation().setEnabled(false);
-//                return;
-//            }
-            //默认方法不处理
-//            if (psiMethod.hasModifierProperty(PsiModifier.DEFAULT)) {
-//                e.getPresentation().setEnabled(false);
-//                return;
-//            }
-            //native 方法不处理
-            if (psiMethod.hasModifierProperty(PsiModifier.NATIVE)) {
-                e.getPresentation().setEnabled(false);
-                return;
-            }
         }
         e.getPresentation().setEnabled(true);
     }
@@ -102,41 +71,8 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
         if (editor == null || project == null) {
             return;
         }
-        if (psiElement == null) {
-            NotifyUtils.notifyMessage(project, "未知错误", NotificationType.ERROR);
-            return;
-        }
-        if (psiElement instanceof PsiClass) {
-
-            return;
-        }
-
-        String lowCamelBeanName = "";
-        String suffixMethodOrFieldBuild = "";
-
-        //支持方法
-        if (psiElement instanceof PsiMethod) {
-            PsiMethod psiMethod = (PsiMethod) psiElement;
-            if (psiMethod.getContainingClass() instanceof PsiAnonymousClass) {
-                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
-                return;
-            }
-            lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiMethod.getContainingClass());
-            // complexParameterCall(#{" ":" "})
-            suffixMethodOrFieldBuild = OgnlPsUtils.getMethodParameterDefault(psiMethod);
-        }
-
-        //支持field
-        if (psiElement instanceof PsiField) {
-            PsiField psiField = (PsiField) psiElement;
-            if (psiField.getContainingClass() instanceof PsiAnonymousClass) {
-                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
-                return;
-            }
-            suffixMethodOrFieldBuild = psiField.getNameIdentifier().getText();
-            lowCamelBeanName = OgnlPsUtils.getClassBeanName(psiField.getContainingClass());
-        }
-
+        String lowCamelBeanName = OgnlPsUtils.getSpringBeanName(psiElement);
+        String suffixMethodOrFieldBuild = OgnlPsUtils.getExecuteInfo(psiElement);
         try {
             // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
             String classNameClassLoaderGet = SpringStaticContextUtils.getStaticSpringContextClassName(project);
