@@ -109,7 +109,7 @@ public class ArthasActionStaticDialog extends JDialog {
             StringBuilder builder = new StringBuilder(aopTargetOgnlExpression);
             builder.append(" -c ").append(hashClassloader);
             ClipboardUtils.setClipboardString(builder.toString());
-            NotifyUtils.notifyMessage(project, "【命令已复制到剪切板】");
+            NotifyUtils.notifyMessageDefault(project);
         });
 
         shellScriptCommandButton.addActionListener(e -> {
@@ -126,16 +126,14 @@ public class ArthasActionStaticDialog extends JDialog {
      */
     private void onOK() {
         String hashClassloader = classloaderHashEditor.getText();
-        String ognCurrentExpression = ognlExpressionEditor.getText();
-        if (StringUtils.isNotBlank(hashClassloader) && ognCurrentExpression != null && !ognCurrentExpression.contains("-c")) {
-            StringBuilder builder = new StringBuilder(ognCurrentExpression);
-            builder.append(" -c ").append(hashClassloader);
-            ognCurrentExpression = builder.toString();
+        String ognlCurrentExpression = ognlExpressionEditor.getText();
+        if (StringUtils.isNotBlank(hashClassloader) && ognlCurrentExpression != null && !ognlCurrentExpression.contains("-c")) {
+            ognlCurrentExpression = ognlCurrentExpression + " -c " + hashClassloader;
             PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
         }
-        if (StringUtils.isNotBlank(ognCurrentExpression)) {
-            ClipboardUtils.setClipboardString(ognCurrentExpression);
-            NotifyUtils.notifyMessage(project, "【命令已复制到剪切板】");
+        if (StringUtils.isNotBlank(ognlCurrentExpression)) {
+            ClipboardUtils.setClipboardString(ognlCurrentExpression);
+            NotifyUtils.notifyMessageDefault(project);
         }
         dispose();
     }
@@ -169,8 +167,8 @@ public class ArthasActionStaticDialog extends JDialog {
 
 
     private void createUIComponents() {
-        classLoaderLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/ognl.html");
-        ognlOfficeLinkLabel = ActionLinkUtils.newActionLink("https://commons.apache.org/proper/commons-ognl/language-guide.html");
+        classLoaderLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/sc.html");
+        ognlOfficeLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/ognl.html");
         oglSpecialLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/71");
         ognlDemoLink = ActionLinkUtils.newActionLink("https://blog.csdn.net/u010634066/article/details/101013479");
     }
