@@ -49,6 +49,22 @@ public class CommandContext {
     }
 
     /**
+     * 获取上下文的信息
+     *
+     * @param variableEnum
+     * @return
+     */
+    public String getKeyValue(ShellScriptVariableEnum variableEnum) {
+        if (variableEnum == null) {
+            return "";
+        }
+        if (this.params.isEmpty()) {
+            this.initContextParam();
+        }
+        return this.params.get(variableEnum.getEnumMsg());
+    }
+
+    /**
      * 初始化上下文信息
      */
     private synchronized void initContextParam() {
@@ -94,6 +110,9 @@ public class CommandContext {
      * @return
      */
     public String getCommandCode(ShellScriptCommandEnum commandEnum) {
+        if (commandEnum == null) {
+            return "";
+        }
         String codeValue = commandEnum.getCode();
         if (this.params.isEmpty()) {
             this.initContextParam();

@@ -46,34 +46,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return context.getCommandCode(this);
         }
     },
-    /**
-     * 调用静态变量 或者方法 java 不需要classloader hashcode 使用默认
-     */
-    OGNL_GETSTATIC_JAVA("ognl -x "
-            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
-            + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
-            + ShellScriptVariableEnum.EXECUTE_INFO.getCode(),
-            "ognl to get static method field 注意需要编辑执行方法的参数") {
-        @Override
-        public boolean support(CommandContext context) {
-            if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement()).startsWith("java.")) {
-                return false;
-            }
-            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
-                return false;
-            }
-            return OgnlPsUtils.isStaticMethodOrField(context.getPsiElement());
-        }
-
-        @Override
-        public String getScCommand(CommandContext context) {
-            return null;
-        }
-        @Override
-        public String getArthasCommand(CommandContext context) {
-            return context.getCommandCode(this);
-        }
-    },
 
     /**
      * 简单的字段
@@ -94,6 +66,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -124,6 +97,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -151,6 +125,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -178,6 +153,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -204,6 +180,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -237,6 +214,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -256,6 +234,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return String.join(" ", "sc", "-d", "org.springframework.core.env.ConfigurableEnvironment");
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -279,6 +258,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -414,6 +394,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -439,6 +420,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -468,6 +450,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -495,6 +478,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -537,6 +521,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -564,6 +549,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -591,6 +577,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -621,6 +608,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -651,6 +639,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         public String getScCommand(CommandContext context) {
             return null;
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -676,6 +665,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "logger", "--name", className);
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
@@ -703,6 +693,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
         }
+
         @Override
         public String getArthasCommand(CommandContext context) {
             return context.getCommandCode(this);
