@@ -1,7 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
-import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
+import com.github.wangji92.arthas.plugin.common.command.CommandContext;
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.project.Project;
@@ -17,14 +17,8 @@ public class ArthasMonitorCommandAction extends BaseArthasPluginAction {
 
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
-        AppSettingsState instance = AppSettingsState.getInstance(project);
-        String invokeMonitorCount = instance.invokeMonitorCount;
-        String invokeMonitorInterval = instance.invokeMonitorInterval;
-        // 好像官方还不支持 先写上 -v 参数都有了
-        String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
-        String printConditionExpress = instance.printConditionExpress ? "-v" : "";
-        // 给 arthas 使用者 配置的需求 来源 交流群
-        String command = String.join(" ", "monitor", className, methodName, printConditionExpress, "-n", invokeMonitorCount, "--cycle", invokeMonitorInterval, conditionExpressDisplay);
+        CommandContext commandContext = new CommandContext(project, psiElement);
+        String command = ShellScriptCommandEnum.MONITOR.getArthasCommand(commandContext);
         ClipboardUtils.setClipboardString(command);
         NotifyUtils.notifyMessageDefault(project);
     }

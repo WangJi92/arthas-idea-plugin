@@ -1,7 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
-import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
+import com.github.wangji92.arthas.plugin.common.command.CommandContext;
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.project.Project;
@@ -19,11 +19,8 @@ public class ArthasStackCommandAction extends BaseArthasPluginAction {
 
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
-        AppSettingsState instance = AppSettingsState.getInstance(project);
-        String invokeCount = instance.invokeCount;
-        String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
-        String printConditionExpress = instance.printConditionExpress ? "-v" : "";
-        String command = String.join(" ", "stack", className, methodName, printConditionExpress, "-n", invokeCount, conditionExpressDisplay);
+        CommandContext commandContext = new CommandContext(project, psiElement);
+        String command = ShellScriptCommandEnum.STACK.getArthasCommand(commandContext);
         ClipboardUtils.setClipboardString(command);
         NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(Source code analysis, view method call stack is very convenient)");
     }

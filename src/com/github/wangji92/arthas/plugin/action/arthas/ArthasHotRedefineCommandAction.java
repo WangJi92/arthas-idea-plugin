@@ -235,9 +235,9 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         List<String> fullClassPackagePaths = Lists.newArrayList();
         if (virtualFileFiles.length == 1 && OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             //选择 当个文件 且为 编辑区选择的
-
-            String packageName = ((PsiJavaFile) psiElement.getContainingFile()).getPackageName();
-            String className = FilenameUtils.getBaseName(psiElement.getContainingFile().getName());
+            PsiJavaFile psiJavaFile = OgnlPsUtils.getContainingPsiJavaFile(psiElement);
+            String packageName = psiJavaFile.getPackageName();
+            String className = FilenameUtils.getBaseName(psiJavaFile.getName());
             String ideaClassName = packageName + "." + className;
 
             //主要是根据模块查询 当前编译后的路径的信息

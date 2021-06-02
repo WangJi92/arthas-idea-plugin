@@ -2,22 +2,21 @@ package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.common.combox.CustomComboBoxItem;
 import com.github.wangji92.arthas.plugin.common.combox.CustomDefaultListCellRenderer;
+import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptConstantEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.common.param.ScriptParam;
-import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
 import com.google.common.collect.Sets;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -48,11 +47,12 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     private JLabel dyTipLabel;
     private JLabel constantLabel;
 
+    private CommandContext commandContext;
+
     private Project project;
 
     private ScriptParam scriptParam;
 
-    private String className;
 
     /**
      * 当前选择的动态脚本
@@ -65,14 +65,9 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     public static Set<String> NEED_CLASSLOADER_COMMAND = Sets.newHashSet("logger --name", "dump", "jad", "vmtool", "ognl", "${CLASSLOADER_HASH_VALUE}");
 
 
-    /**
-     * 当前执行上下文
-     */
-    private Map<String, String> contextParams = new HashMap<>(10);
-
-    public ArthasShellScriptCommandDialog(ScriptParam scriptParam) {
-        this.project = scriptParam.getProject();
-        this.scriptParam = scriptParam;
+    public ArthasShellScriptCommandDialog(AnActionEvent event) {
+        this.commandContext = new CommandContext(event);
+        this.project = commandContext.getProject();
         setContentPane(contentPane);
         setMinimumSize(new Dimension(800, 340));
         setModal(true);
@@ -93,49 +88,9 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        initContextParam();
-
         init();
     }
 
-    /**
-     * 初始化上下文信息
-     */
-    private void initContextParam() {
-        AppSettingsState instance = AppSettingsState.getInstance(project);
-        String methodName = OgnlPsUtils.getMethodName(scriptParam.getPsiElement());
-        String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(scriptParam.getPsiElement());
-        this.className = className;
-        String fieldName = OgnlPsUtils.getFieldName(scriptParam.getPsiElement());
-        String executeInfo = OgnlPsUtils.getExecuteInfo(scriptParam.getPsiElement());
-        Map<String, String> params = new HashMap<>(10);
-        params.put(ShellScriptVariableEnum.PROPERTY_DEPTH.getEnumMsg(), instance.depthPrintProperty);
-        params.put(ShellScriptVariableEnum.CLASS_NAME.getEnumMsg(), className);
-        params.put(ShellScriptVariableEnum.METHOD_NAME.getEnumMsg(), methodName);
-        params.put(ShellScriptVariableEnum.EXECUTE_INFO.getEnumMsg(), executeInfo);
-        params.put(ShellScriptVariableEnum.FIELD_NAME.getEnumMsg(), fieldName);
-        params.put(ShellScriptVariableEnum.SPRING_CONTEXT.getEnumMsg(), instance.staticSpringContextOgnl);
-        params.put(ShellScriptVariableEnum.INVOKE_COUNT.getEnumMsg(), instance.invokeCount);
-        params.put(ShellScriptVariableEnum.INVOKE_MONITOR_COUNT.getEnumMsg(), instance.invokeMonitorCount);
-        params.put(ShellScriptVariableEnum.INVOKE_MONITOR_INTERVAL.getEnumMsg(), instance.invokeMonitorInterval);
-        String skpJdkMethodCommand = instance.traceSkipJdk ? "" : ArthasCommandConstants.DEFAULT_SKIP_JDK_FALSE;
-        params.put(ShellScriptVariableEnum.SKIP_JDK_METHOD.getEnumMsg(), skpJdkMethodCommand);
-        String printConditionExpress = instance.printConditionExpress ? "-v" : "";
-        params.put(ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getEnumMsg(), printConditionExpress);
-        params.put(ShellScriptVariableEnum.CLASSLOADER_HASH_VALUE.getEnumMsg(), "${CLASSLOADER_HASH_VALUE}");
-        String methodNameNotStar = "*".equals(methodName) ? "" : methodName;
-        params.put(ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getEnumMsg(), methodNameNotStar);
-        String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
-        params.put(ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getEnumMsg(), conditionExpressDisplay);
-        String beanName = OgnlPsUtils.getSpringBeanName(scriptParam.getPsiElement());
-        params.put(ShellScriptVariableEnum.SPRING_BEAN_NAME.getEnumMsg(), beanName);
-        params.put(ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getEnumMsg(), OgnlPsUtils.getFieldDefaultValue(scriptParam.getPsiElement()));
-        if (StringUtils.isNotBlank(fieldName)) {
-            String capitalizeFieldName = StringUtils.capitalize(fieldName);
-            params.put(ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getEnumMsg(), capitalizeFieldName);
-        }
-        this.contextParams = params;
-    }
 
     @SuppressWarnings("unchecked")
     private void init() {
@@ -172,7 +127,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             String scCommand = "";
             if (this.currentSelectDyScriptVariableEnum != null) {
                 ShellScriptCommandEnum shellScriptCommandEnum = (ShellScriptCommandEnum) currentSelectDyScriptVariableEnum.getContentObject();
-                scCommand = shellScriptCommandEnum.getScCommand(this.scriptParam);
+                scCommand = shellScriptCommandEnum.getScCommand(this.commandContext);
                 // 这里要处理一下 手动修改了comboBox的值 获取不到 是否需要classloader
                 if (StringUtils.isNotBlank(scCommand)) {
                     final String selectedItemStrFinal = selectedItemStr;
@@ -190,7 +145,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                 }
             }
             // 这里再次处理一下上下文信息
-            String finalStr = StringUtils.stringSubstitutorFromText(selectedItemStr, contextParams);
+            String finalStr = commandContext.getCommandCode(selectedItemStr);
             if (StringUtils.isNotBlank(finalStr)) {
                 CommonExecuteScriptUtils.executeCommonScript(project, scCommand, finalStr, "");
             }
@@ -215,12 +170,12 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             }
         });
         shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox));
+
         for (ShellScriptCommandEnum shellScript : ShellScriptCommandEnum.values()) {
-            if (!shellScript.support(this.scriptParam)) {
+            if (!shellScript.support(this.commandContext)) {
                 continue;
             }
-            String codeValue = shellScript.getCode();
-            String displayCode = StringUtils.stringSubstitutorFromText(codeValue, contextParams);
+            String displayCode = shellScript.getArthasCommand(commandContext);
             CustomComboBoxItem<ShellScriptCommandEnum> boxItem = new CustomComboBoxItem<ShellScriptCommandEnum>();
             boxItem.setContentObject(shellScript);
             boxItem.setDisplay(displayCode);
