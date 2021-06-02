@@ -223,7 +223,13 @@ public class OgnlPsUtils {
         if (psiElement instanceof PsiClass) {
             return OgnlPsUtils.getCommonOrInnerOrAnonymousClassName((PsiClass) psiElement);
         }
-        throw new IllegalArgumentException("非法参数");
+        if (psiElement instanceof PsiJavaFile) {
+            //only select project file is PsiJavaFile
+            String packageName = ((PsiJavaFile) psiElement.getContainingFile()).getPackageName();
+            String shortClassName = FilenameUtils.getBaseName(psiElement.getContainingFile().getName());
+            return packageName + "." + shortClassName;
+        }
+        throw new IllegalArgumentException("Illegal parameters");
     }
 
     /**
@@ -511,6 +517,10 @@ public class OgnlPsUtils {
             beanName = OgnlPsUtils.getClassBeanName(((PsiField) psiElement).getContainingClass());
             return beanName;
         }
+        if (psiElement instanceof PsiJavaFile) {
+            beanName = OgnlPsUtils.getClassBeanName(((PsiJavaFile) psiElement).getClasses()[0]);
+            return beanName;
+        }
         return beanName;
     }
 
@@ -532,7 +542,7 @@ public class OgnlPsUtils {
         String beanName = "";
         if (annotations.length > 0) {
             for (PsiAnnotation annotation : annotations) {
-                beanName = getAttributeFromAnnotation(annotation, Sets.newHashSet("org.springframework.stereotype.Component","org.springframework.stereotype.Service", "org.springframework.stereotype.Controller", "org.springframework.stereotype.Repository", "org.springframework.web.bind.annotation.RestController"), "value");
+                beanName = getAttributeFromAnnotation(annotation, Sets.newHashSet("org.springframework.stereotype.Component", "org.springframework.stereotype.Service", "org.springframework.stereotype.Controller", "org.springframework.stereotype.Repository", "org.springframework.web.bind.annotation.RestController"), "value");
                 if (StringUtils.isNotBlank(beanName)) {
                     break;
                 }
@@ -717,7 +727,23 @@ public class OgnlPsUtils {
      * @return
      */
     public static boolean isPsiFieldOrMethodOrClass(PsiElement psiElement) {
-        return psiElement instanceof PsiField || psiElement instanceof PsiClass || psiElement instanceof PsiMethod;
+        return psiElement instanceof PsiField || psiElement instanceof PsiClass || psiElement instanceof PsiMethod || psiElement instanceof PsiJavaFile;
+    }
+
+
+    /**
+     * 获取ContainingPsiJavaFile
+     *
+     * @param psiElement
+     * @return
+     */
+    public static PsiJavaFile getContainingPsiJavaFile(PsiElement psiElement) {
+        if (psiElement instanceof PsiField || psiElement instanceof PsiClass || psiElement instanceof PsiMethod) {
+            return (PsiJavaFile) psiElement.getContainingFile();
+        } else if (psiElement instanceof PsiJavaFile) {
+            return (PsiJavaFile) psiElement;
+        }
+        throw new IllegalArgumentException("Illegal parameters");
     }
 
 }

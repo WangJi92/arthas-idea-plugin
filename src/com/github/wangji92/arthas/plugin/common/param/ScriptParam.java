@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement;
  * @author 汪小哥
  * @date 05-05-2021
  */
+@Deprecated
 public class ScriptParam {
 
     /**

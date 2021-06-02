@@ -1,7 +1,7 @@
 package com.github.wangji92.arthas.plugin.common.enums;
 
+import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.common.enums.base.EnumCodeMsg;
-import com.github.wangji92.arthas.plugin.common.param.ScriptParam;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
@@ -27,18 +27,23 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode(),
             "ognl to get static method field 注意需要编执行方法的参数") {
         @Override
-        public boolean support(ScriptParam param) {
+        public boolean support(CommandContext context) {
 
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isStaticMethodOrField(param.getPsiElement());
+            return OgnlPsUtils.isStaticMethodOrField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
+        }
+
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -50,19 +55,23 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode(),
             "ognl to get static method field 注意需要编辑执行方法的参数") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement()).startsWith("java.")) {
+        public boolean support(CommandContext context) {
+            if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement()).startsWith("java.")) {
                 return false;
             }
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isStaticMethodOrField(param.getPsiElement());
+            return OgnlPsUtils.isStaticMethodOrField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -74,16 +83,20 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.FIELD_NAME.getCode(),
             "get simple static field") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isStaticField(param.getPsiElement());
+            return OgnlPsUtils.isStaticField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -100,16 +113,20 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
             "watch  static field") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isStaticField(param.getPsiElement());
+            return OgnlPsUtils.isStaticField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -126,13 +143,17 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'",
             "watch non static field") {
         @Override
-        public boolean support(ScriptParam param) {
-            return OgnlPsUtils.isNonStaticField(param.getPsiElement());
+        public boolean support(CommandContext context) {
+            return OgnlPsUtils.isNonStaticField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -149,13 +170,17 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
             "watch input/output parameter, return object,exception") {
         @Override
-        public boolean support(ScriptParam param) {
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        public boolean support(CommandContext context) {
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -171,13 +196,17 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
             "trace the execution time of specified method invocation. ") {
         @Override
-        public boolean support(ScriptParam param) {
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        public boolean support(CommandContext context) {
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -192,21 +221,25 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' ",
             "vmtool get instance invoke method field,you can edit express params,find first instance") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
             // 构造方法不支持
-            if (OgnlPsUtils.isConstructor(param.getPsiElement())) {
+            if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
+            return OgnlPsUtils.isNonStaticMethodOrField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     VM_TOOL_SPRING_ENV("vmtool -x "
@@ -215,13 +248,17 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " --express '#standardServletEnvironment=instances[0]," + SPRING_ALL_MAP_PROPERTY + "' ",
             "vmtool get spring all env source instance of map") {
         @Override
-        public boolean support(ScriptParam param) {
+        public boolean support(CommandContext context) {
             return true;
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return String.join(" ", "sc", "-d", "org.springframework.core.env.ConfigurableEnvironment");
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     VM_TOOL_INSTANCE("vmtool -x  1 "
@@ -230,17 +267,21 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " --limit 5 ",
             "vmtool get all instance") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -253,36 +294,41 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' ",
             "invoke static spring bean【手动编辑填写参数】【bean名称可能不正确,可以手动修改】 ") {
         @Override
-        public boolean support(ScriptParam param) {
+        public boolean support(CommandContext context) {
             //todo 判断是否为spring bean
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
             // 必须要配置spring static context
-            if (!SpringStaticContextUtils.booleanConfigStaticSpringContext(param.getProject())) {
+            if (!SpringStaticContextUtils.booleanConfigStaticSpringContext(context.getProject())) {
                 return false;
             }
             // 构造方法不支持
-            if (OgnlPsUtils.isConstructor(param.getPsiElement())) {
+            if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
                 return false;
             }
             // spring bean 的名称
-            String springBeanName = OgnlPsUtils.getSpringBeanName(param.getPsiElement());
+            String springBeanName = OgnlPsUtils.getSpringBeanName(context.getPsiElement());
             if (StringUtils.isBlank(springBeanName) || "errorBeanName".equals(springBeanName)) {
                 return false;
             }
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             // 非 java.**
             if (className.startsWith("java.")) {
                 return false;
             }
-            return OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement());
+            return OgnlPsUtils.isNonStaticMethodOrField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(param.getProject());
+        public String getScCommand(CommandContext context) {
+            String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(context.getProject());
             return String.join(" ", "sc", "-d", springContextClassName);
+        }
+
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -294,36 +340,36 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\").set" + ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getCode() + "(" + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
             "invoke static spring bean set field method 【需要编辑set方法的值】【bean名称可能不正确,可以手动修改】 ") {
         @Override
-        public boolean support(ScriptParam param) {
+        public boolean support(CommandContext context) {
             //todo 判断是否为spring bean
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
             // 必须要配置spring static context
-            if (!SpringStaticContextUtils.booleanConfigStaticSpringContext(param.getProject())) {
+            if (!SpringStaticContextUtils.booleanConfigStaticSpringContext(context.getProject())) {
                 return false;
             }
             // 构造方法不支持
-            if (OgnlPsUtils.isConstructor(param.getPsiElement())) {
+            if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
                 return false;
             }
             // spring bean 的名称
-            String springBeanName = OgnlPsUtils.getSpringBeanName(param.getPsiElement());
+            String springBeanName = OgnlPsUtils.getSpringBeanName(context.getPsiElement());
             if (StringUtils.isBlank(springBeanName) || "errorBeanName".equals(springBeanName)) {
                 return false;
             }
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             // 非 java.**
             if (className.startsWith("java.")) {
                 return false;
             }
-            if (!OgnlPsUtils.isNonStaticMethodOrField(param.getPsiElement())) {
+            if (!OgnlPsUtils.isNonStaticMethodOrField(context.getPsiElement())) {
                 return false;
             }
             // 含有set 字段的方法
-            if (param.getPsiElement() instanceof PsiField) {
-                PsiField psiField = (PsiField) param.getPsiElement();
-                String fieldName = OgnlPsUtils.getFieldName(param.getPsiElement());
+            if (context.getPsiElement() instanceof PsiField) {
+                PsiField psiField = (PsiField) context.getPsiElement();
+                String fieldName = OgnlPsUtils.getFieldName(context.getPsiElement());
                 String capitalizeFieldName = StringUtils.capitalize(fieldName);
                 PsiClass containingClass = psiField.getContainingClass();
                 if (containingClass != null) {
@@ -338,9 +384,14 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(param.getProject());
+        public String getScCommand(CommandContext context) {
+            String springContextClassName = SpringStaticContextUtils.getStaticSpringContextClassName(context.getProject());
             return String.join(" ", "sc", "-d", springContextClassName);
+        }
+
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -355,13 +406,17 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
             "display the stack trace for the specified class and method") {
         @Override
-        public boolean support(ScriptParam param) {
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        public boolean support(CommandContext context) {
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -376,13 +431,17 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
             "monitor method execution statistics ") {
         @Override
-        public boolean support(ScriptParam param) {
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        public boolean support(CommandContext context) {
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -394,20 +453,24 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
 
             "decompile class") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            if (OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement()).startsWith("java.")) {
+            if (OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement()).startsWith("java.")) {
                 return false;
             }
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -418,19 +481,23 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode(),
             "decompile class") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement()).startsWith("java.")) {
+        public boolean support(CommandContext context) {
+            if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement()).startsWith("java.")) {
                 return false;
             }
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -440,13 +507,18 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CLASS_NAME.getCode(),
             "search all the classes loaded by jvm") {
         @Override
-        public boolean support(ScriptParam param) {
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        public boolean support(CommandContext context) {
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -457,13 +529,17 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.METHOD_NAME.getCode(),
             "search the method of classes loaded by jvm") {
         @Override
-        public boolean support(ScriptParam param) {
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+        public boolean support(CommandContext context) {
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -476,17 +552,21 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
             "ognl reflect to modify static  not final field 注意需要被修改的字段的值") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isStaticField(param.getPsiElement()) && !OgnlPsUtils.isFinalField(param.getPsiElement());
+            return OgnlPsUtils.isStaticField(context.getPsiElement()) && !OgnlPsUtils.isFinalField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -499,17 +579,21 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
             "ognl reflect to modify static  final field 注意需要被修改的字段的值") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isStaticField(param.getPsiElement()) && OgnlPsUtils.isFinalField(param.getPsiElement());
+            return OgnlPsUtils.isStaticField(context.getPsiElement()) && OgnlPsUtils.isFinalField(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -526,16 +610,20 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
             "watch * to execute static method 注意需要编辑执行静态方法的参数") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isStaticMethod(param.getPsiElement());
+            return OgnlPsUtils.isStaticMethod(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -552,16 +640,20 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'",
             "watch * to execute method 注意需要编执行方法的参数") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isConstructor(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isNonStaticMethod(param.getPsiElement());
+            return OgnlPsUtils.isNonStaticMethod(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
+        public String getScCommand(CommandContext context) {
             return null;
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
     /**
@@ -572,17 +664,21 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "--level debug ",
             "--level debug 可以编辑修改为 info、error") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "logger", "--name", className);
+        }
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
         }
     },
 
@@ -595,22 +691,23 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -d /tmp/output ",
             "dump class byte array from jvm") {
         @Override
-        public boolean support(ScriptParam param) {
-            if (OgnlPsUtils.isAnonymousClass(param.getPsiElement())) {
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            return OgnlPsUtils.isPsiFieldOrMethodOrClass(param.getPsiElement());
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
         @Override
-        public String getScCommand(ScriptParam param) {
-            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(param.getPsiElement());
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
             return String.join(" ", "sc", "-d", className);
         }
-    },
-
-
-    ;
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
+        }
+    };
 
     /**
      * @param code
@@ -635,18 +732,26 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     /**
      * 是否支持
      *
-     * @param param
+     * @param context
      * @return
      */
-    public abstract boolean support(ScriptParam param);
+    public abstract boolean support(CommandContext context);
 
     /**
      * 获取sc-d classloader 命令的信息,return null is not need
      *
-     * @param param
+     * @param context
      * @return
      */
-    public abstract String getScCommand(ScriptParam param);
+    public abstract String getScCommand(CommandContext context);
+
+    /**
+     * 获取arthas的命令
+     *
+     * @param context
+     * @return
+     */
+    public abstract String getArthasCommand(CommandContext context);
 
 
     @Override
