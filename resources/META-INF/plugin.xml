@@ -504,6 +504,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolCommandAction"
                 text="Vmtool Get Instance Invoke Method Field"
                 description="Vmtool get instance invoke method field"/>
+        <action id="ArthasIdeaOpenConfigPageAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasIdeaOpenConfigPageAction"
+                text="Setting Arthas Idea Plugin"
+                description="Setting arthas idea"/>
 
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
@@ -533,6 +537,7 @@
             <reference ref="ArthasInstallCommand"/>
             <reference ref="ArthasSpecial"/>
             <separator/>
+            <reference ref="ArthasIdeaOpenConfigPageAction"/>
             <reference ref="ArthasHelpCommand"/>
             <reference ref="HelpArthasDocumentPageAction"/>
         </group>
@@ -590,6 +595,7 @@
             <reference ref="ArthasInstallCommand"/>
             <reference ref="ArthasSpecial"/>
             <separator/>
+            <reference ref="ArthasIdeaOpenConfigPageAction"/>
             <reference ref="ArthasHelpCommand"/>
             <reference ref="HelpArthasDocumentPageAction"/>
         </group>
