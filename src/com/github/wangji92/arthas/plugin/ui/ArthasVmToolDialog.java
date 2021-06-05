@@ -1,10 +1,14 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.common.command.CommandContext;
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.labels.LinkLabel;
@@ -29,21 +33,31 @@ public class ArthasVmToolDialog extends JDialog {
     private JButton copyCommandButton;
 
     private LinkLabel vmtoolHelpLabel;
+    private JButton instantcesCommandButton;
 
     private Project project;
 
     private String className;
 
-    public ArthasVmToolDialog(Project project, String command, String className) {
-        this.project = project;
-        this.className = className;
+    private CommandContext commandContext;
+
+    private String invokeCommand = "";
+    private String instancesCommand = "";
+
+    public ArthasVmToolDialog(AnActionEvent event) {
+        commandContext = new CommandContext(event);
+        this.project = commandContext.getProject();
+        this.className = commandContext.getKeyValue(ShellScriptVariableEnum.CLASS_NAME);
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(copyCommandButton);
 
         String classloaderHash = PropertiesComponentUtils.getValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE);
         classloaderHashValuetextField.setText(classloaderHash);
-        vmToolExpressTextField.setText(command);
+
+        invokeCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INVOKE);
+        vmToolExpressTextField.setText(invokeCommand);
+        instancesCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INSTANCE);
 
         copyCommandButton.addActionListener(new ActionListener() {
             @Override
@@ -56,6 +70,19 @@ public class ArthasVmToolDialog extends JDialog {
             ClipboardUtils.setClipboardString(scCommand);
             NotifyUtils.notifyMessageDefault(project);
 
+        });
+
+        instantcesCommandButton.addActionListener(e -> {
+            String hashClassloader = classloaderHashValuetextField.getText();
+            String vmtoolInstanceCommand = instancesCommand;
+            if (StringUtils.isNotBlank(hashClassloader) && vmtoolInstanceCommand != null && !vmtoolInstanceCommand.contains("-c")) {
+                vmtoolInstanceCommand = vmtoolInstanceCommand + " -c " + hashClassloader;
+                PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
+            }
+            if (StringUtils.isNotBlank(vmtoolInstanceCommand)) {
+                ClipboardUtils.setClipboardString(vmtoolInstanceCommand);
+                NotifyUtils.notifyMessageDefault(project);
+            }
         });
 
         clearCacheButton.addActionListener(e -> {

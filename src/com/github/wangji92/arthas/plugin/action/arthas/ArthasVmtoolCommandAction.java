@@ -1,6 +1,5 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
-import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.ui.ArthasVmToolDialog;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -13,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * vmtool get instance to invoke method field
+ *
  * @author 汪小哥
  * @date 01-06-2021
  */
@@ -44,16 +44,9 @@ public class ArthasVmtoolCommandAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        DataContext dataContext = e.getDataContext();
         Project project = e.getProject();
         assert project != null;
-        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
-        String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
-        String executeInfo = OgnlPsUtils.getExecuteInfo(psiElement);
-        AppSettingsState instance = AppSettingsState.getInstance(project);
-        String depthPrintPropertyX = instance.depthPrintProperty;
-        String command = String.join(" ", "vmtool", "-x", depthPrintPropertyX, "--action getInstances --className", className, "--express 'instances[0]." + executeInfo + "'");
-        ArthasVmToolDialog dialog = new ArthasVmToolDialog(project,command,className);
+        ArthasVmToolDialog dialog = new ArthasVmToolDialog(e);
         dialog.open();
 
 

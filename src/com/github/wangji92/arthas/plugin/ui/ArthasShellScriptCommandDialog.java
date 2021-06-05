@@ -6,7 +6,6 @@ import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptConstantEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
-import com.github.wangji92.arthas.plugin.common.param.ScriptParam;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
 import com.google.common.collect.Sets;
@@ -50,9 +49,6 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     private CommandContext commandContext;
 
     private Project project;
-
-    private ScriptParam scriptParam;
-
 
     /**
      * 当前选择的动态脚本
