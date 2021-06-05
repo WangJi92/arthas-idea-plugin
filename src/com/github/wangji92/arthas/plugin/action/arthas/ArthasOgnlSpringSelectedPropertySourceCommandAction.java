@@ -36,6 +36,9 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
         if (editor == null || project == null) {
             return;
         }
+        if (!SpringStaticContextUtils.booleanConfigStaticSpringContextFalseOpenConfig(project)) {
+            return;
+        }
         //https://zhuanlan.zhihu.com/p/47740017
         String selectedText = editor.getSelectionModel().getSelectedText();
         if (selectedText != null) {

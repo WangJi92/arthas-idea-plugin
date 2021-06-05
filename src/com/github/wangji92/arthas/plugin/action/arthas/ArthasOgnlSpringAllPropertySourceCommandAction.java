@@ -37,6 +37,9 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
         if (editor == null || project == null) {
             return;
         }
+        if (!SpringStaticContextUtils.booleanConfigStaticSpringContextFalseOpenConfig(project)) {
+            return;
+        }
         try {
             // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
             String className = SpringStaticContextUtils.getStaticSpringContextClassName(project);

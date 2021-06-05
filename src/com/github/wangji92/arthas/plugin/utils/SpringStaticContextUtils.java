@@ -3,6 +3,7 @@ package com.github.wangji92.arthas.plugin.utils;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.google.common.base.Splitter;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
 
 import java.util.List;
@@ -67,7 +68,7 @@ public class SpringStaticContextUtils {
         // 获取class的classloader
         List<String> springContextCLassLists = Splitter.on('@').omitEmptyStrings().splitToList(springStaticContextConfig);
         if (springContextCLassLists.isEmpty()) {
-            throw new IllegalArgumentException("Static Spring context 需要手动配置，具体参考Arthas Idea Plugin Help 命令获取相关文档");
+            throw new IllegalArgumentException("Static Spring context requires manual configuration");
         }
         //@com.wj.study.demo.generator.ApplicationContextProvider@context  配置的是这个玩意
         return springContextCLassLists.get(0);
@@ -88,6 +89,20 @@ public class SpringStaticContextUtils {
         }
     }
 
+    /**
+     * 是否配置了 static  spring context
+     *
+     * @param project
+     * @return
+     */
+    public static boolean booleanConfigStaticSpringContextFalseOpenConfig(Project project) {
+        boolean staticSpringContextConfig = SpringStaticContextUtils.booleanConfigStaticSpringContext(project);
+        if (!staticSpringContextConfig) {
+            NotifyUtils.notifyMessage(project, "Static Spring context requires manual configuration <a href=\"https://www.yuque.com/arthas-idea-plugin/help/ugrc8n\">arthas idea setting</a>", NotificationType.ERROR);
+        }
+        return staticSpringContextConfig;
+    }
+
 
     /**
      * 获取spring static context的配置
@@ -97,7 +112,7 @@ public class SpringStaticContextUtils {
         AppSettingsState instance = AppSettingsState.getInstance(project);
         String springContextValue = instance.staticSpringContextOgnl;
         if (StringUtils.isBlank(springContextValue) || ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue)) {
-            throw new IllegalArgumentException("Static Spring context 需要手动配置，具体参考Arthas Idea Plugin Help 命令获取相关文档");
+            throw new IllegalArgumentException("Static Spring context requires manual configuration");
         }
         if (springContextValue.endsWith(",")) {
             springContextValue = springContextValue.substring(0, springContextValue.length() - 2);

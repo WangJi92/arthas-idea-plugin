@@ -71,6 +71,9 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
         if (editor == null || project == null) {
             return;
         }
+        if (!SpringStaticContextUtils.booleanConfigStaticSpringContextFalseOpenConfig(project)) {
+            return;
+        }
         String lowCamelBeanName = OgnlPsUtils.getSpringBeanName(psiElement);
         String suffixMethodOrFieldBuild = OgnlPsUtils.getExecuteInfo(psiElement);
         try {

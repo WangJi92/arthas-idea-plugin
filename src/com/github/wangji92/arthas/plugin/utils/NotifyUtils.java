@@ -50,8 +50,9 @@ public class NotifyUtils {
      */
     public static void notifyMessage(Project project, String message, @NotNull NotificationType type) {
         try {
-            Notification currentNotify = NOTIFICATION.createNotification(message, type);
+            Notification currentNotify = NOTIFICATION.createNotification("",message, type,new NotificationListener.UrlOpeningListener(true));
             Notifications.Bus.notify(currentNotify, project);
+
         } catch (Exception e) {
             //
         }
