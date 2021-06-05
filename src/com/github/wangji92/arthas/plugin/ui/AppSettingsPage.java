@@ -254,10 +254,10 @@ public class AppSettingsPage implements Configurable {
         this.printConditionExpressLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/1348");
         this.mybatisMapperReloadHelpLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start");
         this.retransformHelpLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/retransform.html");
-        this.analysisRetransformerLink = ActionLinkUtils.newActionLink("https://www.yuque.com/wangji-yunque/ikhsmq/lyevb2");
+        this.analysisRetransformerLink = ActionLinkUtils.newActionLink("https://www.yuque.com/arthas-idea-plugin/help/lyevb2");
         this.arthasIdeaGithubLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin");
         this.arthasIdeaDemoLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-plugin-demo");
-        this.arthasYuQueDocumentLink = ActionLinkUtils.newActionLink("https://www.yuque.com/wangji-yunque/ikhsmq/aqe9gr");
+        this.arthasYuQueDocumentLink = ActionLinkUtils.newActionLink("https://www.yuque.com/arthas-idea-plugin");
 
     }
 

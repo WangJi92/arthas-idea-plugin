@@ -2,13 +2,9 @@
 ### 联系方式
 有问题直接加我微信wj983433479 或者 扫码添加钉钉群 32102545 沟通
 ### 帮助文档链接
-   * [语雀arthas idea plugin 使用文档](https://www.yuque.com/docs/share/fa77c7b4-c016-4de6-9fa3-58ef25a97948?#)
-   * [arthas idea plugin 分享文档](https://www.yuque.com/wangji-yunque/ikhsmq/pa45y2)
+   * [arthas idea plugin document](https://www.yuque.com/arthas-idea-plugin)
    * [arthas + arhtas idea plugin 实战视频](https://www.bilibili.com/video/BV1yz4y1f7iz/)
    * [arthas-idea-plugin demo](https://github.com/WangJi92/arthas-plugin-demo)
-   * [arthas 入门最佳实践](https://wangji.blog.csdn.net/article/details/106964278)
-   * [support mybatis mapper xml reload](https://www.yuque.com/wangji-yunque/ikhsmq/ctgcbg)
-   * [provide a quickly action command support automation script for most arthas command](https://www.yuque.com/wangji-yunque/ikhsmq/ypya57)
 ### 给作者一个鼓励
 
 如果你喜欢这款插件，欢迎给身边的小伙伴推荐,给个github star,谢谢
@@ -85,7 +81,7 @@ public class ApplicationContextProvider implements ApplicationContextAware {
 ```
 
 ### 2.4.1 设置获取spring context的上下文
- [arthas idea plugin 配置](https://www.yuque.com/wangji-yunque/ikhsmq/ugrc8n)
+ [arthas idea plugin 配置](https://www.yuque.com/arthas-idea-plugin/help/ugrc8n)
  
 ### 2.4.2 右键点击需要调用的方法
 这里的策略和static ognl 一样的，本质还是ognl的调用。

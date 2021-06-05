@@ -23,7 +23,7 @@ public enum TimeTunnelCommandEnum implements EnumCodeMsg<String> {
     GET_TARGET("tt -w target  -x 1 -i 1000 ", "获取当前index 拦截的目标对象,target : the object"),
     GET_JDK_PROXY_TARGET("tt -w '#isProxy=:[ #this instanceof java.lang.reflect.Proxy ? @java.lang.reflect.Proxy@getInvocationHandler(#this) : #this],#isProxy(target)' -x 1 -i 1000 ", "get jdk proxy target handler"),
     /**
-     * 参考链接 https://www.yuque.com/docs/share/0d93f110-749c-4054-a81c-4fdf2fc2eb52?#
+     * 参考链接 https://www.yuque.com/arthas-idea-plugin/help/uldktc
      */
     GET_SPRING_PROXY_TARGET("tt -w '#isProxy=:[ @org.springframework.aop.support.AopUtils@isAopProxy(#this)?true:false],#isJdkDynamicProxy =:[@org.springframework.aop.support.AopUtils@isJdkDynamicProxy(#this) ? true :false ],#cglibTarget =:[#hField =#this.getClass().getDeclaredField(\"CGLIB$CALLBACK_0\"),#hField.setAccessible(true),#dynamicAdvisedInterceptor=#hField.get(#this),#fieldAdvised=#dynamicAdvisedInterceptor.getClass().getDeclaredField(\"advised\"),#fieldAdvised.setAccessible(true),1==1? #fieldAdvised.get(#dynamicAdvisedInterceptor).getTargetSource().getTarget():null],#jdkTarget=:[ #hField=#this.getClass().getSuperclass().getDeclaredField(\"h\"),#hField.setAccessible(true),#aopProxy=#hField.get(#this),#advisedField=#aopProxy.getClass().getDeclaredField(\"advised\"),#advisedField.setAccessible(true),1==1?#advisedField.get(#aopProxy).getTargetSource().getTarget():null],#nonProxyResultFunc = :[!#isProxy(#this) ? #this :#isJdkDynamicProxy(#this)? #isJdkDynamicProxy(#this) : #cglibTarget(#this)],#nonProxyTarget=#nonProxyResultFunc(target),#nonProxyTarget'  -x 1 -i 1001", "get spring proxy target include jdk proxy"),
     GET_PARAMS0("tt -w params[0]  -x 3 -i 1000", "获取当前index 第一个参数的值"),
