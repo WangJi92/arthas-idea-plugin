@@ -124,7 +124,7 @@
         </constraints>
         <properties>
           <text value="shell command"/>
-          <toolTipText value="直接执行脚本 无需打开arthas"/>
+          <toolTipText value="Copy shell command,Go to the server and paste it without open arthas"/>
         </properties>
       </component>
     </children>
