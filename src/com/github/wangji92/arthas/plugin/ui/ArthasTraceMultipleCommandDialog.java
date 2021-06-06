@@ -127,7 +127,7 @@ public class ArthasTraceMultipleCommandDialog extends JDialog {
             String printConditionExpress = instance.printConditionExpress ? "-v" : "";
             String command = String.join(" ", traceECommand, printConditionExpress, skpJdkMethodCommand,ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS);
             ClipboardUtils.setClipboardString(command);
-            NotifyUtils.notifyMessage(project, "支持ognl条件表达式(默认1==1) shellScript,trace -E 支持trace多个方法,方法中的方法");
+            NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED+"<a href=\"https://arthas.aliyun.com/doc/trace.html\">trace -E help</a>");
         }
         // modify by wangji 同事意见 多次trace 可能需要增加其他的 最好是自己手动清除
         // this.destroyTraceData(project);

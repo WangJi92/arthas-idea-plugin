@@ -55,7 +55,8 @@ public class LocalFileUploadToOssAction extends AnAction {
 
         AppSettingsState settings = AppSettingsState.getInstance(project);
         if (!settings.aliYunOss) {
-            NotifyUtils.notifyMessage(project, "请先配置阿里oss的信息", NotificationType.ERROR);
+            NotifyUtils.notifyMessage(project, "Please configure Aliyun Oss As Storage <a href=\"https://www.yuque.com/arthas-idea-plugin/help/ugrc8n\">arthas idea setting</a>", NotificationType.ERROR);
+            return;
         }
 
         VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
@@ -68,7 +69,7 @@ public class LocalFileUploadToOssAction extends AnAction {
         descriptor.setHideIgnored(true);
         VirtualFile selectVirtualFile = FileChooser.chooseFile(descriptor, event.getProject(), virtualFileBefore);
         if (selectVirtualFile == null || selectVirtualFile.isDirectory()) {
-            NotifyUtils.notifyMessage(project, "请选择要上传的文件", NotificationType.ERROR);
+            NotifyUtils.notifyMessage(project, "Please select the file to be uploaded", NotificationType.ERROR);
             return;
         }
 
@@ -78,10 +79,10 @@ public class LocalFileUploadToOssAction extends AnAction {
                 oss = AliyunOssUtils.buildOssClient(project);
                 String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
                 String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, selectVirtualFile.getInputStream());
-                String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 24*365*3600L * 1000));
+                String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 24 * 365 * 3600L * 1000));
                 String command = String.format(OSS_UP_LOAD_FILE, presignedUrl, selectVirtualFile.getName());
                 ClipboardUtils.setClipboardString(command);
-                NotifyUtils.notifyMessage(project, "直接到目标服务器任意路径 粘贴脚本执行下载文件");
+                NotifyUtils.notifyMessage(project, "linux shell command has been copied to the clipboard Go to the server and paste it");
             } catch (Exception e) {
                 StackTraceUtils.printSanitizedStackTrace(e);
                 NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
