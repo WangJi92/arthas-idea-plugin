@@ -36,7 +36,7 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
             e.getPresentation().setEnabled(true);
             return;
         }
-        e.getPresentation().setEnabled(true);
+        e.getPresentation().setEnabled(false);
     }
 
     @Override
