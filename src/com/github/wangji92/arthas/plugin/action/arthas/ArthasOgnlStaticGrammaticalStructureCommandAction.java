@@ -35,15 +35,11 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         }
         //获取当前事件触发时，光标所在的元素
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
-        if (psiElement == null) {
-            e.getPresentation().setEnabled(false);
-            return;
-        }
-        if (psiElement instanceof PsiClass) {
+        if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             e.getPresentation().setEnabled(true);
             return;
         }
-        e.getPresentation().setEnabled(true);
+        e.getPresentation().setEnabled(false);
     }
 
     @Override
