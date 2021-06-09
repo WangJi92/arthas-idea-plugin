@@ -347,9 +347,9 @@ public class OgnlPsUtils {
             methodName = "*";
             if (psiElement instanceof PsiMethod) {
                 PsiMethod psiMethod = (PsiMethod) psiElement;
-                if (psiMethod.getNameIdentifier()!=null) {
+                if (psiMethod.getNameIdentifier() != null) {
                     methodName = psiMethod.getNameIdentifier().getText();
-                }else{
+                } else {
                     methodName = psiMethod.getName();
                 }
                 if (psiMethod.isConstructor()) {
@@ -452,6 +452,18 @@ public class OgnlPsUtils {
             result = "0F";
             return result;
         }
+
+        //基本类型  数字
+        if (PsiType.INT.equals(psiType) || "java.lang.Integer".equals(canonicalText)
+                ||
+                PsiType.BYTE.equals(psiType) || "java.lang.Byte".equals(canonicalText)
+                ||
+                PsiType.SHORT.equals(psiType) || "java.lang.Short".equals(canonicalText)) {
+            result = "0";
+            return result;
+        }
+
+
         //Class xx 特殊class 字段的判断
         //java.lang.Class
         if ("java.lang.Class".equals(canonicalText)) {
@@ -465,26 +477,23 @@ public class OgnlPsUtils {
             return result;
         }
 
-        //基本类型  数字
-        if (PsiType.INT.equals(psiType) || "java.lang.Integer".equals(canonicalText)
-                ||
-                PsiType.BYTE.equals(psiType) || "java.lang.Byte".equals(canonicalText)
-                ||
-                PsiType.SHORT.equals(psiType) || "java.lang.Short".equals(canonicalText)) {
-            result = "0";
-            return result;
-        }
 
         //常见的List 和Map
         if (canonicalText.startsWith("java.util.")) {
             if (canonicalText.contains("Map")) {
-                result = "#{\" \":\" \"}";
+                result = "#{\" \": null }";
                 return result;
             }
             if (canonicalText.contains("List")) {
                 result = "{}";
                 return result;
             }
+        }
+
+        //...
+        if (psiType instanceof PsiEllipsisType) {
+            String arrayCanonicalText = ((PsiEllipsisType) psiType).getDeepComponentType().getCanonicalText();
+            return "new " + arrayCanonicalText + "[]{}";
         }
 
         //原生的数组
