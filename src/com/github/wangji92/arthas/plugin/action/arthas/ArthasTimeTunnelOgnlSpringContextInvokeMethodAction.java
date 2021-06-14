@@ -1,16 +1,17 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.ui.ArthasTimeTunnelSpringContextDialog;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -44,52 +45,25 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
         }
         //获取当前事件触发时，光标所在的元素
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
-        if (psiElement == null) {
+        if (!OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             e.getPresentation().setEnabled(false);
             return;
         }
-        if (psiElement instanceof PsiClass) {
+        boolean anonymousClass = OgnlPsUtils.isAnonymousClass(psiElement);
+        if (anonymousClass) {
             e.getPresentation().setEnabled(false);
             return;
         }
-
-        if (psiElement instanceof PsiField) {
-            PsiField psiField = (PsiField) psiElement;
-            if (psiField.hasModifierProperty(PsiModifier.STATIC)) {
-                e.getPresentation().setEnabled(false);
-                return;
-            }
+        // 构造方法不支持
+        if (OgnlPsUtils.isConstructor(psiElement)) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
+        if (OgnlPsUtils.isNonStaticMethodOrField(psiElement)) {
             e.getPresentation().setEnabled(true);
             return;
         }
-
-        //判断是否为静态方法
-        if (psiElement instanceof PsiMethod) {
-            /**
-             * {@link https://www.programcreek.com/java-api-examples/?class=com.intellij.psi.PsiField&method=hasModifierProperty }
-             */
-            PsiMethod psiMethod = (PsiMethod) psiElement;
-            if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
-                e.getPresentation().setEnabled(false);
-                return;
-            }
-//            //抽象方法不处理
-//            if (psiMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
-//                e.getPresentation().setEnabled(false);
-//                return;
-//            }
-//            //默认方法不处理
-//            if (psiMethod.hasModifierProperty(PsiModifier.DEFAULT)) {
-//                e.getPresentation().setEnabled(false);
-//                return;
-//            }
-            //native 方法不处理
-            if (psiMethod.hasModifierProperty(PsiModifier.NATIVE)) {
-                e.getPresentation().setEnabled(false);
-                return;
-            }
-        }
-        e.getPresentation().setEnabled(true);
+        e.getPresentation().setEnabled(false);
     }
 
     @Override
@@ -116,10 +90,6 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
         //支持方法
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
-            if (psiMethod.getContainingClass() instanceof PsiAnonymousClass) {
-                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
-                return;
-            }
             psiClass = psiMethod.getContainingClass();
             className = psiMethod.getContainingClass().getQualifiedName();
             //构建表达式
@@ -131,10 +101,6 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
         //支持field
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
-            if (psiField.getContainingClass() instanceof PsiAnonymousClass) {
-                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
-                return;
-            }
             className = psiField.getContainingClass().getQualifiedName();
             String fileName = psiField.getNameIdentifier().getText();
             psiClass = psiField.getContainingClass();
