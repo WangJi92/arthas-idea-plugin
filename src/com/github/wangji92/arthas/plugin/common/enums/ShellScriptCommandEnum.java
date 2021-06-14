@@ -22,9 +22,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      * 调用静态变量 或者方法
      */
     OGNL_GETSTATIC("ognl -x "
-            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " @"
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " '@"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
-            + ShellScriptVariableEnum.EXECUTE_INFO.getCode(),
+            + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "'",
             "ognl to get static method field 注意需要编执行方法的参数") {
         @Override
         public boolean support(CommandContext context) {
