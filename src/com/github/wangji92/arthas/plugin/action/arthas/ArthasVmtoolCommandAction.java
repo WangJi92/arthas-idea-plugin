@@ -29,17 +29,21 @@ public class ArthasVmtoolCommandAction extends AnAction {
             e.getPresentation().setEnabled(false);
             return;
         }
-        boolean staticField = OgnlPsUtils.isStaticField(psiElement);
-        if (staticField) {
-            e.getPresentation().setEnabled(false);
-            return;
-        }
         boolean anonymousClass = OgnlPsUtils.isAnonymousClass(psiElement);
         if (anonymousClass) {
             e.getPresentation().setEnabled(false);
             return;
         }
-        e.getPresentation().setEnabled(true);
+        // 构造方法不支持
+        if (OgnlPsUtils.isConstructor(psiElement)) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
+        if (OgnlPsUtils.isNonStaticMethodOrField(psiElement)) {
+            e.getPresentation().setEnabled(true);
+            return;
+        }
+        e.getPresentation().setEnabled(false);
     }
 
     @Override
