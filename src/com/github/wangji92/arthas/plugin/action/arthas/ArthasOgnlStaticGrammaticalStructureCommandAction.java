@@ -3,7 +3,6 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -35,6 +34,11 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         }
         //获取当前事件触发时，光标所在的元素
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
+        boolean anonymousClass = OgnlPsUtils.isAnonymousClass(psiElement);
+        if (anonymousClass) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
         if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             e.getPresentation().setEnabled(true);
             return;
@@ -65,10 +69,6 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         //region 非静态的处理方式
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
-            if (psiMethod.getContainingClass() instanceof PsiAnonymousClass) {
-                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
-                return;
-            }
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiMethod);
             if (!psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
                 iStaticMethod = false;
@@ -77,10 +77,6 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         }
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
-            if (psiField.getContainingClass() instanceof PsiAnonymousClass) {
-                NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
-                return;
-            }
             className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiField);
             if (!psiField.hasModifierProperty(PsiModifier.STATIC)) {
                 iStaticField = false;
