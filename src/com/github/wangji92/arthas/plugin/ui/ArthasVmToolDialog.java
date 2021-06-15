@@ -75,7 +75,7 @@ public class ArthasVmToolDialog extends JDialog {
         instantcesCommandButton.addActionListener(e -> {
             String hashClassloader = classloaderHashValuetextField.getText();
             String vmtoolInstanceCommand = instancesCommand;
-            if (StringUtils.isNotBlank(hashClassloader) && vmtoolInstanceCommand != null && !vmtoolInstanceCommand.contains("-c")) {
+            if (StringUtils.isNotBlank(hashClassloader) && vmtoolInstanceCommand != null && !vmtoolInstanceCommand.contains("-c ")) {
                 vmtoolInstanceCommand = vmtoolInstanceCommand + " -c " + hashClassloader;
                 PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
             }
@@ -111,7 +111,7 @@ public class ArthasVmToolDialog extends JDialog {
     private void onOK() {
         String hashClassloader = classloaderHashValuetextField.getText();
         String vmtoolExpress = vmToolExpressTextField.getText();
-        if (StringUtils.isNotBlank(hashClassloader) && vmtoolExpress != null && !vmtoolExpress.contains("-c")) {
+        if (StringUtils.isNotBlank(hashClassloader) && vmtoolExpress != null && !vmtoolExpress.contains("-c ")) {
             vmtoolExpress = vmtoolExpress + " -c " + hashClassloader;
             PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
         }
