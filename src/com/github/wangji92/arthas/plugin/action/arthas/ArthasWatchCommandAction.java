@@ -19,8 +19,8 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
         CommandContext commandContext = new CommandContext(project, psiElement);
         ShellScriptCommandEnum scriptCommandEnum = ShellScriptCommandEnum.WATCH;
         //这里针对放置在字段上获取字段的值的信息进行处理增强
-        if (ShellScriptCommandEnum.WATCH_EXECUTE_STATIC_METHOD.support(commandContext)) {
-            scriptCommandEnum = ShellScriptCommandEnum.WATCH_EXECUTE_STATIC_METHOD;
+        if (ShellScriptCommandEnum.WATCH_STATIC_FILED.support(commandContext)) {
+            scriptCommandEnum = ShellScriptCommandEnum.WATCH_STATIC_FILED;
         } else if (ShellScriptCommandEnum.WATCH_NON_STATIC_FILED.support(commandContext)) {
             // 当获取某个非静态的字段的时候，只能是调用构造、或者非静态方法才可以，这里增加一个表达式判断逻辑
             // 默认为 1== 1
