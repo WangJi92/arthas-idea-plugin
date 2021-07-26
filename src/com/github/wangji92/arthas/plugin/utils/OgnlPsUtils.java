@@ -552,7 +552,7 @@ public class OgnlPsUtils {
         String beanName = "";
         if (annotations.length > 0) {
             for (PsiAnnotation annotation : annotations) {
-                beanName = getAttributeFromAnnotation(annotation, Sets.newHashSet("org.springframework.stereotype.Component", "org.springframework.stereotype.Service", "org.springframework.stereotype.Controller", "org.springframework.stereotype.Repository", "org.springframework.web.bind.annotation.RestController"), "value");
+                beanName = getAttributeFromAnnotation(annotation, Sets.newHashSet("org.springframework.stereotype.Component", "org.springframework.stereotype.Service", "org.springframework.stereotype.Controller", "org.springframework.stereotype.Repository", "org.springframework.web.bind.annotation.RestController", "org.springframework.context.annotation.Configuration"), "value");
                 if (StringUtils.isNotBlank(beanName)) {
                     break;
                 }
