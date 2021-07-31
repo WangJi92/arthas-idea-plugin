@@ -27,6 +27,16 @@ public enum ShellScriptConstantEnum implements EnumCodeMsg<String> {
     DASHBOARD_N_1("dashboard -n 1", "dashboard info"),
     SYS_PROP_ENV("sysprop;sysenv;", "sysprop and sysenv"),
     VM_OPTION("vmoption;", "display, and update the vm diagnostic options. vmoption PrintGCDetails true;"),
+    /**
+     * https://mp.weixin.qq.com/s/GF3C7RcEPV0f1hDah6CJPA
+     */
+    VM_OPTION_PRINT_GC("vmoption PrintGC true", " print gc info"),
+    VM_OPTION_PRINT_GC_DETAIL("vmoption PrintGCDetails true", " print gc details"),
+    VM_OPTION_PRINT_GC_DATE("vmoption PrintGCDateStamps true", " print gc time"),
+    VM_OPTION_PRINT_GC_BEFORE_DUMP("vmoption HeapDumpBeforeFullGC true", "打开HeapDumpBeforeFullGC开关，可以在GC前生成heapdump文件"),
+    VM_OPTION_PRINT_GC_AFTER_DUMP("vmoption HeapDumpAfterFullGC true", "打开HeapDumpAfterFullGC开关，可以在GC结束后生成heapdump文件"),
+    VM_OPTION_PRINT_CLASS_HISTOGRAM_BEFORE_FULL_GC("vmoption PrintClassHistogramBeforeFullGC true", "打开PrintClassHistogramBeforeFullGC开关，可以在GC前打印类直方图"),
+    VM_OPTION_PRINT_CLASS_HISTOGRAM_AFTER_FULL_GC("vmoption PrintClassHistogramAfterFullGC true", "打开PrintClassHistogramAfterFullGC开关，可以在GC结束后打印类直方图"),
     PERF_COUNTER("perfcounter -d", "display the perf counter information.");
 
 
