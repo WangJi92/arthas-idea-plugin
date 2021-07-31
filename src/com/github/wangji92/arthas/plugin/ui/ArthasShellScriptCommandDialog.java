@@ -6,12 +6,14 @@ import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptConstantEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
+import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
+import com.intellij.ui.components.labels.ActionLink;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,10 +47,23 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     private JButton commonCopyCommandButton;
     private JLabel dyTipLabel;
     private JLabel constantLabel;
+    private JTextField dyClassloaderHashTextField;
+
+    private JButton dyCopyScCommandButton;
+
+    private JButton dyClearCacheButton;
+
+
+    private ActionLink dyScHelpLink;
 
     private CommandContext commandContext;
 
     private Project project;
+
+    /**
+     * 默认的 sc -d xxxClass
+     */
+    private String selectClassName = "";
 
     /**
      * 当前选择的动态脚本
@@ -64,6 +79,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
     public ArthasShellScriptCommandDialog(AnActionEvent event) {
         this.commandContext = new CommandContext(event);
         this.project = commandContext.getProject();
+        this.selectClassName = commandContext.getKeyValue(ShellScriptVariableEnum.CLASS_NAME);
         setContentPane(contentPane);
         setMinimumSize(new Dimension(800, 340));
         setModal(true);
@@ -93,6 +109,46 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         this.initDynamicShellScript();
         this.commonScriptInit();
         this.initSelectCommandCloseDialogSetting();
+        this.initScClassloaderMethod();
+
+    }
+
+    /**
+     * 初始化 classloader的逻辑
+     */
+    private void initScClassloaderMethod() {
+
+        String classloaderHash = PropertiesComponentUtils.getValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE);
+        dyClassloaderHashTextField.setText(classloaderHash);
+
+        //clear cache的classloader的hash值的信息
+        dyClearCacheButton.addActionListener(e -> onClearClassLoaderHashValue());
+
+        //获取 sc -d classloader的命令
+        dyCopyScCommandButton.addActionListener(e -> {
+            String currentScCommand = "";
+            if (this.currentSelectDyScriptVariableEnum != null) {
+                ShellScriptCommandEnum scriptCommandEnum = (ShellScriptCommandEnum) this.currentSelectDyScriptVariableEnum.getContentObject();
+                currentScCommand = scriptCommandEnum.getScCommand(commandContext);
+            }
+            if (StringUtils.isBlank(currentScCommand)) {
+                if (StringUtils.isBlank(selectClassName)) {
+                    NotifyUtils.notifyMessage(project, "sc -d class name is empty");
+                    return;
+                }
+                currentScCommand = String.join(" ", "sc", "-d", this.selectClassName);
+            }
+            ClipboardUtils.setClipboardString(currentScCommand);
+            NotifyUtils.notifyMessageDefault(project);
+        });
+    }
+
+    /**
+     * 删除之前的缓存classloader的信息
+     */
+    private void onClearClassLoaderHashValue() {
+        dyClassloaderHashTextField.setText("");
+        PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, "");
     }
 
     private void initSelectCommandCloseDialogSetting() {
@@ -151,8 +207,19 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         dyCopyCommandButton.addActionListener(e -> {
             Object selectedItem = shellScriptComboBox.getSelectedItem();
             assert selectedItem != null;
-            String selectedItemStr = selectedItem.toString();
-            ClipboardUtils.setClipboardString(selectedItemStr);
+            String copyCommand = selectedItem.toString();
+            if (this.currentSelectDyScriptVariableEnum != null) {
+                ShellScriptCommandEnum shellScriptCommandEnum = (ShellScriptCommandEnum) currentSelectDyScriptVariableEnum.getContentObject();
+                String scCommand = shellScriptCommandEnum.getScCommand(this.commandContext);
+                if (StringUtils.isNotBlank(scCommand)) {
+                    String hashClassloader = dyClassloaderHashTextField.getText();
+                    if (StringUtils.isNotBlank(hashClassloader)) {
+                        copyCommand = String.join(" ", copyCommand, "-c", hashClassloader);
+                        PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
+                    }
+                }
+            }
+            ClipboardUtils.setClipboardString(copyCommand);
             NotifyUtils.notifyMessage(project, COMMAND_COPIED + "(Some commands need classloader hash value to be executed directly)");
         });
         shellScriptComboBox.addItemListener(e -> {
@@ -267,4 +334,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
         this.project = project;
     }
 
+    private void createUIComponents() {
+        this.dyScHelpLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/sc.html");
+    }
 }
