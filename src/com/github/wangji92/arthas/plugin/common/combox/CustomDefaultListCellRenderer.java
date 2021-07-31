@@ -14,9 +14,12 @@ public class CustomDefaultListCellRenderer extends DefaultListCellRenderer {
 
     private JComboBox comboBox;
 
+    private JLabel tipLabel;
 
-    public CustomDefaultListCellRenderer(JComboBox shellScriptComboBox) {
+
+    public CustomDefaultListCellRenderer(JComboBox shellScriptComboBox, JLabel tipLabel) {
         this.comboBox = shellScriptComboBox;
+        this.tipLabel = tipLabel;
     }
 
     @Override
@@ -30,6 +33,9 @@ public class CustomDefaultListCellRenderer extends DefaultListCellRenderer {
         }
         if (isSelected) {
             comboBox.setToolTipText(tipText);
+            if (tipLabel != null) {
+                tipLabel.setText(tipText);
+            }
         }
         setToolTipText(tipText);
         return this;
