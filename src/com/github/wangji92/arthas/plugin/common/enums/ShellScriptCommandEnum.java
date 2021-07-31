@@ -220,6 +220,41 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return context.getCommandCode(this);
         }
     },
+    /**
+     * 通过反射设置变量
+     * vmtool -x 3 --action getInstances --className com.xxx.cache.CacheAspect  --express '#field=instances[0].getClass().getDeclaredField("cacheEnabled"),#field.setAccessible(true),#field.set(instances[0],false)'  -c 3bd94634
+     */
+    VM_TOOL_INVOKE_REFLECT_FIELD("vmtool -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + "--action getInstances --className "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + " --express '#field=instances[0].getClass()"
+            + ".getDeclaredField(\"" + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "\"),#field.setAccessible(true),"
+            + "#field.set(instances[0]," + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")'",
+            "vmtool get instance invoke method field,you can edit express params,find first instance") {
+        @Override
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
+                return false;
+            }
+            // 构造方法不支持
+            if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
+                return false;
+            }
+            return OgnlPsUtils.isNonStaticField(context.getPsiElement()) && !OgnlPsUtils.isFinalField(context.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
+        }
+
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
+        }
+    },
     VM_TOOL_SPRING_ENV("vmtool -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
