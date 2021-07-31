@@ -162,10 +162,9 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                     dyTipLabel.setText(item.getTipText());
                     this.currentSelectDyScriptVariableEnum = item;
                 }
-
             }
         });
-        shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox));
+        shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox, dyTipLabel));
 
         for (ShellScriptCommandEnum shellScript : ShellScriptCommandEnum.values()) {
             if (!shellScript.support(this.commandContext)) {
@@ -216,7 +215,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                 }
             }
         });
-        commonShellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(commonShellScriptComboBox));
+        commonShellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(commonShellScriptComboBox, this.constantLabel));
         commonShellScriptCommandButton.addActionListener(e -> {
             Object selectedItem = commonShellScriptComboBox.getSelectedItem();
             assert selectedItem != null;
