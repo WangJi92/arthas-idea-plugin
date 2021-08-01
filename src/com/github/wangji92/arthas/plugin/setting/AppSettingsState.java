@@ -188,6 +188,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         // 检测全局的static spring context
         checkGlobalStaticSpringContextAndSettingCurrentProjectIfEmpty(appSettingsState);
 
+        checkGlobalStorageType(appSettingsState);
+
         // 检测 全局的阿里云oss
         checkGlobalAliyunOssAndSettingCurrentProjectIfEmpty(appSettingsState);
 
@@ -205,6 +207,43 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
          */
         checkGlobalScriptDialogCloseWhenSelectedCommand(appSettingsState);
         return appSettingsState;
+    }
+
+    /**
+     * 全局检测设置信息 只要一个工程修改了 全部都修改
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalStorageType(AppSettingsState appSettingsState) {
+        String storageType = PropertiesComponentUtils.getValue("storageType");
+        if (StringUtils.isBlank(storageType)) {
+            storageType = "hotRedefineClipboard";
+        }
+        switch (storageType) {
+            case "hotRedefineClipboard": {
+                appSettingsState.hotRedefineClipboard = true;
+                appSettingsState.hotRedefineRedis = false;
+                appSettingsState.aliYunOss = false;
+                break;
+            }
+            case "hotRedefineRedis": {
+                appSettingsState.hotRedefineClipboard = false;
+                appSettingsState.hotRedefineRedis = true;
+                appSettingsState.aliYunOss = false;
+                break;
+            }
+            case "aliYunOss": {
+                appSettingsState.hotRedefineClipboard = false;
+                appSettingsState.hotRedefineRedis = false;
+                appSettingsState.aliYunOss = true;
+                break;
+            }
+            default: {
+                appSettingsState.hotRedefineClipboard = true;
+                appSettingsState.hotRedefineRedis = false;
+                appSettingsState.aliYunOss = false;
+            }
+        }
     }
 
     /**

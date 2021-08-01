@@ -361,6 +361,7 @@ public class AppSettingsPage implements Configurable {
             settings.hotRedefineClipboard = true;
             settings.aliYunOss = false;
             settings.hotRedefineRedis = false;
+            PropertiesComponentUtils.setValue("storageType", "hotRedefineClipboard");
         } else if (aliYunOssRadioButton.isSelected()) {
             this.saveAliyunOssConfig(error);
         } else if (redisRadioButton.isSelected()) {
@@ -436,6 +437,7 @@ public class AppSettingsPage implements Configurable {
             settings.redisAuth = String.valueOf(redisPasswordField.getPassword());
             settings.hotRedefineRedis = true;
             settings.aliYunOss = false;
+            PropertiesComponentUtils.setValue("storageType", "hotRedefineRedis");
             PropertiesComponentUtils.setValue("redisAddress", settings.redisAddress);
             PropertiesComponentUtils.setValue("redisPort", "" + settings.redisPort);
             PropertiesComponentUtils.setValue("redisAuth", settings.redisAuth);
@@ -465,6 +467,7 @@ public class AppSettingsPage implements Configurable {
             settings.hotRedefineRedis = false;
             settings.ossGlobalSetting = ossGlobalSettingRadioButton.isSelected();
             if (ossGlobalSettingRadioButton.isSelected()) {
+                PropertiesComponentUtils.setValue("storageType", "aliYunOss");
                 PropertiesComponentUtils.setValue("endpoint", settings.endpoint);
                 PropertiesComponentUtils.setValue("accessKeyId", settings.accessKeyId);
                 PropertiesComponentUtils.setValue("accessKeySecret", settings.accessKeySecret);
