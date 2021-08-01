@@ -214,7 +214,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     private static void checkGlobalScriptDialogCloseWhenSelectedCommand(AppSettingsState appSettingsState) {
         String globalScriptDialogCloseWhenSelectedCommand = PropertiesComponentUtils.getValue("scriptDialogCloseWhenSelectedCommand");
-        if (StringUtils.isNotBlank(globalScriptDialogCloseWhenSelectedCommand) && !"y".equalsIgnoreCase(globalScriptDialogCloseWhenSelectedCommand)) {
+        if (StringUtils.isNotBlank(globalScriptDialogCloseWhenSelectedCommand)) {
             appSettingsState.scriptDialogCloseWhenSelectedCommand = globalScriptDialogCloseWhenSelectedCommand;
         }
     }
@@ -228,10 +228,10 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         String globalMybatisMapperReloadServiceBeanName = PropertiesComponentUtils.getValue("mybatisMapperReloadServiceBeanName");
         String globalMybatisMapperReloadMethodName = PropertiesComponentUtils.getValue("mybatisMapperReloadMethodName");
 
-        if (StringUtils.isNotBlank(globalMybatisMapperReloadServiceBeanName) && !DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME.equalsIgnoreCase(globalMybatisMapperReloadServiceBeanName)) {
+        if (StringUtils.isNotBlank(globalMybatisMapperReloadServiceBeanName)) {
             appSettingsState.mybatisMapperReloadServiceBeanName = globalMybatisMapperReloadServiceBeanName;
         }
-        if (StringUtils.isNotBlank(globalMybatisMapperReloadMethodName) && !DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME.equalsIgnoreCase(globalMybatisMapperReloadMethodName)) {
+        if (StringUtils.isNotBlank(globalMybatisMapperReloadMethodName)) {
             appSettingsState.mybatisMapperReloadMethodName = globalMybatisMapperReloadMethodName;
         }
     }
@@ -245,7 +245,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     private static void checkGlobalArthasPackageZipDownloadUrl(AppSettingsState appSettingsState) {
 
         String globalArthasPackageZipDownloadUrl = PropertiesComponentUtils.getValue("arthasPackageZipDownloadUrl");
-        if (StringUtils.isNotBlank(globalArthasPackageZipDownloadUrl) && !DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL.equalsIgnoreCase(globalArthasPackageZipDownloadUrl)) {
+        if (StringUtils.isNotBlank(globalArthasPackageZipDownloadUrl)) {
             appSettingsState.arthasPackageZipDownloadUrl = globalArthasPackageZipDownloadUrl;
         }
     }
@@ -261,21 +261,16 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         String redisAuth = PropertiesComponentUtils.getValue("redisAuth");
         String redisCacheKey = PropertiesComponentUtils.getValue("redisCacheKey");
         String redisCacheKeyTtl = PropertiesComponentUtils.getValue("redisCacheKeyTtl");
-        if (!appSettingsState.aliYunOss
-                && !appSettingsState.hotRedefineRedis
-                && (StringUtils.isBlank(appSettingsState.redisAddress)
-                || "127.0.0.1".equals(appSettingsState.redisAddress)
-                || "localhost".equals(appSettingsState.redisAddress))) {
+        if (StringUtils.isNotBlank(appSettingsState.redisAddress)) {
             appSettingsState.redisAddress = redisAddress;
             if (NumberUtils.isDigits(redisPort)) {
                 appSettingsState.redisPort = Integer.parseInt(redisPort);
             }
             appSettingsState.redisAuth = redisAuth;
             appSettingsState.redisCacheKey = redisCacheKey;
-            if (NumberUtils.isDigits(redisPort)) {
+            if (NumberUtils.isDigits(redisCacheKeyTtl)) {
                 appSettingsState.redisCacheKeyTtl = Integer.parseInt(redisCacheKeyTtl);
             }
-
             if (!appSettingsState.aliYunOss && !appSettingsState.hotRedefineClipboard) {
                 appSettingsState.hotRedefineRedis = true;
             }
@@ -314,11 +309,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         String accessKeySecret1 = PropertiesComponentUtils.getValue("accessKeySecret");
         String directoryPrefix1 = PropertiesComponentUtils.getValue("directoryPrefix");
         // 如果之前有设置过就打开了
-        if (!appSettingsState.aliYunOss && StringUtils.isBlank(appSettingsState.endpoint)
-                && StringUtils.isBlank(appSettingsState.bucketName)
-                && StringUtils.isBlank(appSettingsState.accessKeyId)
-                && StringUtils.isBlank(appSettingsState.accessKeySecret)
-                && StringUtils.isNotBlank(bucketName1)
+        if (StringUtils.isNotBlank(bucketName1)
                 && StringUtils.isNotBlank(endPoint1)
                 && StringUtils.isNotBlank(accessKeyId1)
                 && StringUtils.isNotBlank(accessKeySecret1)) {
