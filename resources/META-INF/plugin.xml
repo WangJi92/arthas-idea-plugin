@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.31</version>
+    <version>2.32</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.32-RELEASE</p>
+      <ul>
+        <li>add reflection to modify variables in quickly shell command,and add sc command</li>
+      </ul>
+       <ul>
+        <li>快捷命令中增加反射修改非静态变量(vmtool+反射)、增加手动输入classloader sc 命令</li>
+      </ul>
     <p>2.30~31-RELEASE</p>
       <ul>
         <li>fix some bug</li>
