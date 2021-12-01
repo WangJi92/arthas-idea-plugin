@@ -390,7 +390,7 @@ public class OgnlPsUtils {
         if (parameters.length > 0) {
             int index = 0;
             for (PsiParameter parameter : parameters) {
-                String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
+                String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType(), parameter.getProject());
                 builder.append(defaultParamValue);
                 if (!(index == parameters.length - 1)) {
                     builder.append(",");
@@ -411,7 +411,7 @@ public class OgnlPsUtils {
         String defaultFieldValue = "";
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
-            defaultFieldValue = OgnlPsUtils.getDefaultString(psiField.getType());
+            defaultFieldValue = OgnlPsUtils.getDefaultString(psiField.getType(), psiField.getProject());
         }
         return defaultFieldValue;
     }
@@ -422,7 +422,7 @@ public class OgnlPsUtils {
      * @param psiType
      * @return
      */
-    public static String getDefaultString(PsiType psiType) {
+    public static String getDefaultString(PsiType psiType, Project project) {
         String result = " ";
         String canonicalText = psiType.getCanonicalText();
 
@@ -502,6 +502,22 @@ public class OgnlPsUtils {
             return result;
         }
 
+        // 处理枚举类的默认值
+        // 当前clazz的类型,然后父类为枚举 查询第一个枚举字段进行传递
+        final PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(canonicalText, GlobalSearchScope.allScope(project));
+        if (psiClass != null && psiClass.getSuperClass() != null) {
+            //父类为枚举的就是枚举
+            final String suppClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass.getSuperClass());
+            if ("java.lang.Enum".equals(suppClassName)) {
+                // 过滤第一个是枚举的字段常量
+                final PsiField defaultPsiField = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().orElse(null);
+                if (defaultPsiField != null) {
+                    final String defaultEnumName = OgnlPsUtils.getFieldName(defaultPsiField);
+                    return "@" + canonicalText + "@" + defaultEnumName;
+                }
+            }
+        }
+        
         //不管他的构造函数了，太麻烦了
         result = "new " + canonicalText + "()";
         return result;
