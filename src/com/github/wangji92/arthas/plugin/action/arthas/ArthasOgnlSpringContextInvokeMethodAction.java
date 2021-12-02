@@ -46,6 +46,10 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             e.getPresentation().setEnabled(false);
             return;
         }
+        if (OgnlPsUtils.isConstructor(psiElement)) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
         boolean staticField = OgnlPsUtils.isStaticField(psiElement);
         if (staticField) {
             e.getPresentation().setEnabled(false);
