@@ -15,6 +15,10 @@ import com.intellij.psi.PsiElement;
  */
 public class ArthasMonitorCommandAction extends BaseArthasPluginAction {
 
+    public ArthasMonitorCommandAction() {
+        this.setSupportEnum(false);
+    }
+
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         CommandContext commandContext = new CommandContext(project, psiElement);

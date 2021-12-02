@@ -517,11 +517,41 @@ public class OgnlPsUtils {
                 }
             }
         }
-        
+
         //不管他的构造函数了，太麻烦了
         result = "new " + canonicalText + "()";
         return result;
 
+    }
+
+    /**
+     * 当前元素是否为枚举..
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean psiElementInEnum(PsiElement psiElement) {
+        if (psiElement instanceof PsiClass && ((PsiClass) psiElement).isEnum()) {
+            // 当前类为枚举
+            return true;
+        } else if (psiElement instanceof PsiEnumConstant) {
+            // 当前是字段枚举常量
+            return true;
+        } else if (psiElement instanceof PsiMethod && ((PsiMethod) psiElement).getContainingClass() != null && ((PsiMethod) psiElement).getContainingClass().isEnum()) {
+            return true;
+        } else if (psiElement instanceof PsiField && ((PsiField) psiElement).getContainingClass().isEnum()) {
+            return true;
+        } else if (psiElement instanceof PsiJavaFile) {
+            // psi java file
+            PsiJavaFile psiJavaFile = (PsiJavaFile) psiElement;
+            final String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiJavaFile);
+            final PsiClass psiClass = JavaPsiFacade.getInstance(psiJavaFile.getProject()).findClass(className, GlobalSearchScope.allScope(psiJavaFile.getProject()));
+            if (psiClass != null && psiClass.isEnum()) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
     /**

@@ -17,6 +17,10 @@ import com.intellij.psi.PsiElement;
  */
 public class ArthasStackCommandAction extends BaseArthasPluginAction {
 
+    public ArthasStackCommandAction() {
+        this.setSupportEnum(false);
+    }
+
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         CommandContext commandContext = new CommandContext(project, psiElement);
