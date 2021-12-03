@@ -505,17 +505,14 @@ public class OgnlPsUtils {
         // 处理枚举类的默认值
         // 当前clazz的类型,然后父类为枚举 查询第一个枚举字段进行传递
         final PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(canonicalText, GlobalSearchScope.allScope(project));
-        if (psiClass != null && psiClass.getSuperClass() != null) {
-            //父类为枚举的就是枚举
-            final String suppClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiClass.getSuperClass());
-            if ("java.lang.Enum".equals(suppClassName)) {
-                // 过滤第一个是枚举的字段常量
-                final PsiField defaultPsiField = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().orElse(null);
-                if (defaultPsiField != null) {
-                    final String defaultEnumName = OgnlPsUtils.getFieldName(defaultPsiField);
-                    return "@" + canonicalText + "@" + defaultEnumName;
-                }
+        if (psiClass != null && psiClass.isEnum()) {
+            //父类为枚举的就是枚举  过滤第一个是枚举的字段常量
+            final PsiField defaultPsiField = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().orElse(null);
+            if (defaultPsiField != null) {
+                final String defaultEnumName = OgnlPsUtils.getFieldName(defaultPsiField);
+                return "@" + canonicalText + "@" + defaultEnumName;
             }
+
         }
 
         //不管他的构造函数了，太麻烦了
@@ -537,7 +534,15 @@ public class OgnlPsUtils {
         } else if (psiElement instanceof PsiEnumConstant) {
             // 当前是字段枚举常量
             return true;
-        } else if (psiElement instanceof PsiMethod && ((PsiMethod) psiElement).getContainingClass() != null && ((PsiMethod) psiElement).getContainingClass().isEnum()) {
+        } else if (psiElement instanceof PsiMethod) {
+            if (((PsiMethod) psiElement).getContainingClass() != null && ((PsiMethod) psiElement).getContainingClass().isEnum()) {
+                // 枚举里面的方法 非匿名方法
+                return true;
+            }
+            if (((PsiMethod) psiElement).getParent() instanceof PsiEnumConstantInitializer) {
+                //枚举里面的匿名常量 常量的匿名方法
+                return true;
+            }
             return true;
         } else if (psiElement instanceof PsiField && ((PsiField) psiElement).getContainingClass().isEnum()) {
             return true;
@@ -551,6 +556,7 @@ public class OgnlPsUtils {
             }
 
         }
+
         return false;
     }
 
