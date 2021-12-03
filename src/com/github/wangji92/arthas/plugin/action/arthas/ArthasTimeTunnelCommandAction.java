@@ -13,6 +13,9 @@ import com.intellij.psi.PsiElement;
  * @date 11-01-2020
  */
 public class ArthasTimeTunnelCommandAction extends BaseArthasPluginAction {
+    public ArthasTimeTunnelCommandAction() {
+        this.setSupportEnum(false);
+    }
 
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {

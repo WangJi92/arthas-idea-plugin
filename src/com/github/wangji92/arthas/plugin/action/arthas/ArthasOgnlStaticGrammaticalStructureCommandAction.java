@@ -27,8 +27,8 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
         DataContext dataContext = e.getDataContext();
-        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
-        if (editor == null) {
+        Project project = CommonDataKeys.PROJECT.getData(dataContext);
+        if (project == null) {
             e.getPresentation().setEnabled(false);
             return;
         }
@@ -52,9 +52,8 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
          * {@link com.intellij.ide.actions.CopyReferenceAction}
          */
         DataContext dataContext = event.getDataContext();
-        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
         Project project = CommonDataKeys.PROJECT.getData(dataContext);
-        if (editor == null || project == null) {
+        if (project == null) {
             return;
         }
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);

@@ -14,6 +14,11 @@ import com.intellij.psi.PsiElement;
  * @date 21-12-2019
  */
 public class ArthasTraceCommandAction extends BaseArthasPluginAction {
+
+    public ArthasTraceCommandAction() {
+        this.setSupportEnum(false);
+    }
+
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         CommandContext commandContext = new CommandContext(project, psiElement);

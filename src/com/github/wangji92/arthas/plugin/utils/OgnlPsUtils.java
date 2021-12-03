@@ -390,7 +390,7 @@ public class OgnlPsUtils {
         if (parameters.length > 0) {
             int index = 0;
             for (PsiParameter parameter : parameters) {
-                String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType());
+                String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType(), parameter.getProject());
                 builder.append(defaultParamValue);
                 if (!(index == parameters.length - 1)) {
                     builder.append(",");
@@ -411,7 +411,7 @@ public class OgnlPsUtils {
         String defaultFieldValue = "";
         if (psiElement instanceof PsiField) {
             PsiField psiField = (PsiField) psiElement;
-            defaultFieldValue = OgnlPsUtils.getDefaultString(psiField.getType());
+            defaultFieldValue = OgnlPsUtils.getDefaultString(psiField.getType(), psiField.getProject());
         }
         return defaultFieldValue;
     }
@@ -422,7 +422,7 @@ public class OgnlPsUtils {
      * @param psiType
      * @return
      */
-    public static String getDefaultString(PsiType psiType) {
+    public static String getDefaultString(PsiType psiType, Project project) {
         String result = " ";
         String canonicalText = psiType.getCanonicalText();
 
@@ -502,10 +502,62 @@ public class OgnlPsUtils {
             return result;
         }
 
+        // 处理枚举类的默认值
+        // 当前clazz的类型,然后父类为枚举 查询第一个枚举字段进行传递
+        final PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(canonicalText, GlobalSearchScope.allScope(project));
+        if (psiClass != null && psiClass.isEnum()) {
+            //父类为枚举的就是枚举  过滤第一个是枚举的字段常量
+            final PsiField defaultPsiField = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().orElse(null);
+            if (defaultPsiField != null) {
+                final String defaultEnumName = OgnlPsUtils.getFieldName(defaultPsiField);
+                return "@" + canonicalText + "@" + defaultEnumName;
+            }
+
+        }
+
         //不管他的构造函数了，太麻烦了
         result = "new " + canonicalText + "()";
         return result;
 
+    }
+
+    /**
+     * 当前元素是否为枚举..
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean psiElementInEnum(PsiElement psiElement) {
+        if (psiElement instanceof PsiClass && ((PsiClass) psiElement).isEnum()) {
+            // 当前类为枚举
+            return true;
+        } else if (psiElement instanceof PsiEnumConstant) {
+            // 当前是字段枚举常量
+            return true;
+        } else if (psiElement instanceof PsiMethod) {
+            if (((PsiMethod) psiElement).getContainingClass() != null && ((PsiMethod) psiElement).getContainingClass().isEnum()) {
+                // 枚举里面的方法 非匿名方法
+                return true;
+            }
+            if (((PsiMethod) psiElement).getParent() instanceof PsiEnumConstantInitializer) {
+                //枚举里面的匿名常量 常量的匿名方法
+                return true;
+            }
+            return true;
+        } else if (psiElement instanceof PsiField && ((PsiField) psiElement).getContainingClass().isEnum()) {
+            return true;
+        } else if (psiElement instanceof PsiJavaFile) {
+            // psi java file
+            PsiJavaFile psiJavaFile = (PsiJavaFile) psiElement;
+            final String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiJavaFile);
+            final PsiClass psiClass = JavaPsiFacade.getInstance(psiJavaFile.getProject()).findClass(className, GlobalSearchScope.allScope(psiJavaFile.getProject()));
+            if (psiClass != null && psiClass.isEnum()) {
+                return true;
+            }
+
+        }
+
+        return false;
     }
 
     /**
