@@ -543,7 +543,6 @@ public class OgnlPsUtils {
                 //枚举里面的匿名常量 常量的匿名方法
                 return true;
             }
-            return true;
         } else if (psiElement instanceof PsiField && ((PsiField) psiElement).getContainingClass().isEnum()) {
             return true;
         } else if (psiElement instanceof PsiJavaFile) {
