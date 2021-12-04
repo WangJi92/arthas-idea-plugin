@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.CompilerModuleExtension;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -528,33 +529,39 @@ public class OgnlPsUtils {
      * @return
      */
     public static boolean psiElementInEnum(PsiElement psiElement) {
-        if (psiElement instanceof PsiClass && ((PsiClass) psiElement).isEnum()) {
-            // 当前类为枚举
-            return true;
-        } else if (psiElement instanceof PsiEnumConstant) {
-            // 当前是字段枚举常量
-            return true;
-        } else if (psiElement instanceof PsiMethod) {
-            if (((PsiMethod) psiElement).getContainingClass() != null && ((PsiMethod) psiElement).getContainingClass().isEnum()) {
-                // 枚举里面的方法 非匿名方法
+        try {
+            if (psiElement instanceof PsiClass && ((PsiClass) psiElement).isEnum()) {
+                // 当前类为枚举
                 return true;
-            }
-            if (((PsiMethod) psiElement).getParent() instanceof PsiEnumConstantInitializer) {
-                //枚举里面的匿名常量 常量的匿名方法
+            } else if (psiElement instanceof PsiEnumConstant) {
+                // 当前是字段枚举常量
                 return true;
-            }
-            return true;
-        } else if (psiElement instanceof PsiField && ((PsiField) psiElement).getContainingClass().isEnum()) {
-            return true;
-        } else if (psiElement instanceof PsiJavaFile) {
-            // psi java file
-            PsiJavaFile psiJavaFile = (PsiJavaFile) psiElement;
-            final String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiJavaFile);
-            final PsiClass psiClass = JavaPsiFacade.getInstance(psiJavaFile.getProject()).findClass(className, GlobalSearchScope.allScope(psiJavaFile.getProject()));
-            if (psiClass != null && psiClass.isEnum()) {
+            } else if (psiElement instanceof PsiMethod) {
+                if (((PsiMethod) psiElement).getContainingClass() != null && ((PsiMethod) psiElement).getContainingClass().isEnum()) {
+                    // 枚举里面的方法 非匿名方法
+                    return true;
+                }
+                if (((PsiMethod) psiElement).getParent() instanceof PsiEnumConstantInitializer) {
+                    //枚举里面的匿名常量 常量的匿名方法
+                    return true;
+                }
+            } else if (psiElement instanceof PsiField && ((PsiField) psiElement).getContainingClass().isEnum()) {
                 return true;
-            }
+            } else if (psiElement instanceof PsiJavaFile) {
+                // psi java file
+                PsiJavaFile psiJavaFile = (PsiJavaFile) psiElement;
+                final String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiJavaFile);
+                final PsiClass psiClass = JavaPsiFacade.getInstance(psiJavaFile.getProject()).findClass(className, GlobalSearchScope.allScope(psiJavaFile.getProject()));
+                if (psiClass != null && psiClass.isEnum()) {
+                    return true;
+                }
 
+            }
+        } catch (IndexNotReadyException e) {
+            LOG.info("[arthas] IndexNotReadyException get is enum  error", e);
+            return false;
+        } catch (Exception e) {
+            LOG.error("[arthas] get is enum  error", e);
         }
 
         return false;
