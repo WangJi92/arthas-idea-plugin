@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.common.combox.CustomComboBoxItem;
+import com.github.wangji92.arthas.plugin.common.combox.CustomDefaultListCellRenderer;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
@@ -43,6 +44,7 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
     private LinkLabel ognlHelp;
     private LinkLabel ognlSpecial;
     private LinkLabel scClassloader;
+    private JLabel tipField;
 
 
     private Project project;
@@ -64,7 +66,6 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(shellCommandButton);
-
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -108,7 +109,10 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
                 final String executeInfo = OgnlPsUtils.getExecuteInfo(psiField);
                 CustomComboBoxItem<String> boxItem = new CustomComboBoxItem<String>();
                 boxItem.setDisplay(String.format("@%s@%s", parentClazzName, executeInfo));
-                boxItem.setTipText("enum static filed=" + executeInfo);
+                boxItem.setTipText("static filed=" + executeInfo);
+                if (psiField instanceof PsiEnumConstant) {
+                    boxItem.setTipText("enum's class instance " + executeInfo);
+                }
                 customComboBoxItems.add(boxItem);
             });
         }
@@ -122,7 +126,7 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
                 final String executeInfo = OgnlPsUtils.getExecuteInfo(psiMethod);
                 CustomComboBoxItem<String> boxItem = new CustomComboBoxItem<String>();
                 boxItem.setDisplay(String.format("@%s@%s", parentClazzName, executeInfo));
-                boxItem.setTipText("enum static method=" + OgnlPsUtils.getMethodName(psiMethod));
+                boxItem.setTipText("static method=" + OgnlPsUtils.getMethodName(psiMethod) + " you can edit method params");
                 customComboBoxItems.add(boxItem);
             });
         }
@@ -140,7 +144,7 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
                     final String nonStaticFieldExecuteInfo = OgnlPsUtils.getExecuteInfo(nonStaticField);
                     CustomComboBoxItem<String> boxItem = new CustomComboBoxItem<String>();
                     boxItem.setDisplay(String.format("@%s@%s.%s", parentClazzName, enumFieldExecuteInfo, nonStaticFieldExecuteInfo));
-                    boxItem.setTipText("enum non static field=" + nonStaticFieldExecuteInfo);
+                    boxItem.setTipText("enum's class " + enumFieldExecuteInfo + " instance non static field=" + nonStaticFieldExecuteInfo);
                     customComboBoxItems.add(boxItem);
                 });
             });
@@ -158,7 +162,7 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
                     final String nonStaticMethodExecuteInfo = OgnlPsUtils.getExecuteInfo(nonStaticMethod);
                     CustomComboBoxItem<String> boxItem = new CustomComboBoxItem<String>();
                     boxItem.setDisplay(String.format("@%s@%s.%s", parentClazzName, enumFieldExecuteInfo, nonStaticMethodExecuteInfo));
-                    boxItem.setTipText("enum non static method=" + OgnlPsUtils.getMethodName(nonStaticMethod));
+                    boxItem.setTipText("enum's class " + enumFieldExecuteInfo + " instance non static method=" + OgnlPsUtils.getMethodName(nonStaticMethod)+" you can edit method params");
                     customComboBoxItems.add(boxItem);
                 });
             });
@@ -169,6 +173,7 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
         String depthPrintProperty = instance.depthPrintProperty;
         String join = String.join(" ", "ognl", "-x", depthPrintProperty);
 
+        enumChildClazzMethodComboBox.setRenderer(new CustomDefaultListCellRenderer(enumChildClazzMethodComboBox, this.tipField));
         customComboBoxItems.forEach(customComboBoxItem -> {
             final String display = customComboBoxItem.getDisplay();
             final String finalName = String.join(" ", join, "'", display + "'");
@@ -177,6 +182,8 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
             enumChildClazzMethodComboBox.addItem(customComboBoxItem);
             if (display.equals(ognlEnumCommandRequest.getSelectKey())) {
                 enumChildClazzMethodComboBox.setSelectedItem(customComboBoxItem);
+                tipField.setText(customComboBoxItem.getTipText());
+                tipField.setToolTipText(customComboBoxItem.getTipText());
             }
         });
     }

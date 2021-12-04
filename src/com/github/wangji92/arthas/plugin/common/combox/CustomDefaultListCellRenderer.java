@@ -35,6 +35,7 @@ public class CustomDefaultListCellRenderer extends DefaultListCellRenderer {
             comboBox.setToolTipText(tipText);
             if (tipLabel != null) {
                 tipLabel.setText(tipText);
+                tipLabel.setToolTipText(tipText);
             }
         }
         setToolTipText(tipText);
