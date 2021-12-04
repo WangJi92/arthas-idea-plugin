@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.32</version>
+    <version>2.33</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.33-RELEASE</p>
+      <ul>
+        <li>add command support for enum <a href="https://www.yuque.com/arthas-idea-plugin/help/su8l44"> more info </a></li>
+      </ul>
+       <ul>
+        <li>增加对于枚举类型的支持 <a href="https://www.yuque.com/arthas-idea-plugin/help/su8l44"> 更多查看 </a></li>
+      </ul>
     <p>2.32-RELEASE</p>
       <ul>
         <li>add reflection to modify variables in quickly shell command,and add sc command</li>
@@ -319,7 +326,7 @@
                 description="Arthas trace">
         </action>
         <action id="ArthasStatic" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
-                text="Ognl To Get Static Method Field"
+                text="Ognl Get Static Method Field"
                 description="Arthas ognl static">
         </action>
         <action id="ArthasSimpleGetStaticCommand"
@@ -378,7 +385,7 @@
         </action>
         <action id="ArthasSetStaticFieldCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSetStaticFieldCommandAction"
-                text="Reflect To Modify Static Field"
+                text="Ognl Modify Static Field"
                 description="Ognl set static field">
 
         </action>
@@ -523,6 +530,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasIdeaOpenConfigPageAction"
                 text="Setting Arthas Idea Plugin"
                 description="Setting arthas idea"/>
+        <action id="ArthasOgnlEnumAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlEnumAction"
+                text="Ognl Invoke for Enum"
+                description="Ognl invoke for enum"/>
 
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
@@ -579,6 +590,7 @@
             <reference ref="ArthasSimpleGetStaticCommand"/>
             <reference ref="ArthasStatic"/>
             <reference ref="ArthasSetStaticFieldCommand"/>
+            <reference ref="ArthasOgnlEnumAction"/>
             <reference ref="ArthasOgnlStaticGrammaticalStructureCommandAction"/>
             <separator text="*  Spring Properties Priority"/>
             <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
