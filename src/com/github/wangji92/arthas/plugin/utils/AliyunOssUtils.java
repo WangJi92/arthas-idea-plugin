@@ -9,8 +9,8 @@ import com.aliyun.oss.model.BucketInfo;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import org.codehaus.groovy.runtime.StackTraceUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -24,6 +24,8 @@ import java.util.Date;
  * @date 18-08-2020
  */
 public class AliyunOssUtils {
+    private static final Logger LOG = Logger.getInstance(AliyunOssUtils.class);
+
     /**
      * 获取oss 客户端
      *
@@ -72,8 +74,8 @@ public class AliyunOssUtils {
                 throw new IllegalArgumentException("配置aliyun oss参数错误 无法获取 bucketName");
             }
         } catch (OSSException | ClientException e) {
-            StackTraceUtils.printSanitizedStackTrace(e);
-            throw new IllegalArgumentException("配置aliyun oss 检测bucketName 错误 "+e.getMessage());
+            LOG.info("checkBuckNameExist", e);
+            throw new IllegalArgumentException("配置aliyun oss 检测bucketName 错误 " + e.getMessage());
         }
     }
 
@@ -94,7 +96,7 @@ public class AliyunOssUtils {
         try {
             ossClient.putObject(putObjectRequest);
         } catch (OSSException | ClientException e) {
-            StackTraceUtils.printSanitizedStackTrace(e);
+            LOG.info("putFile", e);
             throw new IllegalArgumentException("上传文件到oss 错误");
         }
 
@@ -132,7 +134,7 @@ public class AliyunOssUtils {
             URL url = ossClient.generatePresignedUrl(bucketName, key, expiration);
             return url.toString();
         } catch (Exception e) {
-            StackTraceUtils.printSanitizedStackTrace(e);
+            LOG.info("generatePresignedUrl", e);
             throw new IllegalArgumentException("获取oss 文件错误");
         }
     }

@@ -1,7 +1,6 @@
 package com.github.wangji92.arthas.plugin.utils;
 
 import com.intellij.openapi.diagnostic.Logger;
-import org.codehaus.groovy.runtime.StackTraceUtils;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -49,7 +48,7 @@ public class JedisUtils {
         try {
             jedis.ping();
         } catch (Exception e) {
-            StackTraceUtils.printSanitizedStackTrace(e);
+            LOG.error("checkRedisClient",e);
             throw new IllegalArgumentException("配置redis信息错误 " + e.getMessage());
         }
     }
