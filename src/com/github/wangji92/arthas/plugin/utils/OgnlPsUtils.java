@@ -561,7 +561,7 @@ public class OgnlPsUtils {
             LOG.info("[arthas] IndexNotReadyException get is enum  error", e);
             return false;
         } catch (Exception e) {
-            LOG.error("[arthas] get is enum  error", e);
+            LOG.info("[arthas] get is enum  error", e);
         }
 
         return false;
