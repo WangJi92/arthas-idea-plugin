@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.33</version>
+    <version>2.34</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.34-RELEASE</p>
+      <ul>
+        <li>fix some bug in 2021.3</li>
+      </ul>
+       <ul>
+        <li>fix some bug in 2021.3</li>
+      </ul>
      <p>2.33-RELEASE</p>
       <ul>
         <li>add command support for enum <a href="https://www.yuque.com/arthas-idea-plugin/help/su8l44"> more info </a></li>
