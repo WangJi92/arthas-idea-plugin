@@ -49,8 +49,11 @@ public class ClipboardUtils {
         try {
             // 获取系统剪贴板
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            // 将中文转换为 unicode  这里写法
+            // https://github.com/alibaba/arthas/blob/master/site/src/site/sphinx/faq.md#%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87unicode%E5%AD%97%E7%AC%A6
+            String command = ChineseUnicodeConvert.chineseToUnicode(text);
             // 封装文本内容
-            Transferable trans = new StringSelection(text);
+            Transferable trans = new StringSelection(command);
             // 把文本内容设置到系统剪贴板
             clipboard.setContents(trans, null);
         } catch (Exception e) {
