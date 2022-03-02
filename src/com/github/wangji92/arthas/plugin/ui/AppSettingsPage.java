@@ -215,6 +215,14 @@ public class AppSettingsPage implements Configurable {
      * 语雀知识库链接
      */
     private LinkLabel arthasYuQueDocumentLink;
+    /**
+     * 自动转换为中文编码
+     */
+    private JRadioButton autoToUnicodeRadioButton;
+    /**
+     * 自动将中文转换为 unicode 编码
+     */
+    private LinkLabel howToInputChinseParamLink;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -258,6 +266,7 @@ public class AppSettingsPage implements Configurable {
         this.arthasIdeaGithubLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin");
         this.arthasIdeaDemoLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-plugin-demo");
         this.arthasYuQueDocumentLink = ActionLinkUtils.newActionLink("https://www.yuque.com/arthas-idea-plugin");
+        this.howToInputChinseParamLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/blob/master/site/src/site/sphinx/faq.md#%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87unicode%E5%AD%97%E7%AC%A6");
 
     }
 
@@ -287,7 +296,8 @@ public class AppSettingsPage implements Configurable {
                 || manualSelectPidRadioButton.isSelected() != settings.manualSelectPid
                 || !arthasPackageZipDownloadUrlTextField.getText().equalsIgnoreCase(settings.arthasPackageZipDownloadUrl)
                 || !mybatisMapperReloadMethodNameTextField.getText().equalsIgnoreCase(settings.mybatisMapperReloadMethodName)
-                || !mybatisMapperReloadServiceBeanNameTextField.getText().equalsIgnoreCase(settings.mybatisMapperReloadServiceBeanName);
+                || !mybatisMapperReloadServiceBeanNameTextField.getText().equalsIgnoreCase(settings.mybatisMapperReloadServiceBeanName)
+                || autoToUnicodeRadioButton.isSelected() != settings.autoToUnicode;
 
         if (modify) {
             return modify;
@@ -355,6 +365,8 @@ public class AppSettingsPage implements Configurable {
         settings.redefineBeforeCompile = redefineBeforeCompileRadioButton.isSelected();
         settings.printConditionExpress = printConditionExpressRadioButton.isSelected();
         settings.arthasPackageZipDownloadUrl = arthasPackageZipDownloadUrlTextField.getText();
+        settings.autoToUnicode = autoToUnicodeRadioButton.isSelected();
+        PropertiesComponentUtils.setValue("autoToUnicode", autoToUnicodeRadioButton.isSelected() ? "y" : "n");
         // 设置到全局
         PropertiesComponentUtils.setValue("arthasPackageZipDownloadUrl", arthasPackageZipDownloadUrlTextField.getText());
         if (clipboardRadioButton.isSelected()) {
@@ -498,6 +510,7 @@ public class AppSettingsPage implements Configurable {
         hotRedefineDeleteFileRadioButton.setSelected(settings.hotRedefineDelete);
         redefineBeforeCompileRadioButton.setSelected(settings.redefineBeforeCompile);
         printConditionExpressRadioButton.setSelected(settings.printConditionExpress);
+        autoToUnicodeRadioButton.setSelected(settings.autoToUnicode);
         selectProjectNameTextField.setText(settings.selectProjectName);
 
         ossEndpointTextField.setText(settings.endpoint);
