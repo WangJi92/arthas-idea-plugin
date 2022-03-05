@@ -90,9 +90,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
-                return false;
-            }
             return OgnlPsUtils.isStaticField(context.getPsiElement());
         }
 
@@ -121,9 +118,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "watch non static field") {
         @Override
         public boolean support(CommandContext context) {
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
-                return false;
-            }
             return OgnlPsUtils.isNonStaticField(context.getPsiElement());
         }
 
@@ -152,9 +146,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "watch input/output parameter, return object,exception") {
         @Override
         public boolean support(CommandContext context) {
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
-                return false;
-            }
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
@@ -182,9 +173,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "trace the execution time of specified method invocation. ") {
         @Override
         public boolean support(CommandContext context) {
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
-                return false;
-            }
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
@@ -475,9 +463,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "display the stack trace for the specified class and method") {
         @Override
         public boolean support(CommandContext context) {
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
-                return false;
-            }
+
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
@@ -504,9 +490,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "monitor method execution statistics ") {
         @Override
         public boolean support(CommandContext context) {
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
-                return false;
-            }
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
@@ -695,9 +678,6 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
                 return false;
             }
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
-                return false;
-            }
             return OgnlPsUtils.isStaticMethod(context.getPsiElement());
         }
 
@@ -729,9 +709,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
                 return false;
             }
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
-                return false;
-            }
+
             return OgnlPsUtils.isNonStaticMethod(context.getPsiElement());
         }
 

@@ -15,7 +15,7 @@ import com.intellij.psi.PsiElement;
  */
 public class ArthasWatchCommandAction extends BaseArthasPluginAction {
     public ArthasWatchCommandAction() {
-        this.setSupportEnum(false);
+        this.setSupportEnum(true);
     }
 
     @Override

@@ -12,7 +12,7 @@ import com.intellij.psi.PsiElement;
  */
 public class ArthasTraceMultipleClassMethodCommandAction extends BaseArthasPluginAction {
     public ArthasTraceMultipleClassMethodCommandAction() {
-        this.setSupportEnum(false);
+        this.setSupportEnum(true);
     }
 
     @Override

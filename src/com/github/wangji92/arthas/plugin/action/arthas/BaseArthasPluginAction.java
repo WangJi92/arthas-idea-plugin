@@ -42,11 +42,11 @@ public abstract class BaseArthasPluginAction extends AnAction {
         }
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
-            final boolean psiElementInEnum = OgnlPsUtils.psiElementInEnum(psiElement);
-            if(Boolean.FALSE.equals(getSupportEnum()) && psiElementInEnum){
-                e.getPresentation().setEnabled(false);
-                return;
-            }
+//            final boolean psiElementInEnum = OgnlPsUtils.psiElementInEnum(psiElement);
+//            if(Boolean.FALSE.equals(getSupportEnum()) && psiElementInEnum){
+//                e.getPresentation().setEnabled(false);
+//                return;
+//            }
             e.getPresentation().setEnabled(true);
             return;
         }

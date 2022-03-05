@@ -16,7 +16,7 @@ import com.intellij.psi.PsiElement;
 public class ArthasTraceCommandAction extends BaseArthasPluginAction {
 
     public ArthasTraceCommandAction() {
-        this.setSupportEnum(false);
+        this.setSupportEnum(true);
     }
 
     @Override

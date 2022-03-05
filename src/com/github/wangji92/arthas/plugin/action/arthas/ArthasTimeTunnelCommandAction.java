@@ -14,7 +14,7 @@ import com.intellij.psi.PsiElement;
  */
 public class ArthasTimeTunnelCommandAction extends BaseArthasPluginAction {
     public ArthasTimeTunnelCommandAction() {
-        this.setSupportEnum(false);
+        this.setSupportEnum(true);
     }
 
     @Override
