@@ -16,7 +16,7 @@ import com.intellij.psi.PsiElement;
 public class ArthasMonitorCommandAction extends BaseArthasPluginAction {
 
     public ArthasMonitorCommandAction() {
-        this.setSupportEnum(false);
+        this.setSupportEnum(true);
     }
 
     @Override

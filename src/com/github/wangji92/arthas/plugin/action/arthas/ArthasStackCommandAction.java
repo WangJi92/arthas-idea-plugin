@@ -18,7 +18,7 @@ import com.intellij.psi.PsiElement;
 public class ArthasStackCommandAction extends BaseArthasPluginAction {
 
     public ArthasStackCommandAction() {
-        this.setSupportEnum(false);
+        this.setSupportEnum(true);
     }
 
     @Override
