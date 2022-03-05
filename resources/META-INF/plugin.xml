@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.35</version>
+    <version>2.36</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,12 +42,16 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.36-RELEASE</p>
+      <ul>
+        <li>support for enum  before is disable for watch & tt & trace <a href="https://mp.weixin.qq.com/s?__biz=MzkxNDI0ODE0NQ==&mid=2247484030&idx=1&sn=d5314772a68f587b45ff550a11224c51&chksm=c1701ac0f60793d624bcda54340e61f78587bd8081c76417d9a7e3ea547cc40305a9f00e8410&scene=178&cur_album_id=1896318852766973955#rd">arthas 3.5.6</a></li>
+      </ul>
     <p>2.35-RELEASE</p>
       <ul>
-        <li>support input chinese auto convert to unicode <a href="https://github.com/alibaba/arthas/blob/master/site/src/site/sphinx/faq.md#%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87unicode%E5%AD%97%E7%AC%A6">link</a></li>
+        <li>support input chinese auto convert to unicode <a href="https://arthas.aliyun.com/doc/faq.html#unicode">link</a></li>
       </ul>
        <ul>
-        <li>支持输入的中文字符串自动转化为unicode编码<a href="https://github.com/alibaba/arthas/blob/master/site/src/site/sphinx/faq.md#%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87unicode%E5%AD%97%E7%AC%A6">官方的使用链接</a></li>
+        <li>支持输入的中文字符串自动转化为unicode编码<a href="https://arthas.aliyun.com/doc/faq.html#unicode">官方的使用链接</a></li>
       </ul>
      <p>2.34-RELEASE</p>
       <ul>
@@ -312,7 +316,7 @@
     <!--        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>-->
     <!--    </extensions>-->
 
-    <depends>com.intellij.modules.platform</depends>
+<!--    <depends>com.intellij.modules.platform</depends>-->
 
     <!--    Plugin uses classes of Java plugin, for example-->
     <!--    'JvmAnnotatedElement' is used at 'JvmModifiersOwner'-->
