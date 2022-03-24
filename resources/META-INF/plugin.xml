@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.36</version>
+    <version>2.37</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.37-RELEASE</p>
+      <ul>
+        <li>fix <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/74"> issue 74</a></li>
+      </ul>
      <p>2.36-RELEASE</p>
       <ul>
         <li>support for enum  before is disable for watch & tt & trace <a href="https://mp.weixin.qq.com/s?__biz=MzkxNDI0ODE0NQ==&mid=2247484030&idx=1&sn=d5314772a68f587b45ff550a11224c51&chksm=c1701ac0f60793d624bcda54340e61f78587bd8081c76417d9a7e3ea547cc40305a9f00e8410&scene=178&cur_album_id=1896318852766973955#rd">arthas 3.5.6</a></li>

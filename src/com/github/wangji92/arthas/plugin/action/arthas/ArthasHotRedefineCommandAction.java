@@ -67,7 +67,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             e.getPresentation().setEnabled(false);
             return;
         }
-        List<PsiFile> psiFileJavaFiles = Arrays.stream(virtualFileFiles).map(PsiManager.getInstance(project)::findFile).filter(psiFileElement -> psiFileElement instanceof PsiJavaFile && !OgnlPsUtils.psiElementInEnum(psiFileElement)).collect(Collectors.toList());
+        List<PsiFile> psiFileJavaFiles = Arrays.stream(virtualFileFiles).map(PsiManager.getInstance(project)::findFile).filter(psiFileElement -> psiFileElement instanceof PsiJavaFile).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(psiFileJavaFiles)) {
             e.getPresentation().setEnabled(true);
             return;
