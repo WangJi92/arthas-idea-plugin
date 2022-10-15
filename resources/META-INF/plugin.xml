@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.37</version>
+    <version>2.38</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.38-RELEASE</p>
+      <ul>
+        <li>Optimize whether the high-frequency command vmtool is displayed</li>
+        <li>add install command [ curl -L "https://arthas.aliyun.com/as.sh" >as.sh; chmod a+x as.sh; ./as.sh ]</li>
+      </ul>
      <p>2.37-RELEASE</p>
       <ul>
         <li>fix <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/74"> issue 74</a></li>
@@ -372,9 +377,14 @@
 
         <action id="ArthasInstallCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasInstallCommandAction"
-                text="Mac or Linux Install Alias as.sh"
+                text="Install Arthas-Boot.Jar Alias as.sh"
                 description="Arthas install shell">
 
+        </action>
+        <action id="ArthasInstall2Command"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasInstall2CommandAction"
+                text="Install as.sh"
+                description="Arthas install in current dir">
         </action>
 
         <action id="ArthasHelpCommand" class="com.github.wangji92.arthas.plugin.action.arthas.HelpAction"
@@ -582,6 +592,7 @@
                 <reference ref="ArthasVmOptionCommandAction"/>
                 <reference ref="LocalFileUploadToOssAction"/>
             </group>
+            <reference ref="ArthasInstall2Command"/>
             <reference ref="ArthasInstallCommand"/>
             <reference ref="ArthasSpecial"/>
             <separator/>
@@ -641,6 +652,7 @@
                 <reference ref="LocalFileUploadToOssAction"/>
             </group>
             <separator/>
+            <reference ref="ArthasInstall2Command"/>
             <reference ref="ArthasInstallCommand"/>
             <reference ref="ArthasSpecial"/>
             <separator/>
