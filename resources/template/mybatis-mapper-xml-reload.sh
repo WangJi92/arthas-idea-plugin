@@ -13,6 +13,7 @@ getMybatisMapperReloadCommandResult() {
   local mybatisMapperReloadCommandResult=$(cat $HOME/opt/arthas/mybatisMapperXmlReloadResult.out | grep -E "@Boolean\[true\]")
   if [ -z "$mybatisMapperReloadCommandResult" ]; then
     banner_simple $(echo $(tput setaf 1)arthas idea plugin mybatis mapper xml reload error $(tput sgr0))
+    exit 1
   else
     banner_simple "arthas idea plugin mybatis mapper xml reload success"
   fi
