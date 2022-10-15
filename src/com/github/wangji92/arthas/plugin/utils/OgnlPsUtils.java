@@ -799,6 +799,16 @@ public class OgnlPsUtils {
         return psiElement instanceof PsiField || psiElement instanceof PsiClass || psiElement instanceof PsiMethod || psiElement instanceof PsiJavaFile;
     }
 
+    /**
+     * 当前为psi class
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean isPsiClass(PsiElement psiElement) {
+        return psiElement instanceof PsiClass || psiElement instanceof PsiJavaFile;
+    }
+
 
     /**
      * 获取ContainingPsiJavaFile

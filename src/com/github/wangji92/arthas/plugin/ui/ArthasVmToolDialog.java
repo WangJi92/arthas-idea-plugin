@@ -4,10 +4,7 @@ import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
-import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
-import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
+import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
@@ -56,7 +53,17 @@ public class ArthasVmToolDialog extends JDialog {
         classloaderHashValuetextField.setText(classloaderHash);
 
         invokeCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INVOKE);
+
+        // vmtool 使用的比较多，在各种地方都可以弹出来.. 不然使用不方便
+        if (OgnlPsUtils.isConstructor(commandContext.getPsiElement()) ||
+                OgnlPsUtils.isStaticMethodOrField(commandContext.getPsiElement())
+                || OgnlPsUtils.isPsiClass(commandContext.getPsiElement())) {
+            //构造方法、静态方法 这里特殊处理一下 将后面的text 全部干掉
+            invokeCommand = invokeCommand.substring(0, invokeCommand.indexOf("'instances[0].")) + "'instances[0]'";
+        }
+
         vmToolExpressTextField.setText(invokeCommand);
+
         instancesCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INSTANCE);
 
         copyCommandButton.addActionListener(new ActionListener() {

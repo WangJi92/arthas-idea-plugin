@@ -34,12 +34,7 @@ public class ArthasVmtoolCommandAction extends AnAction {
             e.getPresentation().setEnabled(false);
             return;
         }
-        // 构造方法不支持
-        if (OgnlPsUtils.isConstructor(psiElement)) {
-            e.getPresentation().setEnabled(false);
-            return;
-        }
-        if (OgnlPsUtils.isNonStaticMethodOrField(psiElement)) {
+        if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
             e.getPresentation().setEnabled(true);
             return;
         }
