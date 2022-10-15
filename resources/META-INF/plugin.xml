@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.32</version>
+    <version>2.37</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,35 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.37-RELEASE</p>
+      <ul>
+        <li>fix <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/74"> issue 74</a></li>
+      </ul>
+     <p>2.36-RELEASE</p>
+      <ul>
+        <li>support for enum  before is disable for watch & tt & trace <a href="https://mp.weixin.qq.com/s?__biz=MzkxNDI0ODE0NQ==&mid=2247484030&idx=1&sn=d5314772a68f587b45ff550a11224c51&chksm=c1701ac0f60793d624bcda54340e61f78587bd8081c76417d9a7e3ea547cc40305a9f00e8410&scene=178&cur_album_id=1896318852766973955#rd">arthas 3.5.6</a></li>
+      </ul>
+    <p>2.35-RELEASE</p>
+      <ul>
+        <li>support input chinese auto convert to unicode <a href="https://arthas.aliyun.com/doc/faq.html#unicode">link</a></li>
+      </ul>
+       <ul>
+        <li>支持输入的中文字符串自动转化为unicode编码<a href="https://arthas.aliyun.com/doc/faq.html#unicode">官方的使用链接</a></li>
+      </ul>
+     <p>2.34-RELEASE</p>
+      <ul>
+        <li>fix some bug in 2021.3</li>
+      </ul>
+       <ul>
+        <li>fix some bug in 2021.3</li>
+      </ul>
+     <p>2.33-RELEASE</p>
+      <ul>
+        <li>add command support for enum <a href="https://www.yuque.com/arthas-idea-plugin/help/su8l44"> more info </a></li>
+      </ul>
+       <ul>
+        <li>增加对于枚举类型的支持 <a href="https://www.yuque.com/arthas-idea-plugin/help/su8l44"> 更多查看 </a></li>
+      </ul>
     <p>2.32-RELEASE</p>
       <ul>
         <li>add reflection to modify variables in quickly shell command,and add sc command</li>
@@ -291,7 +320,7 @@
     <!--        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>-->
     <!--    </extensions>-->
 
-    <depends>com.intellij.modules.platform</depends>
+<!--    <depends>com.intellij.modules.platform</depends>-->
 
     <!--    Plugin uses classes of Java plugin, for example-->
     <!--    'JvmAnnotatedElement' is used at 'JvmModifiersOwner'-->
@@ -319,7 +348,7 @@
                 description="Arthas trace">
         </action>
         <action id="ArthasStatic" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
-                text="Ognl To Get Static Method Field"
+                text="Ognl Get Static Method Field"
                 description="Arthas ognl static">
         </action>
         <action id="ArthasSimpleGetStaticCommand"
@@ -378,7 +407,7 @@
         </action>
         <action id="ArthasSetStaticFieldCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSetStaticFieldCommandAction"
-                text="Reflect To Modify Static Field"
+                text="Ognl Modify Static Field"
                 description="Ognl set static field">
 
         </action>
@@ -523,6 +552,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasIdeaOpenConfigPageAction"
                 text="Setting Arthas Idea Plugin"
                 description="Setting arthas idea"/>
+        <action id="ArthasOgnlEnumAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlEnumAction"
+                text="Ognl Invoke for Enum"
+                description="Ognl invoke for enum"/>
 
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
@@ -579,6 +612,7 @@
             <reference ref="ArthasSimpleGetStaticCommand"/>
             <reference ref="ArthasStatic"/>
             <reference ref="ArthasSetStaticFieldCommand"/>
+            <reference ref="ArthasOgnlEnumAction"/>
             <reference ref="ArthasOgnlStaticGrammaticalStructureCommandAction"/>
             <separator text="*  Spring Properties Priority"/>
             <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>

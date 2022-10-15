@@ -14,6 +14,22 @@ import org.jetbrains.annotations.NotNull;
  * @date 21-12-2019
  */
 public abstract class BaseArthasPluginAction extends AnAction {
+    /**
+     * 是否支持 枚举
+     */
+    private Boolean supportEnum = true;
+
+    public Boolean getSupportEnum() {
+        return supportEnum;
+    }
+
+    public void setSupportEnum(Boolean supportEnum) {
+        this.supportEnum = supportEnum;
+    }
+
+    public BaseArthasPluginAction() {
+    }
+
 
     @Override
     public void update(@NotNull AnActionEvent e) {
@@ -26,6 +42,11 @@ public abstract class BaseArthasPluginAction extends AnAction {
         }
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         if (OgnlPsUtils.isPsiFieldOrMethodOrClass(psiElement)) {
+//            final boolean psiElementInEnum = OgnlPsUtils.psiElementInEnum(psiElement);
+//            if(Boolean.FALSE.equals(getSupportEnum()) && psiElementInEnum){
+//                e.getPresentation().setEnabled(false);
+//                return;
+//            }
             e.getPresentation().setEnabled(true);
             return;
         }

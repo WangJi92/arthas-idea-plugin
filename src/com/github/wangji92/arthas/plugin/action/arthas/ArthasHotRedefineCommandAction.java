@@ -279,7 +279,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
         } else {
             //  https://blog.csdn.net/weixin_34223655/article/details/88112593
             // PsiFile 转 VirtualFile
-            List<PsiFile> psiFileJavaFiles = Arrays.stream(virtualFileFiles).map(PsiManager.getInstance(project)::findFile).filter(psiFileElement -> psiFileElement instanceof PsiJavaFile).collect(Collectors.toList());
+            List<PsiFile> psiFileJavaFiles = Arrays.stream(virtualFileFiles).map(PsiManager.getInstance(project)::findFile).filter(psiFileElement -> psiFileElement instanceof PsiJavaFile && !OgnlPsUtils.psiElementInEnum(psiElement)).collect(Collectors.toList());
 
             if (CollectionUtils.isEmpty(psiFileJavaFiles)) {
                 NotifyUtils.notifyMessage(project, "请选择.java 先编译 Control /Command F9 编译 或者 .class文件", NotificationType.ERROR);

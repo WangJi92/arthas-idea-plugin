@@ -367,6 +367,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (className.startsWith("java.")) {
                 return false;
             }
+            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
+                return false;
+            }
             return OgnlPsUtils.isNonStaticMethodOrField(context.getPsiElement());
         }
 
@@ -416,6 +419,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (!OgnlPsUtils.isNonStaticMethodOrField(context.getPsiElement())) {
                 return false;
             }
+            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
+                return false;
+            }
             // 含有set 字段的方法
             if (context.getPsiElement() instanceof PsiField) {
                 PsiField psiField = (PsiField) context.getPsiElement();
@@ -457,6 +463,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             "display the stack trace for the specified class and method") {
         @Override
         public boolean support(CommandContext context) {
+
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
         }
 
@@ -702,6 +709,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
                 return false;
             }
+
             return OgnlPsUtils.isNonStaticMethod(context.getPsiElement());
         }
 

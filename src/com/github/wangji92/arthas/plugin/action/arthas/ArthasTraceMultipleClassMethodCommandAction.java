@@ -11,6 +11,9 @@ import com.intellij.psi.PsiElement;
  * @date 03-01-2020
  */
 public class ArthasTraceMultipleClassMethodCommandAction extends BaseArthasPluginAction {
+    public ArthasTraceMultipleClassMethodCommandAction() {
+        this.setSupportEnum(true);
+    }
 
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {

@@ -56,6 +56,10 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction extends AnAction {
             e.getPresentation().setEnabled(false);
             return;
         }
+        if (OgnlPsUtils.psiElementInEnum(psiElement)) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
         if (OgnlPsUtils.isNonStaticMethodOrField(psiElement)) {
             e.getPresentation().setEnabled(true);
             return;

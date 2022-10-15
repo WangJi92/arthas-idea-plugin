@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="1474" height="714"/>
+      <xy x="20" y="20" width="1479" height="806"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -19,7 +19,7 @@
         </properties>
         <border type="etched"/>
         <children>
-          <grid id="a5445" binding="basicSettingPane" layout-manager="GridLayoutManager" row-count="11" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a5445" binding="basicSettingPane" layout-manager="GridLayoutManager" row-count="12" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <tabbedpane title="Basic Setting"/>
@@ -39,7 +39,7 @@
               </component>
               <vspacer id="c6b4f">
                 <constraints>
-                  <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="2e7dc" class="com.intellij.ui.components.labels.LinkLabel" binding="springContextProviderLink" custom-create="true">
@@ -216,6 +216,31 @@
                 </constraints>
                 <properties>
                   <text value="arthas idea plugin yuqu document"/>
+                </properties>
+              </component>
+              <component id="13d23" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Auto Convert Chinese To Unicode"/>
+                  <toolTipText value="输入参数为中文自动转换为unicode 编码"/>
+                </properties>
+              </component>
+              <component id="5a3a" class="com.intellij.ui.components.labels.LinkLabel" binding="howToInputChinseParamLink" custom-create="true">
+                <constraints>
+                  <grid row="10" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="How To Input Chinese Param Link"/>
+                </properties>
+              </component>
+              <component id="5ee4e" class="javax.swing.JRadioButton" binding="autoToUnicodeRadioButton" default-binding="true">
+                <constraints>
+                  <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Auto To Unicode"/>
                 </properties>
               </component>
             </children>

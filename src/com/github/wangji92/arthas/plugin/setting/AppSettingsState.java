@@ -182,8 +182,24 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     public String scriptDialogCloseWhenSelectedCommand = "y";
 
+    /**
+     * 自动转换为 Unicode 编码将中文信息
+     */
+    public boolean autoToUnicode = true;
+
+    /**
+     * 获取工程的名称
+     * @return
+     */
+    public static Project getProject(){
+        return projectInfo;
+    }
+
+    private static  Project projectInfo;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
+        projectInfo = project;
         AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
         // 检测全局的static spring context
         checkGlobalStaticSpringContextAndSettingCurrentProjectIfEmpty(appSettingsState);
@@ -206,6 +222,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
          * 检查快捷脚本是否关闭窗口
          */
         checkGlobalScriptDialogCloseWhenSelectedCommand(appSettingsState);
+
+        checkGlobalAutoToUnicode(appSettingsState);
+
         return appSettingsState;
     }
 
@@ -243,6 +262,18 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
                 appSettingsState.hotRedefineRedis = false;
                 appSettingsState.aliYunOss = false;
             }
+        }
+    }
+
+    /**
+     * 使用全局的配置  自动转换为 Unicode 编码将中文信息
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalAutoToUnicode(AppSettingsState appSettingsState) {
+        String autoToUnicode = PropertiesComponentUtils.getValue("autoToUnicode");
+        if (StringUtils.isNotBlank(autoToUnicode)) {
+            appSettingsState.autoToUnicode = "y".equals(autoToUnicode);
         }
     }
 

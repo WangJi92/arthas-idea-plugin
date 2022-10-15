@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -37,6 +38,7 @@ public class ArthasSpecialDialog extends JDialog {
     private LinkLabel arthasBestUnderStand;
     private LinkLabel arthasJprofileLink;
     private LinkLabel springAopTarget;
+    private LinkLabel arthasVersionLink;
 
     private Project project;
 
@@ -167,6 +169,9 @@ public class ArthasSpecialDialog extends JDialog {
             }
         });
         springAopTarget.setPaintUnderline(false);
+
+        arthasVersionLink = ActionLinkUtils.newActionLink("https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkxNDI0ODE0NQ==&action=getalbum&album_id=1896318852766973955&scene=173&from_msgid=2247484030&from_itemidx=1&count=3&nolastread=1#wechat_redirect");
+
     }
 
     /**

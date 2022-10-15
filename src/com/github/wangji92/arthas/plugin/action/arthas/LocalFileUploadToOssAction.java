@@ -10,6 +10,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -18,7 +19,6 @@ import com.intellij.openapi.progress.Task.Backgroundable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.groovy.runtime.StackTraceUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -32,6 +32,8 @@ import java.util.UUID;
  * @date 20-08-2020
  */
 public class LocalFileUploadToOssAction extends AnAction {
+
+    private static final Logger LOG = Logger.getInstance(LocalFileUploadToOssAction.class);
 
     public static final String OSS_UP_LOAD_FILE = "curl -Lk  \"%s\" > \"%s\"";
 
@@ -84,7 +86,7 @@ public class LocalFileUploadToOssAction extends AnAction {
                 ClipboardUtils.setClipboardString(command);
                 NotifyUtils.notifyMessage(project, "linux shell command has been copied to the clipboard Go to the server and paste it");
             } catch (Exception e) {
-                StackTraceUtils.printSanitizedStackTrace(e);
+                LOG.info("upload to oss error",e);
                 NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
                 return;
             } finally {

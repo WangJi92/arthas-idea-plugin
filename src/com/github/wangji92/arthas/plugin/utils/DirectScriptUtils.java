@@ -5,7 +5,6 @@ import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import org.codehaus.groovy.runtime.StackTraceUtils;
 import redis.clients.jedis.Jedis;
 
 import java.util.Date;
@@ -178,7 +177,6 @@ public class DirectScriptUtils {
         } catch (Exception e) {
             LOG.error("upload to oss error", e);
             NotifyUtils.notifyMessage(project, "Failed to upload file to OSS" + e.getMessage(), NotificationType.ERROR);
-            StackTraceUtils.printSanitizedStackTrace(e);
             result = false;
         } finally {
             if (oss != null) {
