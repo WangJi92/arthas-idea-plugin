@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -36,7 +37,7 @@ public class OsS3Utils {
      *
      * @return
      */
-    public static AmazonS3 buildOssClient(String endpoint, String accessKeyId, String accessKeySecret, String bucketName, String region, String directoryPrefix) {
+    public static AmazonS3 buildS3Client(String endpoint, String accessKeyId, String accessKeySecret, String bucketName, String region, String directoryPrefix) {
         if (StringUtils.isBlank(endpoint)) {
             throw new IllegalArgumentException("配置arthas os s3 endpoint Error");
         }
@@ -64,12 +65,13 @@ public class OsS3Utils {
                 .build();
     }
 
-    public static AmazonS3 buildOssClient(Project project) {
+    public static AmazonS3 buildS3Client(Project project) {
         AppSettingsState instance = AppSettingsState.getInstance(project);
         if (!instance.awsS3) {
             throw new IllegalArgumentException("配置arthas idea plugin Hot Redefine Setting 阿里云oss");
         }
-        return buildOssClient(instance.endpoint, instance.accessKeyId, instance.accessKeySecret, instance.bucketName, "", instance.directoryPrefix);
+        return buildS3Client(instance.s3Endpoint, instance.s3AccessKeyId, instance.s3AccessKeySecret, instance.s3BucketName, instance.s3Region,
+                instance.s3DirectoryPrefix);
     }
 
     /**
@@ -81,10 +83,7 @@ public class OsS3Utils {
     public static void checkBuckNameExist(String bucketName, AmazonS3 s3Client) {
         // 检查是否存在
         try {
-            boolean bucketExistV2 = s3Client.doesBucketExistV2(bucketName);
-            if (!bucketExistV2) {
-                throw new IllegalArgumentException("配置s3 无法获取 bucketName");
-            }
+            putFile(s3Client, bucketName, "arthas/" + UUID.randomUUID().toString(), "this is test");
         } catch (Exception e) {
             LOG.info("checkBuckNameExist", e);
             throw new IllegalArgumentException("配置s3 无法获取 bucketName " + e.getMessage());
@@ -111,7 +110,7 @@ public class OsS3Utils {
             s3.putObject(putObjectRequest);
         } catch (Exception e) {
             LOG.info("putFile", e);
-            throw new IllegalArgumentException("上传文件到对象存储错误",e);
+            throw new IllegalArgumentException("上传文件到对象存储错误", e);
         }
 
         return urlEncodeKeyPath;
