@@ -19,7 +19,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
-import java.util.UUID;
 
 
 /**
@@ -83,10 +82,12 @@ public class OsS3Utils {
     public static void checkBuckNameExist(String bucketName, AmazonS3 s3Client) {
         // 检查是否存在
         try {
-            putFile(s3Client, bucketName, "arthas/" + UUID.randomUUID().toString(), "this is test");
+            if (!s3Client.doesBucketExistV2(bucketName)) {
+                throw new IllegalArgumentException("s3 bucketName not found");
+            }
         } catch (Exception e) {
             LOG.info("checkBuckNameExist", e);
-            throw new IllegalArgumentException("配置s3 无法获取 bucketName " + e.getMessage());
+            throw new IllegalArgumentException("s3 bucketName not found" + e.getMessage());
         }
     }
 
@@ -148,7 +149,7 @@ public class OsS3Utils {
             return url.toString();
         } catch (Exception e) {
             LOG.info("generatePresignedUrl", e);
-            throw new IllegalArgumentException("获取对象存储 文件错误");
+            throw new IllegalArgumentException("generatePresignedUrl error",e);
         }
     }
 

@@ -537,7 +537,7 @@
 
         <action id="LocalFileUploadToOssAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.LocalFileUploadToOssAction"
-                text="Local File Upload To Oss"
+                text="Local File Upload To Object Storage"
                 description="LocalFileUploadToOssAction">
         </action>
 
