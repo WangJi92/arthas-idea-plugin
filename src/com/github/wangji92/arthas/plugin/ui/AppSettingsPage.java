@@ -94,11 +94,11 @@ public class AppSettingsPage implements Configurable {
     /**
      * oss 配置信息 AccessKeyId
      */
-    private JPasswordField ossAccessKeyIdPasswordField;
+    private JTextField ossAccessKeyIdPasswordField;
     /**
      * oss 配置信息 AccessKeySecret
      */
-    private JPasswordField ossAccessKeySecretPasswordField;
+    private JTextField ossAccessKeySecretPasswordField;
     /**
      * oss 配置信息 DirectoryPrefix
      */
@@ -162,7 +162,7 @@ public class AppSettingsPage implements Configurable {
     /**
      * redis 密码
      */
-    private JPasswordField redisPasswordField;
+    private JTextField redisPasswordField;
     /**
      * redis 检测 button
      */
@@ -229,9 +229,9 @@ public class AppSettingsPage implements Configurable {
 
     private JTextField s3EndPointField;
 
-    private JPasswordField s3AkField;
+    private JTextField s3AkField;
 
-    private JPasswordField s3SkField;
+    private JTextField s3SkField;
 
     private JTextField s3BucketNameField;
 
@@ -327,16 +327,16 @@ public class AppSettingsPage implements Configurable {
         }
         if (aliYunOssRadioButton.isSelected()) {
             modify = !settings.endpoint.equals(ossEndpointTextField.getText())
-                    || !settings.accessKeyId.equals(String.valueOf(ossAccessKeyIdPasswordField.getPassword()))
-                    || !settings.accessKeySecret.equals(String.valueOf(ossAccessKeySecretPasswordField.getPassword()))
+                    || !settings.accessKeyId.equals(String.valueOf(ossAccessKeyIdPasswordField.getText()))
+                    || !settings.accessKeySecret.equals(String.valueOf(ossAccessKeySecretPasswordField.getText()))
                     || !settings.bucketName.equals(ossBucketNameTextField.getText())
                     || !settings.directoryPrefix.equals(ossDirectoryPrefixTextField.getText());
         }
 
         if (s3RadioButton.isSelected()) {
             modify = !settings.s3Endpoint.equals(s3EndPointField.getText())
-                    || !settings.s3AccessKeyId.equals(String.valueOf(s3AkField.getPassword()))
-                    || !settings.s3AccessKeySecret.equals(String.valueOf(s3SkField.getPassword()))
+                    || !settings.s3AccessKeyId.equals(String.valueOf(s3AkField.getText()))
+                    || !settings.s3AccessKeySecret.equals(String.valueOf(s3SkField.getText()))
                     || !settings.s3BucketName.equals(s3BucketNameField.getText())
                     || !settings.s3Region.equals(s3RegionField.getText())
                     || !settings.s3DirectoryPrefix.equals(s3DirPrefixField.getText());
@@ -345,7 +345,7 @@ public class AppSettingsPage implements Configurable {
         if (redisRadioButton.isSelected()) {
             modify = !settings.redisAddress.equals(redisAddressTextField.getText())
                     || !settings.redisPort.equals((redisPortField.getValue()))
-                    || !settings.redisAuth.equals(String.valueOf(redisPasswordField.getPassword()))
+                    || !settings.redisAuth.equals(String.valueOf(redisPasswordField.getText()))
                     || !settings.redisCacheKey.equals(redisCacheKeyTextField.getText())
                     || !settings.redisCacheKeyTtl.equals(redisCacheKeyTtl.getValue());
         }
@@ -477,11 +477,11 @@ public class AppSettingsPage implements Configurable {
         if (StringUtils.isBlank(redisCacheKeyTextField.getText())) {
             settings.redisCacheKey = "arthasIdeaPluginRedefineCacheKey";
         }
-        try (Jedis jedis = JedisUtils.buildJedisClient(redisAddressTextField.getText(), (Integer) redisPortField.getValue(), 5000, String.valueOf(redisPasswordField.getPassword()));) {
+        try (Jedis jedis = JedisUtils.buildJedisClient(redisAddressTextField.getText(), (Integer) redisPortField.getValue(), 5000, String.valueOf(redisPasswordField.getText()));) {
             JedisUtils.checkRedisClient(jedis);
             settings.redisAddress = redisAddressTextField.getText();
             settings.redisPort = (Integer) redisPortField.getValue();
-            settings.redisAuth = String.valueOf(redisPasswordField.getPassword());
+            settings.redisAuth = String.valueOf(redisPasswordField.getText());
             settings.hotRedefineRedis = true;
             settings.aliYunOss = false;
             settings.awsS3 = false;
@@ -505,11 +505,11 @@ public class AppSettingsPage implements Configurable {
     private void saveAliyunOssConfig(StringBuilder error) {
         OSS oss = null;
         try {
-            oss = AliyunOssUtils.buildOssClient(ossEndpointTextField.getText(), String.valueOf(ossAccessKeyIdPasswordField.getPassword()), String.valueOf(ossAccessKeySecretPasswordField.getPassword()), ossBucketNameTextField.getText(), ossDirectoryPrefixTextField.getText());
+            oss = AliyunOssUtils.buildOssClient(ossEndpointTextField.getText(), String.valueOf(ossAccessKeyIdPasswordField.getText()), String.valueOf(ossAccessKeySecretPasswordField.getText()), ossBucketNameTextField.getText(), ossDirectoryPrefixTextField.getText());
             AliyunOssUtils.checkBuckNameExist(ossBucketNameTextField.getText(), oss);
             settings.endpoint = ossEndpointTextField.getText();
-            settings.accessKeyId = String.valueOf(ossAccessKeyIdPasswordField.getPassword());
-            settings.accessKeySecret = String.valueOf(ossAccessKeySecretPasswordField.getPassword());
+            settings.accessKeyId = String.valueOf(ossAccessKeyIdPasswordField.getText());
+            settings.accessKeySecret = String.valueOf(ossAccessKeySecretPasswordField.getText());
             settings.bucketName = ossBucketNameTextField.getText();
             settings.directoryPrefix = ossDirectoryPrefixTextField.getText();
             settings.aliYunOss = true;
@@ -544,15 +544,15 @@ public class AppSettingsPage implements Configurable {
         AmazonS3 s3 = null;
         try {
             s3 = OsS3Utils.buildS3Client(s3EndPointField.getText(),
-                    String.valueOf(s3AkField.getPassword()),
-                    String.valueOf(s3SkField.getPassword()),
+                    String.valueOf(s3AkField.getText()),
+                    String.valueOf(s3SkField.getText()),
                     s3BucketNameField.getText(),
                     s3RegionField.getText(),
                     s3DirPrefixField.getText());
             OsS3Utils.checkBuckNameExist(s3BucketNameField.getText(), s3);
             settings.s3Endpoint = s3EndPointField.getText();
-            settings.s3AccessKeyId = String.valueOf(s3AkField.getPassword());
-            settings.s3AccessKeySecret = String.valueOf(s3SkField.getPassword());
+            settings.s3AccessKeyId = String.valueOf(s3AkField.getText());
+            settings.s3AccessKeySecret = String.valueOf(s3SkField.getText());
             settings.s3BucketName = s3BucketNameField.getText();
             settings.s3DirectoryPrefix = s3DirPrefixField.getText();
             settings.s3Region = s3RegionField.getText();
@@ -664,7 +664,7 @@ public class AppSettingsPage implements Configurable {
         ossSettingCheckButton.addActionListener(e -> {
             OSS oss = null;
             try {
-                oss = AliyunOssUtils.buildOssClient(ossEndpointTextField.getText(), String.valueOf(ossAccessKeyIdPasswordField.getPassword()), String.valueOf(ossAccessKeySecretPasswordField.getPassword()), ossBucketNameTextField.getText(), ossDirectoryPrefixTextField.getText());
+                oss = AliyunOssUtils.buildOssClient(ossEndpointTextField.getText(), String.valueOf(ossAccessKeyIdPasswordField.getText()), String.valueOf(ossAccessKeySecretPasswordField.getText()), ossBucketNameTextField.getText(), ossDirectoryPrefixTextField.getText());
                 AliyunOssUtils.checkBuckNameExist(ossBucketNameTextField.getText(), oss);
                 oss.shutdown();
                 ossCheckMsgLabel.setText("oss setting check success");
@@ -683,8 +683,8 @@ public class AppSettingsPage implements Configurable {
             AmazonS3 s3 = null;
             try {
                 s3 = OsS3Utils.buildS3Client(s3EndPointField.getText(),
-                        String.valueOf(s3AkField.getPassword()),
-                        String.valueOf(s3SkField.getPassword()),
+                        String.valueOf(s3AkField.getText()),
+                        String.valueOf(s3SkField.getText()),
                         s3BucketNameField.getText(),
                         s3RegionField.getText(),
                         s3DirPrefixField.getText());
@@ -703,7 +703,7 @@ public class AppSettingsPage implements Configurable {
         });
 
         redisCheckConfigButton.addActionListener(e -> {
-            try (Jedis jedis = JedisUtils.buildJedisClient(redisAddressTextField.getText(), (Integer) redisPortField.getValue(), 5000, String.valueOf(redisPasswordField.getPassword()));) {
+            try (Jedis jedis = JedisUtils.buildJedisClient(redisAddressTextField.getText(), (Integer) redisPortField.getValue(), 5000, String.valueOf(redisPasswordField.getText()));) {
                 JedisUtils.checkRedisClient(jedis);
                 redisMessageLabel.setText("redis setting check success");
                 redisMessageLabel.setForeground(JBColor.BLACK);
