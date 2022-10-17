@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.utils;
 
 import com.aliyun.oss.OSS;
+import com.amazonaws.services.s3.AmazonS3;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
@@ -82,6 +83,8 @@ public class DirectScriptUtils {
     public static void buildDirectScript(Project project, AppSettingsState settings, String base64ShelText, String shellFileName, Consumer<DirectScriptResult> consumer) {
         if (settings.aliYunOss) {
             DirectScriptUtils.uploadBase64FileToOss(project, settings, base64ShelText, shellFileName, consumer);
+        } else if (settings.awsS3) {
+            DirectScriptUtils.uploadBase64FileToS3(project, settings, base64ShelText, shellFileName, consumer);
         } else if (settings.hotRedefineRedis) {
             DirectScriptUtils.uploadBase64FileToRedis(project, settings, base64ShelText, shellFileName, consumer);
         } else {
@@ -181,6 +184,43 @@ public class DirectScriptUtils {
         } finally {
             if (oss != null) {
                 oss.shutdown();
+            }
+        }
+
+        StringBuilder tipsBuilder = new StringBuilder("linux shell command has been copied to the clipboard Go to the server and paste it without open arthas");
+        DirectScriptResult directScriptResult = new DirectScriptResult();
+        directScriptResult.setResult(result);
+        directScriptResult.setTip(tipsBuilder);
+        consumer.accept(directScriptResult);
+    }
+
+    /**
+     * 上传热更新 文件到oss
+     *
+     * @param project
+     * @param settings
+     * @param base64RedefineSh
+     * @param shellFileName
+     * @param consumer
+     */
+    private static void uploadBase64FileToS3(Project project, AppSettingsState settings, String base64RedefineSh, String shellFileName, Consumer<DirectScriptResult> consumer) {
+        boolean result = true;
+        AmazonS3 s3 = null;
+        try {
+            s3 = OsS3Utils.buildS3Client(project);
+            String filePathKey = settings.s3DirectoryPrefix + UUID.randomUUID().toString();
+            String urlEncodeKeyPath = OsS3Utils.putFile(s3, settings.s3BucketName, filePathKey, base64RedefineSh);
+            String presignedUrl = OsS3Utils.generatePresignedUrl(s3, settings.s3BucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 3600L * 1000));
+            String command = String.format(OSS_HOT_REDEFINE, presignedUrl);
+            String finalCommand = String.format(BASE_64_TO_SHELL, command, shellFileName, shellFileName, shellFileName);
+            ClipboardUtils.setClipboardString(finalCommand);
+        } catch (Exception e) {
+            LOG.error("upload to s3 error", e);
+            NotifyUtils.notifyMessage(project, "Failed to upload file to s3" + e.getMessage(), NotificationType.ERROR);
+            result = false;
+        } finally {
+            if (s3 != null) {
+                s3.shutdown();
             }
         }
 
