@@ -111,7 +111,7 @@ public class DirectScriptUtils {
             LOG.error("upload  to clipboard error", e);
         }
         StringBuilder tipsBuilder = new StringBuilder("linux shell command has been copied to the clipboard Go to the server and paste it without open arthas");
-        tipsBuilder.append("[No storage configuration The execution script is long, recommend to configure Ali cloud oss or redis]");
+        tipsBuilder.append("[No storage configuration The execution script is long, recommend to configure Ali cloud oss or S3 or redis]");
 
         DirectScriptResult directScriptResult = new DirectScriptResult();
         directScriptResult.setResult(result);
