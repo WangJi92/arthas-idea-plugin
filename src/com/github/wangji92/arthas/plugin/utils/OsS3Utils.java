@@ -68,7 +68,7 @@ public class OsS3Utils {
     public static AmazonS3 buildS3Client(Project project) {
         AppSettingsState instance = AppSettingsState.getInstance(project);
         if (!instance.awsS3) {
-            throw new IllegalArgumentException("配置arthas idea plugin Hot Redefine Setting 阿里云oss");
+            throw new IllegalArgumentException("arthas idea plugin object Object Storage Setting s3");
         }
         return buildS3Client(instance.s3Endpoint, instance.s3AccessKeyId, instance.s3AccessKeySecret, instance.s3BucketName, instance.s3Region,
                 instance.s3DirectoryPrefix);
