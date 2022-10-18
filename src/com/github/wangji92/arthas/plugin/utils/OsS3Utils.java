@@ -31,6 +31,7 @@ import java.util.Date;
 public class OsS3Utils {
     private static final Logger LOG = Logger.getInstance(OsS3Utils.class);
 
+
     /**
      * 获取oss 客户端
      *
@@ -81,13 +82,19 @@ public class OsS3Utils {
      */
     public static void checkBuckNameExist(String bucketName, AmazonS3 s3Client) {
         // 检查是否存在
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
+            // https://github.com/WangJi92/arthas-idea-plugin/issues/79
+            // https://youtrack.jetbrains.com/issue/BDIDE-1894/javalangIllegalArgumentException-awssdkconfigoverridejson-if-there-is-S3-connection-in-BDT-Panel
+            Thread.currentThread().setContextClassLoader(null);
             if (!s3Client.doesBucketExistV2(bucketName)) {
                 throw new IllegalArgumentException("s3 bucketName not found");
             }
         } catch (Exception e) {
             LOG.info("checkBuckNameExist", e);
             throw new IllegalArgumentException("s3 bucketName not found" + e.getMessage());
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
         }
     }
 
@@ -107,11 +114,16 @@ public class OsS3Utils {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType("application/octet-stream");
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, urlEncodeKeyPath, inputStream, objectMetadata);
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
+            // https://youtrack.jetbrains.com/issue/BDIDE-1894/javalangIllegalArgumentException-awssdkconfigoverridejson-if-there-is-S3-connection-in-BDT-Panel
+            Thread.currentThread().setContextClassLoader(null);
             s3.putObject(putObjectRequest);
         } catch (Exception e) {
             LOG.info("putFile", e);
             throw new IllegalArgumentException("上传文件到对象存储错误", e);
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
         }
 
         return urlEncodeKeyPath;
@@ -144,12 +156,17 @@ public class OsS3Utils {
         if (expiration == null) {
             expiration = new Date(System.currentTimeMillis() + 3600L * 1000);
         }
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
+            // https://youtrack.jetbrains.com/issue/BDIDE-1894/javalangIllegalArgumentException-awssdkconfigoverridejson-if-there-is-S3-connection-in-BDT-Panel
+            Thread.currentThread().setContextClassLoader(null);
             URL url = ossClient.generatePresignedUrl(bucketName, key, expiration);
             return url.toString();
         } catch (Exception e) {
             LOG.info("generatePresignedUrl", e);
-            throw new IllegalArgumentException("generatePresignedUrl error",e);
+            throw new IllegalArgumentException("generatePresignedUrl error", e);
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
         }
     }
 
