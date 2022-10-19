@@ -38,31 +38,38 @@ public class OsS3Utils {
      * @return
      */
     public static AmazonS3 buildS3Client(String endpoint, String accessKeyId, String accessKeySecret, String bucketName, String region, String directoryPrefix) {
-        if (StringUtils.isBlank(endpoint)) {
-            throw new IllegalArgumentException("配置arthas os s3 endpoint Error");
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        try {
+
+            if (StringUtils.isBlank(endpoint)) {
+                throw new IllegalArgumentException("配置arthas os s3 endpoint Error");
+            }
+            if (StringUtils.isBlank(accessKeyId)) {
+                throw new IllegalArgumentException("配置arthas os s3 accessKeyId Error");
+            }
+            if (StringUtils.isBlank(accessKeySecret)) {
+                throw new IllegalArgumentException("配置arthas os s3 accessKeySecret Error");
+            }
+            if (StringUtils.isBlank(bucketName) || !OSSUtils.validateBucketName(bucketName)) {
+                throw new IllegalArgumentException("配置arthas s3  bucketName Error");
+            }
+            // 校验key的信息
+            if (StringUtils.isNotBlank(directoryPrefix) && !OSSUtils.validateObjectKey(OSSUtils.makeResourcePath(directoryPrefix))) {
+                throw new IllegalArgumentException("配置arthas  s3 directoryPrefix Error");
+            }
+            Thread.currentThread().setContextClassLoader(null);
+            AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, accessKeySecret);
+            ClientConfiguration clientConfiguration = new ClientConfiguration();
+            return AmazonS3ClientBuilder
+                    .standard()
+                    .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
+                    .withPathStyleAccessEnabled(true)
+                    .withClientConfiguration(clientConfiguration)
+                    .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                    .build();
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
         }
-        if (StringUtils.isBlank(accessKeyId)) {
-            throw new IllegalArgumentException("配置arthas os s3 accessKeyId Error");
-        }
-        if (StringUtils.isBlank(accessKeySecret)) {
-            throw new IllegalArgumentException("配置arthas os s3 accessKeySecret Error");
-        }
-        if (StringUtils.isBlank(bucketName) || !OSSUtils.validateBucketName(bucketName)) {
-            throw new IllegalArgumentException("配置arthas s3  bucketName Error");
-        }
-        // 校验key的信息
-        if (StringUtils.isNotBlank(directoryPrefix) && !OSSUtils.validateObjectKey(OSSUtils.makeResourcePath(directoryPrefix))) {
-            throw new IllegalArgumentException("配置arthas  s3 directoryPrefix Error");
-        }
-        AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, accessKeySecret);
-        ClientConfiguration clientConfiguration = new ClientConfiguration();
-        return AmazonS3ClientBuilder
-                .standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
-                .withPathStyleAccessEnabled(true)
-                .withClientConfiguration(clientConfiguration)
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .build();
     }
 
     public static AmazonS3 buildS3Client(Project project) {
