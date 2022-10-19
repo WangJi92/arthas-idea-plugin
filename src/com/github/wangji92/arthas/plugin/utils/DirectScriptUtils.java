@@ -38,7 +38,7 @@ public class DirectScriptUtils {
     /**
      * redis
      */
-    private static final String REDIS_HOT_REDEFINE = "echo `redis-cli -h '%s' -p '%s'  get %s` ";
+    private static final String REDIS_HOT_REDEFINE = "echo `redis-cli -h '%s' -p %s  get %s` ";
 
 
     /**
@@ -134,7 +134,7 @@ public class DirectScriptUtils {
 
             StringBuilder portAndAuth = new StringBuilder("" + settings.redisPort);
             if (!StringUtils.isBlank(settings.redisAuth)) {
-                portAndAuth.append(" -a ").append(settings.redisAuth);
+                portAndAuth.append(" -a '").append(settings.redisAuth).append("'");
             }
 
             String cacheKey = settings.redisCacheKey + "_" + UUID.randomUUID().toString();
