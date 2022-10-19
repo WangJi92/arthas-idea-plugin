@@ -99,6 +99,39 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean aliYunOss = false;
 
     /**
+     * aws
+     */
+    public boolean awsS3 = false;
+
+
+    public String s3Endpoint;
+
+    public String s3Region;
+
+    /**
+     * accessKeyId
+     */
+    public String s3AccessKeyId;
+
+    /**
+     * accessKeySecret
+     */
+    public String s3AccessKeySecret;
+
+    /**
+     * bucketName
+     */
+    public String s3BucketName;
+
+    /**
+     * 存储的路径
+     */
+    public String s3DirectoryPrefix = "arthas/";
+
+
+    public boolean s3GlobalConfig = true;
+
+    /**
      * spring context 全局默认配置
      */
     public boolean springContextGlobalSetting = true;
@@ -189,13 +222,14 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     /**
      * 获取工程的名称
+     *
      * @return
      */
-    public static Project getProject(){
+    public static Project getProject() {
         return projectInfo;
     }
 
-    private static  Project projectInfo;
+    private static Project projectInfo;
 
 
     public static AppSettingsState getInstance(@NotNull Project project) {
@@ -208,6 +242,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
         // 检测 全局的阿里云oss
         checkGlobalAliyunOssAndSettingCurrentProjectIfEmpty(appSettingsState);
+
+        //aws
+        checkGlobalS3AndSettingCurrentProjectIfEmpty(appSettingsState);
 
         // 检测全局的redis 配置
         checkGlobalRedisAndSettingCurrentProjectIfEmpty(appSettingsState);
@@ -229,6 +266,31 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     }
 
     /**
+     * 设置信息
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalS3AndSettingCurrentProjectIfEmpty(AppSettingsState appSettingsState) {
+        String endPoint1 = PropertiesComponentUtils.getValue("s3Endpoint");
+        String bucketName1 = PropertiesComponentUtils.getValue("s3BucketName");
+        String accessKeyId1 = PropertiesComponentUtils.getValue("s3AccessKeyId");
+        String accessKeySecret1 = PropertiesComponentUtils.getValue("s3AccessKeySecret");
+        String directoryPrefix1 = PropertiesComponentUtils.getValue("s3DirectoryPrefix");
+        String region = PropertiesComponentUtils.getValue("s3Region");
+        if (StringUtils.isNotBlank(bucketName1)
+                && StringUtils.isNotBlank(endPoint1)
+                && StringUtils.isNotBlank(accessKeyId1)
+                && StringUtils.isNotBlank(accessKeySecret1)) {
+            appSettingsState.s3Endpoint = endPoint1;
+            appSettingsState.s3AccessKeyId = accessKeyId1;
+            appSettingsState.s3BucketName = bucketName1;
+            appSettingsState.s3AccessKeySecret = accessKeySecret1;
+            appSettingsState.s3DirectoryPrefix = directoryPrefix1;
+            appSettingsState.s3Region = region;
+        }
+    }
+
+    /**
      * 全局检测设置信息 只要一个工程修改了 全部都修改
      *
      * @param appSettingsState
@@ -243,24 +305,35 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
                 appSettingsState.hotRedefineClipboard = true;
                 appSettingsState.hotRedefineRedis = false;
                 appSettingsState.aliYunOss = false;
+                appSettingsState.awsS3 = false;
                 break;
             }
             case "hotRedefineRedis": {
                 appSettingsState.hotRedefineClipboard = false;
                 appSettingsState.hotRedefineRedis = true;
                 appSettingsState.aliYunOss = false;
+                appSettingsState.awsS3 = false;
                 break;
             }
             case "aliYunOss": {
                 appSettingsState.hotRedefineClipboard = false;
                 appSettingsState.hotRedefineRedis = false;
                 appSettingsState.aliYunOss = true;
+                appSettingsState.awsS3 = false;
+                break;
+            }
+            case "awsS3": {
+                appSettingsState.hotRedefineClipboard = false;
+                appSettingsState.hotRedefineRedis = false;
+                appSettingsState.aliYunOss = false;
+                appSettingsState.awsS3 = true;
                 break;
             }
             default: {
                 appSettingsState.hotRedefineClipboard = true;
                 appSettingsState.hotRedefineRedis = false;
                 appSettingsState.aliYunOss = false;
+                appSettingsState.awsS3 = false;
             }
         }
     }
@@ -341,7 +414,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
             if (NumberUtils.isDigits(redisCacheKeyTtl)) {
                 appSettingsState.redisCacheKeyTtl = Integer.parseInt(redisCacheKeyTtl);
             }
-            if (!appSettingsState.aliYunOss && !appSettingsState.hotRedefineClipboard) {
+            if (!appSettingsState.aliYunOss && !appSettingsState.hotRedefineClipboard
+                    && !appSettingsState.awsS3) {
                 appSettingsState.hotRedefineRedis = true;
             }
         }
@@ -383,7 +457,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
                 && StringUtils.isNotBlank(endPoint1)
                 && StringUtils.isNotBlank(accessKeyId1)
                 && StringUtils.isNotBlank(accessKeySecret1)) {
-            if (!appSettingsState.hotRedefineRedis && !appSettingsState.hotRedefineClipboard) {
+            if (!appSettingsState.hotRedefineRedis
+                    && !appSettingsState.hotRedefineClipboard
+                    && !appSettingsState.awsS3) {
                 appSettingsState.aliYunOss = true;
             }
             appSettingsState.endpoint = endPoint1;

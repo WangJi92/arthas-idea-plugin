@@ -1,10 +1,12 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.aliyun.oss.OSS;
+import com.amazonaws.services.s3.AmazonS3;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.AliyunOssUtils;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.OsS3Utils;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -18,7 +20,6 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task.Backgroundable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -56,8 +57,8 @@ public class LocalFileUploadToOssAction extends AnAction {
         Project project = CommonDataKeys.PROJECT.getData(dataContext);
 
         AppSettingsState settings = AppSettingsState.getInstance(project);
-        if (!settings.aliYunOss) {
-            NotifyUtils.notifyMessage(project, "Please configure Aliyun Oss As Storage <a href=\"https://www.yuque.com/arthas-idea-plugin/help/ugrc8n\">arthas idea setting</a>", NotificationType.ERROR);
+        if (!(settings.aliYunOss || settings.awsS3)) {
+            NotifyUtils.notifyMessage(project, "Please configure Aliyun Oss Or S3 As Storage <a href=\"https://www.yuque.com/arthas-idea-plugin/help/ugrc8n\">arthas idea setting</a>", NotificationType.ERROR);
             return;
         }
 
@@ -67,7 +68,7 @@ public class LocalFileUploadToOssAction extends AnAction {
             virtualFileBefore = virtualFileFiles[0];
         }
         FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, true, true, false, false);
-        descriptor.setTitle("上传文件到Oss下载");
+        descriptor.setTitle("Upload To Object Storage");
         descriptor.setHideIgnored(true);
         VirtualFile selectVirtualFile = FileChooser.chooseFile(descriptor, event.getProject(), virtualFileBefore);
         if (selectVirtualFile == null || selectVirtualFile.isDirectory()) {
@@ -77,28 +78,39 @@ public class LocalFileUploadToOssAction extends AnAction {
 
         Runnable runnable = () -> {
             OSS oss = null;
+            AmazonS3 aw3 = null;
+            String presignedUrl = "";
             try {
-                oss = AliyunOssUtils.buildOssClient(project);
-                String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
-                String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, selectVirtualFile.getInputStream());
-                String presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 24 * 365 * 3600L * 1000));
+                if (settings.aliYunOss) {
+                    oss = AliyunOssUtils.buildOssClient(project);
+                    String filePathKey = settings.directoryPrefix + UUID.randomUUID().toString();
+                    String urlEncodeKeyPath = AliyunOssUtils.putFile(oss, settings.bucketName, filePathKey, selectVirtualFile.getInputStream());
+                    presignedUrl = AliyunOssUtils.generatePresignedUrl(oss, settings.bucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 24 * 365 * 3600L * 1000));
+                } else if (settings.awsS3) {
+                    aw3 = OsS3Utils.buildS3Client(project);
+                    String filePathKey = settings.s3DirectoryPrefix + UUID.randomUUID().toString();
+                    String urlEncodeKeyPath = OsS3Utils.putFile(aw3, settings.s3BucketName, filePathKey, selectVirtualFile.getInputStream());
+                    presignedUrl = OsS3Utils.generatePresignedUrl(aw3, settings.s3BucketName, urlEncodeKeyPath, new Date(System.currentTimeMillis() + 24 * 6 * 3600L * 1000));
+                }
                 String command = String.format(OSS_UP_LOAD_FILE, presignedUrl, selectVirtualFile.getName());
                 ClipboardUtils.setClipboardString(command);
                 NotifyUtils.notifyMessage(project, "linux shell command has been copied to the clipboard Go to the server and paste it");
             } catch (Exception e) {
-                LOG.info("upload to oss error",e);
-                NotifyUtils.notifyMessage(project, "上传命令到oss 失败" + e.getMessage());
+                LOG.info("upload to object stage error", e);
+                NotifyUtils.notifyMessage(project, "Object Storage" + e.getMessage());
                 return;
             } finally {
                 if (oss != null) {
                     oss.shutdown();
                 }
-                IOUtils.closeQuietly();
+                if (aw3 != null) {
+                    aw3.shutdown();
+                }
             }
         };
 
         // https://stackoverflow.com/questions/18725340/create-a-background-task-in-intellij-plugin
-        ProgressManager.getInstance().run(new Backgroundable(project, "Upload To AliYun Oss") {
+        ProgressManager.getInstance().run(new Backgroundable(project, "Upload To object storage") {
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 // Set the progress bar percentage and text
@@ -108,7 +120,7 @@ public class LocalFileUploadToOssAction extends AnAction {
                     runnable.run();
                     // Finished
                     progressIndicator.setFraction(1.0);
-                    progressIndicator.setText("finished");
+                    progressIndicator.setText("Finished");
                 } catch (Exception e) {
                     try {
                         SwingUtilities.invokeAndWait(runnable::run);
