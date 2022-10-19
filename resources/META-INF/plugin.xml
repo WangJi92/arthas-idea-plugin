@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.38</version>
+    <version>2.39</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,15 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.39-RELEASE</p>
+      <ul>
+        <li><a href="https://github.com/WangJi92/arthas-idea-plugin/issues/80">静态脚本里面增加常用快捷脚本，eg 观察spring http请求耗时、观察jdbc 执行的sql </a></li>
+        <li>动态脚本比如热更新、快捷shell 脚本、上传本地文件等功能都需要对象存储存储脚本内容,之前只支持 redis 、剪切板、 阿里云oss <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/79">aws s3 很多厂商都支持 比如minio、华为云、腾讯云等等</a></li>
+      </ul>
+       <ul>
+        <li><a href="https://github.com/WangJi92/arthas-idea-plugin/issues/80"> Common shortcut scripts are added to static scripts. eg observes the time consuming of spring http requests and the sql executed by jdbc</a></li>
+        <li>Dynamic scripts, such as hot updates, quick shell scripts, and uploading local files, require objects storage to store script content. Previously, only Redis, clipboard, and Alibaba Cloud OSS were supported <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/79 ">Many manufacturers of aws s3 support minio, Huawei Cloud, Tencent Cloud, etc</a></li>
+      </ul>
      <p>2.38-RELEASE</p>
       <ul>
         <li>Optimize whether the high-frequency command vmtool is displayed</li>
