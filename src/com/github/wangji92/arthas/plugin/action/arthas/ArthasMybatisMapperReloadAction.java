@@ -21,6 +21,7 @@ import com.intellij.psi.xml.XmlFile;
 import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,7 @@ public class ArthasMybatisMapperReloadAction extends AnAction implements DumbAwa
             VirtualFile[] virtualFileFiles = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
             assert virtualFileFiles != null;
             String mapperXmlContent = IoUtils.readVirtualFile(virtualFileFiles[0]);
-            String base64MapperXmlContent = BaseEncoding.base64().encode(mapperXmlContent.getBytes());
+            String base64MapperXmlContent = BaseEncoding.base64().encode(mapperXmlContent.getBytes(StandardCharsets.UTF_8));
             String arthasIdeaPluginBase64MapperXmlAndPath = String.join("|", base64MapperXmlContent, mybatisMapperXmlReloadServiceMapperPath);
 
             String selectProjectName = settings.selectProjectName;
@@ -118,7 +119,7 @@ public class ArthasMybatisMapperReloadAction extends AnAction implements DumbAwa
             String commonFunctionSh = StringUtils.stringSubstitutorFromFilePath("/template/plugin-common-function.sh", params);
             String mybatisMapperReloadSh = StringUtils.stringSubstitutorFromFilePath("/template/mybatis-mapper-xml-reload.sh", params);
             mybatisMapperReloadSh = commonFunctionSh + "\n" + mybatisMapperReloadSh;
-            String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes());
+            String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes(StandardCharsets.UTF_8));
             DirectScriptUtils.buildDirectScript(project, settings, base64MybatisMapperReloadSh, "arthas-idea-plugin-mybatis-mapper-xml-reload.sh", directScriptResult -> {
                 if (directScriptResult.getResult()) {
                     directScriptResult.getTip().append("【mybatis mapper reload 使用参考插件配置界面】");

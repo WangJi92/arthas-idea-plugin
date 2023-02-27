@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.BaseEncoding;
 import com.intellij.openapi.project.Project;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -42,7 +43,7 @@ public class CommonExecuteScriptUtils {
         String commonFunctionSh = StringUtils.stringSubstitutorFromFilePath("/template/plugin-common-function.sh", params);
         String mybatisMapperReloadSh = StringUtils.stringSubstitutorFromFilePath("/template/common-execution-script.sh", params);
         mybatisMapperReloadSh = commonFunctionSh + "\n" + mybatisMapperReloadSh;
-        String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes());
+        String base64MybatisMapperReloadSh = BaseEncoding.base64().encode(mybatisMapperReloadSh.getBytes(StandardCharsets.UTF_8));
         DirectScriptUtils.buildDirectScript(project, settings, base64MybatisMapperReloadSh, "arthas-idea-plugin-common-execution-script.sh", directScriptResult -> {
             if (directScriptResult.getResult()) {
                 if (StringUtils.isNotBlank(appendTip)) {
