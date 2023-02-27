@@ -38,7 +38,8 @@ public class OgnlPsUtils {
     public static boolean isAnonymousClass(PsiElement psiElement) {
         boolean result = false;
         if (isPsiFieldOrMethodOrClass(psiElement)) {
-            if (getCommonOrInnerOrAnonymousClassName(psiElement).contains("*$*")) {
+            String className = getCommonOrInnerOrAnonymousClassName(psiElement);
+            if (className != null && className.contains("*$*")) {
                 result = true;
             }
         }
