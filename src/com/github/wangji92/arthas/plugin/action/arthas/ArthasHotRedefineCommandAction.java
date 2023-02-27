@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -172,7 +173,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
 
                 String redefineSh = StringUtils.stringSubstitutorFromFilePath("/template/arthas-idea-plugin-hot-swap.sh", params);
 
-                String base64RedefineSh = BaseEncoding.base64().encode(redefineSh.getBytes());
+                String base64RedefineSh = BaseEncoding.base64().encode(redefineSh.getBytes(StandardCharsets.UTF_8));
                 DirectScriptUtils.buildDirectScript(project, settings, base64RedefineSh, "arthas-idea-plugin-hot-swap.sh", directScriptResult -> {
                     if (directScriptResult.getResult()) {
                         if ("redefine".equals(finalHotCommand)) {
