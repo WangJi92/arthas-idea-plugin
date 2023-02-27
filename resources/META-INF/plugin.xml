@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.39</version>
+    <version>2.40</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.40-RELEASE</p>
+      <ul>
+        <li>Fix two code issues: windows file encoding error,some time;Occasional null pointer exception</li>
+      </ul>
      <p>2.39-RELEASE</p>
       <ul>
         <li><a href="https://github.com/WangJi92/arthas-idea-plugin/issues/80">静态脚本里面增加常用快捷脚本，eg 观察spring http请求耗时、观察jdbc 执行的sql </a></li>
