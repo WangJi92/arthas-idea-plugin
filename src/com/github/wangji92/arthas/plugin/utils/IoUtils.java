@@ -76,9 +76,9 @@ public class IoUtils {
      * @param file
      * @return
      */
-    public static String readFileToString(File file) {
+    public static byte[] readFileToByteArray(File file) {
         try {
-            return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            return FileUtils.readFileToByteArray(file);
         } catch (IOException e) {
             LOG.error("readFileToByteArray error", e);
             throw new IllegalArgumentException("读取文件异常");
@@ -92,8 +92,8 @@ public class IoUtils {
      * @return
      */
     public static String readFileToBase64String(File file) {
-        String fileContent = IoUtils.readFileToString(file);
-        return BaseEncoding.base64().encode(fileContent.getBytes(StandardCharsets.UTF_8));
+        byte[] readFileToByteArray = IoUtils.readFileToByteArray(file);
+        return BaseEncoding.base64().encode(readFileToByteArray);
     }
 
     /**
