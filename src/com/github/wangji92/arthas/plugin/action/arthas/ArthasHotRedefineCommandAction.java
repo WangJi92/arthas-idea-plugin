@@ -242,7 +242,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
             String ideaClassName = packageName + "." + className;
 
             //主要是根据模块查询 当前编译后的路径的信息
-            final String compilerOutputPath = OgnlPsUtils.getCompilerOutputPath(project, ideaClassName);
+            final String compilerOutputPath = OgnlPsUtils.getCompilerOutputPathV2(project, psiElement);
 
             //全路径包含 匿名类的处理
             String pathClassName = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
@@ -292,7 +292,7 @@ public class ArthasHotRedefineCommandAction extends AnAction implements DumbAwar
                 String className = FilenameUtils.getBaseName(psiFileJavaFile.getContainingFile().getName());
                 String qualifiedName = packageNameBack + "." + className;
                 String qualifiedNamePath = qualifiedName.replace(".", File.separator);
-                String currentCompilerOutputPath = OgnlPsUtils.getCompilerOutputPath(project, qualifiedName);
+                String currentCompilerOutputPath = OgnlPsUtils.getCompilerOutputPathV2(project, psiFileJavaFile);
                 File packageDirFile = new File(currentCompilerOutputPath + File.separator + packageNamePath);
                 if (!packageDirFile.exists()) {
                     throw new CompilerFileNotFoundException(String.format("compiler target class dir not found,dir:%s", currentCompilerOutputPath + File.separator + packageNamePath));

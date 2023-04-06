@@ -752,6 +752,30 @@ public class OgnlPsUtils {
      * 找到 编译的出口地址
      *
      * @param project
+     * @param psiElement
+     * @return
+     */
+    public static String getCompilerOutputPathV2(Project project, PsiElement psiElement) {
+
+        // https://jetbrains.org/intellij/sdk/docs/basics/project_structure.html
+        // https://jetbrains.org/intellij/sdk/docs/reference_guide/project_model/module.html
+        Module module = ModuleUtil.findModuleForPsiElement(psiElement);
+        if (module == null) {
+            throw new CompilerFileNotFoundException(String.format("not find class  %s module in this project", getCommonOrInnerOrAnonymousClassName(psiElement)));
+        }
+
+        //找到编译的 出口位置
+        VirtualFile compilerOutputVirtualFile = ModuleRootManager.getInstance(module).getModifiableModel().getModuleExtension(CompilerModuleExtension.class).getCompilerOutputPath();
+        if (compilerOutputVirtualFile == null) {
+            throw new CompilerFileNotFoundException(String.format("not find compile class file %s in target compile class dir", getCommonOrInnerOrAnonymousClassName(psiElement)));
+        }
+        return compilerOutputVirtualFile.getPath();
+    }
+
+    /**
+     * 找到 编译的出口地址  这个版本针对一个工程里面打开一个项目里面的多个svn 目录存在问题 查询 是根据类名称来处理的
+     *
+     * @param project
      * @param ideaClassName
      * @return
      */
