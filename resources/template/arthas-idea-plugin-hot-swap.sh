@@ -186,26 +186,26 @@ installArthas() {
     echo " "
     curl  -Lk "${ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL}" -o  "${temp_target_lib_zip}" || retrun 1
     cd "$HOME/opt/arthas" && unzip -o "${temp_target_lib_zip}"
-    chmod +x "$HOME/opt/arthas/as.sh" || return 1
   fi
+  chmod -R +x "$HOME/opt/arthas/" || return 1
 }
 # xxxClassBase64Str|xxxClassPath,xxxClass2Base64Str|xxxClass2Path
-decodebase64CLassFile() {
+decodeBase64CLassFile() {
   bash64FileAndPathList="${arthasIdeaPluginBase64AndPathCommand}"
-  commaArraybash64FilePath=(${bash64FileAndPathList//\,/ })
-  for i in "${!commaArraybash64FilePath[@]}"; do
-    verticalArraySingleBash64FileAndPath=(${commaArraybash64FilePath[i]//\|/ })
+  commaArrayBash64FilePath=(${bash64FileAndPathList//\,/ })
+  for i in "${!commaArrayBash64FilePath[@]}"; do
+    verticalArraySingleBash64FileAndPath=(${commaArrayBash64FilePath[i]//\|/ })
     createFile ${verticalArraySingleBash64FileAndPath[1]}
     echo ${verticalArraySingleBash64FileAndPath[0]} | base64 --decode >${verticalArraySingleBash64FileAndPath[1]} || return 1
     echo "base64Class decode to path ${verticalArraySingleBash64FileAndPath[1]}"
   done
 }
 
-# Usage: doStarteRedefine
-doStarteRedefine() {
+# Usage: doStartRedefine
+doStartRedefine() {
   createFile $HOME/opt/arthas/hotSwapResult.out
-  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --select ${SELECT_VALUE}  -c \"${arthasIdeaPluginRedefineCommand}\"  | tee $HOME/opt/arthas/hotSwapResult.out"$(tput sgr0)
-  $HOME/opt/arthas/as.sh --select ${SELECT_VALUE} -c "${arthasIdeaPluginRedefineCommand}" | tee $HOME/opt/arthas/hotSwapResult.out
+  echo $(tput bold)"arthas start command :$JAVA_HOME/bin/java -jar $HOME/opt/arthas/arthas-boot.jar --select ${SELECT_VALUE}  -c \"${arthasIdeaPluginRedefineCommand}\"  | tee $HOME/opt/arthas/hotSwapResult.out"$(tput sgr0)
+  $JAVA_HOME/bin/java -jar $HOME/opt/arthas/arthas-boot.jar --select ${SELECT_VALUE} -c "${arthasIdeaPluginRedefineCommand}" | tee $HOME/opt/arthas/hotSwapResult.out
 }
 
 redefineResult() {
@@ -220,7 +220,7 @@ redefineResult() {
 }
 
 #delete file
-doClenFile() {
+doCleanFile() {
   if [ ! -z "${deleteClassFile}" ]; then
     rm -rf $HOME/opt/arthas/hotSwap
     echo "arthas idea plugin delete class file $HOME/opt/arthas/hotSwap ok"
@@ -236,27 +236,27 @@ main() {
 
   installArthas
   if [ $? -ne 0 ]; then
-    exit_on_err 1 "arthas install as.sh script error"
+    exit_on_err 1 "arthas install arthas.zip error"
   fi
 
-  decodebase64CLassFile
+  decodeBase64CLassFile
   if [ $? -ne 0 ]; then
-    exit_on_err 1 "arthas idea plugin decodebase64CLass error"
+    exit_on_err 1 "arthas idea plugin decode base64 cLass error"
   fi
 
+  reset_for_env
   if [ -z ${SELECT_VALUE} ]; then
-    reset_for_env
     select_pid
     SELECT_VALUE=${TARGET_PID}
   fi
 
   if [ -z ${SELECT_VALUE} ]; then
-    exit_on_err 1 "select target process by classname or JARfilename Target pid is empty"
+    exit_on_err 1 "select target process by classname or jar file name target pid is empty"
   fi
 
-  doStarteRedefine
+  doStartRedefine
 
-  doClenFile
+  doCleanFile
 
   redefineResult
 }

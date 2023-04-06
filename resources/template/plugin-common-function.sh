@@ -5,7 +5,7 @@ SELECT_VALUE=${arthasIdeaPluginApplicationName}
 #arthas package zip download url = https://arthas.aliyun.com/download/latest_version?mirror=aliyun
 ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL="${arthasPackageZipDownloadUrl}"
 
-#执行中获取到的hashvalue的变量
+#执行中获取到的hash value的变量
 CLASSLOADER_HASH_VALUE=
 #sc -d 命令
 SC_COMMAND="${SC_COMMAND}"
@@ -239,8 +239,8 @@ installArthas() {
     echo " "
     curl -Lk "${ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL}" -o "${temp_target_lib_zip}" || retrun 1
     cd "$HOME/opt/arthas" && unzip -o "${temp_target_lib_zip}"
-    chmod +x "$HOME/opt/arthas/as.sh" || return 1
   fi
+  chmod -R +x "$HOME/opt/arthas/" || return 1
 }
 
 # execute arthtas batch command
@@ -249,18 +249,18 @@ installArthas() {
 executeArthasCommand() {
   createFile "${1}"
   # " 里面的 " 要进行转义 \"
-  echo $(tput bold)"arthas start command :$HOME/opt/arthas/as.sh --height 100 --width 200 --select ${SELECT_VALUE}  -c \"${2}\"  | tee ${1}"$(tput sgr0)
+  echo $(tput bold)"arthas start command :$JAVA_HOME/bin/java -jar $HOME/opt/arthas/arthas-boot.jar --height 100 --width 200 --select ${SELECT_VALUE}  -c \"${2}\"  | tee ${1}"$(tput sgr0)
   # --height 100 --width 200  the data displayed by automatic execution script is too ugly,to resolve classloaderhashvalue error
-  ${HOME}/opt/arthas/as.sh --height 100 --width 200 --select ${SELECT_VALUE} -c "${2}" | tee ${1}
+  $JAVA_HOME/bin/java -jar $HOME/opt/arthas/arthas-boot.jar --height 100 --width 200 --select ${SELECT_VALUE} -c "${2}" | tee ${1}
 }
 
 # decode base64 text and create file
 # $1 : base64Text|createFilePath1,base64Text2|createFilePath2
 decodeBase64AndCreateFile() {
   bash64FileAndPathList="${1}"
-  commaArraybash64FilePath=(${bash64FileAndPathList//\,/ })
-  for i in "${!commaArraybash64FilePath[@]}"; do
-    verticalArraySingleBash64FileAndPath=(${commaArraybash64FilePath[i]//\|/ })
+  commaArrayBash64FilePath=(${bash64FileAndPathList//\,/ })
+  for i in "${!commaArrayBash64FilePath[@]}"; do
+    verticalArraySingleBash64FileAndPath=(${commaArrayBash64FilePath[i]//\|/ })
     createFile ${verticalArraySingleBash64FileAndPath[1]}
     echo ${verticalArraySingleBash64FileAndPath[0]} | base64 --decode >${verticalArraySingleBash64FileAndPath[1]} || return 1
     echo " "
@@ -269,7 +269,7 @@ decodeBase64AndCreateFile() {
   done
 }
 
-# 获取第一个classloader hashvalue
+# 获取第一个classloader hash value
 getFirstClassLoaderHashValue() {
   local arthasClassLoaderHashValueResult="${HOME}/opt/arthas/classLoaderHashValue.out"
   createFile "${arthasClassLoaderHashValueResult}"
