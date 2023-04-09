@@ -2,6 +2,7 @@
 ### 联系方式
 有问题直接加我微信wj983433479 或者 扫码添加钉钉群 32102545 沟通
 ### 帮助文档链接
+more issue : [https://github.com/WangJi92/arthas-idea-plugin/issues label=documentation ](https://github.com/WangJi92/arthas-idea-plugin/issues?q=label%3Adocumentation+)
    * [arthas idea plugin document](https://www.yuque.com/arthas-idea-plugin)
    * [arthas + arhtas idea plugin 实战视频](https://www.bilibili.com/video/BV1yz4y1f7iz/)
    * [arthas-idea-plugin demo](https://github.com/WangJi92/arthas-plugin-demo)
@@ -93,73 +94,7 @@ ognl  -x  3  '#springContext=@applicationContextProvider@context,#springContext.
 
 #### 特别说明对于ognl 字段类型的处理
 [代码地址 ](https://github.com/WangJi92/arthas-idea-plugin/blob/master/src/com/github/wangji92/arthas/plugin/utils/OgnlPsUtils.java)
-```java
-public static String getDefaultString(PsiType psiType) {
-        String result = " ";
-        String canonicalText = psiType.getCanonicalText();
 
-        //基本类型  boolean
-        if (PsiType.BOOLEAN.equals(psiType) || canonicalText.equals("java.lang.Boolean")) {
-            result = "true";
-            return result;
-        }
-
-        //基本类型  String
-        if (canonicalText.endsWith("java.lang.String")) {
-            result = "\" \"";
-            return result;
-        }
-
-        if (PsiType.LONG.equals(psiType) || "java.lang.Long".equals(canonicalText)) {
-            result = "0L";
-            return result;
-        }
-
-        if (PsiType.DOUBLE.equals(psiType) || "java.lang.Double".equals(canonicalText)) {
-            result = "0D";
-            return result;
-        }
-
-        if (PsiType.FLOAT.equals(psiType) || "java.lang.Float".equals(canonicalText)) {
-            result = "0F";
-            return result;
-        }
-
-
-        //基本类型  数字
-        if (PsiType.INT.equals(psiType) || canonicalText.equals("java.lang.Integer")
-                ||
-                PsiType.BYTE.equals(psiType) || canonicalText.equals("java.lang.Byte")
-                ||
-                PsiType.SHORT.equals(psiType) || canonicalText.equals("java.lang.Short")) {
-            result = "0";
-            return result;
-        }
-
-        //常见的List 和Map
-        if (canonicalText.startsWith("java.util.")) {
-            if (canonicalText.contains("Map")) {
-                result = "#{\" \":\" \"}";
-                return result;
-            }
-            if (canonicalText.contains("List")) {
-                result = "{}";
-                return result;
-            }
-        }
-
-        //原生的数组
-        if (canonicalText.contains("[]")) {
-            result = "new " + canonicalText + "{}";
-            return result;
-        }
-
-        //不管他的构造函数了，太麻烦了
-        result = "new " + canonicalText + "()";
-        return result;
-
-    }
-```
 
 ## 2.5  install(linux)
 安装脚本，可以一键的通过as.sh 进行执行
