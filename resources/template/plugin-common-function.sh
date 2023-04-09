@@ -243,7 +243,7 @@ installArthas() {
   chmod -R +x "$HOME/opt/arthas/" || return 1
 }
 
-# execute arthtas batch command
+# execute arthas batch command
 # $1 : resultFle
 # $2 : command
 executeArthasCommand() {

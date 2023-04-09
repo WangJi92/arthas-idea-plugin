@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.41</version>
+    <version>2.42</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.42-RELEASE</p>
+      <ul>
+        <li>optimizing get compilation path</li>
+        <li>optimizing start script as.sh replace with java -jar arthas-boot.jar,certain situations machine not installed telnet</li>
+      </ul>
      <p>2.40~41-RELEASE</p>
       <ul>
         <li>Fix two code issues: windows file encoding error,some time;Occasional null pointer exception</li>
