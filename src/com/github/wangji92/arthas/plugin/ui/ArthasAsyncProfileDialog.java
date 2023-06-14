@@ -176,8 +176,7 @@ public class ArthasAsyncProfileDialog extends JDialog {
 
         String durationTextFieldText = durationTextField.getText();
         if (StringUtils.isNotBlank(durationTextFieldText)) {
-            durationTextFieldText = "30";
-            commands.add("-duration");
+            commands.add("--duration");
             commands.add(durationTextFieldText);
         }
         if (differentThreadsSeparatelyRadioButton.isSelected()) {
