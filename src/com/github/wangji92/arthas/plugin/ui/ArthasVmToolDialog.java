@@ -1,11 +1,7 @@
 package com.github.wangji92.arthas.plugin.ui;
 
-import com.github.wangji92.arthas.plugin.common.command.CommandContext;
-import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
-import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.*;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.labels.LinkLabel;
@@ -21,7 +17,7 @@ public class ArthasVmToolDialog extends JDialog {
 
     private LinkLabel classloaderHelpLabel;
 
-    private JTextField classloaderHashValuetextField;
+    private JTextField classloaderHashValueTextField;
 
     private JButton clearCacheButton;
 
@@ -30,42 +26,21 @@ public class ArthasVmToolDialog extends JDialog {
     private JButton copyCommandButton;
 
     private LinkLabel vmtoolHelpLabel;
-    private JButton instantcesCommandButton;
+
+    private JButton instancesCommandButton;
 
     private Project project;
 
-    private String className;
 
-    private CommandContext commandContext;
-
-    private String invokeCommand = "";
-    private String instancesCommand = "";
-
-    public ArthasVmToolDialog(AnActionEvent event) {
-        commandContext = new CommandContext(event);
-        this.project = commandContext.getProject();
-        this.className = commandContext.getKeyValue(ShellScriptVariableEnum.CLASS_NAME);
+    public ArthasVmToolDialog(Project project, String className, String invokeCommand, String instancesCommand) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(copyCommandButton);
-
+        this.project = project;
         String classloaderHash = PropertiesComponentUtils.getValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE);
-        classloaderHashValuetextField.setText(classloaderHash);
-
-        invokeCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INVOKE);
-
-        // vmtool 使用的比较多，在各种地方都可以弹出来.. 不然使用不方便
-        if (OgnlPsUtils.isConstructor(commandContext.getPsiElement()) ||
-                OgnlPsUtils.isStaticMethodOrField(commandContext.getPsiElement())
-                || OgnlPsUtils.isPsiClass(commandContext.getPsiElement())) {
-            //构造方法、静态方法 这里特殊处理一下 将后面的text 全部干掉
-            invokeCommand = invokeCommand.substring(0, invokeCommand.indexOf("'instances[0].")) + "'instances[0]'";
-        }
+        classloaderHashValueTextField.setText(classloaderHash);
 
         vmToolExpressTextField.setText(invokeCommand);
-
-        instancesCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INSTANCE);
-
         copyCommandButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,21 +54,27 @@ public class ArthasVmToolDialog extends JDialog {
 
         });
 
-        instantcesCommandButton.addActionListener(e -> {
-            String hashClassloader = classloaderHashValuetextField.getText();
-            String vmtoolInstanceCommand = instancesCommand;
-            if (StringUtils.isNotBlank(hashClassloader) && vmtoolInstanceCommand != null && !vmtoolInstanceCommand.contains("-c ")) {
-                vmtoolInstanceCommand = vmtoolInstanceCommand + " -c " + hashClassloader;
-                PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
-            }
-            if (StringUtils.isNotBlank(vmtoolInstanceCommand)) {
-                ClipboardUtils.setClipboardString(vmtoolInstanceCommand);
-                NotifyUtils.notifyMessageDefault(project);
-            }
-        });
+        if (StringUtils.isNotBlank(instancesCommand)) {
+            instancesCommandButton.addActionListener(e -> {
+                String hashClassloader = classloaderHashValueTextField.getText();
+                String vmtoolInstanceCommand = instancesCommand;
+                if (StringUtils.isNotBlank(hashClassloader) && vmtoolInstanceCommand != null && !vmtoolInstanceCommand.contains("-c ")) {
+                    vmtoolInstanceCommand = vmtoolInstanceCommand + " -c " + hashClassloader;
+                    PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, hashClassloader);
+                }
+                if (StringUtils.isNotBlank(vmtoolInstanceCommand)) {
+                    ClipboardUtils.setClipboardString(vmtoolInstanceCommand);
+                    NotifyUtils.notifyMessageDefault(project);
+                }
+            });
+        } else {
+            // 没有获取实例的表达式直接关闭
+            instancesCommandButton.setVisible(false);
+        }
+
 
         clearCacheButton.addActionListener(e -> {
-            classloaderHashValuetextField.setText("");
+            classloaderHashValueTextField.setText("");
             PropertiesComponentUtils.setValue(project, ArthasCommandConstants.CLASSLOADER_HASH_VALUE, "");
         });
 
@@ -116,7 +97,7 @@ public class ArthasVmToolDialog extends JDialog {
     }
 
     private void onOK() {
-        String hashClassloader = classloaderHashValuetextField.getText();
+        String hashClassloader = classloaderHashValueTextField.getText();
         String vmtoolExpress = vmToolExpressTextField.getText();
         if (StringUtils.isNotBlank(hashClassloader) && vmtoolExpress != null && !vmtoolExpress.contains("-c ")) {
             vmtoolExpress = vmtoolExpress + " -c " + hashClassloader;
@@ -137,8 +118,8 @@ public class ArthasVmToolDialog extends JDialog {
     /**
      * 打开窗口
      */
-    public void open() {
-        setTitle("vmtool command,you can edit params use ognl grammar");
+    public void open(String title) {
+        setTitle(title);
         pack();
         //两个屏幕处理出现问题，跳到主屏幕去了 https://blog.csdn.net/weixin_33919941/article/details/88129513
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));

@@ -1,5 +1,8 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
+import com.github.wangji92.arthas.plugin.common.command.CommandContext;
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.ui.ArthasVmToolDialog;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -45,8 +48,20 @@ public class ArthasVmtoolCommandAction extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent e) {
         Project project = e.getProject();
         assert project != null;
-        ArthasVmToolDialog dialog = new ArthasVmToolDialog(e);
-        dialog.open();
+        CommandContext commandContext = new CommandContext(e);
+        String className = commandContext.getKeyValue(ShellScriptVariableEnum.CLASS_NAME);
+        String invokeCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INVOKE);
+        // vmtool 使用的比较多，在各种地方都可以弹出来.. 不然使用不方便
+        if (OgnlPsUtils.isConstructor(commandContext.getPsiElement()) ||
+                OgnlPsUtils.isStaticMethodOrField(commandContext.getPsiElement())
+                || OgnlPsUtils.isPsiClass(commandContext.getPsiElement())) {
+            //构造方法、静态方法 这里特殊处理一下 将后面的text 全部干掉
+            invokeCommand = invokeCommand.substring(0, invokeCommand.indexOf("'instances[0].")) + "'instances[0]'";
+        }
+
+        String instancesCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INSTANCE);
+        ArthasVmToolDialog dialog = new ArthasVmToolDialog(project, className, invokeCommand, instancesCommand);
+        dialog.open("vmtool command,you can edit params use ognl grammar");
 
 
     }
