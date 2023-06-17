@@ -101,6 +101,23 @@ public class CommandContext {
             String capitalizeFieldName = StringUtils.capitalize(fieldName);
             params.put(ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getEnumMsg(), capitalizeFieldName);
         }
+        if (editor != null) {
+            try {
+                String selectedText = editor.getSelectionModel().getSelectedText();
+                if (StringUtils.isNotBlank(selectedText)) {
+                    //去掉多余的空格
+                    selectedText = selectedText.trim();
+                }
+                if (StringUtils.isBlank(selectedText)) {
+                    selectedText = "spring.profiles.active";
+                }
+                params.put(ShellScriptVariableEnum.EDITOR_SELECT_TEXT.getEnumMsg(), selectedText);
+            } catch (Exception e) {
+                //ignore
+            }
+        } else {
+            params.put(ShellScriptVariableEnum.EDITOR_SELECT_TEXT.getEnumMsg(), "spring.profiles.active");
+        }
     }
 
     /**
