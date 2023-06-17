@@ -1,9 +1,13 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
+import com.github.wangji92.arthas.plugin.common.command.CommandContext;
+import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
+import com.github.wangji92.arthas.plugin.ui.ArthasVmToolDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -36,16 +40,29 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
         if (editor == null || project == null) {
             return;
         }
-        if (!SpringStaticContextUtils.booleanConfigStaticSpringContextFalseOpenConfig(project)) {
+
+        if (!SpringStaticContextUtils.booleanConfigStaticSpringContext(project)) {
+            //if you not set static spring context,you can use vmtool
+            CommandContext commandContext = new CommandContext(e);
+            ShellScriptCommandEnum toolSpringSelectEnv = ShellScriptCommandEnum.VM_TOOL_SPRING_SELECT_ENV;
+            String arthasCommand = toolSpringSelectEnv.getArthasCommand(commandContext);
+            String instancesCommand = "vmtool -x  1 --action getInstances --className org.springframework.core.env.ConfigurableEnvironment  --limit 5 ";
+            ArthasVmToolDialog dialog = new ArthasVmToolDialog(project, "org.springframework.core.env.ConfigurableEnvironment", arthasCommand, instancesCommand);
+            dialog.open("vmtool get selected spring property");
             return;
         }
+
+
+        // ognl static spring context
         //https://zhuanlan.zhihu.com/p/47740017
         String selectedText = editor.getSelectionModel().getSelectedText();
         if (selectedText != null) {
             //去掉多余的空格
             selectedText = selectedText.trim();
         }
-
+        if (StringUtils.isBlank(selectedText)) {
+            selectedText = "spring.profiles.active";
+        }
         try {
             // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
             String className = SpringStaticContextUtils.getStaticSpringContextClassName(project);

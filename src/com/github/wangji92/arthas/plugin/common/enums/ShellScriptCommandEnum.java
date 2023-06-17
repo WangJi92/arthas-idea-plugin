@@ -290,6 +290,27 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return context.getCommandCode(this);
         }
     },
+    VM_TOOL_SPRING_SELECT_ENV("vmtool -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
+            + " --express 'instances[0].getProperty(\""
+            + ShellScriptVariableEnum.EDITOR_SELECT_TEXT.getCode() + "\") '",
+            "vmtool get selected spring property default key: spring.profiles.active") {
+        @Override
+        public boolean support(CommandContext context) {
+            return true;
+        }
+
+        @Override
+        public String getScCommand(CommandContext context) {
+            return String.join(" ", "sc", "-d", "org.springframework.core.env.ConfigurableEnvironment");
+        }
+
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
+        }
+    },
     VM_TOOL_SPRING_ENV("vmtool -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
@@ -367,7 +388,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (className.startsWith("java.")) {
                 return false;
             }
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
+            if (OgnlPsUtils.psiElementInEnum(context.getPsiElement())) {
                 return false;
             }
             return OgnlPsUtils.isNonStaticMethodOrField(context.getPsiElement());
@@ -419,7 +440,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             if (!OgnlPsUtils.isNonStaticMethodOrField(context.getPsiElement())) {
                 return false;
             }
-            if(OgnlPsUtils.psiElementInEnum(context.getPsiElement())){
+            if (OgnlPsUtils.psiElementInEnum(context.getPsiElement())) {
                 return false;
             }
             // 含有set 字段的方法

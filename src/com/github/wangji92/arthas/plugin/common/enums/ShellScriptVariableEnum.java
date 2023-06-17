@@ -77,6 +77,11 @@ public enum ShellScriptVariableEnum implements EnumCodeMsg<String> {
      */
     CLASSLOADER_HASH_VALUE("${CLASSLOADER_HASH_VALUE}", "CLASSLOADER_HASH_VALUE"),
 
+    /**
+     * 编辑器选中的文字
+     */
+    EDITOR_SELECT_TEXT("${EDITOR_SELECT_TEXT}", "EDITOR_SELECT_TEXT"),
+
 
     ;
 
