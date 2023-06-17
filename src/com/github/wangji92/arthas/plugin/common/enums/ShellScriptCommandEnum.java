@@ -315,7 +315,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
             + " --express '#standardServletEnvironment=instances[0]," + SPRING_ALL_MAP_PROPERTY + "' ",
-            "vmtool get spring all env source instance of map") {
+            "vmtool get all spring property,first keyword has the highest priority") {
         @Override
         public boolean support(CommandContext context) {
             return true;

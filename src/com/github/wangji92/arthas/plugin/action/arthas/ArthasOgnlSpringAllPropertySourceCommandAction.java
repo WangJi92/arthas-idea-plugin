@@ -49,7 +49,7 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
             String arthasCommand = vmToolSpringEnv.getArthasCommand(commandContext);
             String instancesCommand = "vmtool -x  1 --action getInstances --className org.springframework.core.env.ConfigurableEnvironment  --limit 5 ";
             ArthasVmToolDialog dialog = new ArthasVmToolDialog(project, "org.springframework.core.env.ConfigurableEnvironment", arthasCommand, instancesCommand);
-            dialog.open("vmtool get all spring property");
+            dialog.open("vmtool get all spring property,first keyword has the highest priority");
             return;
         }
 
@@ -68,7 +68,7 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
 
             String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, join, springContextValue);
 
-            new ArthasActionStaticDialog(project, className, command, "").open("Ognl get all spring property");
+            new ArthasActionStaticDialog(project, className, command, "").open("Ognl get all spring property,first keyword has the highest priority");
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;
