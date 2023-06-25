@@ -225,7 +225,7 @@ public class ArthasAsyncProfileDialog extends JDialog {
      * 打开窗口
      */
     public void open() {
-        setTitle("async-profiler");
+        setTitle("async-profiler you can use --include/--exclude filter stack traces,more read doc");
         pack();
         //两个屏幕处理出现问题，跳到主屏幕去了 https://blog.csdn.net/weixin_33919941/article/details/88129513
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));

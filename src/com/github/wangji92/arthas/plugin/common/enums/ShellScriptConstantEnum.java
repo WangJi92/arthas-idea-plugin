@@ -20,13 +20,12 @@ public enum ShellScriptConstantEnum implements EnumCodeMsg<String> {
     VMTOOL_INTERRUPT_THREAD("vmtool --action interruptThread -t 1", "vmtool interrupt thread by thread id(thread command get)"),
     BATCH_THREAD("thread -i 3000 -n 5;thread -b;thread --state BLOCKED;", "batch thread"),
     PROFILER("profiler start --event cpu --interval 10000000 --format jfr --duration 180", "采集cpu jfr，支持jfr格式的工具来查看,JDK Mission Control or JProfiler 执行 180秒自动结束"),
-    PROFILER_ALLOC("profiler start --event alloc --interval 10000000 --threads --format svg --duration 180 --threads", "采集alloc 火焰图 执行 180秒自动结束"),
-    PROFILER_CPU("profiler start --event cpu --interval 10000000 --threads --format svg --duration 180 --threads", "采集cpu 火焰图 执行 180秒自动结束"),
+    PROFILER_ALLOC("profiler start --event alloc --interval 10000000 --threads --format html --duration 180 --threads", "采集alloc 火焰图 执行 180秒自动结束"),
+    PROFILER_CPU("profiler start --event cpu --interval 10000000 --threads --format html --duration 180 --threads", "采集cpu 火焰图 执行 180秒自动结束"),
     HEAPDUMP("heapdump /tmp/dump.hprof", "heap dump,heapdump --live /tmp/dump.hprof"),
     JVM("jvm", "display the target jvm information"),
     /**
-     * Arthas发布3.5.6版本：应用排包瘦身不再烦恼
-     * https://mp.weixin.qq.com/s?__biz=MzkxNDI0ODE0NQ==&mid=2247484030&idx=1&sn=d5314772a68f587b45ff550a11224c51&chksm=c1701ac0f60793d624bcda54340e61f78587bd8081c76417d9a7e3ea547cc40305a9f00e8410&scene=178&cur_album_id=1896318852766973955#rd
+     * Arthas发布3.5.6版本：应用排包瘦身不再烦恼 https://mp.weixin.qq.com/s/ePc807eHs5vVMbuCfGpLzQ
      */
     CLASSLOADER_URL_STAT("classloader --url-stat", "URL使用统计功能，方便排除未使用jar包,注意 不代表Unused URLs可以从应用中删掉。"),
     CLASSLOADER("classloader;classloader -l;classloader -t;", "show classloader info"),
