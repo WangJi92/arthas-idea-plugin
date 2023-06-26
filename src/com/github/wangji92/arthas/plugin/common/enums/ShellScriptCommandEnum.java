@@ -305,8 +305,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " --express 'instances[0].getProperty(\""
             + ShellScriptVariableEnum.EDITOR_SELECT_TEXT.getCode() + "\") '",
             "vmtool get selected spring property default key: spring.profiles.active",
-            "https://blog.csdn.net/xunjiushi9717/article/details/94050139") {
-        //todo link url
+            "https://github.com/WangJi92/arthas-idea-plugin/issues/100") {
         @Override
         public boolean support(CommandContext context) {
             return true;
@@ -327,8 +326,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
             + " --express '#standardServletEnvironment=instances[0]," + SPRING_ALL_MAP_PROPERTY + "' ",
             "vmtool get all spring property,first keyword has the highest priority",
-            "https://blog.csdn.net/xunjiushi9717/article/details/94050139") {
-        //todo link url
+            "https://github.com/WangJi92/arthas-idea-plugin/issues/100") {
         @Override
         public boolean support(CommandContext context) {
             return true;
