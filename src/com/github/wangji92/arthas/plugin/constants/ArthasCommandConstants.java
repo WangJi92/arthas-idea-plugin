@@ -103,4 +103,10 @@ public interface ArthasCommandConstants {
     String DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME = "mybatisMapperXmlFileReloadService";
 
 
+    /**
+     * 文本信息的链接 label 可以展示html 文本信息，可以监听点击事件
+     */
+    String LABEL_HTML_FORMAT_AND_LINK="<html><a href=\"%s\"> ref link </a>%s</html>";
+
+
 }

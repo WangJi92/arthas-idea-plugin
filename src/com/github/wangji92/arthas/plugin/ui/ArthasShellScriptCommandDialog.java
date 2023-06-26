@@ -10,6 +10,7 @@ import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.*;
 import com.google.common.collect.Sets;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
@@ -69,6 +70,12 @@ public class ArthasShellScriptCommandDialog extends JDialog {
      * 当前选择的动态脚本
      */
     private CustomComboBoxItem currentSelectDyScriptVariableEnum;
+
+    /**
+     * 当前选中的 静态文本信息
+     */
+    private CustomComboBoxItem currentSelectConstantScriptVariableEnum;
+
 
     /**
      * 防止手动修改 恶意添加了 classloader
@@ -140,6 +147,18 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             }
             ClipboardUtils.setClipboardString(currentScCommand);
             NotifyUtils.notifyMessageDefault(project);
+        });
+        // 增加点击事件 打开链接
+        this.constantLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(currentSelectConstantScriptVariableEnum !=null){
+                    ShellScriptConstantEnum contentObject = (ShellScriptConstantEnum) currentSelectConstantScriptVariableEnum.getContentObject();
+                    if(contentObject !=null && contentObject.getUrl() !=null){
+                        BrowserUtil.browse(contentObject.getUrl());
+                    }
+                }
+            }
         });
     }
 
@@ -267,6 +286,9 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             boxItem.setContentObject(scriptConstantEnum);
             boxItem.setDisplay(scriptConstantEnum.getCode());
             boxItem.setTipText(scriptConstantEnum.getEnumMsg());
+            if(StringUtils.isNotBlank(scriptConstantEnum.getUrl())){
+                boxItem.setTipText(String.format(ArthasCommandConstants.LABEL_HTML_FORMAT_AND_LINK,scriptConstantEnum.getUrl(),scriptConstantEnum.getEnumMsg()));
+            }
             commonShellScriptComboBox.addItem(boxItem);
             if (!constantLabel) {
                 constantLabel = true;
@@ -279,6 +301,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                 if (e.getItem() instanceof CustomComboBoxItem) {
                     CustomComboBoxItem item = (CustomComboBoxItem) e.getItem();
                     this.constantLabel.setText(item.getTipText());
+                    this.currentSelectConstantScriptVariableEnum = item;
                 }
             }
         });
