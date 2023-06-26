@@ -25,7 +25,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " '@"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@"
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "'",
-            "ognl to get static method field 注意需要编执行方法的参数") {
+            "ognl to get static method field 注意需要编执行方法的参数",
+            "https://arthas.aliyun.com/doc/ognl.html#%E4%BD%BF%E7%94%A8%E5%8F%82%E8%80%83") {
         @Override
         public boolean support(CommandContext context) {
 
@@ -53,7 +54,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     GETSTATIC("getstatic "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.FIELD_NAME.getCode(),
-            "get simple static field") {
+            "get simple static field",
+            "https://arthas.aliyun.com/doc/getstatic.html#%E4%BD%BF%E7%94%A8%E5%8F%82%E8%80%83") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -84,7 +86,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "watch  static field") {
+            "watch  static field",
+            "https://arthas.aliyun.com/doc/watch.html#%E8%8E%B7%E5%8F%96%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%AD%97%E6%AE%B5%E3%80%81%E8%B0%83%E7%94%A8%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%87%BD%E6%95%B0%E7%9A%84%E4%BE%8B%E5%AD%90") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -115,7 +118,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'",
-            "watch non static field") {
+            "watch non static field",
+            "https://arthas.aliyun.com/doc/watch.html#%E8%A7%82%E5%AF%9F%E5%BD%93%E5%89%8D%E5%AF%B9%E8%B1%A1%E4%B8%AD%E7%9A%84%E5%B1%9E%E6%80%A7") {
         @Override
         public boolean support(CommandContext context) {
             return OgnlPsUtils.isNonStaticField(context.getPsiElement());
@@ -143,7 +147,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "watch input/output parameter, return object,exception") {
+            "watch input/output parameter, return object,exception",
+            "https://arthas.aliyun.com/doc/watch.html#%E5%90%8C%E6%97%B6%E8%A7%82%E5%AF%9F%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E5%89%8D%E5%92%8C%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%90%8E") {
         @Override
         public boolean support(CommandContext context) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
@@ -170,7 +175,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
             + ShellScriptVariableEnum.SKIP_JDK_METHOD.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "trace the execution time of specified method invocation. ") {
+            "trace the execution time of specified method invocation. ",
+            "https://arthas.aliyun.com/doc/trace.html") {
         @Override
         public boolean support(CommandContext context) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
@@ -196,7 +202,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + " --express 'instances[0]."
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' ",
-            "vmtool get instance invoke method field,you can edit express params,find first instance") {
+            "vmtool get instance invoke method field,you can edit express params,find first instance",
+            "https://arthas.aliyun.com/doc/vmtool.html#%E6%89%A7%E8%A1%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -231,7 +238,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " --express '#field=instances[0].getClass()"
             + ".getDeclaredField(\"" + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "\"),#field.setAccessible(true),"
             + "#field.set(instances[0]," + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")'",
-            "vmtool 获取到实例后通过反射修改字段的值,需要编辑设置的值的信息") {
+            "vmtool 获取到实例后通过反射修改字段的值,需要编辑设置的值的信息",
+            "https://arthas.aliyun.com/doc/vmtool.html#%E6%89%A7%E8%A1%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -266,7 +274,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " --express '#field=instances[0].getClass()"
             + ".getDeclaredField(\"" + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),"
             + "#field.set(instances[0]," + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")'",
-            "vmtool 获取到实例后通过反射修改字段的值,需要编辑设置的值的信息") {
+            "vmtool 获取到实例后通过反射修改final字段的值,需要编辑设置的值的信息",
+            "https://arthas.aliyun.com/doc/vmtool.html#%E6%89%A7%E8%A1%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -295,7 +304,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
             + " --express 'instances[0].getProperty(\""
             + ShellScriptVariableEnum.EDITOR_SELECT_TEXT.getCode() + "\") '",
-            "vmtool get selected spring property default key: spring.profiles.active") {
+            "vmtool get selected spring property default key: spring.profiles.active",
+            "https://blog.csdn.net/xunjiushi9717/article/details/94050139") {
+        //todo link url
         @Override
         public boolean support(CommandContext context) {
             return true;
@@ -315,7 +326,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "--action getInstances --className org.springframework.core.env.ConfigurableEnvironment "
             + " --express '#standardServletEnvironment=instances[0]," + SPRING_ALL_MAP_PROPERTY + "' ",
-            "vmtool get all spring property,first keyword has the highest priority") {
+            "vmtool get all spring property,first keyword has the highest priority",
+            "https://blog.csdn.net/xunjiushi9717/article/details/94050139") {
+        //todo link url
         @Override
         public boolean support(CommandContext context) {
             return true;
@@ -335,7 +348,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + "--action getInstances --className "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + " --limit 5 ",
-            "vmtool get all instance") {
+            "vmtool get all instance",
+            "https://arthas.aliyun.com/doc/vmtool.html#%E8%8E%B7%E5%8F%96%E5%AF%B9%E8%B1%A1") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -363,7 +377,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "'#springContext=" + ShellScriptVariableEnum.SPRING_CONTEXT.getCode() + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\")."
             + ShellScriptVariableEnum.EXECUTE_INFO.getCode() + "' ",
-            "invoke static spring bean【手动编辑填写参数】【bean名称可能不正确,可以手动修改】 ") {
+            "invoke static spring bean【手动编辑填写参数】【bean名称可能不正确,可以手动修改】",
+            "") {
+        //todo link
         @Override
         public boolean support(CommandContext context) {
             //todo 判断是否为spring bean
@@ -412,7 +428,9 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "'#springContext=" + ShellScriptVariableEnum.SPRING_CONTEXT.getCode()
             + ",#springContext.getBean(\"" + ShellScriptVariableEnum.SPRING_BEAN_NAME.getCode() + "\").set" + ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getCode() + "(" + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
-            "invoke static spring bean set field method 【需要编辑set方法的值】【bean名称可能不正确,可以手动修改】 ") {
+            "invoke static spring bean set field method 【需要编辑set方法的值】【bean名称可能不正确,可以手动修改】 ",
+            "") {
+        //todo help link
         @Override
         public boolean support(CommandContext context) {
             //todo 判断是否为spring bean
@@ -481,7 +499,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
             + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "display the stack trace for the specified class and method") {
+            "display the stack trace for the specified class and method",
+            "https://arthas.aliyun.com/doc/stack.html") {
         @Override
         public boolean support(CommandContext context) {
 
@@ -508,7 +527,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + ShellScriptVariableEnum.INVOKE_MONITOR_COUNT.getCode() + "  --cycle "
             + ShellScriptVariableEnum.INVOKE_MONITOR_INTERVAL.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "monitor method execution statistics ") {
+            "monitor method execution statistics ",
+            "https://arthas.aliyun.com/doc/monitor.html") {
         @Override
         public boolean support(CommandContext context) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
@@ -530,8 +550,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     JAD("jad --source-only "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode() + " ",
-
-            "decompile class") {
+            "decompile class",
+            "https://arthas.aliyun.com/doc/jad.html") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -560,7 +580,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     JAD_JAVA("jad --source-only "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.METHOD_NAME_NOT_STAR.getCode(),
-            "decompile class") {
+            "decompile class",
+            "https://arthas.aliyun.com/doc/jad.html") {
         @Override
         public boolean support(CommandContext context) {
             if (!OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement()).startsWith("java.")) {
@@ -587,7 +608,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      */
     SC("sc -d "
             + ShellScriptVariableEnum.CLASS_NAME.getCode(),
-            "search all the classes loaded by jvm") {
+            "search all the classes loaded by jvm",
+            "https://arthas.aliyun.com/doc/sc.html") {
         @Override
         public boolean support(CommandContext context) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
@@ -609,7 +631,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     SM("sm -d "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + ShellScriptVariableEnum.METHOD_NAME.getCode(),
-            "search the method of classes loaded by jvm") {
+            "search the method of classes loaded by jvm",
+            "https://arthas.aliyun.com/doc/sc.html") {
         @Override
         public boolean support(CommandContext context) {
             return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
@@ -633,7 +656,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             " '#field=@"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@class.getDeclaredField(\"" + ShellScriptVariableEnum.FIELD_NAME.getCode() + "\"),#field.setAccessible(true),#field.set(null,"
             + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
-            "ognl reflect to modify static  not final field 注意需要被修改的字段的值") {
+            "ognl reflect to modify static  not final field 注意需要被修改的字段的值",
+            "https://github.com/WangJi92/arthas-idea-plugin/issues/1") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -661,7 +685,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             " '#field=@"
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + "@class.getDeclaredField(\"" + ShellScriptVariableEnum.FIELD_NAME.getCode() + "\"),#modifiers=#field.getClass().getDeclaredField(\"modifiers\"),#modifiers.setAccessible(true),#modifiers.setInt(#field,#field.getModifiers() & ~@java.lang.reflect.Modifier@FINAL),#field.setAccessible(true),#field.set(null,"
             + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")' ",
-            "ognl reflect to modify static  final field 注意需要被修改的字段的值") {
+            "ognl reflect to modify static  final field 注意需要被修改的字段的值",
+            "https://github.com/WangJi92/arthas-idea-plugin/issues/1") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -693,7 +718,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
-            "watch * to execute static method 注意需要编辑执行静态方法的参数") {
+            "watch * to execute static method 注意需要编辑执行静态方法的参数",
+            "https://arthas.aliyun.com/doc/watch.html#%E8%8E%B7%E5%8F%96%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%AD%97%E6%AE%B5%E3%80%81%E8%B0%83%E7%94%A8%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%87%BD%E6%95%B0%E7%9A%84%E4%BE%8B%E5%AD%90") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -724,7 +750,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             + " -x "
             + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
             + "'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'",
-            "watch * to execute method 注意需要编执行方法的参数") {
+            "watch * to execute method 注意需要编执行方法的参数",
+            "https://arthas.aliyun.com/doc/watch.html#%E8%8E%B7%E5%8F%96%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%AD%97%E6%AE%B5%E3%80%81%E8%B0%83%E7%94%A8%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E5%87%BD%E6%95%B0%E7%9A%84%E4%BE%8B%E5%AD%90") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
@@ -750,7 +777,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     LOGGER("logger --name "
             + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
             + "--level debug ",
-            "--level debug 可以编辑修改为 info、error") {
+            "--level debug 可以编辑修改为 info、error",
+            "https://arthas.aliyun.com/doc/logger.html#%E6%9B%B4%E6%96%B0-logger-level") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -778,7 +806,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
     DUMP("dump "
             + ShellScriptVariableEnum.CLASS_NAME.getCode()
             + " -d /tmp/output ",
-            "dump class byte array from jvm") {
+            "dump class byte array from jvm",
+            "https://arthas.aliyun.com/doc/dump.html") {
         @Override
         public boolean support(CommandContext context) {
             if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
@@ -803,9 +832,10 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      * @param code
      * @param msg
      */
-    ShellScriptCommandEnum(String code, String msg) {
+    ShellScriptCommandEnum(String code, String msg,String refLink) {
         this.code = code;
         this.msg = msg;
+        this.refLink = refLink;
     }
 
     /**
@@ -817,6 +847,8 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
      * 提示信息
      */
     private String msg;
+
+    private String refLink;
 
 
     /**
@@ -854,4 +886,7 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
         return code;
     }
 
+    public String getRefLink() {
+        return refLink;
+    }
 }

@@ -251,6 +251,18 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             }
         });
         shellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(shellScriptComboBox, dyTipLabel));
+        // 增加点击事件 打开链接
+        this.dyTipLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(currentSelectDyScriptVariableEnum !=null){
+                    ShellScriptCommandEnum contentObject = (ShellScriptCommandEnum)currentSelectDyScriptVariableEnum.getContentObject();
+                    if(contentObject !=null && contentObject.getRefLink() !=null){
+                        BrowserUtil.browse(contentObject.getRefLink());
+                    }
+                }
+            }
+        });
 
         for (ShellScriptCommandEnum shellScript : ShellScriptCommandEnum.values()) {
             if (!shellScript.support(this.commandContext)) {
@@ -261,6 +273,9 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             boxItem.setContentObject(shellScript);
             boxItem.setDisplay(displayCode);
             boxItem.setTipText(shellScript.getEnumMsg());
+            if(StringUtils.isNotBlank(shellScript.getRefLink())){
+                boxItem.setTipText(String.format(ArthasCommandConstants.LABEL_HTML_FORMAT_AND_LINK,shellScript.getRefLink(),shellScript.getEnumMsg()));
+            }
             shellScriptComboBox.addItem(boxItem);
         }
     }
@@ -292,7 +307,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             commonShellScriptComboBox.addItem(boxItem);
             if (!constantLabel) {
                 constantLabel = true;
-                this.constantLabel.setText(scriptConstantEnum.getEnumMsg());
+                this.constantLabel.setText(boxItem.getTipText());
             }
 
         }
