@@ -430,7 +430,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      */
     private static void checkGlobalStaticSpringContextAndSettingCurrentProjectIfEmpty(AppSettingsState appSettingsState) {
         // 配置检查.. 兼容老版本
-        if (appSettingsState.staticSpringContextOgnl.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING) || StringUtils.isBlank(appSettingsState.staticSpringContextOgnl)) {
+        if (appSettingsState.staticSpringContextOgnl.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
             String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
             // 最早的版本设置过配置的！ 使用那个配置作为当前工程的配置
             if (StringUtils.isNotBlank(springContextValue) && !ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(springContextValue) && springContextValue.contains(AT)) {

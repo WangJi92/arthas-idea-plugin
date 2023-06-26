@@ -443,23 +443,24 @@ public class AppSettingsPage implements Configurable {
      */
     private void saveStaticSpringContext(StringBuilder error) {
         String staticOgnlExpressionTextFiledText = springContextStaticOgnlExpressionTextFiled.getText();
-        if (StringUtils.isBlank(staticOgnlExpressionTextFiledText) || !staticOgnlExpressionTextFiledText.contains(AT)) {
-            error.append("配置静态spring context 错误");
-        } else {
-            if (!springContextStaticOgnlExpressionTextFiled.getText().equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
-                String springContextValue = PropertiesComponentUtils.getValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION);
-                // 有一个地方设置 默认设置为全局的！
-                if (StringUtils.isBlank(springContextValue) || springContextValue.equals(ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING)) {
-                    PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, springContextStaticOgnlExpressionTextFiled.getText());
-                }
-            }
-            settings.staticSpringContextOgnl = springContextStaticOgnlExpressionTextFiled.getText();
-            settings.springContextGlobalSetting = springContextGlobalSettingRadioButton.isSelected();
+        if (StringUtils.isBlank(staticOgnlExpressionTextFiledText)) {
+            settings.staticSpringContextOgnl = "";
             //全局设置
-            if (springContextGlobalSettingRadioButton.isSelected()) {
-                PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, springContextStaticOgnlExpressionTextFiled.getText());
+            if (springContextGlobalSettingRadioButton.isSelected() && !ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(settings.staticSpringContextOgnl)) {
+                PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, staticOgnlExpressionTextFiledText);
             }
+            return;
+        }
 
+        if (!staticOgnlExpressionTextFiledText.contains(AT)) {
+            error.append("配置静态spring context 错误");
+            return;
+        }
+        settings.staticSpringContextOgnl = staticOgnlExpressionTextFiledText;
+        settings.springContextGlobalSetting = springContextGlobalSettingRadioButton.isSelected();
+        //全局设置
+        if (springContextGlobalSettingRadioButton.isSelected() && !ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING.equals(settings.staticSpringContextOgnl)) {
+            PropertiesComponentUtils.setValue(ArthasCommandConstants.SPRING_CONTEXT_STATIC_OGNL_EXPRESSION, staticOgnlExpressionTextFiledText);
         }
     }
 

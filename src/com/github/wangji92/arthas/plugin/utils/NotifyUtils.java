@@ -11,7 +11,9 @@ import org.jetbrains.annotations.NotNull;
  * @date 21-12-2019
  */
 public class NotifyUtils {
-
+    /**
+     * todo https://plugins.jetbrains.com/docs/intellij/notifications.html#top-level-notifications-balloons
+     */
     private static final NotificationGroup NOTIFICATION = new NotificationGroup("arthas", NotificationDisplayType.BALLOON, false);
 
 
