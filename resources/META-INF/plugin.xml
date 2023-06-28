@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.43</version>
+    <version>2.44-SNAPSHOT</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.44-RELEASE</p>
+      <ul>
+        <li>optimizing quickly add ref link</li>
+      </ul>
      <p>2.43-RELEASE</p>
       <ul>
         <li>optimizing vmtool get spring all property/select property,if you not set static spring context</li>
@@ -220,7 +224,7 @@
        <p>2.12-RELEASE</p>
       <ul>
         <li>1.Builder Static Ognl Grammar Help Watch Static Content</li>
-        <li>2.Add some commmon command eg jvm、dashboard、classloader、vmoption</li>
+        <li>2.Add some common command eg jvm、dashboard、classloader、vmoption</li>
         <li>3.Enhance watch command,eg: watch com.wangji92.arthas.plugin.demo.controller.StaticTest * '{params,returnObj,throwExp,target.filedValue}' -n 5 -x 3 'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'</li>
       </ul>
       <ul>
