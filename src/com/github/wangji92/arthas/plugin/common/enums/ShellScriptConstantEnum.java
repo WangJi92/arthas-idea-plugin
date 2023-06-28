@@ -20,7 +20,7 @@ public enum ShellScriptConstantEnum implements EnumCodeMsg<String> {
     VM_TOOL_FORCE_GC("vmtool --action forceGc", "force gc", "https://arthas.aliyun.com/doc/vmtool.html#%E5%BC%BA%E5%88%B6-gc"),
     VMTOOL_INTERRUPT_THREAD("vmtool --action interruptThread -t 1", "vmtool interrupt thread by thread id(thread command get)", "https://arthas.aliyun.com/doc/vmtool.html#interrupt-%E6%8C%87%E5%AE%9A%E7%BA%BF%E7%A8%8B"),
     BATCH_THREAD("thread -i 3000 -n 5;thread -b;thread --state BLOCKED;", "batch thread", "https://arthas.aliyun.com/doc/thread.html"),
-    PROFILER("profiler start --event cpu --interval 10000000 --format jfr --duration 180", "采集 cpu 火焰图,jfr 格式", "https://arthas.aliyun.com/doc/profiler.html#%E6%8C%87%E5%AE%9A%E6%89%A7%E8%A1%8C%E6%97%B6%E9%97%B4"),
+    PROFILER("profiler start --event cpu --interval 10000000 --format jfr --duration 180", "see link arthas+jprofiler分析 采集的cpu jfr 火焰图", "https://github.com/alibaba/arthas/issues/1416"),
     PROFILER_ALLOC("profiler start --event alloc --interval 10000000 --threads --format html --duration 180 --threads", "采集alloc火焰图 ", "https://arthas.aliyun.com/doc/profiler.html#profiler-%E6%94%AF%E6%8C%81%E7%9A%84-events"),
     PROFILER_CPU("profiler start --event cpu --interval 10000000 --threads --format html --duration 180 --threads", "采集cpu 火焰图", "https://arthas.aliyun.com/doc/profiler.html#%E9%85%8D%E7%BD%AE-include-exclude-%E6%9D%A5%E8%BF%87%E6%BB%A4%E6%95%B0%E6%8D%AE"),
     HEAPDUMP("heapdump /tmp/dump.hprof", "heap dump,heapdump --live /tmp/dump.hprof", "https://arthas.aliyun.com/doc/heapdump.html"),
@@ -28,7 +28,7 @@ public enum ShellScriptConstantEnum implements EnumCodeMsg<String> {
     /**
      * Arthas发布3.5.6版本：应用排包瘦身不再烦恼 https://mp.weixin.qq.com/s/ePc807eHs5vVMbuCfGpLzQ
      */
-    CLASSLOADER_URL_STAT("classloader --url-stat", "方便排除未使用jar包,注意 不代表Unused URLs可以从应用中删掉。", "https://mp.weixin.qq.com/s/ePc807eHs5vVMbuCfGpLzQ"),
+    CLASSLOADER_URL_STAT("classloader --url-stat", "应用排包瘦身不再烦恼", "https://mp.weixin.qq.com/s/ePc807eHs5vVMbuCfGpLzQ"),
     CLASSLOADER("classloader;classloader -l;classloader -t;", "show classloader info", "https://arthas.aliyun.com/doc/classloader.html"),
     MEMORY("memory", "memory命令可以查看JVM内存信息", "https://mp.weixin.qq.com/s/ePc807eHs5vVMbuCfGpLzQ"),
     MBEAN_MEMORY_THREAD("mbean java.lang:type=Memory;mbean java.lang:type=MemoryPool,name=* Usage;mbean java.nio:type=BufferPool,name=*;mbean java.lang:type=Threading;mbean java.lang:type=OperatingSystem;", "use mbean to show memory pool and thread", "https://arthas.aliyun.com/doc/mbean.html"),

@@ -164,6 +164,32 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return context.getCommandCode(this);
         }
     },
+    WATCH_PRINT_STACK("watch "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + ShellScriptVariableEnum.METHOD_NAME.getCode() + " "
+            + "'new Throwable()' "
+            + ShellScriptVariableEnum.PRINT_CONDITION_RESULT.getCode() + " -n "
+            + ShellScriptVariableEnum.INVOKE_COUNT.getCode() + " "
+            + " -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + ShellScriptVariableEnum.CONDITION_EXPRESS_DEFAULT.getCode(),
+            "watch print stack",
+            "https://mp.weixin.qq.com/s/8ezzcBEdfmsAdcnlLWlq4w") {
+        @Override
+        public boolean support(CommandContext context) {
+            return OgnlPsUtils.isPsiFieldOrMethodOrClass(context.getPsiElement());
+        }
+
+        @Override
+        public String getScCommand(CommandContext context) {
+            return null;
+        }
+
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
+        }
+    },
 
     /**
      * trace
