@@ -3,7 +3,7 @@ package com.github.wangji92.arthas.plugin.common.enums;
 import com.github.wangji92.arthas.plugin.common.enums.base.EnumCodeMsg;
 
 /**
- * 一些常见的命令
+ * 一些常见的命令  通过;分号判断是否可以直接复制命令
  *
  * @author 汪小哥
  * @date 05-05-2021
@@ -37,7 +37,7 @@ public enum ShellScriptConstantEnum implements EnumCodeMsg<String> {
     OPTIONS_JSON_FORMAT("options json-format true", "format object output with json", "https://arthas.aliyun.com/doc/options.html#view-all-options"),
     DASHBOARD_N_1("dashboard -n 1", "dashboard info", "https://arthas.aliyun.com/doc/dashboard.html"),
     SYS_PROP_ENV("sysprop;sysenv;", "sysprop and sysenv", "https://arthas.aliyun.com/doc/sysenv.html"),
-    VM_OPTION("vmoption;", "display and update the vm diagnostic options", "https://arthas.aliyun.com/doc/vmoption.html"),
+    VM_OPTION("vmoption", "display and update the vm diagnostic options", "https://arthas.aliyun.com/doc/vmoption.html"),
     /**
      * https://mp.weixin.qq.com/s/GF3C7RcEPV0f1hDah6CJPA
      */
