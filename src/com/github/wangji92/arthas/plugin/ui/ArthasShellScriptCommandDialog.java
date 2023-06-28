@@ -148,18 +148,6 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             ClipboardUtils.setClipboardString(currentScCommand);
             NotifyUtils.notifyMessageDefault(project);
         });
-        // 增加点击事件 打开链接
-        this.constantLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(currentSelectConstantScriptVariableEnum !=null){
-                    ShellScriptConstantEnum contentObject = (ShellScriptConstantEnum) currentSelectConstantScriptVariableEnum.getContentObject();
-                    if(contentObject !=null && contentObject.getUrl() !=null){
-                        BrowserUtil.browse(contentObject.getUrl());
-                    }
-                }
-            }
-        });
     }
 
     /**
@@ -240,6 +228,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             }
             ClipboardUtils.setClipboardString(copyCommand);
             NotifyUtils.notifyMessage(project, COMMAND_COPIED + "(Some commands need classloader hash value to be executed directly)");
+            this.doCloseDialog();
         });
         shellScriptComboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -308,6 +297,7 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             if (!constantLabel) {
                 constantLabel = true;
                 this.constantLabel.setText(boxItem.getTipText());
+                this.currentSelectConstantScriptVariableEnum = boxItem;
             }
 
         }
@@ -336,8 +326,19 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             String selectedItemStr = selectedItem.toString();
             ClipboardUtils.setClipboardString(selectedItemStr);
             NotifyUtils.notifyMessage(project, COMMAND_COPIED + "(some of the batch scripts cannot be executed need to be modified manually)");
-
-
+            this.doCloseDialog();
+        });
+        // 增加点击事件 打开链接
+        this.constantLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(currentSelectConstantScriptVariableEnum !=null){
+                    ShellScriptConstantEnum contentObject = (ShellScriptConstantEnum) currentSelectConstantScriptVariableEnum.getContentObject();
+                    if(contentObject !=null && contentObject.getUrl() !=null){
+                        BrowserUtil.browse(contentObject.getUrl());
+                    }
+                }
+            }
         });
 
     }

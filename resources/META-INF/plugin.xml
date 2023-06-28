@@ -220,7 +220,7 @@
        <p>2.12-RELEASE</p>
       <ul>
         <li>1.Builder Static Ognl Grammar Help Watch Static Content</li>
-        <li>2.Add some commmon command eg jvm、dashboard、classloader、vmoption</li>
+        <li>2.Add some common command eg jvm、dashboard、classloader、vmoption</li>
         <li>3.Enhance watch command,eg: watch com.wangji92.arthas.plugin.demo.controller.StaticTest * '{params,returnObj,throwExp,target.filedValue}' -n 5 -x 3 'method.initMethod(),method.constructor!=null || !@java.lang.reflect.Modifier@isStatic(method.method.getModifiers())'</li>
       </ul>
       <ul>
