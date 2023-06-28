@@ -236,6 +236,13 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                     CustomComboBoxItem item = (CustomComboBoxItem) e.getItem();
                     dyTipLabel.setText(item.getTipText());
                     this.currentSelectDyScriptVariableEnum = item;
+                    ShellScriptCommandEnum shellScriptCommandEnum = (ShellScriptCommandEnum) item.getContentObject();
+                    // 控制是否展示 sc command,比如watch 这种命令不需要sc
+                    if(StringUtils.isBlank(shellScriptCommandEnum.getScCommand(commandContext))){
+                        dyCopyScCommandButton.setEnabled(false);
+                    }else{
+                        dyCopyScCommandButton.setEnabled(true);
+                    }
                 }
             }
         });
