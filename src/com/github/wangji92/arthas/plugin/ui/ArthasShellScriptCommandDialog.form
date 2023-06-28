@@ -42,7 +42,7 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="dymastic commands"/>
+          <text value="dymastic commands(show only the commands available at the current mouse position)"/>
         </properties>
       </component>
       <grid id="9e539" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -179,7 +179,7 @@
           <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="static commands"/>
+          <text value="static commands(multiple commands can only be used with shell command)"/>
         </properties>
       </component>
       <component id="12680" class="javax.swing.JSeparator">

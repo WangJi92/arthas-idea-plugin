@@ -380,12 +380,12 @@
                 description="Arthas trace">
         </action>
         <action id="ArthasStatic" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
-                text="Ognl Get Static Method Field"
+                text="Ognl Invoke Static Method Field"
                 description="Arthas ognl static">
         </action>
         <action id="ArthasSimpleGetStaticCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSimpleGetStaticCommandAction"
-                text="Simple Get Static Field"
+                text="Get Static Field Simple"
                 description="Simple getStatic field">
         </action>
 
@@ -397,7 +397,7 @@
 
         <action id="ArthasInvokeBeanMethod"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringContextInvokeMethodAction"
-                text="Static Spring Context Invoke  Method Field"
+                text="Static Spring Context Invoke"
                 description="Static spring context invoke  method field">
 
         </action>
@@ -444,7 +444,7 @@
         </action>
         <action id="ArthasSetStaticFieldCommand"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSetStaticFieldCommandAction"
-                text="Ognl Modify Static Field"
+                text="Ognl Set Static Field"
                 description="Ognl set static field">
 
         </action>
@@ -486,18 +486,18 @@
 
         <action id="ArthasWatchOgnlSpringContextInvokeMethodAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchOgnlSpringContextInvokeMethodAction"
-                text="Watch Spring Context Invoke Method Field"
-                description="Watch spring context invoke method field">
+                text="Watch Spring Context Invoke"
+                description="Watch spring context invoke">
         </action>
         <action id="ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"
-                text="TimeTunnel Spring Context Invoke Method Field"
-                description="TimeTunnel spring context invoke method field">
+                text="TimeTunnel Spring Context Invoke"
+                description="TimeTunnel spring context">
         </action>
 
         <action id="ArthasLoggerCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasLoggerCommandAction"
-                text="Logger"
+                text="Logger Set Level"
                 description="Print logger info, and update the logger level">
         </action>
         <action id="ArthasJvmCommandAction"
@@ -579,7 +579,7 @@
                 description="Mybatis mapper xml reload"/>
         <action id="ArthasShellScriptCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasShellScriptCommandAction"
-                text="Quickly Shell Script"
+                text="Quickly Get Available Command "
                 description="Shell script command"/>
         <action id="ArthasVmtoolCommandAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolCommandAction"
@@ -635,38 +635,47 @@
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <separator/>
             <reference ref="ArthasShellScriptCommandAction"/>
+            <separator/>
             <reference ref="ArthasWatch"/>
             <reference ref="ArthasTrace"/>
             <reference ref="ArthasTraceMultipleCommand"/>
             <reference ref="ArthasStackCommand"/>
             <reference ref="ArthasMonitorCommand"/>
             <reference ref="ArthasTimeTunnelCommand"/>
-            <reference ref="ArthasVmtoolCommandAction"/>
-            <separator text="* Spring ApplicationContext getBean"/>
-            <reference ref="ArthasInvokeBeanMethod"/>
-            <reference ref="ArthasWatchOgnlSpringContextInvokeMethodAction"/>
-            <reference ref="ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"/>
-            <separator text="*  Static Method Field"/>
-            <reference ref="ArthasSimpleGetStaticCommand"/>
-            <reference ref="ArthasStatic"/>
-            <reference ref="ArthasSetStaticFieldCommand"/>
-            <reference ref="ArthasOgnlEnumAction"/>
-            <reference ref="ArthasOgnlStaticGrammaticalStructureCommandAction"/>
-            <separator text="*  Spring Properties Priority"/>
-            <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
-            <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
             <separator/>
-            <reference ref="ArthasHotRetransformCommandAction"/>
-            <reference ref="ArthasHotCommandAction"/>
-            <reference ref="ArthasMybatisMapperReloadAction"/>
+            <reference ref="ArthasVmtoolCommandAction"/>
+            <separator/>
+            <group id="arthas-plugin-spring-context" popup="true" text="Spring Get Context Invoke Method Filed">
+                <reference ref="ArthasInvokeBeanMethod"/>
+                <reference ref="ArthasWatchOgnlSpringContextInvokeMethodAction"/>
+                <reference ref="ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"/>
+            </group>
+            <separator/>
+            <group id="arthas-plugin-Static Method Field" popup="true" text="Get Set Static Method Field">
+                <reference ref="ArthasSimpleGetStaticCommand"/>
+                <reference ref="ArthasStatic"/>
+                <reference ref="ArthasSetStaticFieldCommand"/>
+                <reference ref="ArthasOgnlStaticGrammaticalStructureCommandAction"/>
+            </group>
+            <reference ref="ArthasOgnlEnumAction"/>
+            <separator/>
+            <group id="arthas-plugin-Spring Properties Priority" popup="true" text="Spring Properties">
+                <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
+                <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
+            </group>
+            <separator/>
+            <reference ref="ArthasAsyncProfilerCommandAction"/>
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
             <reference ref="ArthasSmCommandAction"/>
             <reference ref="ArthasLoggerCommandAction"/>
-            <reference ref="ArthasAsyncProfilerCommandAction"/>
             <reference ref="ArthasOptionsCommandAction"/>
             <separator/>
+            <reference ref="ArthasHotRetransformCommandAction"/>
+            <reference ref="ArthasHotCommandAction"/>
+            <separator/>
             <group id="arthas-plugin-other" popup="true" text="Other">
+                <reference ref="LocalFileUploadToOssAction"/>
                 <reference ref="ArthasDashboardCommandAction"/>
                 <reference ref="ArthasClassloaderCommandAction"/>
                 <reference ref="ArthasClassLoaderLoadClassCommandAction"/>
@@ -676,7 +685,7 @@
                 <reference ref="ArthasJvmCommandAction"/>
                 <reference ref="ArthasPerCountCommandAction"/>
                 <reference ref="ArthasVmOptionCommandAction"/>
-                <reference ref="LocalFileUploadToOssAction"/>
+                <reference ref="ArthasMybatisMapperReloadAction"/>
             </group>
             <separator/>
             <reference ref="ArthasInstall2Command"/>

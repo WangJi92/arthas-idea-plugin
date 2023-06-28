@@ -17,6 +17,9 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.labels.ActionLink;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Set;
@@ -236,6 +239,13 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                     CustomComboBoxItem item = (CustomComboBoxItem) e.getItem();
                     dyTipLabel.setText(item.getTipText());
                     this.currentSelectDyScriptVariableEnum = item;
+                    ShellScriptCommandEnum shellScriptCommandEnum = (ShellScriptCommandEnum) item.getContentObject();
+                    // 控制是否展示 sc command,比如watch 这种命令不需要sc
+                    if(StringUtils.isBlank(shellScriptCommandEnum.getScCommand(commandContext))){
+                        dyCopyScCommandButton.setEnabled(false);
+                    }else{
+                        dyCopyScCommandButton.setEnabled(true);
+                    }
                 }
             }
         });
@@ -310,6 +320,47 @@ public class ArthasShellScriptCommandDialog extends JDialog {
                 }
             }
         });
+        // 监听文字的变化 根据是否有;号判断是否能够执行copy command
+        try {
+            ComboBoxEditor editor = commonShellScriptComboBox.getEditor();
+            if (editor !=null) {
+                final JTextComponent tc = (JTextComponent) editor.getEditorComponent();
+                tc.getDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        try {
+                            String text = e.getDocument().getText(0, e.getDocument().getLength());
+                            checkStaticCommandChange(text);
+                        } catch (Exception ex) {
+                           //
+                        }
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        try {
+                            String text = e.getDocument().getText(0, e.getDocument().getLength());
+                            checkStaticCommandChange(text);
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                        try {
+                            String text = e.getDocument().getText(0, e.getDocument().getLength());
+                            checkStaticCommandChange(text);
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+           //
+        }
+
         commonShellScriptComboBox.setRenderer(new CustomDefaultListCellRenderer(commonShellScriptComboBox, this.constantLabel));
         commonShellScriptCommandButton.addActionListener(e -> {
             Object selectedItem = commonShellScriptComboBox.getSelectedItem();
@@ -341,6 +392,14 @@ public class ArthasShellScriptCommandDialog extends JDialog {
             }
         });
 
+    }
+
+    private void checkStaticCommandChange(String currentText){
+        if (currentText != null && currentText.indexOf(";") > 0) {
+            commonCopyCommandButton.setEnabled(false);
+        } else {
+            commonCopyCommandButton.setEnabled(true);
+        }
     }
 
     private void onOK() {

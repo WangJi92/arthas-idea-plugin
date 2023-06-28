@@ -39,6 +39,6 @@ public class ArthasShellScriptCommandAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(event);
-        dialog.open("shell command");
+        dialog.open("Quickly Get Available Command(shell command or common command)");
     }
 }
