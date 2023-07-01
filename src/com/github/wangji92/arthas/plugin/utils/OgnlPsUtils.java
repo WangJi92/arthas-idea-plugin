@@ -338,6 +338,31 @@ public class OgnlPsUtils {
     }
 
     /**
+     * 判斷是否有 setXXField
+     *
+     * @param psiElement
+     * @return
+     */
+    public static boolean fieldHaveSetMethod(PsiElement psiElement) {
+        if (!(psiElement instanceof PsiField)) {
+            return false;
+        }
+        PsiField psiField = (PsiField) psiElement;
+        String fieldName = OgnlPsUtils.getFieldName(psiElement);
+        String capitalizeFieldName = StringUtils.capitalize(fieldName);
+        PsiClass containingClass = psiField.getContainingClass();
+        if (containingClass != null) {
+            for (PsiMethod method : containingClass.getMethods()) {
+                if (method.getName().equals("set" + capitalizeFieldName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
      * 获取方法名称
      *
      * @param psiElement

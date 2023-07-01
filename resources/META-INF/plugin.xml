@@ -593,6 +593,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlEnumAction"
                 text="Ognl Invoke for Enum"
                 description="Ognl invoke for enum"/>
+        <action id="ArthasVmtoolSetFieldCommandAction"
+                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolSetFieldCommandAction"
+                text="Vmtool Get Instance Set Field"
+                description="Vmtool get instance set field"/>
 
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
@@ -644,6 +648,7 @@
             <reference ref="ArthasTimeTunnelCommand"/>
             <separator/>
             <reference ref="ArthasVmtoolCommandAction"/>
+            <reference ref="ArthasVmtoolSetFieldCommandAction"/>
             <separator/>
             <group id="arthas-plugin-spring-context" popup="true" text="Spring Get Context Invoke Method Filed">
                 <reference ref="ArthasInvokeBeanMethod"/>
