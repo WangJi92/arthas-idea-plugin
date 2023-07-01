@@ -253,6 +253,39 @@ public enum ShellScriptCommandEnum implements EnumCodeMsg<String> {
             return context.getCommandCode(this);
         }
     },
+    VMTOOL_SET_FIELD("vmtool -x "
+            + ShellScriptVariableEnum.PROPERTY_DEPTH.getCode() + " "
+            + "--action getInstances --className "
+            + ShellScriptVariableEnum.CLASS_NAME.getCode() + " "
+            + " --express '#instances[0].set" + ShellScriptVariableEnum.CAPITALIZE_FIELD_VALUE.getCode() + "(" + ShellScriptVariableEnum.DEFAULT_FIELD_VALUE.getCode() + ")'",
+            "vmtool set field method,method parameters need to be edited",
+            "https://arthas.aliyun.com/doc/vmtool.html#%E6%89%A7%E8%A1%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F") {
+        @Override
+        public boolean support(CommandContext context) {
+            if (OgnlPsUtils.isAnonymousClass(context.getPsiElement())) {
+                return false;
+            }
+            // 构造方法不支持
+            if (OgnlPsUtils.isConstructor(context.getPsiElement())) {
+                return false;
+            }
+            if (OgnlPsUtils.isNonStaticField(context.getPsiElement()) && !OgnlPsUtils.isFinalField(context.getPsiElement()) && OgnlPsUtils.fieldHaveSetMethod(context.getPsiElement())) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public String getScCommand(CommandContext context) {
+            String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(context.getPsiElement());
+            return String.join(" ", "sc", "-d", className);
+        }
+
+        @Override
+        public String getArthasCommand(CommandContext context) {
+            return context.getCommandCode(this);
+        }
+    },
     /**
      * 通过反射设置变量
      * vmtool -x 3 --action getInstances --className com.xxx.cache.CacheAspect  --express '#field=instances[0].getClass().getDeclaredField("cacheEnabled"),#field.setAccessible(true),#field.set(instances[0],false)'  -c 3bd94634
