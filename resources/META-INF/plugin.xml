@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.44-SNAPSHOT</version>
+    <version>2.44</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -45,6 +45,8 @@
     <p>2.44-RELEASE</p>
       <ul>
         <li>optimizing quickly add ref link</li>
+        <li>add a command 'Vmtool Get Instance Set Field'</li>
+        <li>new name 'Quickly Get Available Command'(show only the commands available at the current mouse position) old name is quick shell scripts</li>
       </ul>
      <p>2.43-RELEASE</p>
       <ul>
