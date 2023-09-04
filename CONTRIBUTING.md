@@ -23,7 +23,7 @@ see: [https://www.yuque.com/arthas-idea-plugin/help/qf0s9y](https://www.yuque.co
 
 ## 2.2 add plugin debug
 
-plugin debug like java runtime,add a plugin debug,you can click debug will start a sandbox environment idea in new
+plugin debug like java project,add a plugin debug,you can click debug will start a sandbox environment idea in new
 windows
 
 ![img.png](image/plugin-debug.png)
