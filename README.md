@@ -6,15 +6,14 @@ more issue : [https://github.com/WangJi92/arthas-idea-plugin/issues label=docume
    * [arthas idea plugin document](https://www.yuque.com/arthas-idea-plugin)
    * [arthas + arhtas idea plugin 实战视频](https://www.bilibili.com/video/BV1yz4y1f7iz/)
    * [arthas-idea-plugin demo](https://github.com/WangJi92/arthas-plugin-demo)
-### 给作者一个鼓励
+
 
 如果你喜欢这款插件，欢迎给身边的小伙伴推荐,给个github star,谢谢
 
 # 一、背景
 目前Arthas 官方的工具还不够足够的简单，需要记住一些命令，特别是一些扩展性特别强的高级语法，比如ognl获取spring context 为所欲为，watch、trace 不够简单，需要构造一些命令工具的信息，因此只需要一个能够简单处理字符串信息的插件即可使用。当在处理线上问题的时候需要最快速、最便捷的命令，因此Idea arthas 插件还是有存在的意义和价值的。
-<a name="cE2LQ"></a>
-## 
-<a name="vwK8h"></a>
+
+
 # 二、支持的功能
 支持的功能都是平时处理最常用的一些功能，一些快捷的链接，在处理紧急问题时候不需要到处查找，都是一些基本的功能,自动复制到剪切板中去，方便快捷。
 
@@ -96,18 +95,6 @@ ognl  -x  3  '#springContext=@applicationContextProvider@context,#springContext.
 [代码地址 ](https://github.com/WangJi92/arthas-idea-plugin/blob/master/src/com/github/wangji92/arthas/plugin/utils/OgnlPsUtils.java)
 
 
-## 2.5  install(linux)
-安装脚本，可以一键的通过as.sh 进行执行
-
-```bash
-curl -sk https://arthas.aliyun.com/arthas-boot.jar  -o ~/.arthas-boot.jar  && echo "alias as.sh='java -jar ~/.arthas-boot.jar --repo-mirror aliyun --use-http 2>&1'" >> ~/.bashrc && source ~/.bashrc && echo "source ~/.bashrc" >> ~/.bash_profile && source ~/.bash_profile
-```
-
-
-![image](https://user-images.githubusercontent.com/20874972/71365779-f7e06d00-25da-11ea-92e9-e3ad5725f1ca.png)
-
-
-<a name="Is5S6"></a>
 ## 2.6 常用特殊用法链接
 
 - [special ognl](https://github.com/alibaba/arthas/issues/71)
@@ -118,3 +105,6 @@ curl -sk https://arthas.aliyun.com/arthas-boot.jar  -o ~/.arthas-boot.jar  && ec
 - [ognl 使用姿势](https://blog.csdn.net/u010634066/article/details/101013479)
 
 
+
+## Development Guide
+[CONTRIBUTING](CONTRIBUTING.md)
