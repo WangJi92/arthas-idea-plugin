@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
@@ -63,10 +64,11 @@ public abstract class BaseArthasPluginAction extends AnAction {
         if (project == null) {
             return;
         }
+        Editor editor = event.getRequiredData(CommonDataKeys.EDITOR);
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
         String methodName = OgnlPsUtils.getMethodName(psiElement);
-        doCommand(className, methodName, project, psiElement);
+        doCommand(className, methodName, project, psiElement, editor);
     }
 
     /**
@@ -76,9 +78,10 @@ public abstract class BaseArthasPluginAction extends AnAction {
      * @param methodName
      * @param project
      * @param psiElement
+     * @param editor
      * @return
      */
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
     }
 
 

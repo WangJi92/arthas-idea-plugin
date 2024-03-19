@@ -4,7 +4,15 @@ import com.aliyun.oss.OSS;
 import com.amazonaws.services.s3.AmazonS3;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
-import com.github.wangji92.arthas.plugin.utils.*;
+import com.github.wangji92.arthas.plugin.setting.ApplicationSettingsState;
+import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
+import com.github.wangji92.arthas.plugin.utils.AliyunOssUtils;
+import com.github.wangji92.arthas.plugin.utils.JedisUtils;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.OsS3Utils;
+import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.github.wangji92.arthas.plugin.web.entity.AgentServerInfo;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
@@ -15,8 +23,11 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Jedis;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Objects;
 
 import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.AT;
 
@@ -247,6 +258,15 @@ public class AppSettingsPage implements Configurable {
     private JButton s3CheckButton;
 
 
+
+    private JButton addArthasAgentButton;
+    private JButton removeArthasAgentButton;
+    private JPanel agentTablePanel;
+    private JTable agentTable;
+    public static DefaultTableModel tableModel;
+
+
+
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
@@ -266,6 +286,11 @@ public class AppSettingsPage implements Configurable {
     private AppSettingsState settings;
 
     /**
+     * 全局设置信息
+     */
+    private ApplicationSettingsState applicationSettingsState;
+
+    /**
      * 自动构造  idea 会携带当前的project 参数信息
      *
      * @param project
@@ -273,6 +298,7 @@ public class AppSettingsPage implements Configurable {
     public AppSettingsPage(Project project) {
         this.project = project;
         settings = AppSettingsState.getInstance(this.project);
+        applicationSettingsState = ApplicationSettingsState.getInstance();
     }
 
     private void createUIComponents() {
@@ -656,6 +682,17 @@ public class AppSettingsPage implements Configurable {
         arthasPackageZipDownloadUrlTextField.setText(settings.arthasPackageZipDownloadUrl);
         mybatisMapperReloadMethodNameTextField.setText(settings.mybatisMapperReloadMethodName);
         mybatisMapperReloadServiceBeanNameTextField.setText(settings.mybatisMapperReloadServiceBeanName);
+
+        // 设置agent列表
+        tableModel = new DefaultTableModel(0, 0);
+        tableModel.setColumnIdentifiers(new String[]{"ServerName","Address","BindGitBranch"});
+        agentTable.setModel(tableModel);
+        agentTable.setRowHeight(20);
+
+        this.applicationSettingsState.agentServerInfoList.forEach((agentServerInfo) -> {
+            tableModel.addRow(new Object[]{agentServerInfo.getName(), agentServerInfo.getAddress(), agentServerInfo.getBindGitBranch()});
+        });
+
         initEvent();
     }
 
@@ -760,6 +797,39 @@ public class AppSettingsPage implements Configurable {
         };
         manualSelectPidRadioButton.addItemListener(itemListenerSelectPid);
         preConfigurationSelectPidRadioButton.addItemListener(itemListenerSelectPid);
+
+        addArthasAgentButton.addActionListener(e -> new AddAgentServer().open());
+        removeArthasAgentButton.addActionListener(e -> {
+            int selectedRow = agentTable.getSelectedRow();
+            if (selectedRow != -1) {
+                tableModel.removeRow(selectedRow);
+                this.applicationSettingsState.agentServerInfoList.remove(selectedRow);
+            }
+        });
+        tableModel.addTableModelListener(e -> {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                System.out.println("value change last-row -> "+e.getLastRow()+" column -> "+e.getColumn() + " change to ->"+tableModel.getValueAt(e.getLastRow(), e.getColumn()).toString());
+                AgentServerInfo agentServerInfo = applicationSettingsState.agentServerInfoList.get(e.getLastRow());
+                if (Objects.isNull(agentServerInfo)) {
+                    return;
+                }
+                int column = e.getColumn();
+                String value = tableModel.getValueAt(e.getLastRow(), e.getColumn()).toString();
+                switch (column) {
+                    case 0:
+                      agentServerInfo.setName(value);
+                      break;
+                    case 1:
+                        agentServerInfo.setAddress(value);
+                        break;
+                    case 2:
+                        agentServerInfo.setBindGitBranch(value);
+                        break;
+                    default:
+                        System.out.println("column not match error");
+                }
+            }
+        });
     }
 
     @Override

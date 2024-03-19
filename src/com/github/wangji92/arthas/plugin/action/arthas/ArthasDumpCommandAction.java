@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.ui.ArthasActionDumpDialog;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
@@ -20,7 +21,7 @@ import com.intellij.psi.PsiElement;
 public class ArthasDumpCommandAction extends BaseArthasPluginAction {
 
     @Override
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
         //增强，不用一定要选择在class 上面，只要是可以确定这个class 即可
         String join = String.join(" ", "dump", className, "-d /tmp/output");
         new ArthasActionDumpDialog(project, className, join).open("Dump Class Byte Array from JVM");

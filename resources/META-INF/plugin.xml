@@ -348,6 +348,9 @@
                              id="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
                              displayName="Arthas Idea Plugin"/>
         <projectService serviceImplementation="com.github.wangji92.arthas.plugin.setting.AppSettingsState"/>
+        <applicationService serviceImplementation="com.github.wangji92.arthas.plugin.setting.ApplicationSettingsState"/>
+        <executor implementation="com.github.wangji92.arthas.plugin.gui.ArthasPlusExecutor"
+                  id="ArthasPlusExecutor"/>
     </extensions>
 
     <!--    <extensions defaultExtensionNs="com.intellij">-->

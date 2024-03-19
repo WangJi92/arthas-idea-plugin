@@ -17,5 +17,11 @@
     <orderEntry type="library" name="commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" name="redis.clients:jedis:3.4.1" level="project" />
     <orderEntry type="library" name="com.amazonaws:aws-java-sdk-s3:1.12.321" level="project" />
+    <orderEntry type="library" name="cn.hutool.all" level="project" />
+    <orderEntry type="library" name="alibaba.fastjson" level="project" />
+    <orderEntry type="library" name="java.websocket.Java.WebSocket" level="project" />
+    <orderEntry type="library" name="ch.qos.logback.classic" level="project" />
+    <orderEntry type="library" name="projectlombok.lombok" level="project" />
+    <orderEntry type="library" name="eclipse.jgit" level="project" />
   </component>
 </module>
