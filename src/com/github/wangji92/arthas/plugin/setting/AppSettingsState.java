@@ -231,6 +231,16 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     private static Project projectInfo;
 
+    /**
+     * 上次选择的环境
+     */
+    public String lastSelectEnv;
+
+    /**
+     * 上次选择的agent
+     */
+    public String lastSelectAgent;
+
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         projectInfo = project;
