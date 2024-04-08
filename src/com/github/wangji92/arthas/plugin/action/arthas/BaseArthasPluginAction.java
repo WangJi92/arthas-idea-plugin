@@ -51,6 +51,11 @@ public abstract class BaseArthasPluginAction extends AnAction {
     }
 
     @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+
+    @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         /**
          * {@link com.intellij.ide.actions.CopyReferenceAction}
