@@ -5,10 +5,7 @@ import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -51,6 +48,11 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
         String command = ShellScriptCommandEnum.OGNL_GETSTATIC.getArthasCommand(commandContext);
         String className = commandContext.getKeyValue(ShellScriptVariableEnum.CLASS_NAME);
         new ArthasActionStaticDialog(project, className, command, "").open("Ognl To Get Static Method Field");
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
 }

@@ -1,10 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.ui.ArthasOptionsDialog;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,5 +20,10 @@ public class ArthasOptionsCommandAction extends AnAction {
             return;
         }
         new ArthasOptionsDialog(project).open();
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
     }
 }

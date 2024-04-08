@@ -2,10 +2,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,4 +24,10 @@ public class ArthasThreadAction extends AnAction {
         ClipboardUtils.setClipboardString("thread -i 3000 -n 5");
         NotifyUtils.notifyMessage(project, "-n 5打印cpu占比最高的堆栈,-b 某个线程拿住了某个锁,只支持持找出synchronized关键字锁住的");
     }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
+    }
 }
+

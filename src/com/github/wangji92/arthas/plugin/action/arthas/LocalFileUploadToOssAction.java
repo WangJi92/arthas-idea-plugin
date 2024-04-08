@@ -8,10 +8,7 @@ import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OsS3Utils;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -48,6 +45,11 @@ public class LocalFileUploadToOssAction extends AnAction {
             return;
         }
         event.getPresentation().setEnabled(true);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
     }
 
 

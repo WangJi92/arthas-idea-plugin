@@ -9,13 +9,9 @@ import com.github.wangji92.arthas.plugin.ui.ArthasVmToolDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -75,5 +71,10 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
         }
 
 
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
     }
 }

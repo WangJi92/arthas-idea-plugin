@@ -6,10 +6,7 @@ import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -65,6 +62,11 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             return;
         }
         e.getPresentation().setEnabled(true);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     @Override
