@@ -54,7 +54,7 @@
           <text value="copy command"/>
         </properties>
       </component>
-      <component id="60d13" class="com.intellij.ui.components.labels.LinkLabel" binding="scLink" custom-create="true">
+      <component id="60d13" class="com.intellij.ui.components.ActionLink" binding="scLink" custom-create="true">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -95,7 +95,7 @@
           <toolTipText value="使用当前hash值加载"/>
         </properties>
       </component>
-      <component id="c6564" class="com.intellij.ui.components.labels.LinkLabel" binding="helpLink" custom-create="true">
+      <component id="c6564" class="com.intellij.ui.components.ActionLink" binding="helpLink" custom-create="true">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

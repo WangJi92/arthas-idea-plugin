@@ -51,7 +51,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="39ff4" class="com.intellij.ui.components.labels.LinkLabel" binding="classLoaderLinkLabel" custom-create="true">
+      <component id="39ff4" class="com.intellij.ui.components.ActionLink" binding="classLoaderActionLink" custom-create="true">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -60,7 +60,7 @@
           <toolTipText value="sc -d get classloader hash value"/>
         </properties>
       </component>
-      <component id="201ea" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlOfficeLinkLabel" custom-create="true">
+      <component id="201ea" class="com.intellij.ui.components.ActionLink" binding="ognlOfficeActionLink" custom-create="true">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -68,7 +68,7 @@
           <text value="ognl help"/>
         </properties>
       </component>
-      <component id="8c011" class="com.intellij.ui.components.labels.LinkLabel" binding="oglSpecialLink" custom-create="true">
+      <component id="8c011" class="com.intellij.ui.components.ActionLink" binding="oglSpecialLink" custom-create="true">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -76,7 +76,7 @@
           <text value="ognl special"/>
         </properties>
       </component>
-      <component id="d5190" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlDemoLink" custom-create="true">
+      <component id="d5190" class="com.intellij.ui.components.ActionLink" binding="ognlDemoLink" custom-create="true">
         <constraints>
           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

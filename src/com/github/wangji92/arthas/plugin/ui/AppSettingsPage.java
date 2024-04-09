@@ -9,7 +9,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Jedis;
@@ -36,7 +36,7 @@ public class AppSettingsPage implements Configurable {
      * arthas -n
      */
     private JSpinner invokeCountField;
-    private LinkLabel springContextProviderLink;
+    private ActionLink springContextProviderLink;
 
     private JPanel contentPane;
     /**
@@ -63,10 +63,10 @@ public class AppSettingsPage implements Configurable {
 
     private JTextField selectProjectNameTextField;
 
-    private LinkLabel selectLink;
-    private LinkLabel batchSupportLink;
-    private LinkLabel redefineHelpLinkLabel;
-    private LinkLabel ossHelpLink;
+    private ActionLink selectLink;
+    private ActionLink batchSupportLink;
+    private ActionLink redefineHelpActionLink;
+    private ActionLink ossHelpLink;
     /**
      * 主pane
      */
@@ -138,7 +138,7 @@ public class AppSettingsPage implements Configurable {
      */
     private JRadioButton printConditionExpressRadioButton;
 
-    private LinkLabel printConditionExpressLink;
+    private ActionLink printConditionExpressLink;
     /**
      * 热更新之前先编译
      */
@@ -195,27 +195,27 @@ public class AppSettingsPage implements Configurable {
     /**
      * 更多链接
      */
-    private LinkLabel mybatisMapperReloadHelpLink;
+    private ActionLink mybatisMapperReloadHelpLink;
     /**
      * retransform 帮助文档
      */
-    private LinkLabel retransformHelpLink;
+    private ActionLink retransformHelpLink;
     /**
      * arthas retransformer 热更新功能浅析
      */
-    private LinkLabel analysisRetransformerLink;
+    private ActionLink analysisRetransformerLink;
     /**
      * github 地址
      */
-    private LinkLabel arthasIdeaGithubLink;
+    private ActionLink arthasIdeaGithubLink;
     /**
      * demo 地址
      */
-    private LinkLabel arthasIdeaDemoLink;
+    private ActionLink arthasIdeaDemoLink;
     /**
      * 语雀知识库链接
      */
-    private LinkLabel arthasYuQueDocumentLink;
+    private ActionLink arthasYuQueDocumentLink;
     /**
      * 自动转换为中文编码
      */
@@ -223,7 +223,7 @@ public class AppSettingsPage implements Configurable {
     /**
      * 自动将中文转换为 unicode 编码
      */
-    private LinkLabel howToInputChineseParamLink;
+    private ActionLink howToInputChineseParamLink;
 
     private JRadioButton s3RadioButton;
 
@@ -279,7 +279,7 @@ public class AppSettingsPage implements Configurable {
         this.springContextProviderLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-plugin-demo/blob/master/src/main/java/com/wangji92/arthas/plugin/demo/common/ApplicationContextProvider.java");
         this.selectLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/advanced-use.html");
         this.batchSupportLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/batch-support.html");
-        this.redefineHelpLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/redefine.html#");
+        this.redefineHelpActionLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/redefine.html#");
         this.ossHelpLink = ActionLinkUtils.newActionLink("https://helpcdn.aliyun.com/document_detail/84781.html?spm=a2c4g.11186623.6.823.148d1144LOadRS");
         this.printConditionExpressLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/1348");
         this.mybatisMapperReloadHelpLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/mybatis-mapper-reload-spring-boot-start");

@@ -14,7 +14,7 @@ import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.ActionLink;
+import com.intellij.ui.components.ActionLink;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

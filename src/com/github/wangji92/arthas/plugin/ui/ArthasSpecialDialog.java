@@ -1,14 +1,9 @@
 package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.ActionLink;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,22 +18,22 @@ import java.awt.event.WindowEvent;
  * @date 22-12-2019
  */
 public class ArthasSpecialDialog extends JDialog {
-    private LinkLabel specialOgnlLinkLabel;
-    private LinkLabel ttGetSpringContextLinkLabel;
-    private LinkLabel errorFilterLinkLabel;
-    private LinkLabel dubboArthasLinkLabel;
-    private LinkLabel redefineLinLabel;
+    private ActionLink specialOgnlActionLink;
+    private ActionLink ttGetSpringContextActionLink;
+    private ActionLink errorFilterActionLink;
+    private ActionLink dubboArthasActionLink;
+    private ActionLink redefineLinLabel;
     private JPanel contentPane;
-    private LinkLabel ognlUseLinkLabel;
-    private LinkLabel userCase;
-    private LinkLabel tt;
-    private LinkLabel conditionArthas;
-    private LinkLabel watchSpringContext;
-    private LinkLabel asyncExample;
-    private LinkLabel arthasBestUnderStand;
-    private LinkLabel arthasJprofileLink;
-    private LinkLabel springAopTarget;
-    private LinkLabel arthasVersionLink;
+    private ActionLink ognlUseActionLink;
+    private ActionLink userCase;
+    private ActionLink tt;
+    private ActionLink conditionArthas;
+    private ActionLink watchSpringContext;
+    private ActionLink asyncExample;
+    private ActionLink arthasBestUnderStand;
+    private ActionLink arthasJprofileLink;
+    private ActionLink springAopTarget;
+    private ActionLink arthasVersionLink;
 
     private Project project;
 
@@ -69,107 +64,20 @@ public class ArthasSpecialDialog extends JDialog {
     }
 
     private void createUIComponents() {
-        specialOgnlLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/71");
-            }
-        });
-        specialOgnlLinkLabel.setPaintUnderline(false);
-        ttGetSpringContextLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/482");
-            }
-        });
-        ttGetSpringContextLinkLabel.setPaintUnderline(false);
-        errorFilterLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/429");
-            }
-        });
-        errorFilterLinkLabel.setPaintUnderline(false);
-        dubboArthasLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("http://hengyunabc.github.io/dubbo-meet-arthas/");
-            }
-        });
-        dubboArthasLinkLabel.setPaintUnderline(false);
-
-        redefineLinLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("http://hengyunabc.github.io/arthas-online-hotswap/");
-            }
-        });
-        redefineLinLabel.setPaintUnderline(false);
-        ognlUseLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://blog.csdn.net/u010634066/article/details/101013479");
-            }
-        });
-        ognlUseLinkLabel.setPaintUnderline(false);
-        userCase = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues?utf8=%E2%9C%93&q=+is%3Aissue+label%3Auser-case+");
-            }
-        });
-        userCase.setPaintUnderline(false);
-        conditionArthas = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/6");
-            }
-        });
-        conditionArthas.setPaintUnderline(false);
-        tt = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/4");
-            }
-        });
-        tt.setPaintUnderline(false);
-        watchSpringContext = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/5");
-            }
-        });
-        watchSpringContext.setPaintUnderline(false);
-        asyncExample = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://www.cnblogs.com/leihuazhe/p/11630466.html");
-            }
-        });
-        asyncExample.setPaintUnderline(false);
-        arthasBestUnderStand = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://wangji.blog.csdn.net/article/details/106964278");
-            }
-        });
-        arthasBestUnderStand.setPaintUnderline(false);
-        arthasJprofileLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/1416");
-            }
-        });
-        arthasJprofileLink.setPaintUnderline(false);
-
-        springAopTarget = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/1424");
-            }
-        });
-        springAopTarget.setPaintUnderline(false);
-
+        specialOgnlActionLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/71");
+        ttGetSpringContextActionLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/482");
+        errorFilterActionLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/429");
+        dubboArthasActionLink = ActionLinkUtils.newActionLink("https://hengyunabc.github.io/dubbo-meet-arthas/");
+        redefineLinLabel = ActionLinkUtils.newActionLink("https://hengyunabc.github.io/arthas-online-hotswap/");
+        ognlUseActionLink = ActionLinkUtils.newActionLink("https://blog.csdn.net/u010634066/article/details/101013479");
+        userCase = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues?utf8=%E2%9C%93&q=+is%3Aissue+label%3Auser-case+");
+        conditionArthas = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin/issues/6");
+        tt = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin/issues/4");
+        watchSpringContext = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin/issues/5");
+        asyncExample = ActionLinkUtils.newActionLink("https://www.cnblogs.com/leihuazhe/p/11630466.html");
+        arthasBestUnderStand = ActionLinkUtils.newActionLink("https://wangji.blog.csdn.net/article/details/106964278");
+        arthasJprofileLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/1416");
+        springAopTarget = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/1424");
         arthasVersionLink = ActionLinkUtils.newActionLink("https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkxNDI0ODE0NQ==&action=getalbum&album_id=1896318852766973955&scene=173&from_msgid=2247484030&from_itemidx=1&count=3&nolastread=1#wechat_redirect");
 
     }

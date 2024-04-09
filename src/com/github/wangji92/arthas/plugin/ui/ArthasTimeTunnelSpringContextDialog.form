@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="9f0a6" class="com.intellij.ui.components.labels.LinkLabel" binding="ttInvokeAfterLink" custom-create="true">
+      <component id="9f0a6" class="com.intellij.ui.components.ActionLink" binding="ttInvokeAfterLink" custom-create="true">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="111" height="22"/>
@@ -31,7 +31,7 @@
           <horizontalAlignment value="2"/>
         </properties>
       </component>
-      <component id="edf7f" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlOfficeLinkLabel" custom-create="true">
+      <component id="edf7f" class="com.intellij.ui.components.ActionLink" binding="ognlOfficeActionLink" custom-create="true">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -39,7 +39,7 @@
           <text value="ognl help"/>
         </properties>
       </component>
-      <component id="5ee1b" class="com.intellij.ui.components.labels.LinkLabel" binding="oglSpecialLink" custom-create="true">
+      <component id="5ee1b" class="com.intellij.ui.components.ActionLink" binding="oglSpecialLink" custom-create="true">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="178" height="16"/>
@@ -49,7 +49,7 @@
           <text value="ognl special"/>
         </properties>
       </component>
-      <component id="227e7" class="com.intellij.ui.components.labels.LinkLabel" binding="ttInvokeBeforeHelp" custom-create="true">
+      <component id="227e7" class="com.intellij.ui.components.ActionLink" binding="ttInvokeBeforeHelp" custom-create="true">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -91,7 +91,7 @@
           <toolTipText value="bean的名称可能不正确，可以手动修改"/>
         </properties>
       </component>
-      <component id="6dcfc" class="com.intellij.ui.components.labels.LinkLabel" binding="ttIndexLabel" custom-create="true">
+      <component id="6dcfc" class="com.intellij.ui.components.ActionLink" binding="ttIndexLabel" custom-create="true">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

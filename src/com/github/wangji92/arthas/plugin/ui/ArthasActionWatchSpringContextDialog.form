@@ -18,7 +18,7 @@
           <text value="copy command"/>
         </properties>
       </component>
-      <component id="aef92" class="com.intellij.ui.components.labels.LinkLabel" binding="watchHelpLink" custom-create="true">
+      <component id="aef92" class="com.intellij.ui.components.ActionLink" binding="watchHelpLink" custom-create="true">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="111" height="16"/>
@@ -40,7 +40,7 @@
           <horizontalAlignment value="4"/>
         </properties>
       </component>
-      <component id="d9df7" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlOfficeLinkLabel" custom-create="true">
+      <component id="d9df7" class="com.intellij.ui.components.ActionLink" binding="ognlOfficeActionLink" custom-create="true">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -48,7 +48,7 @@
           <text value="ognl help"/>
         </properties>
       </component>
-      <component id="377c6" class="com.intellij.ui.components.labels.LinkLabel" binding="ognlDemoLink" custom-create="true">
+      <component id="377c6" class="com.intellij.ui.components.ActionLink" binding="ognlDemoLink" custom-create="true">
         <constraints>
           <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

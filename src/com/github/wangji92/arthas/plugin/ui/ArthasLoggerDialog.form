@@ -101,7 +101,7 @@
           <toolTipText value="当前logger -name对应的classloder的hash 值"/>
         </properties>
       </component>
-      <component id="c8619" class="com.intellij.ui.components.labels.LinkLabel" binding="helpLink" custom-create="true">
+      <component id="c8619" class="com.intellij.ui.components.ActionLink" binding="helpLink" custom-create="true">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -110,7 +110,7 @@
           <toolTipText value="可以通过help tt 获取帮助信息"/>
         </properties>
       </component>
-      <component id="46a90" class="com.intellij.ui.components.labels.LinkLabel" binding="loggerBestLink" custom-create="true">
+      <component id="46a90" class="com.intellij.ui.components.ActionLink" binding="loggerBestLink" custom-create="true">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

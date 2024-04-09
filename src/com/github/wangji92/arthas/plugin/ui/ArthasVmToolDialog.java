@@ -4,7 +4,7 @@ import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -15,7 +15,7 @@ public class ArthasVmToolDialog extends JDialog {
 
     private JTextField vmToolExpressTextField;
 
-    private LinkLabel classloaderHelpLabel;
+    private ActionLink classloaderHelpLabel;
 
     private JTextField classloaderHashValueTextField;
 
@@ -25,7 +25,7 @@ public class ArthasVmToolDialog extends JDialog {
 
     private JButton copyCommandButton;
 
-    private LinkLabel vmtoolHelpLabel;
+    private ActionLink vmtoolHelpLabel;
 
     private JButton instancesCommandButton;
 

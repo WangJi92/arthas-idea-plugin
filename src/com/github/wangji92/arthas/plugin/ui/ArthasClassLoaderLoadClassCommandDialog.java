@@ -1,16 +1,12 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.ActionLink;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -24,8 +20,8 @@ public class ArthasClassLoaderLoadClassCommandDialog extends JDialog {
     private JButton loadClassCommandButton;
     private JTextField classloaderLoadTextField;
     private JLabel classloaderListLabel;
-    private LinkLabel helpLink;
-    private LinkLabel scLink;
+    private ActionLink helpLink;
+    private ActionLink scLink;
     private JButton closeButton;
 
     private Project project;
@@ -117,19 +113,7 @@ public class ArthasClassLoaderLoadClassCommandDialog extends JDialog {
     }
 
     private void createUIComponents() {
-        helpLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse(" https://arthas.aliyun.com/doc/classloader");
-            }
-        });
-        helpLink.setPaintUnderline(false);
-        scLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/doc/sc");
-            }
-        });
-        scLink.setPaintUnderline(false);
+        helpLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/classloader");
+        scLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/sc");
     }
 }

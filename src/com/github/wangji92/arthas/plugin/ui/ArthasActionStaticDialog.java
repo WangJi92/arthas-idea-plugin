@@ -4,7 +4,7 @@ import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -38,10 +38,10 @@ public class ArthasActionStaticDialog extends JDialog {
     private JTextField ognlExpressionEditor;
 
     private JPanel contentPane;
-    private LinkLabel classLoaderLinkLabel;
-    private LinkLabel ognlOfficeLinkLabel;
-    private LinkLabel oglSpecialLink;
-    private LinkLabel ognlDemoLink;
+    private ActionLink classLoaderActionLink;
+    private ActionLink ognlOfficeActionLink;
+    private ActionLink oglSpecialLink;
+    private ActionLink ognlDemoLink;
     private JButton clearClassloaderHashValue;
     private JButton springNonProxyTargetButton;
     /**
@@ -167,8 +167,8 @@ public class ArthasActionStaticDialog extends JDialog {
 
 
     private void createUIComponents() {
-        classLoaderLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/sc.html");
-        ognlOfficeLinkLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/ognl.html");
+        classLoaderActionLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/sc.html");
+        ognlOfficeActionLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/ognl.html");
         oglSpecialLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/71");
         ognlDemoLink = ActionLinkUtils.newActionLink("https://blog.csdn.net/u010634066/article/details/101013479");
     }

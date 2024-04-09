@@ -162,7 +162,7 @@
               <text value="close"/>
             </properties>
           </component>
-          <component id="98166" class="com.intellij.ui.components.labels.LinkLabel" binding="help" custom-create="true">
+          <component id="98166" class="com.intellij.ui.components.ActionLink" binding="help" custom-create="true">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -202,7 +202,7 @@
               <toolTipText value="wall profiler is most useful in per-thread mode"/>
             </properties>
           </component>
-          <component id="6fa68" class="com.intellij.ui.components.labels.LinkLabel" binding="asyncExample" custom-create="true">
+          <component id="6fa68" class="com.intellij.ui.components.ActionLink" binding="asyncExample" custom-create="true">
             <constraints>
               <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>

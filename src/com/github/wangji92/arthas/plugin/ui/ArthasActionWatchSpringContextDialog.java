@@ -1,16 +1,12 @@
 package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.ActionLink;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -38,9 +34,9 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
     private JTextField ognlExpressionEditor;
 
     private JPanel contentPane;
-    private LinkLabel ognlOfficeLinkLabel;
-    private LinkLabel ognlDemoLink;
-    private LinkLabel watchHelpLink;
+    private ActionLink ognlOfficeActionLink;
+    private ActionLink ognlDemoLink;
+    private ActionLink watchHelpLink;
     /**
      * spring 所有环境配置项信息获取
      */
@@ -136,29 +132,11 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
 
 
     private void createUIComponents() {
-        ognlOfficeLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://commons.apache.org/proper/commons-ognl/language-guide.html");
-            }
-        });
-        ognlOfficeLinkLabel.setPaintUnderline(false);
-        ognlDemoLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/5");
-            }
-        });
-        ognlDemoLink.setPaintUnderline(false);
+        ognlOfficeActionLink = ActionLinkUtils.newActionLink("https://commons.apache.org/proper/commons-ognl/language-guide.html");
+        ognlDemoLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin/issues/5");
 
         //https://github.com/WangJi92/arthas-idea-plugin/issues/5
 
-        watchHelpLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("   https://arthas.aliyun.com/arthas/watch");
-            }
-        });
-        watchHelpLink.setPaintUnderline(false);
+        watchHelpLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/arthas/watch");
     }
 }

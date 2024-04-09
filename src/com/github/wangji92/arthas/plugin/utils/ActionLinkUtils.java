@@ -1,10 +1,11 @@
 package com.github.wangji92.arthas.plugin.utils;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.ui.components.labels.ActionLink;
+import com.intellij.ui.components.ActionLink;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 /**
  * 构造 链接
@@ -21,13 +22,14 @@ public class ActionLinkUtils {
      * @return
      */
     public static ActionLink newActionLink(String linkUrl) {
-        ActionLink link = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
+        return new ActionLink(linkUrl, new ActionListener(){
             @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
+            public void actionPerformed(ActionEvent e) {
                 BrowserUtil.browse(linkUrl);
             }
-        });
-        link.setPaintUnderline(false);
-        return link;
+        } );
+
+        //
+
     }
 }
