@@ -120,8 +120,9 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
         String watchSpringOgnlExpression = String.format(TT_SPRING_CONTEXT, lowCamelBeanName, builder.toString());
         //这里不需要方法
         String aopTargetOgnlExpression = String.format(TT_SPRING_AOP_TARGET, lowCamelBeanName);
+        final String finalClassName = className;
         SwingUtilities.invokeLater(() -> {
-            new ArthasTimeTunnelSpringContextDialog(project, className, watchSpringOgnlExpression, aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
+            new ArthasTimeTunnelSpringContextDialog(project, finalClassName, watchSpringOgnlExpression, aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
         });
     }
 }
