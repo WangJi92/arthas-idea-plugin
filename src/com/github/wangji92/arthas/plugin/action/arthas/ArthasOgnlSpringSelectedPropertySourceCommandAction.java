@@ -14,6 +14,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * 获取当前spring 中的配置文件的信息
  * <p>
@@ -75,7 +77,10 @@ public class ArthasOgnlSpringSelectedPropertySourceCommandAction extends AnActio
 
             String command = String.format(SPRING_ENVIRONMENT_PROPERTY, join, springContextValue, selectedText);
 
-            new ArthasActionStaticDialog(project, className, command, "").open("Ognl get selected spring property");
+            SwingUtilities.invokeLater(() -> {
+                new ArthasActionStaticDialog(project, className, command, "").open("Ognl get selected spring property");
+            });
+
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;

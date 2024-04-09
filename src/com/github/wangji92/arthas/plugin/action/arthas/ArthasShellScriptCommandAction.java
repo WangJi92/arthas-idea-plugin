@@ -6,6 +6,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * 直接执行脚本
  *
@@ -35,8 +37,11 @@ public class ArthasShellScriptCommandAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(event);
-        dialog.open("Quickly Get Available Command(shell command or common command)");
+
+        SwingUtilities.invokeLater(() -> {
+            ArthasShellScriptCommandDialog dialog = new ArthasShellScriptCommandDialog(event);
+            dialog.open("Quickly Get Available Command(shell command or common command)");
+        });
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * tt 处理获取spring context 进行调用
  * https://github.com/WangJi92/arthas-idea-plugin/issues/4
@@ -118,6 +120,8 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
         String watchSpringOgnlExpression = String.format(TT_SPRING_CONTEXT, lowCamelBeanName, builder.toString());
         //这里不需要方法
         String aopTargetOgnlExpression = String.format(TT_SPRING_AOP_TARGET, lowCamelBeanName);
-        new ArthasTimeTunnelSpringContextDialog(project, className, watchSpringOgnlExpression, aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
+        SwingUtilities.invokeLater(() -> {
+            new ArthasTimeTunnelSpringContextDialog(project, className, watchSpringOgnlExpression, aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
+        });
     }
 }

@@ -12,6 +12,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * 通过ognl 调用获取spring context 然后调用方法、field处理
  * 通过获取静态的的spring context 然后进行获取到Bean的信息进行处理
@@ -106,7 +108,9 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             String staticSpringContextGetBeanVariable = SpringStaticContextUtils.getStaticSpringContextGetBeanVariable(project, lowCamelBeanName);
             String aopTargetOgnlExpression = String.format(STATIC_SPRING_AOP_TARGET, staticSpringContextGetBeanVariable);
 
-            new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("Static spring context invoke【手动编辑填写参数】【bean名称可能不正确,可以手动修改】");
+            SwingUtilities.invokeLater(() -> {
+                new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("Static spring context invoke【手动编辑填写参数】【bean名称可能不正确,可以手动修改】");
+            });
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;

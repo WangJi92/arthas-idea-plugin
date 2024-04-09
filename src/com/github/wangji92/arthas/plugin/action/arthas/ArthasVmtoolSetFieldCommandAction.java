@@ -10,6 +10,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * vmtool get instance to invoke method field
  *
@@ -72,8 +74,13 @@ public class ArthasVmtoolSetFieldCommandAction extends AnAction {
             title = ShellScriptCommandEnum.VMTOOL_SET_FIELD.getEnumMsg();
         }
         String instancesCommand = commandContext.getCommandCode(ShellScriptCommandEnum.VM_TOOL_INSTANCE);
-        ArthasVmToolDialog dialog = new ArthasVmToolDialog(project, className, invokeCommand, instancesCommand);
-        dialog.open(title);
+
+        final String finalInvokeCommand = invokeCommand;
+        final String finalTitle = title;
+        SwingUtilities.invokeLater(() -> {
+            ArthasVmToolDialog dialog = new ArthasVmToolDialog(project, className, finalInvokeCommand, instancesCommand);
+            dialog.open(finalTitle);
+        });
 
 
     }

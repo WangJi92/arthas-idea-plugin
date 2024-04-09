@@ -12,6 +12,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * 通过反射获取字段，通过ognl 设置字段的值
  * https://github.com/alibaba/arthas/issues/641
@@ -63,7 +65,10 @@ public class ArthasOgnlSetStaticFieldCommandAction extends AnAction {
         String command = commandContext.getCommandCode(scriptCommandEnum);
         if (psiElement instanceof PsiField) {
             String className = commandContext.getKeyValue(ShellScriptVariableEnum.CLASS_NAME);
-            new ArthasActionStaticDialog(project, className, command, "").open("Ognl Reflect To Modify Static Field");
+            SwingUtilities.invokeLater(() -> {
+                new ArthasActionStaticDialog(project, className, command, "").open("Ognl Reflect To Modify Static Field");
+            });
+
         }
     }
 }

@@ -5,6 +5,8 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * options 命令
  *
@@ -19,7 +21,10 @@ public class ArthasOptionsCommandAction extends AnAction {
         if (project == null) {
             return;
         }
-        new ArthasOptionsDialog(project).open();
+        SwingUtilities.invokeLater(() -> {
+            new ArthasOptionsDialog(project).open();
+        });
+
     }
 
     @Override

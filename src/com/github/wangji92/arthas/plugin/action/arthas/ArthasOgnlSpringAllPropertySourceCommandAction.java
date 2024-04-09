@@ -14,6 +14,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * 参考 : https://blog.csdn.net/xunjiushi9717/article/details/94050139
  * 参考 : https://github.com/alibaba/arthas/issues/641
@@ -64,7 +66,9 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
 
             String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, join, springContextValue);
 
-            new ArthasActionStaticDialog(project, className, command, "").open("Ognl get all spring property,first keyword has the highest priority");
+            SwingUtilities.invokeLater(() -> {
+                new ArthasActionStaticDialog(project, className, command, "").open("Ognl get all spring property,first keyword has the highest priority");
+            });
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;

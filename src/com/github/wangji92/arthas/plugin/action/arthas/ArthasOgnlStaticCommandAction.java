@@ -11,6 +11,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * static 方法处理
  *
@@ -47,7 +49,10 @@ public class ArthasOgnlStaticCommandAction extends AnAction {
         CommandContext commandContext = new CommandContext(event);
         String command = ShellScriptCommandEnum.OGNL_GETSTATIC.getArthasCommand(commandContext);
         String className = commandContext.getKeyValue(ShellScriptVariableEnum.CLASS_NAME);
-        new ArthasActionStaticDialog(project, className, command, "").open("Ognl To Get Static Method Field");
+        SwingUtilities.invokeLater(() -> {
+            new ArthasActionStaticDialog(project, className, command, "").open("Ognl To Get Static Method Field");
+        });
+
     }
 
     @Override

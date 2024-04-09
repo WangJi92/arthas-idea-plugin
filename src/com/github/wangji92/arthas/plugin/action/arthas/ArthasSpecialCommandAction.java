@@ -5,6 +5,8 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * 特殊用法
  *
@@ -21,7 +23,9 @@ public class ArthasSpecialCommandAction extends AnAction {
         if (project == null) {
             return;
         }
-        new ArthasSpecialDialog(project).open();
+        SwingUtilities.invokeLater(() -> {
+            new ArthasSpecialDialog(project).open();
+        });
     }
 
     @Override

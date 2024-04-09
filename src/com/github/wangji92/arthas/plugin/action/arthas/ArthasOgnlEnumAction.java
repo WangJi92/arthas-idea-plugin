@@ -9,6 +9,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiEnumConstantImpl;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.Arrays;
 
 /**
@@ -94,8 +95,11 @@ public class ArthasOgnlEnumAction extends AnAction {
         request.setProject(e.getProject());
         request.setParentEnumClazz(parentEnumClazz);
         request.setSelectKey(selectKey);
-        ArthasOgnlEnumActionDialog dialog = new ArthasOgnlEnumActionDialog(request);
-        dialog.open("ognl invoke for enum class，you can edit method params ");
+
+        SwingUtilities.invokeLater(() -> {
+            ArthasOgnlEnumActionDialog dialog = new ArthasOgnlEnumActionDialog(request);
+            dialog.open("ognl invoke for enum class，you can edit method params ");
+        });
 
     }
 }

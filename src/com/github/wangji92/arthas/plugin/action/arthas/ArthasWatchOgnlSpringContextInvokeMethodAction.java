@@ -12,6 +12,8 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 /**
  * @author 汪小哥
  * @date 22-03-2020
@@ -115,6 +117,8 @@ public class ArthasWatchOgnlSpringContextInvokeMethodAction extends AnAction {
         String depthPrintPropertyX = instance.depthPrintProperty;
         String watchSpringOgnlExpression = String.format(WATCH_SPRING_CONTEXT, depthPrintPropertyX, lowCamelBeanName, builder.toString());
         String aopTargetOgnlExpression = String.format(WATCH_SPRING_AOP_TARGET, lowCamelBeanName);
-        new ArthasActionWatchSpringContextDialog(project, null, watchSpringOgnlExpression, aopTargetOgnlExpression).open("arthas watch ognl get spring context invoke method field 要触发任意的接口调用");
+        SwingUtilities.invokeLater(() -> {
+            new ArthasActionWatchSpringContextDialog(project, null, watchSpringOgnlExpression, aopTargetOgnlExpression).open("arthas watch ognl get spring context invoke method field 要触发任意的接口调用");
+        });
     }
 }

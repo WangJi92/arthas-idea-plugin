@@ -6,6 +6,8 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
+import javax.swing.*;
+
 /**
  * 使用指定的classloader 加载class
  * 1、classloader -l  find classloader hash value
@@ -22,6 +24,8 @@ public class ArthasClassLoaderLoadClassCommandAction extends BaseArthasPluginAct
             NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
             return;
         }
-        new ArthasClassLoaderLoadClassCommandDialog(project,className).open("class loader load class");
+        SwingUtilities.invokeLater(() -> {
+            new ArthasClassLoaderLoadClassCommandDialog(project, className).open("class loader load class");
+        });
     }
 }
