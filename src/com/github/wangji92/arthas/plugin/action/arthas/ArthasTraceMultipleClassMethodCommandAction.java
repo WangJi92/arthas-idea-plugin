@@ -4,6 +4,8 @@ import com.github.wangji92.arthas.plugin.ui.ArthasTraceMultipleCommandDialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
+import javax.swing.*;
+
 /**
  * trace -E  classA|classB|classC  methodA|methodB|methodC 模式支持
  *
@@ -17,8 +19,10 @@ public class ArthasTraceMultipleClassMethodCommandAction extends BaseArthasPlugi
 
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
-        ArthasTraceMultipleCommandDialog instance = new ArthasTraceMultipleCommandDialog(project);
-        instance.continueAddTrace(className,methodName);
-        instance.showDialog();
+        SwingUtilities.invokeLater(() -> {
+            ArthasTraceMultipleCommandDialog instance = new ArthasTraceMultipleCommandDialog(project);
+            instance.continueAddTrace(className,methodName);
+            instance.showDialog();
+        });
     }
 }

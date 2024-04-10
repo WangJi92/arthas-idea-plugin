@@ -5,15 +5,14 @@ import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptVariableEnum;
 import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 /**
  * 通过反射获取字段，通过ognl 设置字段的值
@@ -43,6 +42,11 @@ public class ArthasOgnlSetStaticFieldCommandAction extends AnAction {
     }
 
     @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+
+    @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         DataContext dataContext = event.getDataContext();
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
@@ -61,7 +65,10 @@ public class ArthasOgnlSetStaticFieldCommandAction extends AnAction {
         String command = commandContext.getCommandCode(scriptCommandEnum);
         if (psiElement instanceof PsiField) {
             String className = commandContext.getKeyValue(ShellScriptVariableEnum.CLASS_NAME);
-            new ArthasActionStaticDialog(project, className, command, "").open("Ognl Reflect To Modify Static Field");
+            SwingUtilities.invokeLater(() -> {
+                new ArthasActionStaticDialog(project, className, command, "").open("Ognl Reflect To Modify Static Field");
+            });
+
         }
     }
 }

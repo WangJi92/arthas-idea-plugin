@@ -20,7 +20,7 @@
           <text value="variable(#springContext)"/>
         </properties>
       </component>
-      <component id="3bbbf" class="com.intellij.ui.components.labels.LinkLabel" binding="linkLable" custom-create="true">
+      <component id="3bbbf" class="com.intellij.ui.components.ActionLink" binding="linkLable" custom-create="true">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="370" height="72"/>

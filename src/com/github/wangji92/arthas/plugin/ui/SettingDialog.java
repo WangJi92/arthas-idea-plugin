@@ -1,17 +1,13 @@
 package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
 import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.ui.components.labels.ActionLink;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +29,7 @@ import java.util.Objects;
 public class SettingDialog implements Configurable {
     private JTextField springContextStaticOgnlExpressionTextFiled;
     private JPanel contentPane;
-    private LinkLabel linkLable;
+    private ActionLink linkLable;
 
     public SettingDialog() {
         initData();
@@ -86,12 +82,6 @@ public class SettingDialog implements Configurable {
         /**
          * 处理访问链接 参考 {@literal https://github.com/YiiGuxing/TranslationPlugin}
          */
-        linkLable = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("http://www.dcalabresi.com/blog/java/spring-context-static-class/");
-            }
-        });
-        linkLable.setPaintUnderline(false);
+        linkLable = ActionLinkUtils.newActionLink("http://www.dcalabresi.com/blog/java/spring-context-static-class/");
     }
 }

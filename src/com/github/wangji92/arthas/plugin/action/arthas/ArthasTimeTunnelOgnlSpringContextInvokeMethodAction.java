@@ -2,10 +2,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.ui.ArthasTimeTunnelSpringContextDialog;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -13,6 +10,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 /**
  * tt 处理获取spring context 进行调用
@@ -71,6 +70,11 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
     }
 
     @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+
+    @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         /**
          * {@link com.intellij.ide.actions.CopyReferenceAction}
@@ -116,6 +120,9 @@ public class ArthasTimeTunnelOgnlSpringContextInvokeMethodAction extends AnActio
         String watchSpringOgnlExpression = String.format(TT_SPRING_CONTEXT, lowCamelBeanName, builder.toString());
         //这里不需要方法
         String aopTargetOgnlExpression = String.format(TT_SPRING_AOP_TARGET, lowCamelBeanName);
-        new ArthasTimeTunnelSpringContextDialog(project, className, watchSpringOgnlExpression, aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
+        final String finalClassName = className;
+        SwingUtilities.invokeLater(() -> {
+            new ArthasTimeTunnelSpringContextDialog(project, finalClassName, watchSpringOgnlExpression, aopTargetOgnlExpression).open("time tunnel ognl get spring context invoke method field");
+        });
     }
 }

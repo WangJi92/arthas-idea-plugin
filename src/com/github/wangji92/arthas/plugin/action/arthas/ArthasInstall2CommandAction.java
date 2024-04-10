@@ -2,10 +2,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,5 +23,10 @@ public class ArthasInstall2CommandAction extends AnAction {
         ClipboardUtils.setClipboardString("curl -L \"https://arthas.aliyun.com/as.sh\" >as.sh; chmod a+x as.sh; ./as.sh");
         NotifyUtils.notifyMessage(project, "download as.sh in dir and execute as.sh");
 
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
     }
 }

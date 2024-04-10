@@ -340,7 +340,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="182"/>
+    <idea-version since-build="222.3345.118"/>
 
     <extensions defaultExtensionNs="com.intellij">
         // parentId = "tools"
@@ -348,6 +348,8 @@
                              id="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
                              displayName="Arthas Idea Plugin"/>
         <projectService serviceImplementation="com.github.wangji92.arthas.plugin.setting.AppSettingsState"/>
+
+        <notificationGroup id="arthas" displayType="BALLOON"/>
     </extensions>
 
     <!--    <extensions defaultExtensionNs="com.intellij">-->

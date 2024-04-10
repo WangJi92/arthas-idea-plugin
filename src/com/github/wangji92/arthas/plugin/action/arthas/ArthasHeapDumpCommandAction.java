@@ -2,10 +2,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,5 +24,10 @@ public class ArthasHeapDumpCommandAction extends AnAction {
         // 下载好了 使用 mac 工具分析哦  https://www.jianshu.com/p/d9f9fb221c30
         ClipboardUtils.setClipboardString("heapdump /tmp/dump.hprof");
         NotifyUtils.notifyMessage(project, "heapdump /tmp/dump.hprof 已经复制,只要存活对象可以--live,然后下载下来使用 Memory Analyzer(MAT)分析");
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
     }
 }

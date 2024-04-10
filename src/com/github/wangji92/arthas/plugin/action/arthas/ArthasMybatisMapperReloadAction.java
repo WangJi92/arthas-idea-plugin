@@ -6,10 +6,7 @@ import com.github.wangji92.arthas.plugin.utils.*;
 import com.google.common.collect.Maps;
 import com.google.common.io.BaseEncoding;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -130,6 +127,11 @@ public class ArthasMybatisMapperReloadAction extends AnAction implements DumbAwa
             NotifyUtils.notifyMessage(project, e.getMessage(), NotificationType.ERROR);
         }
 
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
 

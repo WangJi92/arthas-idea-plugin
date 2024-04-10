@@ -9,14 +9,12 @@ import com.github.wangji92.arthas.plugin.ui.ArthasVmToolDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 /**
  * 参考 : https://blog.csdn.net/xunjiushi9717/article/details/94050139
@@ -68,12 +66,19 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
 
             String command = String.format(ArthasCommandConstants.SPRING_ALL_PROPERTY, join, springContextValue);
 
-            new ArthasActionStaticDialog(project, className, command, "").open("Ognl get all spring property,first keyword has the highest priority");
+            SwingUtilities.invokeLater(() -> {
+                new ArthasActionStaticDialog(project, className, command, "").open("Ognl get all spring property,first keyword has the highest priority");
+            });
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;
         }
 
 
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
     }
 }

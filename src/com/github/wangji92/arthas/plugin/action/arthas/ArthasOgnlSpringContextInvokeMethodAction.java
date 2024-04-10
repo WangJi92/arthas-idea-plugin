@@ -6,14 +6,13 @@ import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 /**
  * 通过ognl 调用获取spring context 然后调用方法、field处理
@@ -68,6 +67,11 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
     }
 
     @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+
+    @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         /**
          * {@link com.intellij.ide.actions.CopyReferenceAction}
@@ -104,7 +108,9 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
             String staticSpringContextGetBeanVariable = SpringStaticContextUtils.getStaticSpringContextGetBeanVariable(project, lowCamelBeanName);
             String aopTargetOgnlExpression = String.format(STATIC_SPRING_AOP_TARGET, staticSpringContextGetBeanVariable);
 
-            new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("Static spring context invoke【手动编辑填写参数】【bean名称可能不正确,可以手动修改】");
+            SwingUtilities.invokeLater(() -> {
+                new ArthasActionStaticDialog(project, classNameClassLoaderGet, builder.toString(), aopTargetOgnlExpression).open("Static spring context invoke【手动编辑填写参数】【bean名称可能不正确,可以手动修改】");
+            });
         } catch (Exception ex) {
             NotifyUtils.notifyMessage(project, ex.getMessage(), NotificationType.ERROR);
             return;

@@ -4,6 +4,8 @@ import com.github.wangji92.arthas.plugin.ui.ArthasActionDumpDialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
+import javax.swing.*;
+
 /**
  * Dump class byte array from JVM
  * https://arthas.aliyun.com/doc/dump
@@ -23,6 +25,9 @@ public class ArthasDumpCommandAction extends BaseArthasPluginAction {
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
         //增强，不用一定要选择在class 上面，只要是可以确定这个class 即可
         String join = String.join(" ", "dump", className, "-d /tmp/output");
-        new ArthasActionDumpDialog(project, className, join).open("Dump Class Byte Array from JVM");
+        SwingUtilities.invokeLater(() -> {
+            new ArthasActionDumpDialog(project, className, join).open("Dump Class Byte Array from JVM");
+        });
+
     }
 }

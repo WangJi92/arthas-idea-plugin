@@ -1,8 +1,14 @@
 package com.github.wangji92.arthas.plugin.utils;
 
-import com.intellij.notification.*;
+import com.intellij.ide.BrowserUtil;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationGroupManager;
+import com.intellij.notification.NotificationListener;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.event.HyperlinkEvent;
 
 /**
  * 通知消息
@@ -11,10 +17,6 @@ import org.jetbrains.annotations.NotNull;
  * @date 21-12-2019
  */
 public class NotifyUtils {
-    /**
-     * todo https://plugins.jetbrains.com/docs/intellij/notifications.html#top-level-notifications-balloons
-     */
-    private static final NotificationGroup NOTIFICATION = new NotificationGroup("arthas", NotificationDisplayType.BALLOON, false);
 
 
     public static final String COMMAND_COPIED = "arthas command copied to clipboard,open arthas to execute command";
@@ -35,12 +37,7 @@ public class NotifyUtils {
      * @param message
      */
     public static void notifyMessage(Project project, String message) {
-        try {
-            Notification currentNotify = NOTIFICATION.createNotification(message, NotificationType.INFORMATION);
-            Notifications.Bus.notify(currentNotify, project);
-        } catch (Exception e) {
-            //
-        }
+        notifyMessage(project, message, NotificationType.INFORMATION);
     }
 
     /**
@@ -52,9 +49,18 @@ public class NotifyUtils {
      */
     public static void notifyMessage(Project project, String message, @NotNull NotificationType type) {
         try {
-            Notification currentNotify = NOTIFICATION.createNotification("",message, type,new NotificationListener.UrlOpeningListener(true));
-            Notifications.Bus.notify(currentNotify, project);
-
+            Notification arthas = NotificationGroupManager.getInstance().getNotificationGroup("arthas").createNotification(message, type);
+            arthas.setTitle("Arthas idea plugin");
+            arthas.setListener(new NotificationListener.Adapter() {
+                @Override
+                protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
+                    if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                        String url = event.getDescription();
+                        BrowserUtil.browse(url);
+                    }
+                }
+            });
+            arthas.notify(project);
         } catch (Exception e) {
             //
         }

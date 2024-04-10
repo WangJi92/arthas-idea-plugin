@@ -7,7 +7,7 @@ import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -26,8 +26,8 @@ public class ArthasLoggerDialog extends JDialog {
     private JTextField classloaderHashEditor;
     private JComboBox logLevelComboBox;
     private JButton closeButton;
-    private LinkLabel helpLink;
-    private LinkLabel loggerBestLink;
+    private ActionLink helpLink;
+    private ActionLink loggerBestLink;
     private JButton shellScriptCommandButton;
 
 

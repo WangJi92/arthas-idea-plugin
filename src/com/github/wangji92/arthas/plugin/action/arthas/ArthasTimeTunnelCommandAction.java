@@ -6,6 +6,8 @@ import com.github.wangji92.arthas.plugin.ui.ArthasTimeTunnelDialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
+import javax.swing.*;
+
 /**
  * 方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测
  *
@@ -23,6 +25,8 @@ public class ArthasTimeTunnelCommandAction extends BaseArthasPluginAction {
         String invokeCount = instance.invokeCount;
         String conditionExpressDisplay = instance.conditionExpressDisplay ? ArthasCommandConstants.DEFAULT_CONDITION_EXPRESS : "";
         String command = String.join(" ", "tt -t", className, methodName, "-n", invokeCount, conditionExpressDisplay);
-        new ArthasTimeTunnelDialog(project, command).open("arthas time tunnel use");
+        SwingUtilities.invokeLater(() -> {
+            new ArthasTimeTunnelDialog(project, command).open("arthas time tunnel use");
+        });
     }
 }

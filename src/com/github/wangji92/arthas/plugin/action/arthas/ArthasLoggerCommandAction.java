@@ -4,6 +4,8 @@ import com.github.wangji92.arthas.plugin.ui.ArthasLoggerDialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
+import javax.swing.*;
+
 /**
  * logger --name sample.mybatis.SampleXmlApplication --l warn
  *
@@ -15,6 +17,9 @@ public class ArthasLoggerCommandAction extends BaseArthasPluginAction {
     @Override
     public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
 
-        new ArthasLoggerDialog(project, className).open("Print logger info, and update the logger level");
+        SwingUtilities.invokeLater(() -> {
+            new ArthasLoggerDialog(project, className).open("Print logger info, and update the logger level");
+        });
+
     }
 }

@@ -3,15 +3,13 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.ui.ArthasOgnlEnumActionDialog;
 import com.github.wangji92.arthas.plugin.ui.ArthasOgnlEnumActionDialog.OgnlEnumCommandRequest;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiEnumConstantImpl;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.Arrays;
 
 /**
@@ -41,6 +39,11 @@ public class ArthasOgnlEnumAction extends AnAction {
             return;
         }
         e.getPresentation().setEnabled(false);
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     @Override
@@ -92,8 +95,11 @@ public class ArthasOgnlEnumAction extends AnAction {
         request.setProject(e.getProject());
         request.setParentEnumClazz(parentEnumClazz);
         request.setSelectKey(selectKey);
-        ArthasOgnlEnumActionDialog dialog = new ArthasOgnlEnumActionDialog(request);
-        dialog.open("ognl invoke for enum class，you can edit method params ");
+
+        SwingUtilities.invokeLater(() -> {
+            ArthasOgnlEnumActionDialog dialog = new ArthasOgnlEnumActionDialog(request);
+            dialog.open("ognl invoke for enum class，you can edit method params ");
+        });
 
     }
 }

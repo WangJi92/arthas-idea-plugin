@@ -2,16 +2,12 @@ package com.github.wangji92.arthas.plugin.ui;
 
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
+import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.labels.ActionLink;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -43,14 +39,14 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
     private JTextField ognlExpressionEditor;
 
     private JPanel contentPane;
-    private LinkLabel ognlOfficeLinkLabel;
-    private LinkLabel oglSpecialLink;
-    private LinkLabel ttInvokeAfterLink;
+    private ActionLink ognlOfficeActionLink;
+    private ActionLink oglSpecialLink;
+    private ActionLink ttInvokeAfterLink;
     private JTextField ttRequestMappingHandlerAdapterInvokeField;
     private JTextField timeTunnelIndexField;
     private JButton ttBeginButton;
-    private LinkLabel ttInvokeBeforeHelp;
-    private LinkLabel ttIndexLabel;
+    private ActionLink ttInvokeBeforeHelp;
+    private ActionLink ttIndexLabel;
     /**
      * spring all 环境变量信息
      */
@@ -184,47 +180,17 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
 
 
     private void createUIComponents() {
-        ognlOfficeLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://commons.apache.org/proper/commons-ognl/language-guide.html");
-            }
-        });
-        ognlOfficeLinkLabel.setPaintUnderline(false);
+        ognlOfficeActionLink = ActionLinkUtils.newActionLink("https://commons.apache.org/proper/commons-ognl/language-guide.html");
 
-        oglSpecialLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/71");
-            }
-        });
-        oglSpecialLink.setPaintUnderline(false);
+        oglSpecialLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/71");
 
         //https://github.com/WangJi92/arthas-idea-plugin/issues/5
+        ttInvokeBeforeHelp = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/482");
 
-        ttInvokeBeforeHelp = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/alibaba/arthas/issues/482");
-            }
-        });
-        ttInvokeBeforeHelp.setPaintUnderline(false);
 
-        ttIndexLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://arthas.aliyun.com/doc/tt");
-            }
-        });
-        ttIndexLabel.setPaintUnderline(false);
+        ttIndexLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tt");
 
-        ttInvokeAfterLink = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
-            @Override
-            public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://github.com/WangJi92/arthas-idea-plugin/issues/4");
-            }
-        });
-        ttInvokeAfterLink.setPaintUnderline(false);
+        ttInvokeAfterLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin/issues/4");
     }
 
 }

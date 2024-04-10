@@ -3,11 +3,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -110,5 +106,10 @@ public class ArthasOgnlStaticGrammaticalStructureCommandAction extends AnAction 
         //endregion
         ClipboardUtils.setClipboardString(builder.toString());
         NotifyUtils.notifyMessage(project, "watch controller home '@com.E@getTraceId()',Similar to this, it helps to construct some static expressions behind, which can't be used directly");
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 }

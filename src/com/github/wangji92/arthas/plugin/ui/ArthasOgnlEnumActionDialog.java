@@ -11,7 +11,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiEnumConstant;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.ActionLink;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,9 +41,9 @@ public class ArthasOgnlEnumActionDialog extends JDialog {
     private JTextField classloaderHashField;
     private JButton clearCacheButton;
     private JButton copyCommandButton;
-    private LinkLabel ognlHelp;
-    private LinkLabel ognlSpecial;
-    private LinkLabel scClassloader;
+    private ActionLink ognlHelp;
+    private ActionLink ognlSpecial;
+    private ActionLink scClassloader;
     private JLabel tipField;
 
 
