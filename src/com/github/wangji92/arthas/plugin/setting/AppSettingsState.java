@@ -4,7 +4,6 @@ import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
@@ -234,7 +233,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         projectInfo = project;
-        AppSettingsState appSettingsState = ServiceManager.getService(project, AppSettingsState.class);
+        AppSettingsState appSettingsState = project.getService(AppSettingsState.class);
         // 检测全局的static spring context
         checkGlobalStaticSpringContextAndSettingCurrentProjectIfEmpty(appSettingsState);
 

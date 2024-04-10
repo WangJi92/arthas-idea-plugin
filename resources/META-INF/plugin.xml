@@ -1,4 +1,4 @@
-<idea-plugin>
+<idea-plugin require-restart="false">
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
     <version>2.44</version>

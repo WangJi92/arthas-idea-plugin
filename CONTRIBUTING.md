@@ -6,6 +6,9 @@
 
 ## 2.1 config plugin sdk
 
+最新编译版本使用(2023.3)： https://www.jetbrains.com.cn/idea/download/other.html
+
+
 example with IntelliJ IDEA Community Edition IC-221.6008.13
 
 - add plugin sdk
