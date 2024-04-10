@@ -454,7 +454,7 @@ public class OgnlPsUtils {
         String canonicalText = psiType.getCanonicalText();
 
         //基本类型  boolean
-        if (PsiType.BOOLEAN.equals(psiType) || "java.lang.Boolean".equals(canonicalText)) {
+        if ("boolean".equals(canonicalText) || "java.lang.Boolean".equals(canonicalText)) {
             result = "true";
             return result;
         }
@@ -465,27 +465,27 @@ public class OgnlPsUtils {
             return result;
         }
 
-        if (PsiType.LONG.equals(psiType) || "java.lang.Long".equals(canonicalText)) {
+        if ("long".equals(canonicalText) || "java.lang.Long".equals(canonicalText)) {
             result = "0L";
             return result;
         }
 
-        if (PsiType.DOUBLE.equals(psiType) || "java.lang.Double".equals(canonicalText)) {
+        if ("double".equals(canonicalText)|| "java.lang.Double".equals(canonicalText)) {
             result = "0D";
             return result;
         }
 
-        if (PsiType.FLOAT.equals(psiType) || "java.lang.Float".equals(canonicalText)) {
+        if ("float".equals(canonicalText) || "java.lang.Float".equals(canonicalText)) {
             result = "0F";
             return result;
         }
 
         //基本类型  数字
-        if (PsiType.INT.equals(psiType) || "java.lang.Integer".equals(canonicalText)
+        if ("int".equals(canonicalText) || "java.lang.Integer".equals(canonicalText)
                 ||
-                PsiType.BYTE.equals(psiType) || "java.lang.Byte".equals(canonicalText)
+                "byte".equals(canonicalText) || "java.lang.Byte".equals(canonicalText)
                 ||
-                PsiType.SHORT.equals(psiType) || "java.lang.Short".equals(canonicalText)) {
+                "short".equals(canonicalText) || "java.lang.Short".equals(canonicalText)) {
             result = "0";
             return result;
         }
