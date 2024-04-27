@@ -616,6 +616,10 @@ public class OgnlPsUtils {
             beanName = OgnlPsUtils.getClassBeanName(((PsiJavaFile) psiElement).getClasses()[0]);
             return beanName;
         }
+        if (psiElement instanceof PsiClass) {
+            beanName = OgnlPsUtils.getClassBeanName((PsiClass) psiElement);
+            return beanName;
+        }
         return beanName;
     }
 

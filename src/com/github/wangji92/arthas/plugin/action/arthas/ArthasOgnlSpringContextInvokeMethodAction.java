@@ -5,6 +5,7 @@ import com.github.wangji92.arthas.plugin.ui.ArthasActionStaticDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
 import com.github.wangji92.arthas.plugin.utils.SpringStaticContextUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
@@ -88,6 +89,12 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
         }
         String lowCamelBeanName = OgnlPsUtils.getSpringBeanName(psiElement);
         String suffixMethodOrFieldBuild = OgnlPsUtils.getExecuteInfo(psiElement);
+        //https://github.com/WangJi92/arthas-idea-plugin/issues/124
+        // 放置在class 上面多了一个点
+        String executeInfo = suffixMethodOrFieldBuild;
+        if (StringUtils.isNotBlank(suffixMethodOrFieldBuild)) {
+            executeInfo = "." + suffixMethodOrFieldBuild;
+        }
         try {
             // 获取class的classloader @applicationContextProvider@context的前面部分 xxxApplicationContextProvider
             String classNameClassLoaderGet = SpringStaticContextUtils.getStaticSpringContextClassName(project);
@@ -102,7 +109,7 @@ public class ArthasOgnlSpringContextInvokeMethodAction extends AnAction {
 
             // 构造表达式
             StringBuilder builder = new StringBuilder(join);
-            builder.append(" '").append(staticSpringContextGetBeanPrefix).append(".").append(suffixMethodOrFieldBuild).append("'");
+            builder.append(" '").append(staticSpringContextGetBeanPrefix).append(executeInfo).append("'");
 
             //#springContext=填充,#targetBean=#springContext.getBean("%s")
             String staticSpringContextGetBeanVariable = SpringStaticContextUtils.getStaticSpringContextGetBeanVariable(project, lowCamelBeanName);
