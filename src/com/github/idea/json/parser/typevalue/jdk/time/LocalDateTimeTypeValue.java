@@ -20,7 +20,7 @@ public class LocalDateTimeTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return LocalDateTime.class.getName();
     }
 }

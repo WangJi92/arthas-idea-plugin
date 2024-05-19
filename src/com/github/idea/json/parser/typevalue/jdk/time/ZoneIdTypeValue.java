@@ -20,7 +20,7 @@ public class ZoneIdTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return ZoneId.class.getName();
     }
 }

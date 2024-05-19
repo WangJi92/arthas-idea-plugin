@@ -37,7 +37,7 @@ public class TypeValueAnalysisFactory {
             try {
                 TypeDefaultValue typeDefaultValue = clazz.getDeclaredConstructor().newInstance();
                 if (typeDefaultValue.isSingle()) {
-                    singleTypeValueMap.put(typeDefaultValue.getQualifiedName(null), typeDefaultValue);
+                    singleTypeValueMap.put(typeDefaultValue.getQualifiedName(), typeDefaultValue);
                 } else {
                     multiTypeValueList.add(typeDefaultValue);
                 }

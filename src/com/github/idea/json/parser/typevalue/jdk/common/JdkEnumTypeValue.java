@@ -17,10 +17,6 @@ public class JdkEnumTypeValue implements TypeDefaultValue {
         return context.get(TypeValueContext.RESULT);
     }
 
-    @Override
-    public String getQualifiedName(TypeValueContext context) {
-        return (String) context.get(TypeValueContext.QUALIFIED_NAME);
-    }
 
     @Override
     public boolean isSingle() {
@@ -39,7 +35,6 @@ public class JdkEnumTypeValue implements TypeDefaultValue {
             // enum
             String result = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().map(PsiField::getName).orElse(null);
             context.put(TypeValueContext.RESULT, result);
-            context.put(TypeValueContext.QUALIFIED_NAME, canonicalText);
             return true;
         }
         return false;

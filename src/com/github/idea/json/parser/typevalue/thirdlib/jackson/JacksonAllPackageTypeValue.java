@@ -41,11 +41,6 @@ public class JacksonAllPackageTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
-        return (String) context.get(TypeValueContext.QUALIFIED_NAME);
-    }
-
-    @Override
     public boolean isSingle() {
         return false;
     }
@@ -61,12 +56,10 @@ public class JacksonAllPackageTypeValue implements TypeDefaultValue {
         Object result = NORMAL_TYPES.get(canonicalText);
         if (result != null) {
             context.put(TypeValueContext.RESULT, result);
-            context.put(TypeValueContext.QUALIFIED_NAME, canonicalText);
             return true;
         }
         if (canonicalText.startsWith("com.fasterxml.jackson")) {
             context.put(TypeValueContext.RESULT, null);
-            context.put(TypeValueContext.QUALIFIED_NAME, canonicalText);
             return true;
         }
         return false;

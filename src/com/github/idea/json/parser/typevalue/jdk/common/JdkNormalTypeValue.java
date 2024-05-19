@@ -112,10 +112,6 @@ public class JdkNormalTypeValue implements TypeDefaultValue {
         return context.get(TypeValueContext.RESULT);
     }
 
-    @Override
-    public String getQualifiedName(TypeValueContext context) {
-        return (String) context.get(TypeValueContext.QUALIFIED_NAME);
-    }
 
     @Override
     public boolean isSingle() {
@@ -132,14 +128,12 @@ public class JdkNormalTypeValue implements TypeDefaultValue {
         Object result = NORMAL_TYPES.get(canonicalText);
         if (result != null) {
             context.put(TypeValueContext.RESULT, result);
-            context.put(TypeValueContext.QUALIFIED_NAME, canonicalText);
             return true;
         }
         if (canonicalText.startsWith("java") || canonicalText.startsWith("jdk") || canonicalText.startsWith("sun")) {
             if (canonicalText.startsWith("java.io") || canonicalText.startsWith("java.lang.reflect") || canonicalText.startsWith("java.util.concurrent.locks") || canonicalText.startsWith("javax") || canonicalText.startsWith("java.text") || canonicalText.startsWith("java.sql") || canonicalText.startsWith("java.security") || canonicalText.startsWith("java.rmi") || canonicalText.startsWith("java.nio") || canonicalText.startsWith("java.net") || canonicalText.startsWith("java.math") || canonicalText.startsWith("java.beans") || canonicalText.startsWith("java.awt") || canonicalText.startsWith("java.apple") || canonicalText.startsWith("jdk") || canonicalText.startsWith("sun") || InheritanceUtil.isInheritor(context.getType(), Throwable.class.getName())) {
                 //io 的包忽略 异常的忽略
                 context.put(TypeValueContext.RESULT, null);
-                context.put(TypeValueContext.QUALIFIED_NAME, canonicalText);
                 return true;
             }
         }
@@ -147,14 +141,12 @@ public class JdkNormalTypeValue implements TypeDefaultValue {
         if (InheritanceUtil.isInheritor(context.getType(), Number.class.getName())) {
             //number 的处理
             context.put(TypeValueContext.RESULT, NORMAL_TYPES.get(Number.class.getName()));
-            context.put(TypeValueContext.QUALIFIED_NAME, canonicalText);
             return true;
         }
 
         if (InheritanceUtil.isInheritor(context.getType(), CharSequence.class.getName())) {
             // 字符串的处理
             context.put(TypeValueContext.RESULT, NORMAL_TYPES.get(CharSequence.class.getName()));
-            context.put(TypeValueContext.QUALIFIED_NAME, canonicalText);
             return true;
         }
 

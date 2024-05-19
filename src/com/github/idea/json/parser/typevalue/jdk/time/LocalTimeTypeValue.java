@@ -21,7 +21,7 @@ public class LocalTimeTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return LocalTime.class.getName();
     }
 }

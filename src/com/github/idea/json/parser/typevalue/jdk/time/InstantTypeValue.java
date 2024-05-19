@@ -19,7 +19,7 @@ public class InstantTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return Instant.class.getName();
     }
 }

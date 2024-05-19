@@ -19,7 +19,7 @@ public class PeriodTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return Period.class.getName();
     }
 }

@@ -19,11 +19,13 @@ public interface TypeDefaultValue {
 
 
     /**
-     * 获取包结构信息
+     * 获取包结构信息 (only isSingle need)
      *
      * @return
      */
-    String getQualifiedName(TypeValueContext context);
+    default String getQualifiedName() {
+        return "";
+    }
 
     /**
      * 单个模型
@@ -35,13 +37,13 @@ public interface TypeDefaultValue {
     }
 
     /**
-     * 是否支持
+     * 是否支持 (only isSingle=false need)
      *
      * @param context
      * @return
      */
     default boolean isSupport(TypeValueContext context) {
-        return isSingle() && Objects.equals(this.getQualifiedName(context), context.getType().getCanonicalText());
+        return isSingle() && Objects.equals(this.getQualifiedName(), context.getType().getCanonicalText());
     }
 
 }

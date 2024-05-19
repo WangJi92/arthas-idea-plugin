@@ -16,7 +16,7 @@ public class JsonNodeTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return "com.fasterxml.jackson.databind.JsonNode";
     }
 }

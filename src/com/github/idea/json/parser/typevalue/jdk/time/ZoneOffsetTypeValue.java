@@ -20,7 +20,7 @@ public class ZoneOffsetTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return ZoneOffset.class.getName();
     }
 }

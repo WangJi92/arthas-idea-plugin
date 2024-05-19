@@ -22,7 +22,7 @@ public class YearMonthTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return YearMonth.class.getName();
     }
 }

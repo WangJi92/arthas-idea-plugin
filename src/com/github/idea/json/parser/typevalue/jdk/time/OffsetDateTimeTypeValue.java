@@ -20,7 +20,7 @@ public class OffsetDateTimeTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return OffsetDateTime.class.getName();
     }
 }
