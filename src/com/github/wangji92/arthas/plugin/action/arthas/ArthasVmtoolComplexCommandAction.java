@@ -70,7 +70,5 @@ public class ArthasVmtoolComplexCommandAction extends AnAction {
             ArthasVmToolComplexDialog dialog = new ArthasVmToolComplexDialog(commandContext);
             dialog.open("vmtool command,you can edit params use ognl grammar");
         });
-
-
     }
 }
