@@ -18,7 +18,7 @@ public class DurationTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return Duration.class.getName();
     }
 }

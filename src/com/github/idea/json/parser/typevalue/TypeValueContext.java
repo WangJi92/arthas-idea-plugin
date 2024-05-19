@@ -14,8 +14,6 @@ import java.util.Map;
  */
 public class TypeValueContext {
 
-    public static final String QUALIFIED_NAME = "QUALIFIED_NAME";
-
     public static final String RESULT = "RESULT";
 
     private PsiClassType psiClassType;

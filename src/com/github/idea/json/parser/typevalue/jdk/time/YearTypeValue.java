@@ -21,7 +21,7 @@ public class YearTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return Year.class.getName();
     }
 }

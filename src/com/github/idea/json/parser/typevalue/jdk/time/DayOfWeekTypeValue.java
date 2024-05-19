@@ -19,7 +19,7 @@ public class DayOfWeekTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return DayOfWeek.class.getName();
     }
 }

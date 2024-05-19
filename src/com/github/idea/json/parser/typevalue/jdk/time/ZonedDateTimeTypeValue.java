@@ -23,7 +23,7 @@ public class ZonedDateTimeTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return ZonedDateTime.class.getName();
     }
 }

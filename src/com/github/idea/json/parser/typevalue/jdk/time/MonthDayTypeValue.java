@@ -20,7 +20,7 @@ public class MonthDayTypeValue implements TypeDefaultValue {
     }
 
     @Override
-    public String getQualifiedName(TypeValueContext context) {
+    public String getQualifiedName() {
         return MonthDay.class.getName();
     }
 }
