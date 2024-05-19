@@ -29,11 +29,10 @@ public class JdkEnumTypeValue implements TypeDefaultValue {
         if (!(type instanceof PsiClassType psiClassType)) {
             return false;
         }
-        String canonicalText = type.getCanonicalText();
         PsiClass psiClass = psiClassType.resolve();
         if (psiClass != null && psiClass.isEnum()) {
             // enum
-            String result = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().map(PsiField::getName).orElse(null);
+            String result = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().map(PsiField::getName).orElse(TypeDefaultValue.DEFAULT_NULL);
             context.put(TypeValueContext.RESULT, result);
             return true;
         }

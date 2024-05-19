@@ -31,7 +31,7 @@ public class JsonOrgAllPackageTypeValue implements TypeDefaultValue {
         }
         String canonicalText = type.getCanonicalText();
         if (canonicalText.startsWith("org.json")) {
-            context.put(TypeValueContext.RESULT, null);
+            context.put(TypeValueContext.RESULT, DEFAULT_NULL);
             return true;
         }
         return false;
