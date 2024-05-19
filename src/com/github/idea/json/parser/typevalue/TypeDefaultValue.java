@@ -11,6 +11,8 @@ import java.util.Objects;
  */
 public interface TypeDefaultValue {
 
+    String DEFAULT_NULL = "__DEFAULT_NULL__";
+
     /**
      * 获取值的信息
      *

@@ -2,6 +2,7 @@ package com.github.idea.json.parser;
 
 import com.github.idea.json.parser.model.JPsiTypeClazz;
 import com.github.idea.json.parser.model.JPsiType;
+import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueAnalysisFactory;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 import com.google.common.collect.Lists;
@@ -53,7 +54,10 @@ public class IdeaJsonParser {
             PsiType type = psiParameter.getType();
             JPsiType jPsiType = new JPsiType(type, getPsiClassGenerics(type), null, -1);
             Object object = parseVariableValue(jPsiType);
-            return gsonBuilder.create().toJson(object);
+            if (!Objects.equals(TypeDefaultValue.DEFAULT_NULL, object)) {
+                return gsonBuilder.create().toJson(object);
+            }
+            return null;
         } catch (Exception e) {
             LOG.error("to json error", e);
         }
@@ -66,7 +70,7 @@ public class IdeaJsonParser {
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap();
         for (PsiField field : psiClass.getAllFields()) {
             if (field.hasModifierProperty(PsiModifier.STATIC)) {
-                return null;
+                continue;
             }
             // key
             String fieldKey = parseFieldName(field);
@@ -81,8 +85,7 @@ public class IdeaJsonParser {
                 fieldValue = parseVariableValue(jPsiType);
             }
 
-            if (fieldValue != null) {
-                //todo 为空的值不要？
+            if (!Objects.equals(TypeDefaultValue.DEFAULT_NULL, fieldValue)) {
                 linkedHashMap.put(fieldKey, fieldValue);
             }
         }
@@ -121,7 +124,7 @@ public class IdeaJsonParser {
     private Object parseVariableValue(JPsiType jPsiType) {
         if (jPsiType.getRecursionLevel() >= 200) {
             //递归太多了次数直接返回 null
-            return null;
+            return TypeDefaultValue.DEFAULT_NULL;
         }
         PsiType type = jPsiType.getPsiType();
         if (type instanceof PsiPrimitiveType) {
@@ -146,7 +149,7 @@ public class IdeaJsonParser {
             //reference Type
             PsiClass psiClass = psiClassType.resolve();
             if (psiClass == null) {
-                return new LinkedHashMap<>();
+                return TypeDefaultValue.DEFAULT_NULL;
             }
 
             // 检测泛型参数
@@ -170,7 +173,7 @@ public class IdeaJsonParser {
                         PsiType[] parameters = psiClassType.getParameters();
                         if (parameters.length == 0) {
                             //没有泛型类型，为空直接 null
-                            return null;
+                            return TypeDefaultValue.DEFAULT_NULL;
                         }
                         // clazz 直接返回这个类的字符串
                         PsiClassType classType = (PsiClassType) parameters[0];
@@ -231,7 +234,7 @@ public class IdeaJsonParser {
             // Test<User,String> ..
             return parseClass(jPsiType.deepClass(psiClass, getPsiClassGenerics(type)));
         }
-        return null;
+        return TypeDefaultValue.DEFAULT_NULL;
     }
 
 

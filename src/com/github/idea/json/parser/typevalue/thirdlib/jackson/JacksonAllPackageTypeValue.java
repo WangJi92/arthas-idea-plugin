@@ -59,7 +59,7 @@ public class JacksonAllPackageTypeValue implements TypeDefaultValue {
             return true;
         }
         if (canonicalText.startsWith("com.fasterxml.jackson")) {
-            context.put(TypeValueContext.RESULT, null);
+            context.put(TypeValueContext.RESULT, DEFAULT_NULL);
             return true;
         }
         return false;

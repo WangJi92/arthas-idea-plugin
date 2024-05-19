@@ -94,14 +94,14 @@ public class JdkNormalTypeValue implements TypeDefaultValue {
         longAdder.add(1L);
         NORMAL_TYPES.put(LongAdder.class.getName(), longAdder);
         // 异常的不处理
-        NORMAL_TYPES.put(java.lang.Throwable.class.getName(), null);
-        NORMAL_TYPES.put(java.lang.Object.class.getName(), null);
-        NORMAL_TYPES.put(java.lang.Enum.class.getName(), null);
-        NORMAL_TYPES.put(java.lang.Runnable.class.getName(), null);
-        NORMAL_TYPES.put(Callable.class.getName(), null);
-        NORMAL_TYPES.put(Future.class.getName(), null);
-        NORMAL_TYPES.put(Thread.class.getName(), null);
-        NORMAL_TYPES.put(ThreadGroup.class.getName(), null);
+        NORMAL_TYPES.put(java.lang.Throwable.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        NORMAL_TYPES.put(java.lang.Object.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        NORMAL_TYPES.put(java.lang.Enum.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        NORMAL_TYPES.put(java.lang.Runnable.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        NORMAL_TYPES.put(Callable.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        NORMAL_TYPES.put(Future.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        NORMAL_TYPES.put(Thread.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        NORMAL_TYPES.put(ThreadGroup.class.getName(), TypeDefaultValue.DEFAULT_NULL);
         NORMAL_TYPES.put(UUID.class.getName(), UUID.randomUUID().toString());
         NORMAL_TYPES.put(Charset.class.getName(), StandardCharsets.UTF_8);
 
@@ -131,9 +131,27 @@ public class JdkNormalTypeValue implements TypeDefaultValue {
             return true;
         }
         if (canonicalText.startsWith("java") || canonicalText.startsWith("jdk") || canonicalText.startsWith("sun")) {
-            if (canonicalText.startsWith("java.io") || canonicalText.startsWith("java.lang.reflect") || canonicalText.startsWith("java.util.concurrent.locks") || canonicalText.startsWith("javax") || canonicalText.startsWith("java.text") || canonicalText.startsWith("java.sql") || canonicalText.startsWith("java.security") || canonicalText.startsWith("java.rmi") || canonicalText.startsWith("java.nio") || canonicalText.startsWith("java.net") || canonicalText.startsWith("java.math") || canonicalText.startsWith("java.beans") || canonicalText.startsWith("java.awt") || canonicalText.startsWith("java.apple") || canonicalText.startsWith("jdk") || canonicalText.startsWith("sun") || InheritanceUtil.isInheritor(context.getType(), Throwable.class.getName())) {
+            if (canonicalText.startsWith("java.io")
+                    || canonicalText.startsWith("java.lang.reflect")
+                    //Optional 序列化不稳定，eg fastjson 需要自定义..
+                    || canonicalText.startsWith("java.util.Optional")
+                    || canonicalText.startsWith("java.util.concurrent.locks")
+                    || canonicalText.startsWith("javax")
+                    || canonicalText.startsWith("java.text")
+                    || canonicalText.startsWith("java.sql")
+                    || canonicalText.startsWith("java.security")
+                    || canonicalText.startsWith("java.rmi")
+                    || canonicalText.startsWith("java.nio")
+                    || canonicalText.startsWith("java.net")
+                    || canonicalText.startsWith("java.math")
+                    || canonicalText.startsWith("java.beans")
+                    || canonicalText.startsWith("java.awt")
+                    || canonicalText.startsWith("java.apple")
+                    || canonicalText.startsWith("jdk")
+                    || canonicalText.startsWith("sun")
+                    || InheritanceUtil.isInheritor(context.getType(), Throwable.class.getName())) {
                 //io 的包忽略 异常的忽略
-                context.put(TypeValueContext.RESULT, null);
+                context.put(TypeValueContext.RESULT, TypeDefaultValue.DEFAULT_NULL);
                 return true;
             }
             if (InheritanceUtil.isInheritor(context.getType(), Number.class.getName())) {
