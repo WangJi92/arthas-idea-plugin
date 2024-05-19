@@ -1,7 +1,7 @@
 package com.github.idea.json.parser;
 
-import com.github.idea.json.parser.model.JPsiTypeClazz;
 import com.github.idea.json.parser.model.JPsiType;
+import com.github.idea.json.parser.model.JPsiTypeClazz;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueAnalysisFactory;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
@@ -64,9 +64,17 @@ public class IdeaJsonParser {
         return null;
     }
 
-
-    private Map<String, Object> parseClass(JPsiTypeClazz jPsiTypeClazz) {
+    /**
+     * 解析clazz
+     *
+     * @param jPsiTypeClazz
+     * @return
+     */
+    private Object parseClass(JPsiTypeClazz jPsiTypeClazz) {
         PsiClass psiClass = jPsiTypeClazz.getPsiClass();
+        if (checkClassIgnore(psiClass)) {
+            return TypeDefaultValue.DEFAULT_NULL;
+        }
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap();
         for (PsiField field : psiClass.getAllFields()) {
             try {
@@ -122,6 +130,21 @@ public class IdeaJsonParser {
             return linkedHashMap.isEmpty() ? null : linkedHashMap;
         }
         return linkedHashMap;
+    }
+
+    /**
+     * 检测是否需要忽略
+     * @param psiClass
+     * @return
+     */
+    private static Boolean checkClassIgnore(PsiClass psiClass) {
+        if (psiClass.getAnnotations().length > 0) {
+            PsiAnnotation annotation = psiClass.getAnnotation("com.fasterxml.jackson.annotation.JsonIgnoreType");
+            if (annotation != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
