@@ -69,7 +69,7 @@ public class IdeaJsonParser {
                 return null;
             }
             // key
-            String fieldKey = parseFieldName(field.getType(), field.getName());
+            String fieldKey = parseFieldName(field);
             PsiExpression psiExpression = field.getInitializer();
             Object fieldValue = null;
             if (psiExpression instanceof PsiLiteralExpression) {
@@ -96,34 +96,26 @@ public class IdeaJsonParser {
     /**
      * 获取字段的名称
      *
-     * @param psiType
-     * @param defaultName
+     * @param field
      * @return
      */
-    private String parseFieldName(PsiType psiType, String defaultName) {
-        PsiAnnotation[] annotations = psiType.getAnnotations();
-        PsiAnnotation annotationJacksonJsonProperty = null;
-        PsiAnnotation annotationFastJsonJSONField = null;
-        for (PsiAnnotation annotation : annotations) {
-            if (Objects.equals(annotation.getQualifiedName(), "com.fasterxml.jackson.annotation.JsonProperty")) {
-                annotationJacksonJsonProperty = annotation;
-            } else if (Objects.equals(annotation.getQualifiedName(), "com.alibaba.fastjson.annotation.JSONField")) {
-                annotationFastJsonJSONField = annotation;
-            }
-        }
+    private String parseFieldName(PsiField field) {
+        PsiAnnotation annotationJacksonJsonProperty = field.getAnnotation("com.fasterxml.jackson.annotation.JsonProperty");
         if (annotationJacksonJsonProperty != null) {
             String fieldName = Objects.requireNonNull(annotationJacksonJsonProperty.findAttributeValue("value")).getText();
             if (StringUtils.isNotBlank(fieldName)) {
-                return fieldName;
+                //""fileName""
+                return fieldName.substring(1, fieldName.length() - 1);
             }
         }
+        PsiAnnotation annotationFastJsonJSONField = field.getAnnotation("com.alibaba.fastjson.annotation.JSONField");;
         if (annotationFastJsonJSONField != null) {
             String fieldName = Objects.requireNonNull(annotationFastJsonJSONField.findAttributeValue("name")).getText();
             if (StringUtils.isNotBlank(fieldName)) {
-                return fieldName;
+                return fieldName.substring(1, fieldName.length() - 1);
             }
         }
-        return defaultName;
+        return field.getName();
     }
 
     private Object parseVariableValue(JPsiType jPsiType) {
