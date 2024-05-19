@@ -4,7 +4,6 @@ import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * @author wangji
@@ -13,7 +12,7 @@ import java.nio.file.Paths;
 public class JavaPathTypeValue implements TypeDefaultValue {
     @Override
     public Object getValue(TypeValueContext context) {
-        return Paths.get("/home/user");
+        return"file:///home/user";
     }
 
     @Override
