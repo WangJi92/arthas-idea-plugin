@@ -69,24 +69,28 @@ public class IdeaJsonParser {
         PsiClass psiClass = jPsiTypeClazz.getPsiClass();
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap();
         for (PsiField field : psiClass.getAllFields()) {
-            if (field.hasModifierProperty(PsiModifier.STATIC)) {
-                continue;
-            }
-            // key
-            String fieldKey = parseFieldName(field);
-            PsiExpression psiExpression = field.getInitializer();
-            Object fieldValue = null;
-            if (psiExpression instanceof PsiLiteralExpression) {
-                // 这个字段有默认值信息，且为字面量信息，直接获取结果。
-                fieldValue = ((PsiLiteralExpression) psiExpression).getValue();
-            }
-            if (fieldValue == null) {
-                JPsiType jPsiType = jPsiTypeClazz.toJPsiVariable(field);
-                fieldValue = parseVariableValue(jPsiType);
-            }
+            try {
+                if (field.hasModifierProperty(PsiModifier.STATIC)) {
+                    continue;
+                }
+                // key
+                String fieldKey = parseFieldName(field);
+                PsiExpression psiExpression = field.getInitializer();
+                Object fieldValue = null;
+                if (psiExpression instanceof PsiLiteralExpression) {
+                    // 这个字段有默认值信息，且为字面量信息，直接获取结果。
+                    fieldValue = ((PsiLiteralExpression) psiExpression).getValue();
+                }
+                if (fieldValue == null) {
+                    JPsiType jPsiType = jPsiTypeClazz.toJPsiVariable(field);
+                    fieldValue = parseVariableValue(jPsiType);
+                }
 
-            if (!Objects.equals(TypeDefaultValue.DEFAULT_NULL, fieldValue)) {
-                linkedHashMap.put(fieldKey, fieldValue);
+                if (!Objects.equals(TypeDefaultValue.DEFAULT_NULL, fieldValue)) {
+                    linkedHashMap.put(fieldKey, fieldValue);
+                }
+            } catch (Exception e) {
+                LOG.error("get file json error " + field.getName(), e);
             }
         }
         if (jPsiTypeClazz.getRecursionLevel() > 0 && psiClass.getAllFields().length == 0) {
@@ -132,7 +136,7 @@ public class IdeaJsonParser {
             TypeValueContext value = typeValueAnalysisFactory.getValue(type);
             return value.getResult();
         } else if (type instanceof PsiArrayType) {
-            //array type
+            //array type also support PsiEllipsisType
             PsiType typeToDeepType = type.getDeepComponentType();
             Object obj = parseVariableValue(jPsiType.deepVariable(typeToDeepType, getPsiClassGenerics(typeToDeepType)));
             return obj != null ? List.of(obj) : List.of();
@@ -202,7 +206,6 @@ public class IdeaJsonParser {
                         Collections.reverse(qualifiedClassNameArray);
                         return String.join("", qualifiedClassNameArray);
                     }
-                    //todo optional
                 }
 
             } else if (typeParameters.length == 2) {
