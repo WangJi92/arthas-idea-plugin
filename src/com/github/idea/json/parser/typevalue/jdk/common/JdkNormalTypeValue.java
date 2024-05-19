@@ -136,20 +136,18 @@ public class JdkNormalTypeValue implements TypeDefaultValue {
                 context.put(TypeValueContext.RESULT, null);
                 return true;
             }
-        }
+            if (InheritanceUtil.isInheritor(context.getType(), Number.class.getName())) {
+                //number 的处理
+                context.put(TypeValueContext.RESULT, NORMAL_TYPES.get(Number.class.getName()));
+                return true;
+            }
 
-        if (InheritanceUtil.isInheritor(context.getType(), Number.class.getName())) {
-            //number 的处理
-            context.put(TypeValueContext.RESULT, NORMAL_TYPES.get(Number.class.getName()));
-            return true;
+            if (InheritanceUtil.isInheritor(context.getType(), CharSequence.class.getName())) {
+                // 字符串的处理
+                context.put(TypeValueContext.RESULT, NORMAL_TYPES.get(CharSequence.class.getName()));
+                return true;
+            }
         }
-
-        if (InheritanceUtil.isInheritor(context.getType(), CharSequence.class.getName())) {
-            // 字符串的处理
-            context.put(TypeValueContext.RESULT, NORMAL_TYPES.get(CharSequence.class.getName()));
-            return true;
-        }
-
         return false;
     }
 }
