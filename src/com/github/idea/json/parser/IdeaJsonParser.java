@@ -72,9 +72,34 @@ public class IdeaJsonParser {
             try {
                 if (field.hasModifierProperty(PsiModifier.STATIC)) {
                     continue;
+                }else if (field.hasModifierProperty(PsiModifier.TRANSIENT)) {
+                    continue;
+                }else if (field.hasModifierProperty(PsiModifier.NATIVE)) {
+                    continue;
                 }
                 // key
-                String fieldKey = parseFieldName(field);
+                String fieldKey = field.getName();
+                if (field.getAnnotations().length > 0) {
+                    // jackson 不需要序列化
+                    PsiAnnotation annotationJsonIgnore = field.getAnnotation("com.fasterxml.jackson.annotation.JsonIgnore");
+                    if (annotationJsonIgnore != null) {
+                        continue;
+                    }
+
+                    // fastjson 不需要序列化
+                    PsiAnnotation annotationJSONField = field.getAnnotation("com.alibaba.fastjson.annotation.JSONField");
+                    if (annotationJSONField != null) {
+                        String serialize = Objects.requireNonNull(annotationJSONField.findAttributeValue("serialize")).getText();
+                        if (StringUtils.isNotBlank(serialize)) {
+                            if (Objects.equals(serialize, "false")) {
+                                continue;
+                            }
+                        }
+                    }
+                    // 存在注解才需要去处理 获取注解的值信息
+                    fieldKey = parseFieldName(field);
+                }
+
                 PsiExpression psiExpression = field.getInitializer();
                 Object fieldValue = null;
                 if (psiExpression instanceof PsiLiteralExpression) {
