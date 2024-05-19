@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /**
  * 获取类型的默认值信息
+ * {@link  TypeValueAnalysisFactory#initialize() 初始化在这里}
  *
  * @author wangji
  * @date 2024/5/19 13:13
