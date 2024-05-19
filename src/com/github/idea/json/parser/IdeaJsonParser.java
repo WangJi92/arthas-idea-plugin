@@ -183,6 +183,7 @@ public class IdeaJsonParser {
                         // clazz 直接返回这个类的字符串
                         PsiClassType classType = (PsiClassType) parameters[0];
                         PsiClass currentContainingClass = classType.resolve();
+                        assert currentContainingClass != null;
                         PsiClass nextContainingClass = currentContainingClass.getContainingClass();
                         if (nextContainingClass == null) {
                             // 不是内部类
@@ -190,7 +191,7 @@ public class IdeaJsonParser {
                         }
                         // 内部类的处理 OutClass$InnerClass
                         List<String> qualifiedClassNameArray = Lists.newArrayList();
-                        qualifiedClassNameArray.add(currentContainingClass.getNameIdentifier().getText());
+                        qualifiedClassNameArray.add(Objects.requireNonNull(currentContainingClass.getNameIdentifier()).getText());
                         currentContainingClass = currentContainingClass.getContainingClass();
                         while (currentContainingClass != null) {
                             qualifiedClassNameArray.add("$");
