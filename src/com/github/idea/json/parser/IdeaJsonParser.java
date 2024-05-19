@@ -78,42 +78,25 @@ public class IdeaJsonParser {
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap();
         for (PsiField field : psiClass.getAllFields()) {
             try {
-                if (field.hasModifierProperty(PsiModifier.STATIC)) {
+                if (checkIgnoreModifierP(field)) {
                     continue;
-                }else if (field.hasModifierProperty(PsiModifier.TRANSIENT)) {
-                    continue;
-                }else if (field.hasModifierProperty(PsiModifier.NATIVE)) {
+                }
+
+                if (checkIgnoreField(field)){
                     continue;
                 }
                 // key
-                String fieldKey = field.getName();
-                if (field.getAnnotations().length > 0) {
-                    // jackson 不需要序列化
-                    PsiAnnotation annotationJsonIgnore = field.getAnnotation("com.fasterxml.jackson.annotation.JsonIgnore");
-                    if (annotationJsonIgnore != null) {
-                        continue;
-                    }
+                String  fieldKey = checkGetFieldName(field);
 
-                    // fastjson 不需要序列化
-                    PsiAnnotation annotationJSONField = field.getAnnotation("com.alibaba.fastjson.annotation.JSONField");
-                    if (annotationJSONField != null) {
-                        String serialize = Objects.requireNonNull(annotationJSONField.findAttributeValue("serialize")).getText();
-                        if (StringUtils.isNotBlank(serialize)) {
-                            if (Objects.equals(serialize, "false")) {
-                                continue;
-                            }
-                        }
-                    }
-                    // 存在注解才需要去处理 获取注解的值信息
-                    fieldKey = parseFieldName(field);
-                }
-
+                //region 字母常量的默认值
                 PsiExpression psiExpression = field.getInitializer();
                 Object fieldValue = null;
                 if (psiExpression instanceof PsiLiteralExpression) {
                     // 这个字段有默认值信息，且为字面量信息，直接获取结果。
                     fieldValue = ((PsiLiteralExpression) psiExpression).getValue();
                 }
+                //endregion
+
                 if (fieldValue == null) {
                     JPsiType jPsiType = jPsiTypeClazz.toJPsiVariable(field);
                     fieldValue = parseVariableValue(jPsiType);
@@ -130,6 +113,66 @@ public class IdeaJsonParser {
             return linkedHashMap.isEmpty() ? null : linkedHashMap;
         }
         return linkedHashMap;
+    }
+
+    /**
+     * 获取字段的名称
+     *
+     * @param field
+     * @return
+     */
+    private String checkGetFieldName(PsiField field) {
+        if (field.getAnnotations().length > 0) {
+            // 存在注解才需要去处理 获取注解的值信息
+            return parseFieldName(field);
+        }
+        return field.getName();
+    }
+
+    /**
+     * 检测 忽略的字段
+     *
+     * @param field
+     * @return
+     */
+    private static boolean checkIgnoreField(PsiField field) {
+        if (field.getAnnotations().length > 0) {
+            // jackson 不需要序列化
+            PsiAnnotation annotationJsonIgnore = field.getAnnotation("com.fasterxml.jackson.annotation.JsonIgnore");
+            if (annotationJsonIgnore != null) {
+                return true;
+            }
+
+            // fastjson 不需要序列化
+            PsiAnnotation annotationJSONField = field.getAnnotation("com.alibaba.fastjson.annotation.JSONField");
+            if (annotationJSONField != null) {
+                String serialize = Objects.requireNonNull(annotationJSONField.findAttributeValue("serialize")).getText();
+                if (StringUtils.isNotBlank(serialize)) {
+                    if (Objects.equals(serialize, "false")) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * 检测忽略的属性
+     *
+     * @param field
+     * @return
+     */
+    private static boolean checkIgnoreModifierP(PsiField field) {
+        if (field.hasModifierProperty(PsiModifier.STATIC)) {
+            return true;
+        } else if (field.hasModifierProperty(PsiModifier.TRANSIENT)) {
+            return true;
+        } else if (field.hasModifierProperty(PsiModifier.NATIVE)) {
+            return true;
+        }
+        return false;
     }
 
     /**
