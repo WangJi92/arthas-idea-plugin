@@ -1,16 +1,16 @@
-package com.github.idea.json.parser.typevalue.thirdlib.fastjson;
+package com.github.idea.json.parser.typevalue.thirdlib.jsonorg;
 
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 import com.intellij.psi.PsiType;
 
 /**
- * 当前fastjson的所有包路径下面的
+ * json org 其他的所有包路径下面的
  *
  * @author wangji
  * @date 2024/5/19 17:49
  */
-public class FastJsonAllPackageTypeValue implements TypeDefaultValue {
+public class JsonOrgAllPackageTypeValue implements TypeDefaultValue {
 
     @Override
     public Object getValue(TypeValueContext context) {
@@ -30,7 +30,7 @@ public class FastJsonAllPackageTypeValue implements TypeDefaultValue {
             return false;
         }
         String canonicalText = type.getCanonicalText();
-        if (canonicalText.startsWith("com.alibaba.fastjson")) {
+        if (canonicalText.startsWith("org.json")) {
             context.put(TypeValueContext.RESULT, null);
             return true;
         }
