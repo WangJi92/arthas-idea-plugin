@@ -4,8 +4,11 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * PsiVariable 包含 PsiField & PsiLocalVariable &  PsiParameter & PsiReceiverParameter & PsiVariableEx
@@ -16,19 +19,29 @@ import java.util.Map;
 @Getter
 public class JPsiType extends JPsiTypeBase {
 
+    /**
+     * 当前的类型
+     */
     protected PsiType psiType;
+
+    /**
+     * 当前类+所有的父类的名字集合
+     */
+    public Set<String> parentPlusCurrentQualifiedNames;
 
 
     public JPsiType(PsiType psiType, Map<String, PsiType> psiClassGenerics, List<String> ignoreProperties, int recursionLevel) {
         this.psiType = psiType;
-        if (ignoreProperties == null) {
-            this.ignoreProperties = List.of();
-        } else {
+
+        // 获取父类的信息
+        Set<String> clazzNames = Arrays.stream(psiType.getSuperTypes()).map(PsiType::getCanonicalText).collect(Collectors.toSet());
+        clazzNames.add(psiType.getCanonicalText());
+        this.parentPlusCurrentQualifiedNames = clazzNames;
+        if (ignoreProperties != null) {
             this.ignoreProperties = ignoreProperties;
         }
-        if (psiClassGenerics == null) {
-            this.psiTypeGenerics = Map.of();
-        } else {
+
+        if (psiClassGenerics != null) {
             this.psiTypeGenerics = psiClassGenerics;
         }
         this.recursionLevel = recursionLevel;
