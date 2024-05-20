@@ -1,6 +1,5 @@
 package com.github.idea.json.parser.typevalue;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,16 +10,28 @@ import java.util.Set;
  * @date 2024/5/20 22:26
  */
 public interface MultiTypeDefaultValue extends TypeDefaultValue {
-    /**
-     * 初始信息
-     */
-    default void init() {
-    }
 
+    /**
+     * 多个处理 把静态和动态结合起来了.
+     * @param context
+     * @return
+     */
     @Override
     default Object getValue(TypeValueContext context) {
-        return context.getSupport() ? context.get(TypeValueContext.RESULT) : DEFAULT_NULL;
+        if (context.getSupport()) {
+            // 动态处理的;
+            return context.get(TypeValueContext.RESULT);
+        }
+        if (this.getContainer() != null) {
+            //静态处理
+            Object quicklyResult = this.getContainer().get(context.getType().getCanonicalText());
+            if (quicklyResult != null) {
+                return quicklyResult;
+            }
+        }
+        return DEFAULT_NULL;
     }
+
 
     /**
      * 获取容器
@@ -28,7 +39,7 @@ public interface MultiTypeDefaultValue extends TypeDefaultValue {
      * @return
      */
     default Map<String, Object> getContainer() {
-        return new HashMap<>(8);
+        return null;
     }
 
 
@@ -38,7 +49,7 @@ public interface MultiTypeDefaultValue extends TypeDefaultValue {
      * @return
      */
     default Set<String> getQualifiedNames() {
-        return this.getContainer().keySet();
+        return this.getContainer() != null ? this.getContainer().keySet() : Set.of();
     }
 
     /**

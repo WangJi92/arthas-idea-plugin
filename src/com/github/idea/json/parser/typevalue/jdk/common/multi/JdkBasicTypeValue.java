@@ -23,7 +23,17 @@ public class JdkBasicTypeValue implements MultiTypeDefaultValue {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    public JdkBasicTypeValue() {
+        this.init();
+    }
+
+    private final Map<String, Object> container = new HashMap<>(16);
+
     @Override
+    public Map<String, Object> getContainer() {
+        return container;
+    }
+
     public void init() {
         Map<String, Object> container = this.getContainer();
         container.put(Boolean.class.getName(), true);
