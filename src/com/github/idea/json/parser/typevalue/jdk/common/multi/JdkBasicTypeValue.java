@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * @author wangji
  * @date 2024/5/19 14:36
  */
-public class JdkNormalTypeValue implements MultiTypeDefaultValue {
+public class JdkBasicTypeValue implements MultiTypeDefaultValue {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

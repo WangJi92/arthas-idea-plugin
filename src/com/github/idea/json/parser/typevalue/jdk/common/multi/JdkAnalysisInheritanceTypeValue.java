@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
  * @author wangji
  * @date 2024/5/20 22:11
  */
-public class JdkAnalysisInheritanceBasicType implements MultiTypeDefaultValue {
+public class JdkAnalysisInheritanceTypeValue implements MultiTypeDefaultValue {
 
 
     @Override
