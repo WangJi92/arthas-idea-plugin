@@ -1,5 +1,6 @@
-package com.github.idea.json.parser.typevalue.jdk.common;
+package com.github.idea.json.parser.typevalue.jdk.common.multi;
 
+import com.github.idea.json.parser.typevalue.MultiTypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 import com.intellij.psi.*;
@@ -10,18 +11,7 @@ import java.util.Arrays;
  * @author wangji
  * @date 2024/5/19 17:24
  */
-public class JdkEnumTypeValue implements TypeDefaultValue {
-
-    @Override
-    public Object getValue(TypeValueContext context) {
-        return context.get(TypeValueContext.RESULT);
-    }
-
-
-    @Override
-    public boolean isSingle() {
-        return false;
-    }
+public class JdkEnumTypeValue implements MultiTypeDefaultValue {
 
     @Override
     public boolean isSupport(TypeValueContext context) {

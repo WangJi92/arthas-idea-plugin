@@ -1,10 +1,13 @@
 package com.github.idea.json.parser.typevalue;
 
-import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
+import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 类型转换上下文
@@ -16,36 +19,47 @@ public class TypeValueContext {
 
     public static final String RESULT = "RESULT";
 
-    private PsiClassType psiClassType;
-
+    @Getter
     private PsiType type;
 
     private final Map<String, Object> processCache = new HashMap<>();
 
+    @Getter
     private Object result;
 
     /**
      * 是否支持
      */
+    @Getter
     private Boolean support = false;
+
+    /**
+     * 当前类+所有的父类的名字集合
+     */
+    private Set<String> parentPlusCurrentQualifiedNames;
+
+    /**
+     * 是否继承了 当前clazz
+     *
+     * @param clazzName
+     * @return
+     */
+    public Boolean isInheritor(String clazzName) {
+        return parentPlusCurrentQualifiedNames != null && parentPlusCurrentQualifiedNames.contains(clazzName);
+    }
 
 
     /**
-     * single 的时候 PsiClassType 可能为空
-     *
      * @param type
      */
     public TypeValueContext(PsiType type) {
+        assert type != null;
         this.type = type;
-        if (type instanceof PsiClassType) {
-            this.psiClassType = (PsiClassType) type;
-        }
+        Set<String> clazzNames = Arrays.stream(type.getSuperTypes()).map(PsiType::getCanonicalText).collect(Collectors.toSet());
+        clazzNames.add(type.getCanonicalText());
+        this.parentPlusCurrentQualifiedNames = clazzNames;
     }
 
-
-    public Object getResult() {
-        return result;
-    }
 
     public void setResult(Object result) {
         this.result = result;
@@ -61,11 +75,4 @@ public class TypeValueContext {
         return processCache.get(key);
     }
 
-    public PsiType getType() {
-        return type;
-    }
-
-    public Boolean getSupport() {
-        return support;
-    }
 }
