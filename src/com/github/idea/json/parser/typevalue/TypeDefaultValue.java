@@ -13,7 +13,7 @@ public interface TypeDefaultValue {
     String DEFAULT_NULL = "__DEFAULT_NULL__";
 
     /**
-     * 获取值的信息
+     * 获取值的信息 context 可能为空
      *
      * @return
      */
