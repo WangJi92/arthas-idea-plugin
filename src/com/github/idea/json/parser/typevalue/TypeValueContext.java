@@ -1,13 +1,12 @@
 package com.github.idea.json.parser.typevalue;
 
+import com.github.idea.json.parser.toolkit.PsiToolkit;
 import com.intellij.psi.PsiType;
 import lombok.Getter;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 类型转换上下文
@@ -55,9 +54,7 @@ public class TypeValueContext {
     public TypeValueContext(PsiType type) {
         assert type != null;
         this.type = type;
-        Set<String> clazzNames = Arrays.stream(type.getSuperTypes()).map(PsiType::getCanonicalText).collect(Collectors.toSet());
-        clazzNames.add(type.getCanonicalText());
-        this.parentPlusCurrentQualifiedNames = clazzNames;
+        this.parentPlusCurrentQualifiedNames = PsiToolkit.findParentPlusCurrentQualifiedName(type);
     }
 
 

@@ -4,6 +4,7 @@ import com.github.idea.json.parser.typevalue.MultiTypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 import com.intellij.psi.PsiType;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,13 @@ import java.util.Map;
  */
 public class JacksonAllPackageTypeValue implements MultiTypeDefaultValue {
 
+    private final Map<String, Object> container = new HashMap<>(16);
+
     @Override
+    public Map<String, Object> getContainer() {
+        return container;
+    }
+
     public void init() {
         Map<String, Object> container = this.getContainer();
         container.put("com.fasterxml.jackson.databind.node.BooleanNode", true);

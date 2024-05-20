@@ -1,7 +1,6 @@
 package com.github.idea.json.parser;
 
-import com.github.idea.json.parser.model.JPsiType;
-import com.github.idea.json.parser.model.JPsiTypeClazz;
+import com.github.idea.json.parser.toolkit.model.JPsiType;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueAnalysisFactory;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
@@ -9,7 +8,6 @@ import com.google.common.collect.Lists;
 import com.google.gson.GsonBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -67,15 +65,19 @@ public class IdeaJsonParser {
     /**
      * 解析clazz
      *
-     * @param jPsiTypeClazz
+     * @param currentParseJPsiClazzType
      * @return
      */
-    private Object parseClass(JPsiTypeClazz jPsiTypeClazz) {
-        PsiClass psiClass = jPsiTypeClazz.getPsiClass();
+    private Object parseClass(JPsiType currentParseJPsiClazzType) {
+        if(!(currentParseJPsiClazzType.getPsiType() instanceof  PsiClassType)){
+            return TypeDefaultValue.DEFAULT_NULL;
+        }
+        PsiClass psiClass = ((PsiClassType) currentParseJPsiClazzType.getPsiType()).resolve();
+        assert psiClass != null;
         if (checkClassIgnore(psiClass)) {
             return TypeDefaultValue.DEFAULT_NULL;
         }
-        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap();
+        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
         for (PsiField field : psiClass.getAllFields()) {
             try {
                 if (checkIgnoreModifierP(field)) {
@@ -98,7 +100,7 @@ public class IdeaJsonParser {
                 //endregion
 
                 if (fieldValue == null) {
-                    JPsiType jPsiType = jPsiTypeClazz.toJPsiVariable(field);
+                    JPsiType jPsiType = currentParseJPsiClazzType.copyNew(field);
                     fieldValue = parseVariableValue(jPsiType);
                 }
 
@@ -109,7 +111,7 @@ public class IdeaJsonParser {
                 LOG.error("get file json error " + field.getName(), e);
             }
         }
-        if (jPsiTypeClazz.getRecursionLevel() > 0 && psiClass.getAllFields().length == 0) {
+        if (currentParseJPsiClazzType.getRecursionLevel() > 0 && psiClass.getAllFields().length == 0) {
             return linkedHashMap.isEmpty() ? null : linkedHashMap;
         }
         return linkedHashMap;
@@ -218,12 +220,12 @@ public class IdeaJsonParser {
         return field.getName();
     }
 
-    private Object parseVariableValue(JPsiType jPsiType) {
-        if (jPsiType.getRecursionLevel() >= 200) {
+    private Object parseVariableValue(JPsiType currenParsetJpsiType) {
+        if (currenParsetJpsiType.getRecursionLevel() >= 200) {
             //递归太多了次数直接返回 null
             return TypeDefaultValue.DEFAULT_NULL;
         }
-        PsiType type = jPsiType.getPsiType();
+        PsiType type = currenParsetJpsiType.getPsiType();
         if (type instanceof PsiPrimitiveType) {
             //primitive Type
             TypeValueContext value = typeValueAnalysisFactory.getValue(type);
@@ -231,11 +233,9 @@ public class IdeaJsonParser {
         } else if (type instanceof PsiArrayType) {
             //array type also support PsiEllipsisType
             PsiType typeToDeepType = type.getDeepComponentType();
-            Object obj = parseVariableValue(jPsiType.deepVariable(typeToDeepType, getPsiClassGenerics(typeToDeepType)));
+            Object obj = parseVariableValue(currenParsetJpsiType.copyNew(typeToDeepType, getPsiClassGenerics(typeToDeepType)));
             return obj != null ? List.of(obj) : List.of();
-        } else if (type instanceof PsiClassType) {
-            PsiClassType psiClassType = ((PsiClassType) type);
-
+        } else if (type instanceof PsiClassType currentParseIdeaPsiClassType) {
             TypeValueContext quickProcessValue = typeValueAnalysisFactory.getValue(type);
             if (quickProcessValue.getSupport()) {
                 // 快速处理获取结果，比如一些常见的数据类型
@@ -244,7 +244,7 @@ public class IdeaJsonParser {
                 return quickProcessValue.getResult();
             }
             //reference Type
-            PsiClass psiClass = psiClassType.resolve();
+            PsiClass psiClass = currentParseIdeaPsiClassType.resolve();
             if (psiClass == null) {
                 return TypeDefaultValue.DEFAULT_NULL;
             }
@@ -252,12 +252,13 @@ public class IdeaJsonParser {
             // 检测泛型参数
             PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
             if (typeParameters.length == 1) {
-                PsiClassType rawType = psiClassType.rawType();
-                if (InheritanceUtil.isInheritor(rawType, Collection.class.getName())) {
+                PsiClassType rawType = currentParseIdeaPsiClassType.rawType();
+                JPsiType rawJPsiType = new JPsiType(rawType);
+                if (rawJPsiType.isInheritor(Collection.class.getName())) {
                     // Set<String> List<Demo<String>> ..why not startsWith("java.")?
-                    PsiType[] parameters = psiClassType.getParameters();
+                    PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                     if (parameters.length == 1) {
-                        Object obj = parseVariableValue(jPsiType.deepVariable(parameters[0], getPsiClassGenerics(parameters[0])));
+                        Object obj = parseVariableValue(currenParsetJpsiType.copyNew(parameters[0], getPsiClassGenerics(parameters[0])));
                         return obj != null ? List.of(obj) : List.of();
                     }
                     // List 没有写泛型..
@@ -266,9 +267,9 @@ public class IdeaJsonParser {
 
                 if (type.getCanonicalText().startsWith("java.")) {
                     // 提速
-                    if (InheritanceUtil.isInheritor(rawType, Class.class.getName())) {
+                    if (rawJPsiType.isInheritor(Class.class.getName())) {
                         // Class clazz  ,Class<User> clazz2
-                        PsiType[] parameters = psiClassType.getParameters();
+                        PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                         if (parameters.length == 0) {
                             //没有泛型类型，为空直接 null
                             return TypeDefaultValue.DEFAULT_NULL;
@@ -303,30 +304,41 @@ public class IdeaJsonParser {
                 }
 
             } else if (typeParameters.length == 2) {
-                PsiClassType rawType = psiClassType.rawType();
+                PsiClassType rawType = currentParseIdeaPsiClassType.rawType();
                 // 特殊处理Map
-                if (InheritanceUtil.isInheritor(rawType, Map.class.getName())) {
-                    PsiType[] parameters = psiClassType.getParameters();
+                JPsiType rawJPsiType = new JPsiType(rawType);
+                if (rawJPsiType.isInheritor(Map.class.getName())) {
+                    PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                     if (parameters.length == 2) {
-                        Object obj = parseVariableValue(jPsiType.deepVariable(parameters[1], getPsiClassGenerics(parameters[1])));
+                        Object obj = parseVariableValue(currenParsetJpsiType.copyNew(parameters[1], getPsiClassGenerics(parameters[1])));
                         return obj != null ? Map.of(" ", obj) : new HashMap<>();
                     }
                     // Map 没有写泛型..
                     return new HashMap<>();
                 }
             }
-            if (jPsiType.getPsiTypeGenerics() != null) {
-                PsiType typeToDeepType = jPsiType.getPsiTypeGenerics().get(psiClass.getName());
+
+            //not standard Map、List  CustomMap extends HashMap<String,String>
+            // current psiClazz not type generics
+            // simple handler ignore type generics
+            if (currenParsetJpsiType.isInheritor(Map.class.getName())) {
+                return Map.of();
+            } else if (currenParsetJpsiType.isInheritor(Collection.class.getName())) {
+                return List.of();
+            }
+
+            if (currenParsetJpsiType.getPsiTypeGenerics() != null) {
+                PsiType typeToDeepType = currenParsetJpsiType.getPsiTypeGenerics().get(psiClass.getName());
                 if (typeToDeepType != null) {
-                    return parseVariableValue(jPsiType.deepVariable(typeToDeepType, getPsiClassGenerics(typeToDeepType)));
+                    return parseVariableValue(currenParsetJpsiType.copyNew(typeToDeepType, getPsiClassGenerics(typeToDeepType)));
                 }
             }
             if (typeParameters.length == 0) {
                 // 没有泛型参数
-                return parseClass(jPsiType.deepClass(psiClass));
+                return parseClass(currenParsetJpsiType.copyNew(currentParseIdeaPsiClassType,null));
             }
             // Test<User,String> ..
-            return parseClass(jPsiType.deepClass(psiClass, getPsiClassGenerics(type)));
+            return parseClass(currenParsetJpsiType.copyNew(currentParseIdeaPsiClassType, getPsiClassGenerics(type)));
         }
         return TypeDefaultValue.DEFAULT_NULL;
     }

@@ -22,8 +22,17 @@ import java.util.concurrent.Future;
  */
 public class JdkAnalysisInheritanceTypeValue implements MultiTypeDefaultValue {
 
+    public JdkAnalysisInheritanceTypeValue() {
+        this.init();
+    }
+
+    private final Map<String, Object> container = new HashMap<>(16);
 
     @Override
+    public Map<String, Object> getContainer() {
+        return container;
+    }
+
     public void init() {
         Map<String, Object> container = this.getContainer();
         container.put(Number.class.getName(), 0);
