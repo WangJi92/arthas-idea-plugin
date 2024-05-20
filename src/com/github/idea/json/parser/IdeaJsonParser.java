@@ -82,11 +82,11 @@ public class IdeaJsonParser {
                     continue;
                 }
 
-                if (checkIgnoreField(field)){
+                if (checkIgnoreField(field)) {
                     continue;
                 }
                 // key
-                String  fieldKey = checkGetFieldName(field);
+                String fieldKey = checkGetFieldName(field);
 
                 //region 字母常量的默认值
                 PsiExpression psiExpression = field.getInitializer();
@@ -177,6 +177,7 @@ public class IdeaJsonParser {
 
     /**
      * 检测是否需要忽略
+     *
      * @param psiClass
      * @return
      */
@@ -206,7 +207,8 @@ public class IdeaJsonParser {
                 return fieldName.substring(1, fieldName.length() - 1);
             }
         }
-        PsiAnnotation annotationFastJsonJSONField = field.getAnnotation("com.alibaba.fastjson.annotation.JSONField");;
+        PsiAnnotation annotationFastJsonJSONField = field.getAnnotation("com.alibaba.fastjson.annotation.JSONField");
+        ;
         if (annotationFastJsonJSONField != null) {
             String fieldName = Objects.requireNonNull(annotationFastJsonJSONField.findAttributeValue("name")).getText();
             if (StringUtils.isNotBlank(fieldName)) {
@@ -250,20 +252,21 @@ public class IdeaJsonParser {
             // 检测泛型参数
             PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
             if (typeParameters.length == 1) {
+                PsiClassType rawType = psiClassType.rawType();
+                if (InheritanceUtil.isInheritor(rawType, Collection.class.getName())) {
+                    // Set<String> List<Demo<String>> ..why not startsWith("java.")?
+                    PsiType[] parameters = psiClassType.getParameters();
+                    if (parameters.length == 1) {
+                        Object obj = parseVariableValue(jPsiType.deepVariable(parameters[0], getPsiClassGenerics(parameters[0])));
+                        return obj != null ? List.of(obj) : List.of();
+                    }
+                    // List 没有写泛型..
+                    return List.of();
+                }
+
                 if (type.getCanonicalText().startsWith("java.")) {
-                    // 提起判断 提速
-                    PsiClassType rawType = psiClassType.rawType();
-                    if (InheritanceUtil.isInheritor(rawType, "java.lang.Iterable")
-                            || InheritanceUtil.isInheritor(rawType, "java.util.Collection")) {
-                        // Iterable<String> List<Demo<String>>
-                        PsiType[] parameters = psiClassType.getParameters();
-                        if (parameters.length == 1) {
-                            Object obj = parseVariableValue(jPsiType.deepVariable(parameters[0], getPsiClassGenerics(parameters[0])));
-                            return obj != null ? List.of(obj) : List.of();
-                        }
-                        // List 没有写泛型..
-                        return List.of();
-                    } else if (InheritanceUtil.isInheritor(rawType, "java.lang.Class")) {
+                    // 提速
+                    if (InheritanceUtil.isInheritor(rawType, Class.class.getName())) {
                         // Class clazz  ,Class<User> clazz2
                         PsiType[] parameters = psiClassType.getParameters();
                         if (parameters.length == 0) {
@@ -300,19 +303,16 @@ public class IdeaJsonParser {
                 }
 
             } else if (typeParameters.length == 2) {
-                if (type.getCanonicalText().startsWith("java.")) {
-                    PsiClassType rawType = psiClassType.rawType();
-                    // 特殊处理Map
-                    if (InheritanceUtil.isInheritor(rawType, "java.util.Map")) {
-                        PsiType[] parameters = psiClassType.getParameters();
-                        if (parameters.length == 2) {
-                            Object obj = parseVariableValue(jPsiType.deepVariable(parameters[1], getPsiClassGenerics(parameters[1])));
-                            return obj != null ? Map.of(" ", obj) : new HashMap<>();
-                        }
-                        // Map 没有写泛型..
-                        return new HashMap<>();
-
+                PsiClassType rawType = psiClassType.rawType();
+                // 特殊处理Map
+                if (InheritanceUtil.isInheritor(rawType, Map.class.getName())) {
+                    PsiType[] parameters = psiClassType.getParameters();
+                    if (parameters.length == 2) {
+                        Object obj = parseVariableValue(jPsiType.deepVariable(parameters[1], getPsiClassGenerics(parameters[1])));
+                        return obj != null ? Map.of(" ", obj) : new HashMap<>();
                     }
+                    // Map 没有写泛型..
+                    return new HashMap<>();
                 }
             }
             if (jPsiType.getPsiTypeGenerics() != null) {
@@ -334,6 +334,7 @@ public class IdeaJsonParser {
 
     /**
      * 获取 type的泛型信息
+     *
      * @param type
      * @return
      */
