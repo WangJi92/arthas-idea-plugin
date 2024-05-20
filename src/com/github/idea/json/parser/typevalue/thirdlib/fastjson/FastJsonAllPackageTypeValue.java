@@ -1,6 +1,6 @@
 package com.github.idea.json.parser.typevalue.thirdlib.fastjson;
 
-import com.github.idea.json.parser.typevalue.TypeDefaultValue;
+import com.github.idea.json.parser.typevalue.MultiTypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 import com.intellij.psi.PsiType;
 
@@ -10,18 +10,7 @@ import com.intellij.psi.PsiType;
  * @author wangji
  * @date 2024/5/19 17:49
  */
-public class FastJsonAllPackageTypeValue implements TypeDefaultValue {
-
-    @Override
-    public Object getValue(TypeValueContext context) {
-        return context.get(TypeValueContext.RESULT);
-    }
-
-    @Override
-    public boolean isSingle() {
-        return false;
-    }
-
+public class FastJsonAllPackageTypeValue implements MultiTypeDefaultValue {
 
     @Override
     public boolean isSupport(TypeValueContext context) {

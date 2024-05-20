@@ -24,7 +24,7 @@ public class TypeValueAnalysisFactory {
     /**
      * 一个类可以处理多个类型
      */
-    private final List<TypeDefaultValue> multiTypeValueList = new LinkedList<>();
+    private final List<MultiTypeDefaultValue> multiTypeValueList = new LinkedList<>();
 
     private TypeValueAnalysisFactory() {
         initialize();
@@ -36,10 +36,14 @@ public class TypeValueAnalysisFactory {
         for (Class<? extends TypeDefaultValue> clazz : typeDefaultValueClazz) {
             try {
                 TypeDefaultValue typeDefaultValue = clazz.getDeclaredConstructor().newInstance();
-                if (typeDefaultValue.isSingle()) {
-                    singleTypeValueMap.put(typeDefaultValue.getQualifiedName(), typeDefaultValue);
+                if (typeDefaultValue instanceof MultiTypeDefaultValue) {
+                    multiTypeValueList.add((MultiTypeDefaultValue) typeDefaultValue);
+                    // 批量里面也有单个的数据，方便加快速度
+                    for (String qualifiedName : ((MultiTypeDefaultValue) typeDefaultValue).getQualifiedNames()) {
+                        singleTypeValueMap.put(qualifiedName, typeDefaultValue);
+                    }
                 } else {
-                    multiTypeValueList.add(typeDefaultValue);
+                    singleTypeValueMap.put(typeDefaultValue.getQualifiedName(), typeDefaultValue);
                 }
             } catch (Exception e) {
             }
@@ -64,12 +68,12 @@ public class TypeValueAnalysisFactory {
         //如果基本类型能够处理
         TypeDefaultValue typeDefaultValue = singleTypeValueMap.get(type.getCanonicalText());
         TypeValueContext context = new TypeValueContext(type);
-        if (typeDefaultValue != null && typeDefaultValue.isSupport(context)) {
+        if (typeDefaultValue != null) {
             Object value = typeDefaultValue.getValue(context);
             context.setResult(value);
             return context;
         }
-        for (TypeDefaultValue multiTypeValue : multiTypeValueList) {
+        for (MultiTypeDefaultValue multiTypeValue : multiTypeValueList) {
             if (multiTypeValue.isSupport(context)) {
                 Object value = multiTypeValue.getValue(context);
                 context.setResult(value);
