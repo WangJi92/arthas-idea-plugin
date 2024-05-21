@@ -1,5 +1,6 @@
 package com.github.idea.json.parser;
 
+import com.github.idea.json.parser.toolkit.PsiToolkit;
 import com.github.idea.json.parser.toolkit.model.JPsiType;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueAnalysisFactory;
@@ -8,13 +9,10 @@ import com.google.common.collect.Lists;
 import com.google.gson.GsonBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 解析 默认的json 字符串信息
@@ -351,14 +349,7 @@ public class IdeaJsonParser {
      * @return
      */
     private Map<String, PsiType> getPsiClassGenerics(PsiType type) {
-        PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
-        if (psiClass != null) {
-            return Arrays.stream(psiClass.getTypeParameters())
-                    .map(p -> Pair.of(p, PsiUtil.substituteTypeParameter(type, psiClass, p.getIndex(), false)))
-                    .filter(p -> p.getValue() != null)
-                    .collect(Collectors.toMap(p -> p.getKey().getName(), Pair::getValue));
-        }
-        return Map.of();
+        return PsiToolkit.getPsiClassGenerics(type);
     }
 
 
