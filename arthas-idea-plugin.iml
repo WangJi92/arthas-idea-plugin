@@ -17,8 +17,6 @@
     <orderEntry type="library" name="commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" name="redis.clients:jedis:3.4.1" level="project" />
     <orderEntry type="library" name="com.amazonaws:aws-java-sdk-s3:1.12.321" level="project" />
-    <orderEntry type="library" name="instrumented-pojo2json-2.0.6" level="project" />
-    <orderEntry type="library" name="javassist-3.28.0-GA" level="project" />
     <orderEntry type="library" name="reflections" level="project" />
   </component>
 </module>

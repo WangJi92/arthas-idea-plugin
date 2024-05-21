@@ -1,6 +1,5 @@
 package com.github.idea.json.parser.toolkit;
 
-import com.github.idea.json.parser.toolkit.model.JPsiType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class PsiToolkit {
 
-    private static final Logger LOG = Logger.getInstance(JPsiType.class);
+    private static final Logger LOG = Logger.getInstance(PsiToolkit.class);
 
     /**
      * 查找父类的信息

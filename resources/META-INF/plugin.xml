@@ -597,6 +597,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolComplexCommandAction"
                 text="Vmtool Get Instance Invoke Complex Method"
                 description="Vmtool get instance invoke method field"/>
+        <action id="ToolParseJsonAction"
+                class="com.github.idea.json.parser.action.ToolParseJsonAction"
+                text="Json Parse"
+                description="ToolParseJsonAction"/>
 
         <action id="ArthasIdeaOpenConfigPageAction"
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasIdeaOpenConfigPageAction"
@@ -662,6 +666,7 @@
             <separator/>
             <reference ref="ArthasVmtoolCommandAction"/>
             <reference ref="ArthasVmtoolComplexCommandAction"/>
+            <reference ref="ToolParseJsonAction"/>
             <reference ref="ArthasVmtoolSetFieldCommandAction"/>
             <separator/>
             <group id="arthas-plugin-spring-context" popup="true" text="Spring Get Context Invoke Method Filed">
