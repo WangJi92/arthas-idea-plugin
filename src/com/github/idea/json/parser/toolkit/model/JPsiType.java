@@ -17,6 +17,7 @@ import java.util.Set;
  * @date 2024/5/19 19:49
  */
 @Getter
+@Deprecated
 public class JPsiType {
     private static final Logger LOG = Logger.getInstance(JPsiType.class);
 
@@ -35,10 +36,6 @@ public class JPsiType {
      */
     public int recursionLevel = 0;
 
-    /**
-     * 需要过滤的属性，随Fields上定义的注释而变化
-     */
-    public List<String> ignoreProperties = List.of();
 
     /**
      * class Person<T>{
@@ -68,9 +65,6 @@ public class JPsiType {
     public JPsiType(PsiType psiType, Map<String, PsiType> psiClassGenerics, List<String> ignoreProperties, int recursionLevel) {
         this.psiType = psiType;
         this.parentPlusCurrentQualifiedNames = PsiToolkit.findParentPlusCurrentQualifiedName(psiType);
-        if (ignoreProperties != null) {
-            this.ignoreProperties = ignoreProperties;
-        }
 
         if (psiClassGenerics != null) {
             this.psiTypeGenerics = psiClassGenerics;
@@ -98,7 +92,7 @@ public class JPsiType {
      * @return
      */
     public JPsiType copyNew(PsiType deepType, Map<String, PsiType> psiClassGenerics) {
-        return new JPsiType(deepType, psiClassGenerics, this.getIgnoreProperties(), ++this.recursionLevel);
+        return new JPsiType(deepType, psiClassGenerics, null, ++this.recursionLevel);
     }
 
     /**
@@ -108,6 +102,6 @@ public class JPsiType {
      * @return
      */
     public JPsiType copyNew(PsiField psiField) {
-        return new JPsiType(psiField.getType(), this.getPsiTypeGenerics(), this.getIgnoreProperties(), this.getRecursionLevel());
+        return new JPsiType(psiField.getType(), this.getPsiTypeGenerics(), null, this.getRecursionLevel());
     }
 }
