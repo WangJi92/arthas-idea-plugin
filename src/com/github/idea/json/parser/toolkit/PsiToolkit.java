@@ -2,10 +2,16 @@ package com.github.idea.json.parser.toolkit;
 
 import com.github.idea.json.parser.toolkit.model.JPsiType;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiType;
+import com.intellij.psi.util.PsiUtil;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author wangji
@@ -52,5 +58,23 @@ public class PsiToolkit {
         HashSet<String> supperClazzNames = new HashSet<>(16);
         doFindParentPlusCurrentQualifiedName(psiType, supperClazzNames);
         return supperClazzNames;
+    }
+
+
+    /**
+     * 获取 type的泛型信息
+     *
+     * @param type
+     * @return
+     */
+    public static Map<String, PsiType> getPsiClassGenerics(PsiType type) {
+        PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
+        if (psiClass != null) {
+            return Arrays.stream(psiClass.getTypeParameters())
+                    .map(p -> Pair.of(p, PsiUtil.substituteTypeParameter(type, psiClass, p.getIndex(), false)))
+                    .filter(p -> p.getValue() != null)
+                    .collect(Collectors.toMap(p -> p.getKey().getName(), Pair::getValue));
+        }
+        return Map.of();
     }
 }
