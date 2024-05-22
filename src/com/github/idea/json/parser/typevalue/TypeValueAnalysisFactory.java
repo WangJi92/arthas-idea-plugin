@@ -6,12 +6,6 @@ import org.reflections.Reflections;
 import java.util.*;
 
 /**
- * <p>intro </p>
- * <pre>
- *   {@code
- *       //code example
- *   }
- *  </pre>
  *
  * @author wangji
  * @date 2024/5/19 16:32

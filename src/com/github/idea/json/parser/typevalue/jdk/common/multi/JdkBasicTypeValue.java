@@ -133,7 +133,6 @@ public class JdkBasicTypeValue implements MultiTypeDefaultValue {
                     //Optional 序列化不稳定，eg fastjson 需要自定义..
                     || canonicalText.startsWith("java.util.Optional")
                     || canonicalText.startsWith("java.util.concurrent.locks")
-                    || canonicalText.startsWith("javax")
                     || canonicalText.startsWith("java.text")
                     || canonicalText.startsWith("java.sql")
                     || canonicalText.startsWith("java.security")

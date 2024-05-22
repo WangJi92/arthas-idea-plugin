@@ -26,6 +26,7 @@ public class JPsiTypeContext {
      */
     public static final String CACHE_KEY_PSI_CLASS_GENERICS = "PSI_CLASS_GENERICS_%s";
 
+
     @Getter
     private PsiType owner;
 
@@ -40,22 +41,46 @@ public class JPsiTypeContext {
     @Getter
     public Map processCache = new HashMap<String, Object>();
 
-    public void setParentPlusCurrentQualifiedNames(Set<String> parentPlusCurrentQualifiedNames) {
-        this.processCache.put(String.format(CACHE_KEY_PARENT_PLUS_CURRENT_QUALIFIED_NAMES, this.getQualifiedName()), parentPlusCurrentQualifiedNames);
+
+    /**
+     * 设置泛型
+     * @param psiClassGenerics
+     */
+    public void setPsiClassGenerics(Map<String, PsiType> psiClassGenerics) {
+        this.putCache(String.format(CACHE_KEY_PSI_CLASS_GENERICS, this.getQualifiedName()), psiClassGenerics);
     }
 
+
+    /**
+     * 获取缓存信息
+     *
+     * @param key
+     * @return
+     */
+    public Object getCache(Object key) {
+        return processCache.get(key);
+    }
+
+    /**
+     * 设置缓存信息
+     *
+     * @param key
+     * @param value
+     * @return
+     */
     @SuppressWarnings("unchecked")
-    public Set<String> getParentPlusCurrentQualifiedNames() {
-        return (Set<String>) this.processCache.get(String.format(CACHE_KEY_PARENT_PLUS_CURRENT_QUALIFIED_NAMES, this.getQualifiedName()));
+    public void putCache(Object key, Object value) {
+       this.processCache.put(key, value);
     }
 
-    public void setPsiTypeGenerics(Map<String, PsiType> psiTypeGenerics) {
-        this.processCache.put(String.format(CACHE_KEY_PSI_CLASS_GENERICS, this.getQualifiedName()), psiTypeGenerics);
-    }
-
+    /**
+     * 获取当前类的泛型数据
+     *
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public Map<String, PsiType> getPsiTypeGenerics() {
-        return (Map<String, PsiType>) this.processCache.get(String.format(CACHE_KEY_PSI_CLASS_GENERICS, this.getQualifiedName()));
+        return (Map<String, PsiType>) this.getCache(String.format(CACHE_KEY_PSI_CLASS_GENERICS, this.getQualifiedName()));
     }
 
     /**
@@ -67,7 +92,7 @@ public class JPsiTypeContext {
      */
     @SuppressWarnings("unchecked")
     public Boolean isInheritor(String clazzName) {
-        Set<String> parentClazzNames = (Set<String>) this.getProcessCache().getOrDefault(String.format(CACHE_KEY_PARENT_PLUS_CURRENT_QUALIFIED_NAMES, this.getQualifiedName()), null);
+        Set<String> parentClazzNames = (Set<String>) this.getCache(String.format(CACHE_KEY_PARENT_PLUS_CURRENT_QUALIFIED_NAMES, this.getQualifiedName()));
         return parentClazzNames != null && parentClazzNames.contains(clazzName);
     }
 
@@ -79,10 +104,9 @@ public class JPsiTypeContext {
     }
 
 
-
     private JPsiTypeContext(JPsiTypeContext old, PsiType owner, boolean init) {
         this(owner, init);
-        this.processCache = old.getProcessCache();
+        this.processCache = old.processCache;
     }
 
     /**
@@ -90,13 +114,15 @@ public class JPsiTypeContext {
      */
     @SuppressWarnings("unchecked")
     public void init() {
-        if (this.getParentPlusCurrentQualifiedNames() == null) {
+        // 初始化获取父类的信息
+        if (this.getCache(String.format(CACHE_KEY_PARENT_PLUS_CURRENT_QUALIFIED_NAMES, this.getQualifiedName())) == null) {
             Set<String> parentPlusCurrentQualifiedName = PsiToolkit.findParentPlusCurrentQualifiedName(this.getOwner());
-            this.setParentPlusCurrentQualifiedNames(parentPlusCurrentQualifiedName);
+            this.putCache(String.format(CACHE_KEY_PARENT_PLUS_CURRENT_QUALIFIED_NAMES, this.getQualifiedName()), parentPlusCurrentQualifiedName);
         }
-        if (this.getPsiTypeGenerics() == null) {
+        // 初始化获取泛型信息
+        if (this.getCache(String.format(CACHE_KEY_PSI_CLASS_GENERICS, this.getQualifiedName())) == null) {
             Map<String, PsiType> psiClassGenerics = PsiToolkit.getPsiClassGenerics(this.getOwner());
-            this.setPsiTypeGenerics(psiClassGenerics);
+           this.setPsiClassGenerics(psiClassGenerics);
         }
     }
 
@@ -127,7 +153,7 @@ public class JPsiTypeContext {
     public JPsiTypeContext copy(PsiType deepType, Map<String, PsiType> psiClassGenerics, int recursionLevel) {
         JPsiTypeContext psiTypeJPsiTypeContext = new JPsiTypeContext(this, deepType, false);
         psiTypeJPsiTypeContext.init();
-        psiTypeJPsiTypeContext.setPsiTypeGenerics(psiClassGenerics);
+        psiTypeJPsiTypeContext.setPsiClassGenerics(psiClassGenerics);
         psiTypeJPsiTypeContext.setRecursionLevel(recursionLevel);
         return psiTypeJPsiTypeContext;
     }
