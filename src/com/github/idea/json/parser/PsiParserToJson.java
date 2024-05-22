@@ -20,23 +20,23 @@ import java.util.*;
  * @author wangji
  * @date 2024/5/19 22:08
  */
-public class IdeaJsonParser {
+public class PsiParserToJson {
 
-    private static final Logger LOG = Logger.getInstance(IdeaJsonParser.class);
+    private static final Logger LOG = Logger.getInstance(PsiParserToJson.class);
 
     private final GsonBuilder gsonBuilder = new GsonBuilder().setPrettyPrinting();
 
     private final TypeValueAnalysisFactory typeValueAnalysisFactory = TypeValueAnalysisFactory.getInstance();
 
     private static class SingletonHolder {
-        private static final IdeaJsonParser INSTANCE = new IdeaJsonParser();
+        private static final PsiParserToJson INSTANCE = new PsiParserToJson();
     }
 
-    public static IdeaJsonParser getInstance() {
-        return IdeaJsonParser.SingletonHolder.INSTANCE;
+    public static PsiParserToJson getInstance() {
+        return PsiParserToJson.SingletonHolder.INSTANCE;
     }
 
-    private IdeaJsonParser() {
+    private PsiParserToJson() {
     }
 
     /**
@@ -75,14 +75,35 @@ public class IdeaJsonParser {
         } else if (psiElement instanceof PsiParameter psiParameter) {
             PsiType type = psiParameter.getType();
             return toJSONString(type);
-        } else if (psiElement instanceof PsiNewExpression psiNewExpression) {
-            assert psiNewExpression.getReference() != null;
-            PsiElement resolve = psiNewExpression.getReference().resolve();
-            assert resolve != null;
-            return toJSONString(resolve);
+        } else if (psiElement instanceof PsiJavaFile psiJavaFile) {
+            PsiClass[] classes = psiJavaFile.getClasses();
+            if (classes.length > 0) {
+                return toJSONString(classes[0]);
+            }
         } else if (psiElement instanceof PsiLocalVariable psiLocalVariable) {
             PsiType type = psiLocalVariable.getType();
             return toJSONString(type);
+        } else if (psiElement instanceof PsiNewExpression psiNewExpression) {
+            if (psiNewExpression.getReference() != null) {
+                PsiElement resolve = psiNewExpression.getReference().resolve();
+                if (resolve != null) {
+                    return toJSONString(resolve);
+                }
+            }
+        } else if (psiElement instanceof PsiReferenceExpression referenceExpression) {
+            if (referenceExpression.getReference() != null) {
+                PsiElement resolve = referenceExpression.getReference().resolve();
+                if (resolve != null) {
+                    return toJSONString(resolve);
+                }
+            }
+        } else if (psiElement instanceof PsiJavaCodeReferenceElement psiJavaCodeReferenceElement) {
+            if (psiJavaCodeReferenceElement.getReference() != null) {
+                PsiElement resolve = psiJavaCodeReferenceElement.getReference().resolve();
+                if (resolve != null) {
+                    return toJSONString(resolve);
+                }
+            }
         }
         return null;
     }
@@ -95,6 +116,11 @@ public class IdeaJsonParser {
      * @return
      */
     private Object parseClass(JPsiTypeContext context) {
+        // 1、查看缓存有没有数据
+        Object parsedJsonObject = context.getCache(context.getOwner());
+        if (parsedJsonObject != null) {
+            return parsedJsonObject;
+        }
         PsiClass psiClass = null;
         if (context.getOwner() instanceof PsiClassType) {
             psiClass = ((PsiClassType) context.getOwner()).resolve();
@@ -140,6 +166,10 @@ public class IdeaJsonParser {
         }
         if (context.getRecursionLevel() > 0 && psiClass.getAllFields().length == 0) {
             return linkedHashMap.isEmpty() ? null : linkedHashMap;
+        }
+
+        if (!linkedHashMap.isEmpty()) {
+            context.putCache(context.getOwner(), linkedHashMap);
         }
         return linkedHashMap;
     }
@@ -264,8 +294,7 @@ public class IdeaJsonParser {
         } else if (type instanceof PsiClassType currentParseIdeaPsiClassType) {
             TypeValueContext quickProcessValue = typeValueAnalysisFactory.getValue(type);
             if (quickProcessValue.getSupport()) {
-                // 快速处理获取结果，比如一些常见的数据类型
-                //Enum 处理
+                // 快速处理获取结果，比如一些常见的数据类型 Enum 处理
                 return quickProcessValue.getResult();
             }
             //reference Type
@@ -284,7 +313,10 @@ public class IdeaJsonParser {
                     PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                     if (parameters.length == 1) {
                         Object obj = parseVariableValue(context.copy(parameters[0], getPsiClassGenerics(parameters[0])));
-                        return obj != null ? List.of(obj) : List.of();
+                        if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
+                            return List.of();
+                        }
+                        return List.of(obj);
                     }
                     // List 没有写泛型..
                     return List.of();
@@ -336,7 +368,10 @@ public class IdeaJsonParser {
                     PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                     if (parameters.length == 2) {
                         Object obj = parseVariableValue(context.copy(parameters[1], getPsiClassGenerics(parameters[1])));
-                        return obj != null ? Map.of(" ", obj) : new HashMap<>();
+                        if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
+                            return new HashMap<>();
+                        }
+                        return Map.of(TypeDefaultValue.DEFAULT_MAP_KEY, obj);
                     }
                     // Map 没有写泛型..
                     return new HashMap<>();

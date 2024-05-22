@@ -1,6 +1,6 @@
 package com.github.wangji92.arthas.plugin.ui;
 
-import com.github.idea.json.parser.IdeaJsonParser;
+import com.github.idea.json.parser.PsiParserToJson;
 import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
 import com.intellij.openapi.diagnostic.Logger;
@@ -99,7 +99,7 @@ public class ArthasVmToolComplexDialog extends JDialog {
                     //PsiElement declarationScope = parameter.getDeclarationScope();
                     String jsonString ="";
                     try {
-                        jsonString = IdeaJsonParser.getInstance().toJSONString(parameter);
+                        jsonString = PsiParserToJson.getInstance().toJSONString(parameter);
                     } catch (Exception e) {
                         LOG.error("error",e);
                     }

@@ -10,7 +10,9 @@ package com.github.idea.json.parser.typevalue;
 public interface TypeDefaultValue {
 
 
-    String DEFAULT_NULL = "__DEFAULT_NULL__";
+    String DEFAULT_NULL = "__default_null__";
+
+    String DEFAULT_MAP_KEY = "_key_";
 
     /**
      * 获取值的信息 context 可能为空
