@@ -1,7 +1,9 @@
 package com.github.idea.json.parser.toolkit;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiUtil;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,11 +30,7 @@ public class PsiToolkit {
      */
     private static void doFindParentPlusCurrentQualifiedName(PsiType psiType, Set<String> supperClazzNames) {
         try {
-            String qualifiedName = psiType.getCanonicalText();
-            //携带有泛型的这里有点问题.. 处理一下
-            if (qualifiedName.indexOf("<") > 0) {
-                qualifiedName = qualifiedName.substring(0, qualifiedName.indexOf("<"));
-            }
+            String qualifiedName = getPsiTypeSimpleName(psiType);
             supperClazzNames.add(qualifiedName);
             PsiType[] superTypes = psiType.getSuperTypes();
             for (PsiType superType : superTypes) {
@@ -45,6 +43,20 @@ public class PsiToolkit {
         } catch (Exception e) {
             LOG.warn("doFindParentClassName2", e);
         }
+    }
+
+    /**
+     * psiType的名称会存在 泛型的信息
+     * @param psiType
+     * @return
+     */
+    public static  String getPsiTypeSimpleName(PsiType psiType){
+        String qualifiedName = psiType.getCanonicalText();
+        //携带有泛型的这里有点问题.. 处理一下
+        if (qualifiedName.indexOf("<") > 0) {
+            qualifiedName = qualifiedName.substring(0, qualifiedName.indexOf("<"));
+        }
+        return qualifiedName;
     }
 
     /**
@@ -75,5 +87,16 @@ public class PsiToolkit {
                     .collect(Collectors.toMap(p -> p.getKey().getName(), Pair::getValue));
         }
         return Map.of();
+    }
+
+    /**
+     * PsiClass 转 psiType
+     * @param psiClass
+     * @return
+     */
+    public static PsiType getPsiTypeByPisClazz(PsiClass psiClass) {
+        JavaPsiFacade facade = JavaPsiFacade.getInstance(psiClass.getProject());
+        PsiElementFactory factory = facade.getElementFactory();
+        return factory.createType(psiClass);
     }
 }
