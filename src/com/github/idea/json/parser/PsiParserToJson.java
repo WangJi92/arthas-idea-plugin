@@ -290,7 +290,10 @@ public class PsiParserToJson {
             //array type also support PsiEllipsisType
             PsiType typeToDeepType = type.getDeepComponentType();
             Object obj = parseVariableValue(context.copy(typeToDeepType, PsiToolkit.getPsiClassGenerics(typeToDeepType)));
-            return obj != null ? List.of(obj) : List.of();
+            if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
+                return List.of();
+            }
+            return List.of(obj);
         } else if (type instanceof PsiClassType currentParseIdeaPsiClassType) {
             TypeValueContext quickProcessValue = typeValueAnalysisFactory.getValue(type);
             if (quickProcessValue.getSupport()) {
