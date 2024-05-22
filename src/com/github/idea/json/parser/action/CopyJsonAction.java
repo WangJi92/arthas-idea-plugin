@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * @author wangji
  * @date 2024/5/21 21:03
  */
-public class ToolParseJsonAction extends AnAction {
+public class CopyJsonAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
@@ -52,7 +52,7 @@ public class ToolParseJsonAction extends AnAction {
             e.getPresentation().setEnabled(true);
             return;
         }
-        if(psiElement instanceof PsiJavaCodeReferenceElement){
+        if (psiElement instanceof PsiJavaCodeReferenceElement) {
             e.getPresentation().setEnabled(true);
             return;
         }
@@ -63,9 +63,10 @@ public class ToolParseJsonAction extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
+        assert psiElement != null;
         String jsonString = PsiParserToJson.getInstance().toJSONString(psiElement);
         if (StringUtils.isBlank(jsonString)) {
-            String emptyData = "parse element json data empty or parse error";
+            String emptyData = "parse json data empty or parse error";
             ClipboardUtils.setClipboardString("empty json");
             NotifyUtils.notifyMessage(e.getProject(), emptyData, NotificationType.WARNING);
             return;

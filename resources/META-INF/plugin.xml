@@ -597,9 +597,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolComplexCommandAction"
                 text="Vmtool Get Instance Invoke Complex Method"
                 description="Vmtool get instance invoke method field"/>
-        <action id="ToolParseJsonAction"
-                class="com.github.idea.json.parser.action.ToolParseJsonAction"
-                text="Json Parse"
+        <action id="CopyJsonAction"
+                class="com.github.idea.json.parser.action.CopyJsonAction"
+                icon="AllIcons.Json.Object"
+                text="Copy JSON"
                 description="ToolParseJsonAction"/>
 
         <action id="ArthasIdeaOpenConfigPageAction"
@@ -666,7 +667,6 @@
             <separator/>
             <reference ref="ArthasVmtoolCommandAction"/>
             <reference ref="ArthasVmtoolComplexCommandAction"/>
-            <reference ref="ToolParseJsonAction"/>
             <reference ref="ArthasVmtoolSetFieldCommandAction"/>
             <separator/>
             <group id="arthas-plugin-spring-context" popup="true" text="Spring Get Context Invoke Method Filed">
@@ -720,6 +720,14 @@
             <reference ref="ArthasHelpCommand"/>
             <reference ref="HelpArthasDocumentPageAction"/>
         </group>
+
+        <group id="arthas-copy-json">
+            <reference ref="CopyJsonAction"/>
+            <reference ref="CopyJsonAction"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="arthas-plugin"/>
+            <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="arthas-plugin"/>
+        </group>
+
     </actions>
 
 </idea-plugin>
