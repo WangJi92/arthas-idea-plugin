@@ -4,6 +4,8 @@ import com.github.idea.json.parser.IdeaJsonParser;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLocalVariable;
@@ -34,15 +36,15 @@ public class ToolParseJsonAction extends AnAction {
             e.getPresentation().setEnabled(false);
             return;
         }
-        if(psiElement instanceof PsiParameter){
+        if (psiElement instanceof PsiParameter) {
             e.getPresentation().setEnabled(true);
             return;
         }
-        if(psiElement instanceof PsiLocalVariable){
+        if (psiElement instanceof PsiLocalVariable) {
             e.getPresentation().setEnabled(true);
             return;
         }
-        if(psiElement instanceof PsiNewExpression){
+        if (psiElement instanceof PsiNewExpression) {
             e.getPresentation().setEnabled(true);
             return;
         }
@@ -54,9 +56,15 @@ public class ToolParseJsonAction extends AnAction {
         DataContext dataContext = e.getDataContext();
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String jsonString = IdeaJsonParser.getInstance().toJSONString(psiElement);
+        if (StringUtils.isBlank(jsonString)) {
+            String emptyData = "parse element json data empty or parse error";
+            ClipboardUtils.setClipboardString("empty json");
+            NotifyUtils.notifyMessage(e.getProject(), emptyData, NotificationType.WARNING);
+            return;
+        }
         ClipboardUtils.setClipboardString(jsonString);
-        NotifyUtils.notifyMessage(e.getProject(),"ok");
-
+        String emptyData = "parse element json data copied to clipboard";
+        NotifyUtils.notifyMessage(e.getProject(), emptyData);
     }
 
     @Override

@@ -71,10 +71,6 @@ public class JPsiTypeContext {
         return parentClazzNames != null && parentClazzNames.contains(clazzName);
     }
 
-    public JPsiTypeContext(PsiType owner) {
-        this(owner, true);
-    }
-
     public JPsiTypeContext(PsiType owner, boolean init) {
         this.owner = owner;
         if (init) {
@@ -82,11 +78,9 @@ public class JPsiTypeContext {
         }
     }
 
-    public JPsiTypeContext(JPsiTypeContext old, PsiType owner) {
-        this(old, owner, true);
-    }
 
-    public JPsiTypeContext(JPsiTypeContext old, PsiType owner, boolean init) {
+
+    private JPsiTypeContext(JPsiTypeContext old, PsiType owner, boolean init) {
         this(owner, init);
         this.processCache = old.getProcessCache();
     }

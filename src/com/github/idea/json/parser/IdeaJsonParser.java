@@ -84,7 +84,7 @@ public class IdeaJsonParser {
             PsiType type = psiLocalVariable.getType();
             return toJSONString(type);
         }
-        return "";
+        return null;
     }
 
 
@@ -237,7 +237,6 @@ public class IdeaJsonParser {
             }
         }
         PsiAnnotation annotationFastJsonJSONField = field.getAnnotation("com.alibaba.fastjson.annotation.JSONField");
-        ;
         if (annotationFastJsonJSONField != null) {
             String fieldName = Objects.requireNonNull(annotationFastJsonJSONField.findAttributeValue("name")).getText();
             if (StringUtils.isNotBlank(fieldName)) {
@@ -279,8 +278,7 @@ public class IdeaJsonParser {
             PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
             if (typeParameters.length == 1) {
                 PsiClassType rawType = currentParseIdeaPsiClassType.rawType();
-                JPsiTypeContext rawJPsiTypeJPsiTypeContext = new JPsiTypeContext(context, rawType, false);
-                rawJPsiTypeJPsiTypeContext.init();
+                JPsiTypeContext rawJPsiTypeJPsiTypeContext = context.copy(rawType, context.getPsiTypeGenerics());
                 if (rawJPsiTypeJPsiTypeContext.isInheritor(Collection.class.getName())) {
                     // Set<String> List<Demo<String>> ..why not startsWith("java.")?
                     PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
@@ -333,8 +331,7 @@ public class IdeaJsonParser {
             } else if (typeParameters.length == 2) {
                 PsiClassType rawType = currentParseIdeaPsiClassType.rawType();
                 // 特殊处理Map
-                JPsiTypeContext rawJPsiTypeJPsiTypeContext = new JPsiTypeContext(context, rawType, false);
-                rawJPsiTypeJPsiTypeContext.init();
+                JPsiTypeContext rawJPsiTypeJPsiTypeContext = context.copy(rawType, context.getPsiTypeGenerics());
                 if (rawJPsiTypeJPsiTypeContext.isInheritor(Map.class.getName())) {
                     PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                     if (parameters.length == 2) {
