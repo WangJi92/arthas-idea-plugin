@@ -1,17 +1,11 @@
 package com.github.idea.json.parser.toolkit;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiUtil;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -99,4 +93,39 @@ public class PsiToolkit {
         PsiElementFactory factory = facade.getElementFactory();
         return factory.createType(psiClass);
     }
+
+    /**
+     * 基本信息
+     *
+     * @param psiType
+     * @return
+     */
+    public static Object getPsiClassBasicTypeDefaultValue(PsiType psiType) {
+        String canonicalText = psiType.getCanonicalText();
+        return switch (canonicalText) {
+            case "java.lang.Boolean","boolean" -> true;
+            case "java.lang.String" -> "\"_AR_\"";
+            case "java.lang.Integer", "java.lang.Byte", "java.lang.Short","short", "int", "byte" -> 0;
+            case "java.lang.Long","long" -> 0L;
+            case "java.lang.Double","double" -> 0D;
+            case "java.lang.Float" -> 0F;
+            case "char" -> 'c';
+            default -> null;
+        };
+    }
+
+    public static String getPsiClassBasicTypeDefaultStringValue(PsiType psiType) {
+        String canonicalText = psiType.getCanonicalText();
+        return switch (canonicalText) {
+            case "java.lang.Boolean","boolean" -> "true";
+            case "java.lang.String" -> "\"_AR_\"";
+            case "java.lang.Integer", "java.lang.Byte", "java.lang.Short","short", "int", "byte" -> "0";
+            case "java.lang.Long","long" -> "0L";
+            case "java.lang.Double","double" -> "0D";
+            case "java.lang.Float" -> "0F";
+            case "char" -> "\'c\'";
+            default -> null;
+        };
+    }
+
 }
