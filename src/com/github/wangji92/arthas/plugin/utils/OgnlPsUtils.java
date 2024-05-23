@@ -1,5 +1,6 @@
 package com.github.wangji92.arthas.plugin.utils;
 
+import com.github.idea.json.parser.toolkit.PsiToolkit;
 import com.github.wangji92.arthas.plugin.common.exception.CompilerFileNotFoundException;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.google.common.collect.Lists;
@@ -14,6 +15,7 @@ import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.InheritanceUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -450,102 +452,90 @@ public class OgnlPsUtils {
      * @return
      */
     public static String getDefaultString(PsiType psiType, Project project) {
-        String result = " ";
         String canonicalText = psiType.getCanonicalText();
-
-        //基本类型  boolean
-        if ("boolean".equals(canonicalText) || "java.lang.Boolean".equals(canonicalText)) {
-            result = "true";
-            return result;
-        }
-
-        //基本类型  String
-        if (canonicalText.endsWith("java.lang.String")) {
-            result = "\" \"";
-            return result;
-        }
-
-        if ("long".equals(canonicalText) || "java.lang.Long".equals(canonicalText)) {
-            result = "0L";
-            return result;
-        }
-
-        if ("double".equals(canonicalText)|| "java.lang.Double".equals(canonicalText)) {
-            result = "0D";
-            return result;
-        }
-
-        if ("float".equals(canonicalText) || "java.lang.Float".equals(canonicalText)) {
-            result = "0F";
-            return result;
-        }
-
-        //基本类型  数字
-        if ("int".equals(canonicalText) || "java.lang.Integer".equals(canonicalText)
-                ||
-                "byte".equals(canonicalText) || "java.lang.Byte".equals(canonicalText)
-                ||
-                "short".equals(canonicalText) || "java.lang.Short".equals(canonicalText)) {
-            result = "0";
-            return result;
-        }
-
-
-        //Class xx 特殊class 字段的判断
-        //java.lang.Class
-        if ("java.lang.Class".equals(canonicalText)) {
-            result = "@java.lang.Object@class";
-            return result;
-        }
-        //Class<XXX> x
-        //java.lang.Class<com.wangji92.arthas.plugin.demo.controller.user>
-        if (canonicalText.startsWith("java.lang.Class")) {
-            result = "@" + canonicalText.substring(canonicalText.indexOf("<") + 1, canonicalText.length() - 1) + "@class";
-            return result;
-        }
-
-
-        //常见的List 和Map
-        if (canonicalText.startsWith("java.util.")) {
-            if (canonicalText.contains("Map")) {
-                result = "#{\" \": null }";
-                return result;
+        //基本数据类型
+        if (psiType instanceof PsiPrimitiveType psiPrimitiveType) {
+            return PsiToolkit.getPsiClassBasicTypeDefaultStringValue(psiType);
+        } else if (psiType instanceof PsiArrayType psiArrayType) {
+            //数组类型信息
+            PsiType componentType = psiArrayType.getDeepComponentType();
+            if (componentType instanceof PsiPrimitiveType) {
+                return "new " + canonicalText + "{}";
+            } else if (componentType instanceof PsiClassType psiClassType) {
+                PsiClass resolved = psiClassType.resolve();
+                assert resolved != null;
+                PsiTypeParameter[] typeParameters = resolved.getTypeParameters();
+                if (typeParameters.length == 0) {
+                    // 数组没有泛型.. 可以构建json ?
+                    // new array[]{ parseJson..}
+                    // return "new " + componentType.getCanonicalText() + "[]{}";
+                }else{
+                    //ognl not support 泛型
+                    return "null";
+                }
             }
-            if (canonicalText.contains("List")) {
-                result = "{}";
-                return result;
+            //其他的直接new array..
+            return "new " + componentType.getCanonicalText() + "[]{}";
+        } else if (psiType instanceof PsiClassType psiClassType) {
+            //基本类型
+            String basicTypeValue = PsiToolkit.getPsiClassBasicTypeDefaultStringValue(psiType);
+            if (basicTypeValue != null) {
+                return basicTypeValue;
             }
-        }
-
-        //...
-        if (psiType instanceof PsiEllipsisType) {
-            String arrayCanonicalText = ((PsiEllipsisType) psiType).getDeepComponentType().getCanonicalText();
-            return "new " + arrayCanonicalText + "[]{}";
-        }
-
-        //原生的数组
-        if (canonicalText.contains("[]")) {
-            result = "new " + canonicalText + "{}";
-            return result;
-        }
-
-        // 处理枚举类的默认值
-        // 当前clazz的类型,然后父类为枚举 查询第一个枚举字段进行传递
-        final PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(canonicalText, GlobalSearchScope.allScope(project));
-        if (psiClass != null && psiClass.isEnum()) {
-            //父类为枚举的就是枚举  过滤第一个是枚举的字段常量
-            final PsiField defaultPsiField = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().orElse(null);
-            if (defaultPsiField != null) {
-                final String defaultEnumName = OgnlPsUtils.getFieldName(defaultPsiField);
-                return "@" + canonicalText + "@" + defaultEnumName;
+            PsiClass psiClass = psiClassType.resolve();
+            assert psiClass != null;
+            // 处理枚举
+            if (psiClass.isEnum()) {
+                //父类为枚举的就是枚举  过滤第一个是枚举的字段常量
+                final PsiField defaultPsiField = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().orElse(null);
+                if (defaultPsiField != null) {
+                    final String defaultEnumName = OgnlPsUtils.getFieldName(defaultPsiField);
+                    return "@" + canonicalText + "@" + defaultEnumName;
+                }
+                return "null";
             }
 
+            PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
+            if (typeParameters.length == 0) {
+                //
+                return "new " + canonicalText + "()";
+            } else if (typeParameters.length == 2) {
+                PsiType[] parameters = psiClassType.getParameters();
+                if (InheritanceUtil.isInheritor(psiClassType, Map.class.getName())) {
+                    if (parameters.length == 0) {
+                        return "#{\"_AR_\": null }";
+                    }
+                    String defaultNewString = " ";
+                    return "#{\"_AR_\": %s}".formatted(defaultNewString);
+                }
+            } else if (typeParameters.length == 1) {
+                PsiType[] parameters = psiClassType.getParameters();
+                if (canonicalText.startsWith("java.")) {
+                    if (InheritanceUtil.isInheritor(psiClassType, List.class.getName())) {
+                        if (parameters.length == 0) {
+                            return "{}";
+                        } else {
+                            //String currentValue = getDefaultNewString(parameters[0], project);
+                           // String currentValue = "233";
+                            //return "{%s}".formatted(currentValue);
+                        }
+                        //todo remove
+                        return "{}";
+                        //todo set ?
+                    } else if (InheritanceUtil.isInheritor(psiClassType, Class.class.getName())) {
+                        if (parameters.length == 0) {
+                            return "@java.lang.Object@class";
+                        } else {
+                            String qualifiedName = typeParameters[0].getQualifiedName();
+                            return "@" + qualifiedName + "@class";
+                        }
+                    }
+                }
+            }
+            //ognl 不支持泛型
+            return "null";
         }
-
-        //不管他的构造函数了，太麻烦了
-        result = "new " + canonicalText + "()";
-        return result;
-
+        return "null";
     }
 
     /**
