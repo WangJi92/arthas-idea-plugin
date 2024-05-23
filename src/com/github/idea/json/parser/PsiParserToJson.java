@@ -24,7 +24,9 @@ public class PsiParserToJson {
 
     private static final Logger LOG = Logger.getInstance(PsiParserToJson.class);
 
-    private final GsonBuilder gsonBuilder = new GsonBuilder().setPrettyPrinting();
+    private final GsonBuilder gsonBuilderPretty = new GsonBuilder().setPrettyPrinting();
+
+    private final GsonBuilder gsonBuilder = new GsonBuilder();
 
     private final TypeValueAnalysisFactory typeValueAnalysisFactory = TypeValueAnalysisFactory.getInstance();
 
@@ -45,11 +47,14 @@ public class PsiParserToJson {
      * @param psiType
      * @return
      */
-    public String toJSONString(@NotNull final PsiType psiType) {
+    public String toJSONString(@NotNull final PsiType psiType,boolean pretty) {
         try {
             JPsiTypeContext JPsiTypeContext = new JPsiTypeContext(psiType, true);
             Object object = parseVariableValue(JPsiTypeContext);
             if (!Objects.equals(TypeDefaultValue.DEFAULT_NULL, object)) {
+                if (pretty) {
+                    gsonBuilderPretty.create().toJson(object);
+                }
                 return gsonBuilder.create().toJson(object);
             }
             return null;
@@ -63,18 +68,18 @@ public class PsiParserToJson {
     public String toJSONString(@NotNull final PsiElement psiElement) {
         if (psiElement instanceof PsiClass psiClass) {
             PsiType psiType = PsiToolkit.getPsiTypeByPisClazz(psiClass);
-            return toJSONString(psiType);
+            return toJSONString(psiType,true);
         } else if (psiElement instanceof PsiField field) {
-            return toJSONString(field.getType());
+            return toJSONString(field.getType(),true);
         } else if (psiElement instanceof PsiMethod psiMethod) {
             PsiClass containingClass = psiMethod.getContainingClass();
             if (containingClass != null) {
                 PsiType psiType = PsiToolkit.getPsiTypeByPisClazz(containingClass);
-                return toJSONString(psiType);
+                return toJSONString(psiType,true);
             }
         } else if (psiElement instanceof PsiParameter psiParameter) {
             PsiType type = psiParameter.getType();
-            return toJSONString(type);
+            return toJSONString(type,true);
         } else if (psiElement instanceof PsiJavaFile psiJavaFile) {
             PsiClass[] classes = psiJavaFile.getClasses();
             if (classes.length > 0) {
@@ -82,7 +87,7 @@ public class PsiParserToJson {
             }
         } else if (psiElement instanceof PsiLocalVariable psiLocalVariable) {
             PsiType type = psiLocalVariable.getType();
-            return toJSONString(type);
+            return toJSONString(type,true);
         } else if (psiElement instanceof PsiNewExpression psiNewExpression) {
             if (psiNewExpression.getReference() != null) {
                 PsiElement resolve = psiNewExpression.getReference().resolve();

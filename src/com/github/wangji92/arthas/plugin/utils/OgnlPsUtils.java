@@ -467,8 +467,13 @@ public class OgnlPsUtils {
                 PsiTypeParameter[] typeParameters = resolved.getTypeParameters();
                 if (typeParameters.length == 0) {
                     // 数组没有泛型.. 可以构建json ?
-                    // new array[]{ parseJson..}
-                    // return "new " + componentType.getCanonicalText() + "[]{}";
+                    String basicValue = PsiToolkit.getPsiClassBasicTypeDefaultStringValue(componentType);
+                    if (basicValue != null) {
+                        //基本类型，给个默认值
+                        return "new " + componentType.getCanonicalText() + "[]{%s}".formatted(basicValue);
+                    }
+                    String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(componentType, project);
+                    return "new " + componentType.getCanonicalText() + "[]{%s}".formatted(ognlJsonDefaultValue);
                 }else{
                     //ognl not support 泛型
                     return "null";
@@ -497,16 +502,15 @@ public class OgnlPsUtils {
 
             PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
             if (typeParameters.length == 0) {
-                //
-                return "new " + canonicalText + "()";
+                return OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(psiType, project);
             } else if (typeParameters.length == 2) {
                 PsiType[] parameters = psiClassType.getParameters();
                 if (InheritanceUtil.isInheritor(psiClassType, Map.class.getName())) {
                     if (parameters.length == 0) {
                         return "#{\"_AR_\": null }";
                     }
-                    String defaultNewString = " ";
-                    return "#{\"_AR_\": %s}".formatted(defaultNewString);
+                    String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
+                    return "#{\"_AR_\": %s}".formatted(ognlJsonDefaultValue);
                 }
             } else if (typeParameters.length == 1) {
                 PsiType[] parameters = psiClassType.getParameters();
@@ -514,13 +518,9 @@ public class OgnlPsUtils {
                     if (InheritanceUtil.isInheritor(psiClassType, List.class.getName())) {
                         if (parameters.length == 0) {
                             return "{}";
-                        } else {
-                            //String currentValue = getDefaultNewString(parameters[0], project);
-                           // String currentValue = "233";
-                            //return "{%s}".formatted(currentValue);
                         }
-                        //todo remove
-                        return "{}";
+                        String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+                        return "{%s}".formatted(ognlJsonDefaultValue);
                         //todo set ?
                     } else if (InheritanceUtil.isInheritor(psiClassType, Class.class.getName())) {
                         if (parameters.length == 0) {
