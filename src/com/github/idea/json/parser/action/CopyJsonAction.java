@@ -72,8 +72,25 @@ public class CopyJsonAction extends AnAction {
             return;
         }
         ClipboardUtils.setClipboardString(jsonString);
-        String emptyData = "parse element json data copied to clipboard";
+        String emptyData = "JSON data copied to clipboard";
         NotifyUtils.notifyMessage(e.getProject(), emptyData);
+
+//        final PsiClass psiClass = JavaPsiFacade.getInstance(psiElement.getProject()).findClass("com.alibaba.fastjson.JSON", GlobalSearchScope.allScope(psiElement.getProject()));
+//        if (psiClass !=null) {
+//            String command = "vmtool -x 3 --action getInstances " +
+//                    "--className com.wangji92.arthas.plugin.demo.controller.CommonController  " +
+//                    "--express 'instances[0].userFastJson(%s)'";
+//            String jsonBuild = "com.alibaba.fastjson.JSON@parseObject(\"%s\", %s)";
+//            String fastjson = jsonBuild.formatted(jsonString, "@com.wangji92.arthas.plugin.demo.controller.User@class");
+//
+//            String finalStr = command.formatted(fastjson);
+//            NotifyUtils.notifyMessage(e.getProject(), finalStr);
+//            ClipboardUtils.setClipboardString(finalStr);
+//        }
+
+
+
+        //NotifyUtils.notifyMessage(e.getProject(), emptyData);
     }
 
     @Override
