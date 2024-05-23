@@ -593,10 +593,10 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolCommandAction"
                 text="Vmtool Get Instance Invoke Method Field"
                 description="Vmtool get instance invoke method field"/>
-        <action id="ArthasVmtoolComplexCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolComplexCommandAction"
-                text="Vmtool Get Instance Invoke Complex Method"
-                description="Vmtool get instance invoke method field"/>
+<!--        <action id="ArthasVmtoolComplexCommandAction"-->
+<!--                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolComplexCommandAction"-->
+<!--                text="Vmtool Get Instance Invoke Complex Method"-->
+<!--                description="Vmtool get instance invoke method field"/>-->
         <action id="CopyJsonAction"
                 class="com.github.idea.json.parser.action.CopyJsonAction"
                 icon="AllIcons.Json.Object"
@@ -666,7 +666,7 @@
             <reference ref="ArthasTimeTunnelCommand"/>
             <separator/>
             <reference ref="ArthasVmtoolCommandAction"/>
-            <reference ref="ArthasVmtoolComplexCommandAction"/>
+<!--            <reference ref="ArthasVmtoolComplexCommandAction"/>-->
             <reference ref="ArthasVmtoolSetFieldCommandAction"/>
             <separator/>
             <group id="arthas-plugin-spring-context" popup="true" text="Spring Get Context Invoke Method Filed">
