@@ -463,7 +463,8 @@ public class OgnlPsUtils {
             //数组类型信息
             PsiType componentType = psiArrayType.getDeepComponentType();
             if (componentType instanceof PsiPrimitiveType) {
-                return "new " + canonicalText + "{}";
+                String basicValue = PsiToolkit.getPsiClassBasicTypeDefaultStringValue(componentType);
+                return "(new " + ((PsiPrimitiveType) componentType).getName() + "[]{%s})".formatted(basicValue);
             } else if (componentType instanceof PsiClassType psiClassType) {
                 PsiClass resolved = psiClassType.resolve();
                 assert resolved != null;
@@ -473,10 +474,10 @@ public class OgnlPsUtils {
                     String basicValue = PsiToolkit.getPsiClassBasicTypeDefaultStringValue(componentType);
                     if (basicValue != null) {
                         //基本类型，给个默认值
-                        return "new " + componentType.getCanonicalText() + "[]{%s}".formatted(basicValue);
+                        return "(new " + componentType.getCanonicalText() + "[]{%s})".formatted(basicValue);
                     }
                     String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(componentType, project);
-                    return "new " + componentType.getCanonicalText() + "[]{%s}".formatted(ognlJsonDefaultValue);
+                    return "(new " + PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) componentType) + "[]{%s})".formatted(ognlJsonDefaultValue);
                 }
             }
             //其他的直接new array..
@@ -495,7 +496,7 @@ public class OgnlPsUtils {
                 final PsiField defaultPsiField = Arrays.stream(psiClass.getAllFields()).filter(psiField -> psiField instanceof PsiEnumConstant).findFirst().orElse(null);
                 if (defaultPsiField != null) {
                     final String defaultEnumName = OgnlPsUtils.getFieldName(defaultPsiField);
-                    return "@" + canonicalText + "@" + defaultEnumName;
+                    return "@" + PsiToolkit.getPsiTypeQualifiedNameClazzName(psiClassType) + "@" + defaultEnumName;
                 }
                 return "null";
             }
@@ -521,15 +522,15 @@ public class OgnlPsUtils {
                         if (parameters.length == 0) {
                             return "@java.lang.Object@class";
                         } else {
-                            //todo 内部类
-                            String qualifiedName = typeParameters[0].getQualifiedName();
+                            String qualifiedName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) parameters[0]);
                             return "@" + qualifiedName + "@class";
                         }
                     }
                 }
             }
-            //ognl 不支持泛型
-            return "null";
+            //ognl 不支持泛型的也尝试json? 总比返回null强
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(psiClassType, project);
+            return "(%s)".formatted(ognlJsonDefaultValue);
         }
         return "null";
     }

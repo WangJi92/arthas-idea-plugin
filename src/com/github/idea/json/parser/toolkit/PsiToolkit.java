@@ -1,5 +1,6 @@
 package com.github.idea.json.parser.toolkit;
 
+import com.google.common.collect.Lists;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -42,7 +43,7 @@ public class PsiToolkit {
     }
 
     /**
-     * psiType的名称会存在 泛型的信息
+     * psiType的名称会存在 泛型的信息 这种构建ognl 不准确
      * @param psiType
      * @return
      */
@@ -53,6 +54,52 @@ public class PsiToolkit {
             qualifiedName = qualifiedName.substring(0, qualifiedName.indexOf("<"));
         }
         return qualifiedName;
+    }
+
+
+    /**
+     * 获取clazz 内名称，处理了内部类的情况 这种构建ognl 更加准确
+     * @param classType
+     * @return
+     */
+    public static String getPsiTypeQualifiedNameClazzName(PsiClassType classType) {
+        // clazz 直接返回这个类的字符串
+        PsiClass currentContainingClass = classType.resolve();
+        assert currentContainingClass != null;
+        return getPsiTypeQualifiedNameClazzName(currentContainingClass);
+    }
+
+    /**
+     * 获取clazz 内名称，处理了内部类的情况 这种构建ognl 更加准确
+     *
+     * @param currentContainingClass
+     * @return
+     */
+    public static String getPsiTypeQualifiedNameClazzName(PsiClass currentContainingClass){
+        // clazz 直接返回这个类的字符串
+        assert currentContainingClass != null;
+        PsiClass nextContainingClass = currentContainingClass.getContainingClass();
+        if (nextContainingClass == null) {
+            // 不是内部类
+            return currentContainingClass.getQualifiedName();
+        }
+        // 内部类的处理 OutClass$InnerClass
+        List<String> qualifiedClassNameArray = Lists.newArrayList();
+        qualifiedClassNameArray.add(Objects.requireNonNull(currentContainingClass.getNameIdentifier()).getText());
+        currentContainingClass = currentContainingClass.getContainingClass();
+        while (currentContainingClass != null) {
+            qualifiedClassNameArray.add("$");
+            String name = Objects.requireNonNull(currentContainingClass.getNameIdentifier()).getText();
+            nextContainingClass = currentContainingClass.getContainingClass();
+            if (nextContainingClass == null) {
+                qualifiedClassNameArray.add(currentContainingClass.getQualifiedName());
+            } else {
+                qualifiedClassNameArray.add(name);
+            }
+            currentContainingClass = nextContainingClass;
+        }
+        Collections.reverse(qualifiedClassNameArray);
+        return String.join("", qualifiedClassNameArray);
     }
 
     /**

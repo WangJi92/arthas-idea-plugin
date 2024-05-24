@@ -98,7 +98,7 @@ public class OgnlJsonHandlerUtils {
         if (jsonType == null) {
             return null;
         }
-        String psiTypeSimpleName = PsiToolkit.getPsiTypeSimpleName(psiType);
+        String psiTypeSimpleName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) psiType);
         return jsonType.getTemplate().formatted(escapeJson, "@" + psiTypeSimpleName + "@class");
     }
 }
