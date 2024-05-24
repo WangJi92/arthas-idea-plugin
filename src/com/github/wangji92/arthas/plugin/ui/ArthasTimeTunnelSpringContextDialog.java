@@ -180,7 +180,7 @@ public class ArthasTimeTunnelSpringContextDialog extends JDialog {
 
 
     private void createUIComponents() {
-        ognlOfficeActionLink = ActionLinkUtils.newActionLink("https://commons.apache.org/proper/commons-ognl/language-guide.html");
+        ognlOfficeActionLink = ActionLinkUtils.newActionLink("https://commons.apache.org/dormant/commons-ognl/language-guide.html");
 
         oglSpecialLink = ActionLinkUtils.newActionLink("https://github.com/alibaba/arthas/issues/71");
 
