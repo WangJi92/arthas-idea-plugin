@@ -515,17 +515,18 @@ public class OgnlPsUtils {
             } else if (typeParameters.length == 1) {
                 PsiType[] parameters = psiClassType.getParameters();
                 if (canonicalText.startsWith("java.")) {
-                    if (InheritanceUtil.isInheritor(psiClassType, List.class.getName())) {
-                        if (parameters.length == 0) {
-                            return "{}";
-                        }
-                        String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
-                        return "{%s}".formatted(ognlJsonDefaultValue);
-                        //todo set ?
+                    if (InheritanceUtil.isInheritor(psiClassType, List.class.getName())
+                            || canonicalText.contains(Collection.class.getName())) {
+                        //list
+                        return getListOgnlDefaultValue(psiClassType);
+                    }else if(InheritanceUtil.isInheritor(psiClassType,Set.class.getName())){
+                        // set
+                        return getSetOgnlDefaultValue(psiClassType);
                     } else if (InheritanceUtil.isInheritor(psiClassType, Class.class.getName())) {
                         if (parameters.length == 0) {
                             return "@java.lang.Object@class";
                         } else {
+                            //todo 内部类
                             String qualifiedName = typeParameters[0].getQualifiedName();
                             return "@" + qualifiedName + "@class";
                         }
@@ -536,6 +537,78 @@ public class OgnlPsUtils {
             return "null";
         }
         return "null";
+    }
+
+    /**
+     * 获取Set的默认值
+     * @param psiClassType
+     * @return
+     */
+    private static String getSetOgnlDefaultValue(PsiClassType psiClassType) {
+        String  canonicalText = psiClassType.getCanonicalText();
+        PsiType[] parameters = psiClassType.getParameters();
+        Project project = Objects.requireNonNull(psiClassType.resolve()).getProject();
+        if(canonicalText.contains(Set.class.getName())
+                || canonicalText.contains(AbstractSet.class.getName())
+                || canonicalText.contains(HashSet.class.getName())){
+            // Set
+            if (parameters.length == 0) {
+                return "(#set=new java.util.HashSet(),#set)";
+            }
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            return "(#set=new java.util.HashSet(),#set.add(%s),#set)".formatted(ognlJsonDefaultValue);
+        }else if(canonicalText.contains(TreeSet.class.getName())
+          || canonicalText.contains(SortedSet.class.getName())){
+            if (parameters.length == 0) {
+                return "(#set=new java.util.TreeSet(),#set)";
+            }
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            return "(#set=new java.util.TreeSet(),#set.add(%s),#set)".formatted(ognlJsonDefaultValue);
+        }else if(canonicalText.contains(LinkedHashSet.class.getName())){
+            if (parameters.length == 0) {
+                return "(#set=new java.util.LinkedHashSet(),#set)";
+            }
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            return "(#set=new java.util.LinkedHashSet(),#set.add(%s),#set)".formatted(ognlJsonDefaultValue);
+        }
+        return "(#set=new java.util.HashSet(),#set)";
+    }
+
+    /**
+     * 获取List 默认值
+     * @param psiClassType
+     * @return
+     */
+    private static String getListOgnlDefaultValue(PsiClassType psiClassType) {
+        String  canonicalText = psiClassType.getCanonicalText();
+        PsiType[] parameters = psiClassType.getParameters();
+        Project project = Objects.requireNonNull(psiClassType.resolve()).getProject();
+        if (canonicalText.contains(ArrayList.class.getName())
+                || canonicalText.contains(List.class.getName())
+                || canonicalText.contains(Collection.class.getName())
+                || canonicalText.contains(AbstractList.class.getName())) {
+            //ArrayList
+            if (parameters.length == 0) {
+                return "{}";
+            }
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            return "{%s}".formatted(ognlJsonDefaultValue);
+        }else if(canonicalText.contains(LinkedList.class.getName())){
+            // LinkedList
+            if (parameters.length == 0) {
+                return "(#list=new java.util.LinkedList(),#list)";
+            }
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            return "(#list=new java.util.LinkedList(),#list.add(%s),#list)".formatted(ognlJsonDefaultValue);
+        }else if(canonicalText.contains(Vector.class.getName())){
+            // Vector
+            if (parameters.length == 0) {
+                return "(#vector=new java.util.Vector(),#vector)";
+            }
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            return "(#vector=new java.util.Vector(),#vector.add(%s),#vector)".formatted(ognlJsonDefaultValue);
+        }
+        return "{}";
     }
 
     /**
