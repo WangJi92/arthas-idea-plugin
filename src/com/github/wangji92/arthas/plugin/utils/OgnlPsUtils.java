@@ -520,17 +520,41 @@ public class OgnlPsUtils {
                         return getSetOgnlDefaultValue(psiClassType);
                     } else if (InheritanceUtil.isInheritor(psiClassType, Class.class.getName())) {
                         if (parameters.length == 0) {
-                            return "@java.lang.Object@class";
+                            return "(@java.lang.Object@class)";
                         } else {
                             String qualifiedName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) parameters[0]);
-                            return "@" + qualifiedName + "@class";
+                            return "(@" + qualifiedName + "@class)";
                         }
                     }
                 }
             }
-            //ognl 不支持泛型的也尝试json? 总比返回null强
+
+            //region 处理这种泛型复杂参数 Test5<User,Map<String,User>> test
+            // 1、ognl 本身不支持泛型参数
+            // 2、通过Json 构建外层对象 Test5
+            // 3、获取Test5所有泛型参数
+            // 4、遍历Test5 所有字段 包含了泛型参数 且非基本类型，通过判断是否有set方法进行赋值 同理赋值使用json 构造
+            // 5、构建脚本 差异化解决无法处理泛型的问题..
+            Map<String, PsiType> psiClassGenerics = PsiToolkit.getPsiClassGenerics(psiClassType);
+            StringBuilder builder = new StringBuilder();
+            for (PsiField cField : psiClass.getAllFields()) {
+                if (cField.getType() instanceof PsiClassType fieldClazzType && psiClassGenerics != null) {
+                    PsiType psiClassGenericCurrent = psiClassGenerics.get(fieldClazzType.getName());
+                    if (psiClassGenericCurrent != null && PsiToolkit.getPsiClassBasicTypeDefaultStringValue(psiType) == null) {
+                        // ognl 不支持泛型、手动通过set设置过去
+                        if(fieldHaveSetMethod(cField)){
+                            builder.append(",(#p.set")
+                                    .append(StringUtils.capitalize(cField.getName()))
+                                    .append("(")
+                                    .append(OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(psiClassType, project))
+                                    .append("))");
+                        }
+                    }
+                }
+            }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(psiClassType, project);
-            return "(%s)".formatted(ognlJsonDefaultValue);
+            return "(#p=%s%s,#p)".formatted(ognlJsonDefaultValue, builder.toString());
+            //endregion
         }
         return "null";
     }
@@ -548,52 +572,52 @@ public class OgnlPsUtils {
                 || canonicalText.contains(Map.class.getName())
                 || canonicalText.contains(AbstractMap.class.getName())) {
             if (parameters.length == 0) {
-                return "#{\"_AR_\": null }";
+                return "(#{\"_AR_\": null })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "#{\"_AR_\": %s}".formatted(ognlJsonDefaultValue);
+            return "(#{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(LinkedHashMap.class.getName())){
             if (parameters.length == 0) {
-                return "#@java.util.LinkedHashMap@{\"_AR_\": null }";
+                return "(#@java.util.LinkedHashMap@{\"_AR_\": null })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "#@java.util.LinkedHashMap@{\"_AR_\": %s}".formatted(ognlJsonDefaultValue);
+            return "(#@java.util.LinkedHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(Hashtable.class.getName())){
             if (parameters.length == 0) {
-                return "#@java.util.Hashtable@{\"_AR_\": new java.lang.Object()}";
+                return "(#@java.util.Hashtable@{\"_AR_\": new java.lang.Object()})";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "#@java.util.Hashtable@{\"_AR_\": %s}".formatted(ognlJsonDefaultValue);
+            return "(#@java.util.Hashtable@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(TreeMap.class.getName())
                 || canonicalText.contains(SortedMap.class.getName())
                 || canonicalText.contains(NavigableMap.class.getName())){
             if (parameters.length == 0) {
-                return "#@java.util.TreeMap@{\"_AR_\": new java.lang.Object() }";
+                return "(#@java.util.TreeMap@{\"_AR_\": new java.lang.Object() })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "#@java.util.TreeMap@{\"_AR_\": %s}".formatted(ognlJsonDefaultValue);
+            return "(#@java.util.TreeMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(ConcurrentHashMap.class.getName())
                 || canonicalText.contains(ConcurrentMap.class.getName())
                ){
             if (parameters.length == 0) {
-                return "#@java.util.concurrent.ConcurrentHashMap@{\"_AR_\": new java.lang.Object() }";
+                return "(#@java.util.concurrent.ConcurrentHashMap@{\"_AR_\": new java.lang.Object() })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "#@java.util.concurrent.ConcurrentHashMap@{\"_AR_\": %s}".formatted(ognlJsonDefaultValue);
+            return "(#@java.util.concurrent.ConcurrentHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(EnumMap.class.getName())) {
             if (parameters.length == 0) {
-                return "#@java.util.EnumMap@{\"_AR_\": null }";
+                return "(#@java.util.EnumMap@{\"_AR_\": null })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "#@java.util.EnumMap@{\"_AR_\": %s}".formatted(ognlJsonDefaultValue);
+            return "(#@java.util.EnumMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(WeakHashMap.class.getName())) {
             if (parameters.length == 0) {
-                return "#@java.util.WeakHashMap@{\"_AR_\": null }";
+                return "(#@java.util.WeakHashMap@{\"_AR_\": null })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "#@java.util.WeakHashMap@{\"_AR_\": %s}".formatted(ognlJsonDefaultValue);
+            return "(#@java.util.WeakHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
         }
-        return "#{\"_AR_\": null }";
+        return "(#{\"_AR_\": null })";
     }
 
     /**
