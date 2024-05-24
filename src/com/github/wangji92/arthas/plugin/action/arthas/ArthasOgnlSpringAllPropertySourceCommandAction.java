@@ -20,7 +20,7 @@ import javax.swing.*;
  * 参考 : https://blog.csdn.net/xunjiushi9717/article/details/94050139
  * 参考 : https://github.com/alibaba/arthas/issues/641
  * 参考 : https://github.com/alibaba/arthas/issues/71
- * 参考 : https://commons.apache.org/proper/commons-ognl/language-guide.html
+ * 参考 : https://commons.apache.org/dormant/commons-ognl/language-guide.html
  * <p>
  * org.springframework.core.env.MutablePropertySources 中的优先级 addFirst高  addLast低
  * <p>

@@ -132,7 +132,7 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
 
 
     private void createUIComponents() {
-        ognlOfficeActionLink = ActionLinkUtils.newActionLink("https://commons.apache.org/proper/commons-ognl/language-guide.html");
+        ognlOfficeActionLink = ActionLinkUtils.newActionLink("https://commons.apache.org/dormant/commons-ognl/language-guide.html");
         ognlDemoLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-idea-plugin/issues/5");
 
         //https://github.com/WangJi92/arthas-idea-plugin/issues/5
