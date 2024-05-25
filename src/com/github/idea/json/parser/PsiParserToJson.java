@@ -53,7 +53,7 @@ public class PsiParserToJson {
             Object object = parseVariableValue(JPsiTypeContext);
             if (!Objects.equals(TypeDefaultValue.DEFAULT_NULL, object)) {
                 if (pretty) {
-                    gsonBuilderPretty.create().toJson(object);
+                   return gsonBuilderPretty.create().toJson(object);
                 }
                 return gsonBuilder.create().toJson(object);
             }
