@@ -5,7 +5,6 @@ import com.github.idea.json.parser.toolkit.model.JPsiTypeContext;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueAnalysisFactory;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
-import com.google.common.collect.Lists;
 import com.google.gson.GsonBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
@@ -136,6 +135,9 @@ public class PsiParserToJson {
             return TypeDefaultValue.DEFAULT_NULL;
         }
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+        // 循环依赖，返回null 空数据~ Gson 解析会异常..
+        // https://github.com/WangJi92/arthas-idea-plugin/issues/131
+       context.putCache(context.getOwner(), TypeDefaultValue.DEFAULT_NULL);
         for (PsiField field : psiClass.getAllFields()) {
             try {
                 if (checkIgnoreModifierP(field)) {
@@ -337,34 +339,29 @@ public class PsiParserToJson {
                         PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                         if (parameters.length == 0) {
                             //没有泛型类型，为空直接 null
-                            return TypeDefaultValue.DEFAULT_NULL;
+                            return Class.class.getName();
                         }
-                        // clazz 直接返回这个类的字符串
-                        PsiClassType classType = (PsiClassType) parameters[0];
-                        PsiClass currentContainingClass = classType.resolve();
-                        assert currentContainingClass != null;
-                        PsiClass nextContainingClass = currentContainingClass.getContainingClass();
-                        if (nextContainingClass == null) {
-                            // 不是内部类
-                            return parameters[0].getCanonicalText();
-                        }
-                        // 内部类的处理 OutClass$InnerClass
-                        List<String> qualifiedClassNameArray = Lists.newArrayList();
-                        qualifiedClassNameArray.add(Objects.requireNonNull(currentContainingClass.getNameIdentifier()).getText());
-                        currentContainingClass = currentContainingClass.getContainingClass();
-                        while (currentContainingClass != null) {
-                            qualifiedClassNameArray.add("$");
-                            String name = Objects.requireNonNull(currentContainingClass.getNameIdentifier()).getText();
-                            nextContainingClass = currentContainingClass.getContainingClass();
-                            if (nextContainingClass == null) {
-                                qualifiedClassNameArray.add(currentContainingClass.getQualifiedName());
-                            } else {
-                                qualifiedClassNameArray.add(name);
+                        // https://github.com/WangJi92/arthas-idea-plugin/issues/130
+                        // List<?>  Class<? extends LanguageDriver>
+                        if(parameters[0] instanceof PsiClassType psiClassType){
+                            // clazz 直接返回这个类的字符串
+                            return  PsiToolkit.getPsiTypeQualifiedNameClazzName(psiClassType);
+                        }if (parameters[0] instanceof PsiWildcardType wildcardType) {
+                            if (wildcardType.isExtends()) {
+                                // 获取上界限定的类型 上界限定通配符 (? extends T): 指定了类型的上界，表示该类型可以是 T 或 T 的子类。
+                                PsiType extendsBound = wildcardType.getExtendsBound();
+                                if (extendsBound instanceof PsiClassType extendsBoundPsiClassType) {
+                                    return PsiToolkit.getPsiTypeQualifiedNameClazzName(extendsBoundPsiClassType);
+                                }
+                            } else if (wildcardType.isSuper()) {
+                                // 获取下界限定的类型 下界限定通配符 (? super T): 指定了类型的下界，表示该类型可以是 T 或 T 的超类。
+                                PsiType superBound = wildcardType.getSuperBound();
+                                if (superBound  instanceof PsiClassType superBoundPsiClassType) {
+                                    return PsiToolkit.getPsiTypeQualifiedNameClazzName(superBoundPsiClassType);
+                                }
                             }
-                            currentContainingClass = nextContainingClass;
                         }
-                        Collections.reverse(qualifiedClassNameArray);
-                        return String.join("", qualifiedClassNameArray);
+                        return Class.class.getName();
                     }
                 }
 
