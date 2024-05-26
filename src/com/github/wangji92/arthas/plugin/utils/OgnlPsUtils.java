@@ -570,56 +570,71 @@ public class OgnlPsUtils {
         String  canonicalText = psiClassType.getCanonicalText();
         PsiType[] parameters = psiClassType.getParameters();
         Project project = Objects.requireNonNull(psiClassType.resolve()).getProject();
+        PsiType mapValueTypeGenericsType = null;
+        if (parameters.length >= 2) {
+            //Map<String,T extend User>?
+            mapValueTypeGenericsType = PsiToolkit.getPsiTypeGenericsType(parameters[1]);
+        }
         if (canonicalText.contains(HashMap.class.getName())
                 || canonicalText.contains(Map.class.getName())
                 || canonicalText.contains(AbstractMap.class.getName())) {
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
                 return "(#{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
             return ("(#{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(LinkedHashMap.class.getName())){
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
                 return "(#@java.util.LinkedHashMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
             return ("(#@java.util.LinkedHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(Hashtable.class.getName())){
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
                 return "(#@java.util.Hashtable@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object()})";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
             return ("(#@java.util.Hashtable@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(TreeMap.class.getName())
                 || canonicalText.contains(SortedMap.class.getName())
                 || canonicalText.contains(NavigableMap.class.getName())){
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
                 return "(#@java.util.TreeMap@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object() })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
             return ("(#@java.util.TreeMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(ConcurrentHashMap.class.getName())
                 || canonicalText.contains(ConcurrentMap.class.getName())
                ){
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
                 return "(#@java.util.concurrent.ConcurrentHashMap@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object() })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
             return ("(#@java.util.concurrent.ConcurrentHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(EnumMap.class.getName())) {
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
                 return "(#@java.util.EnumMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
             return ("(#@java.util.EnumMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(WeakHashMap.class.getName())) {
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
                 return "(#@java.util.WeakHashMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
             return ("(#@java.util.WeakHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }
-        return "(#{\"" + DEFAULT_MAP_KEY + "\": null })";
+
+        String qualifiedNameClazzName = PsiToolkit.getPsiTypeQualifiedNameClazzName(psiClassType);
+        PsiClass psiClass = psiClassType.resolve();
+        assert psiClass != null;
+        // todo 这里没有判断是否有无参构造函数
+        // PsiToolkit.hasNoArgConstructor(psiClass)
+        if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+            return "(#@"+qualifiedNameClazzName+"@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object()})";
+        }
+        String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+        return ("(#@"+qualifiedNameClazzName+"@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
     }
 
     /**

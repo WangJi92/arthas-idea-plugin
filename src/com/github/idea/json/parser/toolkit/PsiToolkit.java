@@ -203,6 +203,26 @@ public class PsiToolkit {
         }
     }
 
-
+    /**
+     * 是否有无参构造函数
+     *
+     * @param psiClass
+     * @return
+     */
+    public static boolean hasNoArgConstructor(PsiClass psiClass) {
+        // 查找类的所有构造函数
+        PsiMethod[] constructors = psiClass.getConstructors();
+        // 检查是否有无参构造函数
+        boolean hasNoArgConstructor = false;
+        for (PsiMethod constructor : constructors) {
+            // 检查构造函数是否无参（参数数量为0）且不是私有（private）
+            if (constructor.getParameterList().getParametersCount() == 0 &&
+                    !constructor.hasModifierProperty(PsiModifier.PRIVATE)) {
+                hasNoArgConstructor = true;
+                break;
+            }
+        }
+        return hasNoArgConstructor;
+    }
 
 }
