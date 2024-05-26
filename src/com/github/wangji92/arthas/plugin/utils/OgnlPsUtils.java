@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.utils;
 
 import com.github.idea.json.parser.toolkit.PsiToolkit;
+import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.wangji92.arthas.plugin.common.exception.CompilerFileNotFoundException;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.google.common.collect.Lists;
@@ -33,6 +34,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class OgnlPsUtils {
 
     private static final Logger LOG = Logger.getInstance(OgnlPsUtils.class);
+    public static final String DEFAULT_MAP_KEY = TypeDefaultValue.DEFAULT_MAP_KEY;
 
     /**
      * 是否为匿名类
@@ -572,52 +574,52 @@ public class OgnlPsUtils {
                 || canonicalText.contains(Map.class.getName())
                 || canonicalText.contains(AbstractMap.class.getName())) {
             if (parameters.length == 0) {
-                return "(#{\"_AR_\": null })";
+                return "(#{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            return ("(#{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(LinkedHashMap.class.getName())){
             if (parameters.length == 0) {
-                return "(#@java.util.LinkedHashMap@{\"_AR_\": null })";
+                return "(#@java.util.LinkedHashMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.LinkedHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            return ("(#@java.util.LinkedHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(Hashtable.class.getName())){
             if (parameters.length == 0) {
-                return "(#@java.util.Hashtable@{\"_AR_\": new java.lang.Object()})";
+                return "(#@java.util.Hashtable@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object()})";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.Hashtable@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            return ("(#@java.util.Hashtable@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(TreeMap.class.getName())
                 || canonicalText.contains(SortedMap.class.getName())
                 || canonicalText.contains(NavigableMap.class.getName())){
             if (parameters.length == 0) {
-                return "(#@java.util.TreeMap@{\"_AR_\": new java.lang.Object() })";
+                return "(#@java.util.TreeMap@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object() })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.TreeMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            return ("(#@java.util.TreeMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(ConcurrentHashMap.class.getName())
                 || canonicalText.contains(ConcurrentMap.class.getName())
                ){
             if (parameters.length == 0) {
-                return "(#@java.util.concurrent.ConcurrentHashMap@{\"_AR_\": new java.lang.Object() })";
+                return "(#@java.util.concurrent.ConcurrentHashMap@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object() })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.concurrent.ConcurrentHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            return ("(#@java.util.concurrent.ConcurrentHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(EnumMap.class.getName())) {
             if (parameters.length == 0) {
-                return "(#@java.util.EnumMap@{\"_AR_\": null })";
+                return "(#@java.util.EnumMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.EnumMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            return ("(#@java.util.EnumMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(WeakHashMap.class.getName())) {
             if (parameters.length == 0) {
-                return "(#@java.util.WeakHashMap@{\"_AR_\": null })";
+                return "(#@java.util.WeakHashMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
             String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.WeakHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            return ("(#@java.util.WeakHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }
-        return "(#{\"_AR_\": null })";
+        return "(#{\"" + DEFAULT_MAP_KEY + "\": null })";
     }
 
     /**

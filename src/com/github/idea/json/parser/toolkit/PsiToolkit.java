@@ -6,10 +6,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author wangji
@@ -124,12 +122,44 @@ public class PsiToolkit {
     public static Map<String, PsiType> getPsiClassGenerics(PsiType type) {
         PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
         if (psiClass != null) {
-            return Arrays.stream(psiClass.getTypeParameters())
-                    .map(p -> Pair.of(p, PsiUtil.substituteTypeParameter(type, psiClass, p.getIndex(), false)))
-                    .filter(p -> p.getValue() != null)
-                    .collect(Collectors.toMap(p -> p.getKey().getName(), Pair::getValue));
+            Map<String,PsiType> psiClazzGenerics = new HashMap<>();
+            for (PsiTypeParameter typeParameter : psiClass.getTypeParameters()) {
+                PsiType substituteTypeParameter = PsiUtil.substituteTypeParameter(type, psiClass, typeParameter.getIndex(), false);
+                if (substituteTypeParameter != null) {
+                    psiClazzGenerics.put(typeParameter.getName(), substituteTypeParameter);
+                } else if (typeParameter.getExtendsListTypes().length > 0) {
+                    // TestGeneratesClazz<T extends String,B extends User> 获取泛型参数 T 为String B 为User
+                    psiClazzGenerics.put(typeParameter.getName(), typeParameter.getExtendsListTypes()[0]);
+                }
+            }
+            return psiClazzGenerics;
         }
         return Map.of();
+    }
+
+    /**
+     * List<?>  Class<? extends LanguageDriver>
+     * 获取内部的泛型信息
+     *
+     * @param parameter
+     * @return
+     */
+    public static PsiType getPsiTypeGenericsType(PsiType parameter){
+        if(parameter instanceof PsiClassType psiClassType){
+            return  psiClassType;
+        }else if (parameter instanceof PsiWildcardType wildcardType) {
+            if (wildcardType.isExtends()) {
+                // 获取上界限定的类型 上界限定通配符 (? extends T): 指定了类型的上界，表示该类型可以是 T 或 T 的子类。
+               return wildcardType.getExtendsBound();
+
+            } else if (wildcardType.isSuper()) {
+                // 获取下界限定的类型 下界限定通配符 (? super T): 指定了类型的下界，表示该类型可以是 T 或 T 的超类。
+                return wildcardType.getSuperBound();
+            }else{
+                return null;
+            }
+        }
+        return parameter;
     }
 
     /**
