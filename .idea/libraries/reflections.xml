@@ -5,14 +5,14 @@
       <root url="jar://$MAVEN_REPOSITORY$/org/reflections/reflections/0.10.2/reflections-0.10.2.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/javassist/javassist/3.28.0-GA/javassist-3.28.0-GA.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.jar!/" />
+<!--      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.jar!/" />-->
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/reflections/reflections/0.10.2/reflections-0.10.2-sources.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/javassist/javassist/3.28.0-GA/javassist-3.28.0-GA-sources.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32-sources.jar!/" />
+<!--      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32-sources.jar!/" />-->
     </SOURCES>
   </library>
 </component>

@@ -1,5 +1,7 @@
 package com.github.idea.json.parser.typevalue;
 
+import com.github.idea.json.parser.PsiParserToJson;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiType;
 import org.reflections.Reflections;
 
@@ -11,6 +13,7 @@ import java.util.*;
  * @date 2024/5/19 16:32
  */
 public class TypeValueAnalysisFactory {
+    private static final com.intellij.openapi.diagnostic.Logger LOG = Logger.getInstance(PsiParserToJson.class);
     /**
      * 和class 一一对应的类
      */
@@ -25,22 +28,30 @@ public class TypeValueAnalysisFactory {
     }
 
     private void initialize() {
-        Reflections reflections = new Reflections(TypeDefaultValue.class.getPackageName());
-        Set<Class<? extends TypeDefaultValue>> typeDefaultValueClazz = reflections.getSubTypesOf(TypeDefaultValue.class);
-        for (Class<? extends TypeDefaultValue> clazz : typeDefaultValueClazz) {
-            try {
-                TypeDefaultValue typeDefaultValue = clazz.getDeclaredConstructor().newInstance();
-                if (typeDefaultValue instanceof MultiTypeDefaultValue) {
-                    multiTypeValueList.add((MultiTypeDefaultValue) typeDefaultValue);
-                    // 批量里面也有单个的数据，方便加快速度
-                    for (String qualifiedName : ((MultiTypeDefaultValue) typeDefaultValue).getQualifiedNames()) {
-                        singleTypeValueMap.put(qualifiedName, typeDefaultValue);
+        try {
+            Reflections reflections = new Reflections(TypeDefaultValue.class.getPackageName());
+            Set<Class<? extends TypeDefaultValue>> typeDefaultValueClazz = reflections.getSubTypesOf(TypeDefaultValue.class);
+            for (Class<? extends TypeDefaultValue> clazz : typeDefaultValueClazz) {
+                try {
+                    if (clazz.isInterface()) {
+                        continue;
                     }
-                } else {
-                    singleTypeValueMap.put(typeDefaultValue.getQualifiedName(), typeDefaultValue);
+                    TypeDefaultValue typeDefaultValue = clazz.getDeclaredConstructor().newInstance();
+                    if (typeDefaultValue instanceof MultiTypeDefaultValue) {
+                        multiTypeValueList.add((MultiTypeDefaultValue) typeDefaultValue);
+                        // 批量里面也有单个的数据，方便加快速度
+                        for (String qualifiedName : ((MultiTypeDefaultValue) typeDefaultValue).getQualifiedNames()) {
+                            singleTypeValueMap.put(qualifiedName, typeDefaultValue);
+                        }
+                    } else {
+                        singleTypeValueMap.put(typeDefaultValue.getQualifiedName(), typeDefaultValue);
+                    }
+                } catch (Exception e) {
+                    LOG.error("init TypeDefaultValue error",e);
                 }
-            } catch (Exception e) {
             }
+        } catch (Exception e) {
+            LOG.error("init error",e);
         }
     }
 

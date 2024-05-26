@@ -3,13 +3,13 @@
     <properties maven-id="redis.clients:jedis:3.4.1" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/redis/clients/jedis/3.4.1/jedis-3.4.1.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar!/" />
+<!--      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar!/" />-->
       <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-pool2/2.6.2/commons-pool2-2.6.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/redis/clients/jedis/3.4.1/jedis-3.4.1-sources.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30-sources.jar!/" />
+<!--      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30-sources.jar!/" />-->
       <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-pool2/2.6.2/commons-pool2-2.6.2-sources.jar!/" />
     </SOURCES>
   </library>
