@@ -66,7 +66,7 @@ public class JdkAnalysisInheritanceTypeValue implements MultiTypeDefaultValue {
         for (Map.Entry<String, Object> entry : getContainer().entrySet()) {
             if (context.isInheritor(entry.getKey())) {
                 Object result = getContainer().get(entry.getKey());
-                context.put(TypeValueContext.RESULT, result);
+                context.setResult(result);
                 return true;
             }
         }

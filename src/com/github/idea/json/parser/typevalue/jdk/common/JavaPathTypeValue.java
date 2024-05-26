@@ -12,7 +12,7 @@ import java.nio.file.Path;
 public class JavaPathTypeValue implements TypeDefaultValue {
     @Override
     public Object getValue(TypeValueContext context) {
-        return"file:///home/user";
+        return"file://home/user";
     }
 
     @Override

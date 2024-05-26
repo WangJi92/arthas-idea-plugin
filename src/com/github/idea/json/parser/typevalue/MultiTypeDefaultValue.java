@@ -1,5 +1,7 @@
 package com.github.idea.json.parser.typevalue;
 
+import com.github.idea.json.parser.toolkit.PsiToolkit;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -20,11 +22,11 @@ public interface MultiTypeDefaultValue extends TypeDefaultValue {
     default Object getValue(TypeValueContext context) {
         if (context.getSupport()) {
             // 动态处理的;
-            return context.get(TypeValueContext.RESULT);
+            return context.getResult();
         }
         if (this.getContainer() != null) {
             //静态处理
-            Object quicklyResult = this.getContainer().get(context.getType().getCanonicalText());
+            Object quicklyResult = this.getContainer().get(PsiToolkit.getPsiTypeSimpleName(context.getType()));
             if (quicklyResult != null) {
                 return quicklyResult;
             }
