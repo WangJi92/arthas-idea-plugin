@@ -7,7 +7,8 @@
 ## 2.1 config plugin sdk
 
 最新编译版本使用(2023.3)： https://www.jetbrains.com.cn/idea/download/other.html
-
+- JDK>=17
+- 最新的版本IDEA 不会自动安装 plugin-devkit [plugin-devkit](https://plugins.jetbrains.com/plugin/22851-plugin-devkit)
 
 example with IntelliJ IDEA Community Edition IC-221.6008.13
 
