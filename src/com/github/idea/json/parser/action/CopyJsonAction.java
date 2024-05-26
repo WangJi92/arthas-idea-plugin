@@ -66,9 +66,9 @@ public class CopyJsonAction extends AnAction {
         assert psiElement != null;
         String jsonString = PsiParserToJson.getInstance().toJSONString(psiElement);
         if (StringUtils.isBlank(jsonString)) {
-            String emptyData = "parse json data empty or parse error";
-            ClipboardUtils.setClipboardString("empty json");
-            NotifyUtils.notifyMessage(e.getProject(), emptyData, NotificationType.WARNING);
+            String emptyData = "JSON data empty";
+            ClipboardUtils.setClipboardString("{}");
+            NotifyUtils.notifyMessage(e.getProject(), emptyData, NotificationType.INFORMATION);
             return;
         }
         ClipboardUtils.setClipboardString(jsonString);
