@@ -346,7 +346,7 @@ public class PsiParserToJson {
                         if(parameters[0] instanceof PsiClassType psiClassType){
                             // clazz 直接返回这个类的字符串
                             return  PsiToolkit.getPsiTypeQualifiedNameClazzName(psiClassType);
-                        }if (parameters[0] instanceof PsiWildcardType wildcardType) {
+                        }else if (parameters[0] instanceof PsiWildcardType wildcardType) {
                             if (wildcardType.isExtends()) {
                                 // 获取上界限定的类型 上界限定通配符 (? extends T): 指定了类型的上界，表示该类型可以是 T 或 T 的子类。
                                 PsiType extendsBound = wildcardType.getExtendsBound();

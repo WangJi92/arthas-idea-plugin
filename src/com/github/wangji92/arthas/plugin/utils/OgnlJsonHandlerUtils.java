@@ -5,6 +5,7 @@ import com.github.idea.json.parser.toolkit.PsiToolkit;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClassType;
 import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiWildcardType;
 import org.apache.commons.text.StringEscapeUtils;
 
 /**
@@ -89,16 +90,28 @@ public class OgnlJsonHandlerUtils {
         if (basicValue != null) {
             return basicValue;
         }
-        if (!(psiType instanceof PsiClassType)) {
+        PsiType currentPsiType = psiType;
+        //处理参数里面哟泛型的
+        if (psiType instanceof PsiWildcardType wildcardType) {
+            if (wildcardType.isExtends()) {
+                // 获取上界限定的类型 上界限定通配符 (? extends T): 指定了类型的上界，表示该类型可以是 T 或 T 的子类。
+                currentPsiType = wildcardType.getExtendsBound();
+
+            } else if (wildcardType.isSuper()) {
+                // 获取下界限定的类型 下界限定通配符 (? super T): 指定了类型的下界，表示该类型可以是 T 或 T 的超类。
+                currentPsiType = wildcardType.getSuperBound();
+            }
+        }
+        if (!(currentPsiType instanceof PsiClassType)) {
             return null;
         }
-        String jsonString = PsiParserToJson.getInstance().toJSONString(psiType,false);
+        String jsonString = PsiParserToJson.getInstance().toJSONString(currentPsiType, false);
         String escapeJson = StringEscapeUtils.escapeJson(jsonString);
         JsonType jsonType = getJsonType(project);
         if (jsonType == null) {
             return null;
         }
-        String psiTypeSimpleName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) psiType);
+        String psiTypeSimpleName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) currentPsiType);
         return jsonType.getTemplate().formatted(escapeJson, "@" + psiTypeSimpleName + "@class");
     }
 }
