@@ -322,11 +322,15 @@ public class PsiParserToJson {
                     // Set<String> List<Demo<String>> ..why not startsWith("java.")?
                     PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                     if (parameters.length == 1) {
-                        Object obj = parseVariableValue(context.copy(parameters[0], getPsiClassGenerics(parameters[0])));
-                        if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
-                            return List.of();
+                        //List<?> List<? extend XXX>
+                        PsiType psiTypeGenericsType = PsiToolkit.getPsiTypeGenericsType(parameters[0]);
+                        if(psiTypeGenericsType !=null){
+                            Object obj = parseVariableValue(context.copy(psiTypeGenericsType, getPsiClassGenerics(psiTypeGenericsType)));
+                            if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
+                                return List.of();
+                            }
+                            return List.of(obj);
                         }
-                        return List.of(obj);
                     }
                     // List 没有写泛型..
                     return List.of();
@@ -372,11 +376,15 @@ public class PsiParserToJson {
                 if (rawJPsiTypeJPsiTypeContext.isInheritor(Map.class.getName())) {
                     PsiType[] parameters = currentParseIdeaPsiClassType.getParameters();
                     if (parameters.length == 2) {
-                        Object obj = parseVariableValue(context.copy(parameters[1], getPsiClassGenerics(parameters[1])));
-                        if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
-                            return new HashMap<>();
+                        //Map<String,<? extends LanguageDriver> ?
+                        PsiType psiTypeGenericsType = PsiToolkit.getPsiTypeGenericsType(parameters[1]);
+                        if(psiTypeGenericsType!=null){
+                            Object obj = parseVariableValue(context.copy(psiTypeGenericsType, getPsiClassGenerics(psiTypeGenericsType)));
+                            if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
+                                return new HashMap<>();
+                            }
+                            return Map.of(TypeDefaultValue.DEFAULT_MAP_KEY, obj);
                         }
-                        return Map.of(TypeDefaultValue.DEFAULT_MAP_KEY, obj);
                     }
                     // Map 没有写泛型..
                     return new HashMap<>();

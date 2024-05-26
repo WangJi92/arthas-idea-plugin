@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.utils;
 
 import com.github.idea.json.parser.toolkit.PsiToolkit;
+import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.wangji92.arthas.plugin.common.exception.CompilerFileNotFoundException;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.google.common.collect.Lists;
@@ -33,6 +34,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class OgnlPsUtils {
 
     private static final Logger LOG = Logger.getInstance(OgnlPsUtils.class);
+    public static final String DEFAULT_MAP_KEY = TypeDefaultValue.DEFAULT_MAP_KEY;
 
     /**
      * 是否为匿名类
@@ -505,8 +507,10 @@ public class OgnlPsUtils {
             if (typeParameters.length == 0) {
                 return OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(psiType, project);
             } else if (typeParameters.length == 2) {
-                if (InheritanceUtil.isInheritor(psiClassType, Map.class.getName())) {
-                    return getOgnlMapDefaultValue(psiClassType);
+                if (canonicalText.startsWith("java.")){
+                    if (InheritanceUtil.isInheritor(psiClassType, Map.class.getName())) {
+                        return getOgnlMapDefaultValue(psiClassType);
+                    }
                 }
             } else if (typeParameters.length == 1) {
                 PsiType[] parameters = psiClassType.getParameters();
@@ -568,56 +572,71 @@ public class OgnlPsUtils {
         String  canonicalText = psiClassType.getCanonicalText();
         PsiType[] parameters = psiClassType.getParameters();
         Project project = Objects.requireNonNull(psiClassType.resolve()).getProject();
+        PsiType mapValueTypeGenericsType = null;
+        if (parameters.length >= 2) {
+            //Map<String,T extend User>?
+            mapValueTypeGenericsType = PsiToolkit.getPsiTypeGenericsType(parameters[1]);
+        }
         if (canonicalText.contains(HashMap.class.getName())
                 || canonicalText.contains(Map.class.getName())
                 || canonicalText.contains(AbstractMap.class.getName())) {
-            if (parameters.length == 0) {
-                return "(#{\"_AR_\": null })";
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+                return "(#{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+            return ("(#{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(LinkedHashMap.class.getName())){
-            if (parameters.length == 0) {
-                return "(#@java.util.LinkedHashMap@{\"_AR_\": null })";
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+                return "(#@java.util.LinkedHashMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.LinkedHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+            return ("(#@java.util.LinkedHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(Hashtable.class.getName())){
-            if (parameters.length == 0) {
-                return "(#@java.util.Hashtable@{\"_AR_\": new java.lang.Object()})";
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+                return "(#@java.util.Hashtable@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object()})";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.Hashtable@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+            return ("(#@java.util.Hashtable@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(TreeMap.class.getName())
                 || canonicalText.contains(SortedMap.class.getName())
                 || canonicalText.contains(NavigableMap.class.getName())){
-            if (parameters.length == 0) {
-                return "(#@java.util.TreeMap@{\"_AR_\": new java.lang.Object() })";
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+                return "(#@java.util.TreeMap@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object() })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.TreeMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+            return ("(#@java.util.TreeMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(ConcurrentHashMap.class.getName())
                 || canonicalText.contains(ConcurrentMap.class.getName())
                ){
-            if (parameters.length == 0) {
-                return "(#@java.util.concurrent.ConcurrentHashMap@{\"_AR_\": new java.lang.Object() })";
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+                return "(#@java.util.concurrent.ConcurrentHashMap@{\"" + DEFAULT_MAP_KEY + "\": new java.lang.Object() })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.concurrent.ConcurrentHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+            return ("(#@java.util.concurrent.ConcurrentHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(EnumMap.class.getName())) {
-            if (parameters.length == 0) {
-                return "(#@java.util.EnumMap@{\"_AR_\": null })";
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+                return "(#@java.util.EnumMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.EnumMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+            return ("(#@java.util.EnumMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(WeakHashMap.class.getName())) {
-            if (parameters.length == 0) {
-                return "(#@java.util.WeakHashMap@{\"_AR_\": null })";
+            if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+                return "(#@java.util.WeakHashMap@{\"" + DEFAULT_MAP_KEY + "\": null })";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[1], project);
-            return "(#@java.util.WeakHashMap@{\"_AR_\": %s})".formatted(ognlJsonDefaultValue);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+            return ("(#@java.util.WeakHashMap@{\"" + DEFAULT_MAP_KEY + "\": %s})").formatted(ognlJsonDefaultValue);
         }
-        return "(#{\"_AR_\": null })";
+
+        String qualifiedNameClazzName = PsiToolkit.getPsiTypeQualifiedNameClazzName(psiClassType);
+        PsiClass psiClass = psiClassType.resolve();
+        assert psiClass != null;
+        // todo 这里实现的不完善 这里直接new 非实现类，可能执行失败
+        // PsiToolkit.hasNoArgConstructor(psiClass)
+        if (parameters.length == 0 || mapValueTypeGenericsType ==null) {
+            return "(#map=new "+qualifiedNameClazzName+"(),#map.put(\"" + DEFAULT_MAP_KEY + "\",new java.lang.Object()),#map)";
+        }
+        String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(mapValueTypeGenericsType, project);
+        return ("(#map=new "+qualifiedNameClazzName+"(),#map.put(\"" + DEFAULT_MAP_KEY + "\",%s),#map)").formatted(ognlJsonDefaultValue);
     }
 
     /**
@@ -629,27 +648,32 @@ public class OgnlPsUtils {
         String  canonicalText = psiClassType.getCanonicalText();
         PsiType[] parameters = psiClassType.getParameters();
         Project project = Objects.requireNonNull(psiClassType.resolve()).getProject();
+        PsiType setValueTypeGenericsType = null;
+        if (parameters.length >= 1) {
+            //List<T extend User>
+            setValueTypeGenericsType = PsiToolkit.getPsiTypeGenericsType(parameters[0]);
+        }
         if(canonicalText.contains(Set.class.getName())
                 || canonicalText.contains(AbstractSet.class.getName())
                 || canonicalText.contains(HashSet.class.getName())){
             // Set
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || setValueTypeGenericsType==null) {
                 return "(#set=new java.util.HashSet(),#set)";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(setValueTypeGenericsType, project);
             return "(#set=new java.util.HashSet(),#set.add(%s),#set)".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(TreeSet.class.getName())
           || canonicalText.contains(SortedSet.class.getName())){
-            if (parameters.length == 0) {
+            if (parameters.length == 0 ||  setValueTypeGenericsType==null) {
                 return "(#set=new java.util.TreeSet(),#set)";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(setValueTypeGenericsType, project);
             return "(#set=new java.util.TreeSet(),#set.add(%s),#set)".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(LinkedHashSet.class.getName())){
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || setValueTypeGenericsType==null) {
                 return "(#set=new java.util.LinkedHashSet(),#set)";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(setValueTypeGenericsType, project);
             return "(#set=new java.util.LinkedHashSet(),#set.add(%s),#set)".formatted(ognlJsonDefaultValue);
         }
         return "(#set=new java.util.HashSet(),#set)";
@@ -664,43 +688,48 @@ public class OgnlPsUtils {
         String  canonicalText = psiClassType.getCanonicalText();
         PsiType[] parameters = psiClassType.getParameters();
         Project project = Objects.requireNonNull(psiClassType.resolve()).getProject();
+        PsiType listValueTypeGenericsType = null;
+        if (parameters.length >= 1) {
+            //List<T extend User>
+            listValueTypeGenericsType = PsiToolkit.getPsiTypeGenericsType(parameters[0]);
+        }
         if (canonicalText.contains(ArrayList.class.getName())
                 || canonicalText.contains(List.class.getName())
                 || canonicalText.contains(Collection.class.getName())
                 || canonicalText.contains(AbstractList.class.getName())) {
             //ArrayList
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || listValueTypeGenericsType==null) {
                 return "{}";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(listValueTypeGenericsType, project);
             return "{%s}".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(LinkedList.class.getName())){
             // LinkedList
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || listValueTypeGenericsType==null) {
                 return "(#list=new java.util.LinkedList(),#list)";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(listValueTypeGenericsType, project);
             return "(#list=new java.util.LinkedList(),#list.add(%s),#list)".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(Vector.class.getName())){
             // Vector
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || listValueTypeGenericsType==null) {
                 return "(#vector=new java.util.Vector(),#vector)";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(listValueTypeGenericsType, project);
             return "(#vector=new java.util.Vector(),#vector.add(%s),#vector)".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(Stack.class.getName())){
             // stack
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || listValueTypeGenericsType==null) {
                 return "(#stack=new java.util.Stack(),#stack)";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(listValueTypeGenericsType, project);
             return "(#stack=new java.util.Stack(),#vector.add(%s),#stack)".formatted(ognlJsonDefaultValue);
         }else if(canonicalText.contains(CopyOnWriteArrayList.class.getName())){
             // stack
-            if (parameters.length == 0) {
+            if (parameters.length == 0 || listValueTypeGenericsType==null) {
                 return "(#list=new java.util.concurrent.CopyOnWriteArrayList(),#list)";
             }
-            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(parameters[0], project);
+            String ognlJsonDefaultValue = OgnlJsonHandlerUtils.getOgnlJsonDefaultValue(listValueTypeGenericsType, project);
             return "(#list=new java.util.concurrent.CopyOnWriteArrayList(),#list.add(%s),#list)".formatted(ognlJsonDefaultValue);
         }
         return "{}";
