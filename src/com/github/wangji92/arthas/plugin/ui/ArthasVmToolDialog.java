@@ -123,6 +123,7 @@ public class ArthasVmToolDialog extends JDialog {
         pack();
         //两个屏幕处理出现问题，跳到主屏幕去了 https://blog.csdn.net/weixin_33919941/article/details/88129513
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
+        vmToolExpressTextField.requestFocus();
         setVisible(true);
     }
 
