@@ -147,7 +147,7 @@ public class JdkBasicTypeValue implements MultiTypeDefaultValue {
                     || canonicalText.startsWith("sun")
                     || InheritanceUtil.isInheritor(context.getType(), Throwable.class.getName())) {
                 //io 的包忽略 异常的忽略
-                context.put(TypeValueContext.RESULT, TypeDefaultValue.DEFAULT_NULL);
+                context.setResult(TypeDefaultValue.DEFAULT_NULL);
                 return true;
             }
         }

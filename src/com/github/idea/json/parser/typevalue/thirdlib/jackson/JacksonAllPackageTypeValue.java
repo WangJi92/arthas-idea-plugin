@@ -45,7 +45,7 @@ public class JacksonAllPackageTypeValue implements MultiTypeDefaultValue {
         PsiType type = context.getType();
         String canonicalText = type.getCanonicalText();
         if (canonicalText.startsWith("com.fasterxml.jackson")) {
-            context.put(TypeValueContext.RESULT, DEFAULT_NULL);
+            context.setResult(DEFAULT_NULL);
             return true;
         }
         return false;

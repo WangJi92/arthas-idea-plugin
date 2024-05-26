@@ -17,7 +17,7 @@ public class JsonOrgAllPackageTypeValue implements MultiTypeDefaultValue {
         PsiType type = context.getType();
         String canonicalText = type.getCanonicalText();
         if (canonicalText.startsWith("org.json")) {
-            context.put(TypeValueContext.RESULT, DEFAULT_NULL);
+            context.setResult(DEFAULT_NULL);
             return true;
         }
         return false;

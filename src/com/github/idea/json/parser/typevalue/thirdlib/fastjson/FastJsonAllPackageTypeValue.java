@@ -20,7 +20,7 @@ public class FastJsonAllPackageTypeValue implements MultiTypeDefaultValue {
         }
         String canonicalText = type.getCanonicalText();
         if (canonicalText.startsWith("com.alibaba.fastjson")) {
-            context.put(TypeValueContext.RESULT, DEFAULT_NULL);
+            context.setResult(DEFAULT_NULL);
             return true;
         }
         return false;

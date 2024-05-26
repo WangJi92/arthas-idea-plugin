@@ -4,8 +4,6 @@ import com.github.idea.json.parser.toolkit.PsiToolkit;
 import com.intellij.psi.PsiType;
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -16,12 +14,8 @@ import java.util.Set;
  */
 public class TypeValueContext {
 
-    public static final String RESULT = "RESULT";
-
     @Getter
     private PsiType type;
-
-    private final Map<String, Object> processCache = new HashMap<>();
 
     @Getter
     private Object result;
@@ -61,15 +55,6 @@ public class TypeValueContext {
     public void setResult(Object result) {
         this.result = result;
         this.support = true;
-    }
-
-
-    public Object put(String key, Object value) {
-        return processCache.put(key, value);
-    }
-
-    public Object get(Object key) {
-        return processCache.get(key);
     }
 
 }
