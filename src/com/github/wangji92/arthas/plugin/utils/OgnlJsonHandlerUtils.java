@@ -26,6 +26,12 @@ public class OgnlJsonHandlerUtils {
                 return "@com.alibaba.fastjson.JSON@parseObject(\"%s\",%s)";
             }
         },
+        FASTJSON_2 {
+            @Override
+            public String getTemplate() {
+                return "@com.alibaba.fastjson2.JSON@parseObject(\"%s\",%s)";
+            }
+        },
         JACKSON {
             @Override
             public String getTemplate() {
@@ -61,6 +67,11 @@ public class OgnlJsonHandlerUtils {
         boolean fastJson = PsiToolkit.findClass("com.alibaba.fastjson.JSON", project);
         if (fastJson) {
             DEFAULT_JSON = JsonType.FASTJSON;
+            return DEFAULT_JSON;
+        }
+        boolean fastJson2 = PsiToolkit.findClass("com.alibaba.fastjson2.JSON", project);
+        if (fastJson2) {
+            DEFAULT_JSON = JsonType.FASTJSON_2;
             return DEFAULT_JSON;
         }
         boolean jackson = PsiToolkit.findClass("com.fasterxml.jackson.databind.ObjectMapper(", project);
