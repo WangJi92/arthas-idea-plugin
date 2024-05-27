@@ -74,7 +74,7 @@ public class OgnlJsonHandlerUtils {
             DEFAULT_JSON = JsonType.FASTJSON_2;
             return DEFAULT_JSON;
         }
-        boolean jackson = PsiToolkit.findClass("com.fasterxml.jackson.databind.ObjectMapper(", project);
+        boolean jackson = PsiToolkit.findClass("com.fasterxml.jackson.databind.ObjectMapper", project);
         if (jackson) {
             DEFAULT_JSON = JsonType.JACKSON;
             return DEFAULT_JSON;
