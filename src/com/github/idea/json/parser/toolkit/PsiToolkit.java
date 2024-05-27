@@ -177,7 +177,7 @@ public class PsiToolkit {
         String canonicalText = psiType.getCanonicalText();
         return switch (canonicalText) {
             case "java.lang.Boolean","boolean" -> "true";
-            case "java.lang.String" -> "\"_AR_\"";
+            case "java.lang.String" -> "\" \"";
             case "java.lang.Integer", "java.lang.Byte", "java.lang.Short","short", "int", "byte" -> "0";
             case "java.lang.Long","long" -> "0L";
             case "java.lang.Double","double" -> "0D";
