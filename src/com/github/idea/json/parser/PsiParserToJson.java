@@ -71,10 +71,10 @@ public class PsiParserToJson {
         } else if (psiElement instanceof PsiField field) {
             return toJSONString(field.getType(),true);
         } else if (psiElement instanceof PsiMethod psiMethod) {
-            PsiClass containingClass = psiMethod.getContainingClass();
-            if (containingClass != null) {
-                PsiType psiType = PsiToolkit.getPsiTypeByPisClazz(containingClass);
-                return toJSONString(psiType,true);
+            // 如果是方法、获取返回值的JSON 数据结构
+            PsiType returnType = psiMethod.getReturnType();
+            if (returnType != null) {
+                return toJSONString(returnType,true);
             }
         } else if (psiElement instanceof PsiParameter psiParameter) {
             PsiType type = psiParameter.getType();
