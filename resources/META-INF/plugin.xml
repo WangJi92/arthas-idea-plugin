@@ -45,7 +45,8 @@
      <p>2.46-RELEASE</p>
       <ul>
         <li>add a command Arthas Copy JSON</li>
-         <li>vmtool & ognl & springContext.getBean support <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/127">auto generator complex params</a>use JSON.parseObject</li>
+        <li>vmtool & ognl & springContext.getBean support  <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/127"> auto generator complex params </a> use JSON.parseObject("jsonStr",XXX.class)</li>
+        <li>JSON Escape、compression 、Chinese To Unicode Can Use Tools Like <a href="https://www.json.cn/jsonzip/"> Json Tools</a>,Make vmtool command invoke complex params easy</li>
       </ul>
      <p>2.45-RELEASE</p>
       <ul>
