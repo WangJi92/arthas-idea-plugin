@@ -88,6 +88,63 @@ public class OgnlJsonHandlerUtils {
         return DEFAULT_JSON;
     }
 
+    /**
+     * 获取这些基本类型的ognl 表达式
+     * @param psiType
+     * @return
+     */
+    public static String getPsiClassJDKBaseTypeDefaultOgnl(PsiType psiType) {
+        String canonicalText = PsiToolkit.getPsiTypeSimpleName(psiType);
+        return switch (canonicalText) {
+            case "java.lang.StringBuilder","java.lang.StringBuffer" -> "(#p=new "+psiType.getCanonicalText()+"(),#p.append(\" \"),#p)";
+            case "java.math.BigInteger" -> "(#p=new java.math.BigInteger(\"0\"),#p)";
+            case "java.math.BigDecimal" -> "(#p=@java.math.BigDecimal@valueOf(1L),#p)";
+            case "java.net.URL","java.net.URI" -> "(#p=new "+psiType.getCanonicalText()+"(\"https://arthas.aliyun.com\"),#p)";
+            case "java.util.Date" -> "(#p=new java.util.Date(),#p)";
+            case "java.sql.Date" -> "(#p=new java.sql.Date(@java.lang.System@currentTimeMillis()),#p)";
+            case "java.sql.Timestamp" -> "(#p=new java.sql.Timestamp(@java.lang.System@currentTimeMillis()),#p)";
+            case "java.util.concurrent.atomic.AtomicBoolean" -> "(#p=new java.util.concurrent.atomic.AtomicBoolean(true),#p)";
+            case "java.util.concurrent.atomic.AtomicInteger" -> "(#p=new java.util.concurrent.atomic.AtomicInteger(1),#p)";
+            case "java.util.concurrent.atomic.AtomicLong" -> "(#p=new java.util.concurrent.atomic.AtomicLong(1L),#p)";
+            case "java.util.concurrent.atomic.AtomicIntegerArray" -> "(#p=new java.util.concurrent.atomic.AtomicIntegerArray(1),#p.set(0,1),#p)";
+            case "java.util.concurrent.atomic.DoubleAdder" -> "(#p=new java.util.concurrent.atomic.DoubleAdder(),#p.add(1.0d),#p)";
+            case "java.util.concurrent.atomic.LongAdder" -> "(#p=new java.util.concurrent.atomic.LongAdder(),#p.add(1L),#p)";
+            case "java.util.concurrent.atomic.AtomicReference" -> "(#p=null,#p)";
+            case "java.lang.Object","java.lang.Runnable","java.util.concurrent.Callable","java.util.concurrent.Future","java.lang.Thread","java.lang.ThreadGroup","java.util.Optional" -> "(#p=null,#p)";
+            case "java.lang.Enum" -> "(#p=null,#p)";
+            case "java.lang.ref.WeakReference" -> "(#p=null,#p)";
+            case "java.lang.ref.SoftReference","java.sql.Clob" -> "(#p=null,#p)";
+            case "java.util.UUID" -> "(#p=@java.util.UUID@randomUUID(),#p)";
+            case "java.text.SimpleDateFormat" -> "(#p=new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\"),#p)";
+            case "java.text.DateFormat" -> "(#p=new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\"),#p)";
+            case "java.util.Locale" -> "(#p=@java.util.Locale@CHINA,#p)";
+            case "java.util.Currency" -> "(#p=@java.util.Currency@getInstance(@java.util.Locale@CHINA),#p)";
+            case "java.net.InetAddress" -> "(#p=@java.net.InetAddress@getByName(\"127.0.0.1\"),#p)";
+            case "java.net.Inet4Address" -> "(#p=@java.net.InetAddress@getByName(\"127.0.0.1\"),#p)";
+            case "java.net.Inet6Address" -> "(#p=@java.net.Inet6Address@Inet6Address(\"2001:0db8:85a3:0000:0000:8a2e:0370:7334\"),#p)";
+            case "java.util.regex.Pattern" -> "(#p=@java.util.regex.Pattern@compile(\"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$\"),#p)";
+            case "java.lang.Throwable","java.lang.RuntimeException" -> "(#p=new java.lang.RuntimeException(\"message\"),#p)";
+            case "java.nio.charset.Charset" -> "(#p=@java.nio.charset.StandardCharsets@UTF_8,#p)";
+            case "java.util.TimeZone" -> "(#p=@java.util.TimeZone@getDefault().getID(),#p)";
+            case "java.util.Calendar" -> "(#p=java.util.Calendar.getInstance(),#p)";
+            case "java.time.DayOfWeek" -> "(#p=@java.time.LocalDate@now().getDayOfWeek(),#p)";
+            case "java.time.Duration" -> "(#p=@java.time.Duration@ofHours(1L),#p)";
+            case "java.time.Instant" -> "(#p=@java.time.Instant@now(),#p)";
+            case "java.time.LocalDateTime" -> "(#p=@java.time.LocalDateTime@now(),#p)";
+            case "java.time.LocalDate" -> "(#p=@java.time.LocalDate@now(),#p)";
+            case "java.time.MonthDay" -> "(#p=@java.time.MonthDay@now(),#p)";
+            case "java.time.OffsetDateTime" -> "(#p=@java.time.OffsetDateTime@now(),#p)";
+            case "java.time.OffsetTime" -> "(#p=@java.time.OffsetTime@now(),#p)";
+            case "java.time.YearMonth" -> "(#p=@java.time.YearMonth@now(),#p)";
+            case "java.time.Year" -> "(#p=@java.time.Year@now(),#p)";
+            case "java.time.Period" -> "(#p=@java.time.Period@ofDays(1),#p)";
+            case "java.time.ZonedDateTime" -> "(#p=@java.time.ZonedDateTime@now(),#p)";
+            case "java.time.ZoneId" -> "(#p=@java.time.ZoneId@systemDefault(),#p)";
+            case "java.time.ZoneOffset" -> "(#p=@java.time.ZoneOffset@UTC,#p)";
+            default -> null;
+        };
+    }
+
 
     /**
      * 来到这里了，肯定是非泛型的数据 .. 不然无法转换ognl json，ognl 不支持 泛型
@@ -116,6 +173,13 @@ public class OgnlJsonHandlerUtils {
         if (!(currentPsiType instanceof PsiClassType)) {
             return null;
         }
+
+        //如果基本类型可以处理，不需要走json 字符串去处理了
+        String psiClassJDKBaseTypeDefaultOgnl = getPsiClassJDKBaseTypeDefaultOgnl(currentPsiType);
+        if(psiClassJDKBaseTypeDefaultOgnl !=null){
+            return psiClassJDKBaseTypeDefaultOgnl;
+        }
+
         String jsonString = PsiParserToJson.getInstance().toJSONString(currentPsiType, false);
         String escapeJson = StringEscapeUtils.escapeJson(jsonString);
         JsonType jsonType = getJsonType(project);
