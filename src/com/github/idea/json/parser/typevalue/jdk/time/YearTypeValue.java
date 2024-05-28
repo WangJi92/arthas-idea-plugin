@@ -4,7 +4,6 @@ import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 
 import java.time.Year;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -13,7 +12,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class YearTypeValue implements TypeDefaultValue {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
-    private final YearMonth now = YearMonth.now();
+    private final Year now = Year.now();
 
     @Override
     public Object getValue(TypeValueContext context) {
