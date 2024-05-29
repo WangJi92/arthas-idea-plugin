@@ -15,7 +15,7 @@ public class InstantTypeValue implements TypeDefaultValue {
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return now.toString();
+        return now;
     }
 
     @Override

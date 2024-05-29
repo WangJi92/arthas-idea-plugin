@@ -11,12 +11,11 @@ import java.time.format.DateTimeFormatter;
  * @date 2024/5/19 13:56
  */
 public class OffsetTimeTypeValue implements TypeDefaultValue {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss XXX");
     private final OffsetTime now = OffsetTime.now();
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return now.format(formatter);
+        return now;
     }
 
     @Override

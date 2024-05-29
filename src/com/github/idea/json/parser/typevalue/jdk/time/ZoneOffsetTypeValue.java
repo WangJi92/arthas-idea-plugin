@@ -16,7 +16,7 @@ public class ZoneOffsetTypeValue implements TypeDefaultValue {
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return defaultOffset.toString();
+        return defaultOffset;
     }
 
     @Override

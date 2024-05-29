@@ -11,12 +11,11 @@ import java.time.format.DateTimeFormatter;
  * @date 2024/5/19 13:34
  */
 public class LocalDateTypeValue implements TypeDefaultValue {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final LocalDate today = LocalDate.now(); // 获取当前日期
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return today.format(formatter);
+        return today;
     }
 
     @Override
