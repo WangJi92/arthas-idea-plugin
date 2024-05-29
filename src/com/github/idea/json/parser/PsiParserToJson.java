@@ -1,11 +1,11 @@
 package com.github.idea.json.parser;
 
+import com.github.idea.json.parser.toolkit.ParserContext;
 import com.github.idea.json.parser.toolkit.PsiToolkit;
 import com.github.idea.json.parser.toolkit.model.JPsiTypeContext;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueAnalysisFactory;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
-import com.google.gson.GsonBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import org.apache.commons.lang3.StringUtils;
@@ -22,10 +22,6 @@ import java.util.*;
 public class PsiParserToJson {
 
     private static final Logger LOG = Logger.getInstance(PsiParserToJson.class);
-
-    private final GsonBuilder gsonBuilderPretty = new GsonBuilder().setPrettyPrinting();
-
-    private final GsonBuilder gsonBuilder = new GsonBuilder();
 
     private final TypeValueAnalysisFactory typeValueAnalysisFactory = TypeValueAnalysisFactory.getInstance();
 
@@ -46,15 +42,12 @@ public class PsiParserToJson {
      * @param psiType
      * @return
      */
-    public String toJSONString(@NotNull final PsiType psiType,boolean pretty) {
+    public String toJSONString(@NotNull final PsiType psiType, ParserContext context) {
         try {
             JPsiTypeContext JPsiTypeContext = new JPsiTypeContext(psiType, true);
             Object object = parseVariableValue(JPsiTypeContext);
             if (!Objects.equals(TypeDefaultValue.DEFAULT_NULL, object)) {
-                if (pretty) {
-                   return gsonBuilderPretty.create().toJson(object);
-                }
-                return gsonBuilder.create().toJson(object);
+                return context.toJsonString(object);
             }
             return null;
         } catch (Exception e) {
@@ -64,56 +57,56 @@ public class PsiParserToJson {
     }
 
 
-    public String toJSONString(@NotNull final PsiElement psiElement) {
+    public String toJSONString(@NotNull final PsiElement psiElement, ParserContext context) {
         if (psiElement instanceof PsiClass psiClass) {
             PsiType psiType = PsiToolkit.getPsiTypeByPisClazz(psiClass);
-            return toJSONString(psiType,true);
+            return toJSONString(psiType, context);
         } else if (psiElement instanceof PsiField field) {
-            return toJSONString(field.getType(),true);
+            return toJSONString(field.getType(), context);
         } else if (psiElement instanceof PsiMethod psiMethod) {
             // 构造函数特殊处理
             if (psiMethod.isConstructor()) {
                 PsiClass containingClass = psiMethod.getContainingClass();
-                if (containingClass !=null) {
+                if (containingClass != null) {
                     PsiType psiType = PsiToolkit.getPsiTypeByPisClazz(containingClass);
-                    return toJSONString(psiType,true);
+                    return toJSONString(psiType, context);
                 }
             }
             // 如果是方法、获取返回值的JSON 数据结构
             PsiType returnType = psiMethod.getReturnType();
             if (returnType != null) {
-                return toJSONString(returnType,true);
+                return toJSONString(returnType, context);
             }
         } else if (psiElement instanceof PsiParameter psiParameter) {
             PsiType type = psiParameter.getType();
-            return toJSONString(type,true);
+            return toJSONString(type, context);
         } else if (psiElement instanceof PsiJavaFile psiJavaFile) {
             PsiClass[] classes = psiJavaFile.getClasses();
             if (classes.length > 0) {
-                return toJSONString(classes[0]);
+                return toJSONString(classes[0],context);
             }
         } else if (psiElement instanceof PsiLocalVariable psiLocalVariable) {
             PsiType type = psiLocalVariable.getType();
-            return toJSONString(type,true);
+            return toJSONString(type, context);
         } else if (psiElement instanceof PsiNewExpression psiNewExpression) {
             if (psiNewExpression.getReference() != null) {
                 PsiElement resolve = psiNewExpression.getReference().resolve();
                 if (resolve != null) {
-                    return toJSONString(resolve);
+                    return toJSONString(resolve,context);
                 }
             }
         } else if (psiElement instanceof PsiReferenceExpression referenceExpression) {
             if (referenceExpression.getReference() != null) {
                 PsiElement resolve = referenceExpression.getReference().resolve();
                 if (resolve != null) {
-                    return toJSONString(resolve);
+                    return toJSONString(resolve,context);
                 }
             }
         } else if (psiElement instanceof PsiJavaCodeReferenceElement psiJavaCodeReferenceElement) {
             if (psiJavaCodeReferenceElement.getReference() != null) {
                 PsiElement resolve = psiJavaCodeReferenceElement.getReference().resolve();
                 if (resolve != null) {
-                    return toJSONString(resolve);
+                    return toJSONString(resolve,context);
                 }
             }
         }
@@ -145,7 +138,7 @@ public class PsiParserToJson {
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
         // 循环依赖，返回null 空数据~ Gson 解析会异常..
         // https://github.com/WangJi92/arthas-idea-plugin/issues/131
-       context.putCache(context.getOwner(), TypeDefaultValue.DEFAULT_NULL);
+        context.putCache(context.getOwner(), TypeDefaultValue.DEFAULT_NULL);
         for (PsiField field : psiClass.getAllFields()) {
             try {
                 if (checkIgnoreModifierP(field)) {
@@ -332,7 +325,7 @@ public class PsiParserToJson {
                     if (parameters.length == 1) {
                         //List<?> List<? extend XXX>
                         PsiType psiTypeGenericsType = PsiToolkit.getPsiTypeGenericsType(parameters[0]);
-                        if(psiTypeGenericsType !=null){
+                        if (psiTypeGenericsType != null) {
                             Object obj = parseVariableValue(context.copy(psiTypeGenericsType, getPsiClassGenerics(psiTypeGenericsType)));
                             if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
                                 return List.of();
@@ -355,10 +348,10 @@ public class PsiParserToJson {
                         }
                         // https://github.com/WangJi92/arthas-idea-plugin/issues/130
                         // List<?>  Class<? extends LanguageDriver>
-                        if(parameters[0] instanceof PsiClassType psiClassType){
+                        if (parameters[0] instanceof PsiClassType psiClassType) {
                             // clazz 直接返回这个类的字符串
-                            return  PsiToolkit.getPsiTypeQualifiedNameClazzName(psiClassType);
-                        }else if (parameters[0] instanceof PsiWildcardType wildcardType) {
+                            return PsiToolkit.getPsiTypeQualifiedNameClazzName(psiClassType);
+                        } else if (parameters[0] instanceof PsiWildcardType wildcardType) {
                             if (wildcardType.isExtends()) {
                                 // 获取上界限定的类型 上界限定通配符 (? extends T): 指定了类型的上界，表示该类型可以是 T 或 T 的子类。
                                 PsiType extendsBound = wildcardType.getExtendsBound();
@@ -368,7 +361,7 @@ public class PsiParserToJson {
                             } else if (wildcardType.isSuper()) {
                                 // 获取下界限定的类型 下界限定通配符 (? super T): 指定了类型的下界，表示该类型可以是 T 或 T 的超类。
                                 PsiType superBound = wildcardType.getSuperBound();
-                                if (superBound  instanceof PsiClassType superBoundPsiClassType) {
+                                if (superBound instanceof PsiClassType superBoundPsiClassType) {
                                     return PsiToolkit.getPsiTypeQualifiedNameClazzName(superBoundPsiClassType);
                                 }
                             }
@@ -386,7 +379,7 @@ public class PsiParserToJson {
                     if (parameters.length == 2) {
                         //Map<String,<? extends LanguageDriver> ?
                         PsiType psiTypeGenericsType = PsiToolkit.getPsiTypeGenericsType(parameters[1]);
-                        if(psiTypeGenericsType!=null){
+                        if (psiTypeGenericsType != null) {
                             Object obj = parseVariableValue(context.copy(psiTypeGenericsType, getPsiClassGenerics(psiTypeGenericsType)));
                             if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
                                 return new HashMap<>();
