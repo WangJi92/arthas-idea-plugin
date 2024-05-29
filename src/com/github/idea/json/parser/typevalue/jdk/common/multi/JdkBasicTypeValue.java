@@ -10,6 +10,7 @@ import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.math.BigInteger;
 import java.net.*;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -72,9 +73,9 @@ public class JdkBasicTypeValue implements MultiTypeDefaultValue {
             container.put("java.net.URI", uri);
         } catch (Exception e) {
         }
-        container.put(Date.class.getName(), DATE_FORMAT.format(new Date()));
-        container.put(java.sql.Date.class.getName(), DATE_FORMAT.format(new Date()));
-        container.put(java.sql.Timestamp.class.getName(), System.currentTimeMillis());
+        container.put(Date.class.getName(), new Date());
+        container.put(java.sql.Date.class.getName(), new java.sql.Date(System.currentTimeMillis()));
+        container.put(java.sql.Timestamp.class.getName(), new Timestamp(System.currentTimeMillis()));
 
         container.put(AtomicBoolean.class.getName(), new AtomicBoolean(true));
         container.put(AtomicReference.class.getName(), TypeDefaultValue.DEFAULT_NULL);
@@ -100,25 +101,21 @@ public class JdkBasicTypeValue implements MultiTypeDefaultValue {
         container.put(WeakReference.class.getName(), TypeDefaultValue.DEFAULT_NULL);
         container.put(SoftReference.class.getName(), TypeDefaultValue.DEFAULT_NULL);
 
-        container.put(UUID.class.getName(), UUID.randomUUID().toString());
+        container.put(UUID.class.getName(), UUID.randomUUID());
 
-        // com.alibaba.fastjson.serializer.SerializeConfig#SerializeConfig(int)
-        container.put(SimpleDateFormat.class.getName(), DATE_FORMAT.toPattern());
+        container.put(SimpleDateFormat.class.getName(), DATE_FORMAT);
         Locale locale = Locale.CHINA;
-        container.put(Locale.class.getName(), locale.toString());
+        container.put(Locale.class.getName(), locale);
 
         Currency currency = Currency.getInstance(locale);
-        container.put(Currency.class.getName(), currency.getCurrencyCode());
-        container.put(InetAddress.class.getName(), "127.0.0.1");
-        container.put(Inet4Address.class.getName(), "127.0.0.1");
-        container.put(Inet6Address.class.getName(), "2001:0db8:85a3:0000:0000:8a2e:0370:7334");
-        Map<String, String> inetSocketAddress = new HashMap<>();
+        container.put(Currency.class.getName(), currency);
+        container.put(InetAddress.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        container.put(Inet4Address.class.getName(), TypeDefaultValue.DEFAULT_NULL);
+        container.put(Inet6Address.class.getName(), TypeDefaultValue.DEFAULT_NULL);
 
-        inetSocketAddress.put("address", (String) container.get(InetAddress.class.getName()));
-        inetSocketAddress.put("port", "8081");
-        container.put(InetSocketAddress.class.getName(), inetSocketAddress);
+        container.put(InetSocketAddress.class.getName(), TypeDefaultValue.DEFAULT_NULL);
 
-        container.put(Pattern.class.getName(), "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$");
+        container.put(Pattern.class.getName(),Pattern.compile( "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$"));
 
 
     }
