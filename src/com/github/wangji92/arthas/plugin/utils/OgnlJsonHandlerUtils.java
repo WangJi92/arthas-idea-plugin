@@ -125,8 +125,8 @@ public class OgnlJsonHandlerUtils {
             case "java.util.regex.Pattern" -> "(#p=@java.util.regex.Pattern@compile(\"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$\"),#p)";
             case "java.lang.Throwable","java.lang.RuntimeException" -> "(#p=new java.lang.RuntimeException(\"message\"),#p)";
             case "java.nio.charset.Charset" -> "(#p=@java.nio.charset.StandardCharsets@UTF_8,#p)";
-            case "java.util.TimeZone" -> "(#p=@java.util.TimeZone@getDefault().getID(),#p)";
-            case "java.util.Calendar" -> "(#p=java.util.Calendar.getInstance(),#p)";
+            case "java.util.TimeZone" -> "(#p=@java.util.TimeZone@getDefault(),#p)";
+            case "java.util.Calendar" -> "(#p=@java.util.Calendar@getInstance(),#p)";
             case "java.time.DayOfWeek" -> "(#p=@java.time.LocalDate@now().getDayOfWeek(),#p)";
             case "java.time.Duration" -> "(#p=@java.time.Duration@ofHours(1L),#p)";
             case "java.time.Instant" -> "(#p=@java.time.Instant@now(),#p)";
