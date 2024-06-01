@@ -2,10 +2,7 @@ package com.github.idea.json.parser.action;
 
 import com.github.idea.json.parser.PsiParserToJson;
 import com.github.idea.json.parser.toolkit.ParserContext;
-import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.psi.*;
@@ -76,7 +73,8 @@ public class CopyJsonAction extends AnAction {
         DataContext dataContext = e.getDataContext();
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         assert psiElement != null;
-
+        OgnlJsonHandlerUtils.JsonType jsonType = OgnlJsonHandlerUtils.getJsonType(e.getProject());
+        parserContext.setJsonType(jsonType.getType());
         String jsonString = PsiParserToJson.getInstance().toJSONString(psiElement,parserContext);
         if (StringUtils.isBlank(jsonString)) {
             String emptyData = "JSON data empty";
