@@ -1,9 +1,12 @@
 package com.github.idea.json.parser.typevalue.thirdlib.jackson;
 
+import com.fasterxml.jackson.databind.node.*;
 import com.github.idea.json.parser.typevalue.MultiTypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 import com.intellij.psi.PsiType;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,19 +28,19 @@ public class JacksonAllPackageTypeValue implements MultiTypeDefaultValue {
 
     public void init() {
         Map<String, Object> container = this.getContainer();
-        container.put("com.fasterxml.jackson.databind.node.BooleanNode", true);
+        container.put("com.fasterxml.jackson.databind.node.BooleanNode", BooleanNode.valueOf(true));
         container.put("com.fasterxml.jackson.databind.node.ArrayNode", List.of());
-        container.put("com.fasterxml.jackson.databind.node.BigIntegerNode", "0");
-        container.put("com.fasterxml.jackson.databind.node.DecimalNode", 0.0);
-        container.put("com.fasterxml.jackson.databind.node.DoubleNode", 0.0D);
-        container.put("com.fasterxml.jackson.databind.node.FloatNode", 0.0F);
-        container.put("com.fasterxml.jackson.databind.node.IntNode", 0);
-        container.put("com.fasterxml.jackson.databind.node.LongNode", 0L);
-        container.put("com.fasterxml.jackson.databind.node.NullNode", null);
-        container.put("com.fasterxml.jackson.databind.node.NumericNode", 0);
+        container.put("com.fasterxml.jackson.databind.node.BigIntegerNode", BigIntegerNode.valueOf(BigInteger.ONE));
+        container.put("com.fasterxml.jackson.databind.node.DecimalNode", DecimalNode.valueOf(BigDecimal.ONE));
+        container.put("com.fasterxml.jackson.databind.node.DoubleNode", DoubleNode.valueOf(1d));
+        container.put("com.fasterxml.jackson.databind.node.FloatNode", FloatNode.valueOf(1f));
+        container.put("com.fasterxml.jackson.databind.node.IntNode", IntNode.valueOf(1));
+        container.put("com.fasterxml.jackson.databind.node.LongNode", LongNode.valueOf(1L));
+        container.put("com.fasterxml.jackson.databind.node.NullNode", NullNode.getInstance());
+        container.put("com.fasterxml.jackson.databind.node.NumericNode", IntNode.valueOf(1));
         container.put("com.fasterxml.jackson.databind.node.POJONode", Map.of());
-        container.put("com.fasterxml.jackson.databind.node.ShortNode", 0);
-        container.put("com.fasterxml.jackson.databind.node.TextNode", " ");
+        container.put("com.fasterxml.jackson.databind.node.ShortNode", ShortNode.valueOf((short) 1));
+        container.put("com.fasterxml.jackson.databind.node.TextNode", TextNode.valueOf(" "));
     }
 
     @Override

@@ -11,12 +11,11 @@ import java.time.format.DateTimeFormatter;
  * @date 2024/5/19 13:59
  */
 public class YearTypeValue implements TypeDefaultValue {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
     private final Year now = Year.now();
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return now.format(formatter);
+        return now;
     }
 
     @Override

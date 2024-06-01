@@ -13,13 +13,12 @@ import java.time.format.DateTimeFormatter;
  */
 public class ZonedDateTimeTypeValue implements TypeDefaultValue {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
     private final ZonedDateTime now = ZonedDateTime.now();
 
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return now.format(formatter);
+        return now;
     }
 
     @Override
