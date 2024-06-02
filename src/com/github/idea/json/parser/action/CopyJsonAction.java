@@ -1,10 +1,8 @@
 package com.github.idea.json.parser.action;
 
 import com.github.idea.json.parser.PsiParserToJson;
-import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
-import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
-import com.github.wangji92.arthas.plugin.utils.StringUtils;
+import com.github.idea.json.parser.toolkit.ParserContext;
+import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.psi.*;
@@ -59,12 +57,25 @@ public class CopyJsonAction extends AnAction {
         e.getPresentation().setEnabled(false);
     }
 
+    /**
+     * 解析上下文
+     */
+    private static ParserContext parserContext;
+
+    static {
+        parserContext = new ParserContext();
+        parserContext.setPretty(true);
+        parserContext.setJsonType(ParserContext.ParserJsonType.FASTJSON);
+    }
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         assert psiElement != null;
-        String jsonString = PsiParserToJson.getInstance().toJSONString(psiElement);
+        OgnlJsonHandlerUtils.JsonType jsonType = OgnlJsonHandlerUtils.getJsonType(e.getProject());
+        parserContext.setJsonType(jsonType.getType());
+        String jsonString = PsiParserToJson.getInstance().toJSONString(psiElement,parserContext);
         if (StringUtils.isBlank(jsonString)) {
             String emptyData = "JSON data empty";
             ClipboardUtils.setClipboardString("{}");

@@ -11,12 +11,11 @@ import java.time.format.DateTimeFormatter;
  * @date 2024/5/19 13:53
  */
 public class MonthDayTypeValue implements TypeDefaultValue {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
     private final MonthDay now = MonthDay.now();
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return now.format(formatter);
+        return now;
     }
 
     @Override

@@ -15,7 +15,7 @@ public class PeriodTypeValue implements TypeDefaultValue {
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return period.toString();
+        return period;
     }
 
     @Override

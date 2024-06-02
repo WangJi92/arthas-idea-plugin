@@ -12,13 +12,12 @@ import java.time.format.DateTimeFormatter;
  */
 public class YearMonthTypeValue implements TypeDefaultValue {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
     private final YearMonth now = YearMonth.now();
 
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return now.format(formatter);
+        return now;
     }
 
     @Override

@@ -12,12 +12,11 @@ import java.time.format.DateTimeFormatter;
  */
 public class LocalTimeTypeValue implements TypeDefaultValue {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private final LocalTime now = LocalTime.now();
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return now.format(formatter);
+        return now;
     }
 
     @Override

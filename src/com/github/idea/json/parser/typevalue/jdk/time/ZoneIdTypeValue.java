@@ -16,7 +16,7 @@ public class ZoneIdTypeValue implements TypeDefaultValue {
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return systemZone.toString();
+        return systemZone;
     }
 
     @Override

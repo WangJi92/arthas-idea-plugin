@@ -15,7 +15,7 @@ public class DayOfWeekTypeValue implements TypeDefaultValue {
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return todayDayOfWeek.toString();
+        return todayDayOfWeek;
     }
 
     @Override

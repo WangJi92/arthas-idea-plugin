@@ -14,7 +14,7 @@ public class DurationTypeValue implements TypeDefaultValue {
 
     @Override
     public Object getValue(TypeValueContext context) {
-        return "1s";
+        return Duration.ofMinutes(1);
     }
 
     @Override
