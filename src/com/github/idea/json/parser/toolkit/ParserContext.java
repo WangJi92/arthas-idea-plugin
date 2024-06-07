@@ -31,10 +31,13 @@ public class ParserContext {
         FASTJSON {
             @Override
             public String toJsonString(Object object, ParserContext parserContext) {
+                //在fastjson2中，代替的是JSONWriter.Feature.ReferenceDetection，但语义相反，缺省不一样。
+                //fastjson2中的JSONWriter.Feature.ReferenceDetection缺省是关闭的，而fastjson1默认打开的。
+                //$ref  https://blog.csdn.net/HumorChen99/article/details/135696590
                 if (Boolean.TRUE.equals(parserContext.getPretty())) {
-                    return com.alibaba.fastjson.JSON.toJSONString(object, SerializerFeature.PrettyFormat);
+                    return com.alibaba.fastjson.JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.DisableCircularReferenceDetect);
                 }
-                return com.alibaba.fastjson.JSON.toJSONString(object);
+                return com.alibaba.fastjson.JSON.toJSONString(object, SerializerFeature.DisableCircularReferenceDetect);
             }
         },
         FASTJSON_2 {
