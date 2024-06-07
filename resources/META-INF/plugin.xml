@@ -1,7 +1,7 @@
 <idea-plugin require-restart="true">
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.46</version>
+    <version>2.47</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+     <p>2.47-RELEASE</p>
+      <ul>
+        <li>Fix compatibility issues with different JSON tools for generating strings in OGNL JSON</li>
+        <li>Directly Constructing OGNL Expressions with JDK Basic Data Structures，eg AtomicBoolean (#p=new java.util.concurrent.atomic.AtomicBoolean(true),#p)</li>
+        <li>I hope you can use it very well and contact me promptly if you have any questions</li>
+      </ul>
      <p>2.46-RELEASE</p>
       <ul>
         <li>add a command Arthas Copy JSON</li>
