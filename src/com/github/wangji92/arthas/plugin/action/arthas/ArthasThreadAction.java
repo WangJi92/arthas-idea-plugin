@@ -3,8 +3,12 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.wangji92.arthas.plugin.utils.NotifyUtils.COMMAND_COPIED;
 
 /**
  * thread -i 3000 -n 5
@@ -13,16 +17,15 @@ import org.jetbrains.annotations.NotNull;
  * @author 汪小哥
  * @date 21-03-2020
  */
-public class ArthasThreadAction extends AnAction {
+public class ArthasThreadAction extends BaseArthasPluginAction {
+
+    private static final String MESSAGE = "-n 5打印cpu占比最高的堆栈,-b 某个线程拿住了某个锁,只支持持找出synchronized关键字锁住的";
+
     @Override
-    public void actionPerformed(@NotNull AnActionEvent event) {
-        DataContext dataContext = event.getDataContext();
-        Project project = CommonDataKeys.PROJECT.getData(dataContext);
-        if (project == null) {
-            return;
-        }
-        ClipboardUtils.setClipboardString("thread -i 3000 -n 5");
-        NotifyUtils.notifyMessage(project, "-n 5打印cpu占比最高的堆栈,-b 某个线程拿住了某个锁,只支持持找出synchronized关键字锁住的");
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
+        String command = "thread -i 3000 -n 5";
+        ClipboardUtils.setClipboardString(command);
+        NotifyUtils.notifyMessageOpenTerminal(project, COMMAND_COPIED, command, editor);
     }
 
     @Override

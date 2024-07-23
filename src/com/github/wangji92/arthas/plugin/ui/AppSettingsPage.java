@@ -1,22 +1,38 @@
 package com.github.wangji92.arthas.plugin.ui;
 
+import com.alibaba.fastjson.JSON;
 import com.aliyun.oss.OSS;
 import com.amazonaws.services.s3.AmazonS3;
+import com.github.wangji92.arthas.plugin.common.pojo.TunnelServerInfo;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
-import com.github.wangji92.arthas.plugin.utils.*;
+import com.github.wangji92.arthas.plugin.utils.ActionLinkUtils;
+import com.github.wangji92.arthas.plugin.utils.AliyunOssUtils;
+import com.github.wangji92.arthas.plugin.utils.JedisUtils;
+import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.github.wangji92.arthas.plugin.utils.OsS3Utils;
+import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
+import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.ActionLink;
+import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.table.JBTable;
 import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Jedis;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
+import java.util.Vector;
 
 import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.AT;
 
@@ -245,6 +261,17 @@ public class AppSettingsPage implements Configurable {
 
     private JLabel s3CheckMessageLabel;
     private JButton s3CheckButton;
+    private JPanel tunnelServerSettingPanel;
+    private JButton addButton;
+    private JButton deleteButton;
+    private JTable tunnelTable;
+    private JPanel tablePanel;
+    public static DefaultTableModel tableModel;
+    private boolean tableModify = false;
+    /**
+     * 自动打开Arthas终端
+     */
+    private JRadioButton autoOpenArthasTerminalRadioButton;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -273,6 +300,7 @@ public class AppSettingsPage implements Configurable {
     public AppSettingsPage(Project project) {
         this.project = project;
         settings = AppSettingsState.getInstance(this.project);
+        tableModel = new DefaultTableModel(new String[]{"Name", "Address"}, 0);
     }
 
     private void createUIComponents() {
@@ -320,7 +348,10 @@ public class AppSettingsPage implements Configurable {
                 || !arthasPackageZipDownloadUrlTextField.getText().equalsIgnoreCase(settings.arthasPackageZipDownloadUrl)
                 || !mybatisMapperReloadMethodNameTextField.getText().equalsIgnoreCase(settings.mybatisMapperReloadMethodName)
                 || !mybatisMapperReloadServiceBeanNameTextField.getText().equalsIgnoreCase(settings.mybatisMapperReloadServiceBeanName)
-                || autoToUnicodeRadioButton.isSelected() != settings.autoToUnicode;
+                || autoToUnicodeRadioButton.isSelected() != settings.autoToUnicode
+                || autoOpenArthasTerminalRadioButton.isSelected() != settings.autoOpenArthasTerminal
+                || tableModify
+                || tunnelTable.getRowCount() != (settings.tunnelServerList == null ? 0 : settings.tunnelServerList.size());
 
         if (modify) {
             return modify;
@@ -398,9 +429,15 @@ public class AppSettingsPage implements Configurable {
         settings.printConditionExpress = printConditionExpressRadioButton.isSelected();
         settings.arthasPackageZipDownloadUrl = arthasPackageZipDownloadUrlTextField.getText();
         settings.autoToUnicode = autoToUnicodeRadioButton.isSelected();
+        settings.autoOpenArthasTerminal = autoOpenArthasTerminalRadioButton.isSelected();
         PropertiesComponentUtils.setValue("autoToUnicode", autoToUnicodeRadioButton.isSelected() ? "y" : "n");
+        PropertiesComponentUtils.setValue("autoOpenArthasTerminal", autoOpenArthasTerminalRadioButton.isSelected() ? "y" : "n");
         // 设置到全局
         PropertiesComponentUtils.setValue("arthasPackageZipDownloadUrl", arthasPackageZipDownloadUrlTextField.getText());
+        List<TunnelServerInfo> tunnelServerList = this.getTunnelServerInfoList();
+        settings.tunnelServerList = tunnelServerList;
+        PropertiesComponentUtils.setValue("ArthasTunnelServerList", JSON.toJSONString(tunnelServerList));
+
         if (clipboardRadioButton.isSelected()) {
             settings.hotRedefineClipboard = true;
             settings.aliYunOss = false;
@@ -419,6 +456,14 @@ public class AppSettingsPage implements Configurable {
             NotifyUtils.notifyMessage(project, error.toString(), NotificationType.ERROR);
         }
 
+    }
+
+    @NotNull
+    private List<TunnelServerInfo> getTunnelServerInfoList() {
+        Vector<Vector> dataVector = ((DefaultTableModel) tunnelTable.getModel()).getDataVector();
+        return dataVector.stream()
+                .map(vector -> new TunnelServerInfo(vector.get(0).toString(), vector.get(1).toString()))
+                .toList();
     }
 
     /**
@@ -595,6 +640,7 @@ public class AppSettingsPage implements Configurable {
         redefineBeforeCompileRadioButton.setSelected(settings.redefineBeforeCompile);
         printConditionExpressRadioButton.setSelected(settings.printConditionExpress);
         autoToUnicodeRadioButton.setSelected(settings.autoToUnicode);
+        autoOpenArthasTerminalRadioButton.setSelected(settings.autoOpenArthasTerminal);
         selectProjectNameTextField.setText(settings.selectProjectName);
 
         ossEndpointTextField.setText(settings.endpoint);
@@ -760,6 +806,25 @@ public class AppSettingsPage implements Configurable {
         };
         manualSelectPidRadioButton.addItemListener(itemListenerSelectPid);
         preConfigurationSelectPidRadioButton.addItemListener(itemListenerSelectPid);
+
+        addButton.addActionListener(e -> new AddTunnelServer(project).open());
+        deleteButton.addActionListener(e -> {
+            int selectedRow = tunnelTable.getSelectedRow();
+            if (selectedRow != -1) {
+                tableModel.removeRow(selectedRow);
+            }
+        });
+        tunnelTable = new JBTable(tableModel);
+        addTableModelListener(tableModel);
+        tunnelTable.setRowHeight(30);
+        tunnelTable.getColumnModel().getColumn(0).setMaxWidth(200);
+        tunnelTable.getColumnModel().getColumn(1).setMaxWidth(500);
+        settings.tunnelServerList.forEach(tunnelServerInfo -> tableModel.addRow(new Object[]{tunnelServerInfo.getName(), tunnelServerInfo.getAddress()}));
+        JScrollPane scrollPane = new JBScrollPane(tunnelTable);
+        BorderLayout borderLayout = new BorderLayout();
+        tablePanel.setLayout(borderLayout);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+
     }
 
     @Override
@@ -767,5 +832,14 @@ public class AppSettingsPage implements Configurable {
         contentPane = null;
     }
 
-
+    private void addTableModelListener(DefaultTableModel model) {
+        model.addTableModelListener(e -> {
+            int type = e.getType();
+            if (type == TableModelEvent.UPDATE) {
+                if (e.getColumn() != TableModelEvent.ALL_COLUMNS) {
+                    tableModify = true;
+                }
+            }
+        });
+    }
 }
