@@ -300,7 +300,7 @@ public class AppSettingsPage implements Configurable {
     public AppSettingsPage(Project project) {
         this.project = project;
         settings = AppSettingsState.getInstance(this.project);
-        tableModel = new DefaultTableModel(new String[]{"Name", "Address"}, 0);
+        tableModel = new DefaultTableModel(new String[]{"Name", "TunnelAddress", "WsAddress"}, 0);
     }
 
     private void createUIComponents() {
@@ -462,7 +462,7 @@ public class AppSettingsPage implements Configurable {
     private List<TunnelServerInfo> getTunnelServerInfoList() {
         Vector<Vector> dataVector = ((DefaultTableModel) tunnelTable.getModel()).getDataVector();
         return dataVector.stream()
-                .map(vector -> new TunnelServerInfo(vector.get(0).toString(), vector.get(1).toString()))
+                .map(vector -> new TunnelServerInfo(vector.get(0).toString(), vector.get(1).toString(), StringUtils.toString(vector.get(2))))
                 .toList();
     }
 
@@ -818,8 +818,9 @@ public class AppSettingsPage implements Configurable {
         addTableModelListener(tableModel);
         tunnelTable.setRowHeight(30);
         tunnelTable.getColumnModel().getColumn(0).setMaxWidth(200);
-        tunnelTable.getColumnModel().getColumn(1).setMaxWidth(500);
-        settings.tunnelServerList.forEach(tunnelServerInfo -> tableModel.addRow(new Object[]{tunnelServerInfo.getName(), tunnelServerInfo.getAddress()}));
+        tunnelTable.getColumnModel().getColumn(1).setMaxWidth(400);
+        tunnelTable.getColumnModel().getColumn(2).setMaxWidth(400);
+        settings.tunnelServerList.forEach(tunnelServerInfo -> tableModel.addRow(tunnelServerInfo.toObjArr()));
         JScrollPane scrollPane = new JBScrollPane(tunnelTable);
         BorderLayout borderLayout = new BorderLayout();
         tablePanel.setLayout(borderLayout);

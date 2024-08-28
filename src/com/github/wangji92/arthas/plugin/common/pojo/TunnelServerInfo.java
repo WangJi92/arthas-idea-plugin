@@ -21,7 +21,16 @@ public class TunnelServerInfo {
     private String name;
 
     /**
-     * Agent Server 地址
+     * Tunnel Server 地址
      */
-    private String address;
+    private String tunnelAddress;
+
+    /**
+     * Tunnel Server Agent 地址
+     */
+    private String wsAddress;
+
+    public Object[] toObjArr() {
+        return new Object[]{this.name, this.tunnelAddress, this.wsAddress};
+    }
 }

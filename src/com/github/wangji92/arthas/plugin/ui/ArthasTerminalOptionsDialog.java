@@ -1,15 +1,12 @@
 package com.github.wangji92.arthas.plugin.ui;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.github.wangji92.arthas.plugin.common.pojo.AgentInfo;
 import com.github.wangji92.arthas.plugin.common.pojo.TunnelServerInfo;
 import com.github.wangji92.arthas.plugin.common.swing.PlaceholderTextSearchField;
+import com.github.wangji92.arthas.plugin.component.ArthasTunnelServerService;
 import com.github.wangji92.arthas.plugin.setting.AppSettingsState;
 import com.github.wangji92.arthas.plugin.utils.ArthasTerminalManager;
-import com.github.wangji92.arthas.plugin.utils.HttpUtil;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
-import com.github.wangji92.arthas.plugin.utils.TunnelServerPath;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
@@ -23,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * OptionsDialog
@@ -47,6 +42,8 @@ public class ArthasTerminalOptionsDialog extends JDialog {
      * 设置信息
      */
     private AppSettingsState setting;
+
+    private final ArthasTunnelServerService arthasTunnelServerService = new ArthasTunnelServerService();
 
     private Map<String, AgentInfo> agentInfoMap;
     private List<String> appIdList;
@@ -148,10 +145,7 @@ public class ArthasTerminalOptionsDialog extends JDialog {
         List<String> appIds = this.appIdList;
         if (refresh) {
             TunnelServerInfo nameServerSelectIdx = setting.tunnelServerList.get(nameServerSelector.getSelectedIndex());
-            String appsUrl = TunnelServerPath.getAppsPath(nameServerSelectIdx.getAddress());
-            String resp = HttpUtil.get(appsUrl);
-            appIds = JSON.parseArray(resp).toJavaList(String.class).stream().sorted().collect(Collectors.toList());
-            appIdList = appIds;
+            appIdList = appIds = arthasTunnelServerService.getAppIdList(nameServerSelectIdx.getTunnelAddress());
         }
         appSelector.removeAllItems();
         String lastSelectAgent = setting.lastSelectApp.get(nameServerSelector.getSelectedItem().toString());
@@ -169,27 +163,12 @@ public class ArthasTerminalOptionsDialog extends JDialog {
 
     }
 
-    /**
-     * 把agentId填充到AgentInfo中，方便后续处理
-     *
-     * @param res 返回
-     * @return AgentInfoMap
-     */
-    private static Map<String, AgentInfo> getAgentInfoMap(String res) {
-        return Optional.ofNullable(res).map(str -> JSON.parseObject(str, new TypeReference<Map<String, AgentInfo>>() {
-        })).map(infoMap -> {
-            infoMap.keySet().forEach(id -> infoMap.get(id).setAgentId(id));
-            return infoMap;
-        }).orElse(null);
-    }
-
     private void loadAgentInfo() {
         if (appSelector.getSelectedItem() == null) {
             return;
         }
+        String tunnelAddress = setting.tunnelServerList.get(nameServerSelector.getSelectedIndex()).getTunnelAddress();
         String appId = appSelector.getSelectedItem().toString();
-        String agentsUrl = TunnelServerPath.getAgentInfoPath(setting.tunnelServerList.get(nameServerSelector.getSelectedIndex()).getAddress(), appId);
-        String resp = HttpUtil.get(agentsUrl);
-        this.agentInfoMap = getAgentInfoMap(resp);
+        this.agentInfoMap = arthasTunnelServerService.getAgentInfoMap(tunnelAddress, appId);
     }
 }

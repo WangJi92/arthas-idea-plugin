@@ -17,6 +17,9 @@ import java.util.function.Consumer;
 public class PlaceholderTextSearchField extends JTextField {
     private final String placeholder;
 
+    public PlaceholderTextSearchField(String placeholder) {
+        this(placeholder, null);
+    }
     public PlaceholderTextSearchField(String placeholder, Consumer<String> search) {
         this.placeholder = placeholder;
         Color originForeground = getForeground();
@@ -40,22 +43,24 @@ public class PlaceholderTextSearchField extends JTextField {
         this.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                search.accept(getText());
+                search();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                search.accept(getText());
+                search();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                search.accept(getText());
+                search();
             }
-        });
 
-        addCaretListener(e -> {
-            System.out.println(e.getDot());
+            private void search() {
+                if (search != null) {
+                    search.accept(getText());
+                }
+            }
         });
     }
 
