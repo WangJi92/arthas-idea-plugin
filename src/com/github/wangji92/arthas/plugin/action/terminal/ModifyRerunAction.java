@@ -1,8 +1,8 @@
 package com.github.wangji92.arthas.plugin.action.terminal;
 
 import com.github.wangji92.arthas.plugin.ui.ArthasTerminalOptionsDialog;
-import com.github.wangji92.arthas.plugin.utils.ArthasTerminalManager;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Editor;
@@ -31,4 +31,8 @@ public class ModifyRerunAction extends AnAction {
         new ArthasTerminalOptionsDialog(project, this.cmd, this.editor).open();
     }
 
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
 }

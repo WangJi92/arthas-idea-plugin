@@ -2,6 +2,7 @@ package com.github.wangji92.arthas.plugin.action.terminal;
 
 import com.github.wangji92.arthas.plugin.utils.ArthasTerminalManager;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jetbrains.annotations.NotNull;
@@ -29,4 +30,8 @@ public class StopAction extends AnAction {
         e.getPresentation().setEnabled(manager.isRunning());
     }
 
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
 }

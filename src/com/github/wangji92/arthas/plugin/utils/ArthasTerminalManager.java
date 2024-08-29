@@ -39,7 +39,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * ArthasTerminalManager
@@ -50,7 +49,7 @@ public class ArthasTerminalManager implements Disposable {
 
     private static final Key<ArthasTerminalManager> KEY = Key.create(ArthasTerminalManager.class.getName());
 
-    private final ConsoleViewImpl consoleView;
+    private final ConsoleView consoleView;
     private final Project project;
     private final RunContentDescriptor descriptor;
 
@@ -125,11 +124,8 @@ public class ArthasTerminalManager implements Disposable {
         return agentInfos.stream().map(agentInfo ->
                         createSocketConnection(cmd, agentInfo.getAgentId(), agentInfo.getClientConnectHost(), tunnelServerInfo, editor))
                 .filter(Objects::nonNull)
-                .peek(client -> {
-                    client.setConsoleView(consoleView);
-                    Disposer.register(this, client);
-                })
-                .collect(Collectors.toList());
+                .peek(client -> Disposer.register(this, client))
+                .toList();
     }
 
     public static void run(Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
@@ -157,7 +153,7 @@ public class ArthasTerminalManager implements Disposable {
         return client;
     }
 
-    private ConsoleViewImpl createConsoleView() {
+    private ConsoleView createConsoleView() {
         TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(project);
         final ConsoleViewImpl console = (ConsoleViewImpl) consoleBuilder.getConsole();
         // init editor

@@ -9,6 +9,7 @@ import com.github.wangji92.arthas.plugin.utils.ArthasTerminalManager;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.WindowManager;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -16,6 +17,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +73,7 @@ public class ArthasTerminalOptionsDialog extends JDialog {
     private void init(Project project, String command, Editor editor) {
 
         commendEdit.setText(command);
+        execBtn.setEnabled(false);
 
         // 设置环境和模块选择器
         setting = AppSettingsState.getInstance(project);
@@ -94,6 +97,11 @@ public class ArthasTerminalOptionsDialog extends JDialog {
 
             String newCommend = commendEdit.getText();
             TunnelServerInfo tunnelServerInfo = setting.tunnelServerList.get(nameServerSelector.getSelectedIndex());
+            if (Objects.isNull(agentInfoMap) || agentInfoMap.isEmpty()) {
+                String msg = new String("Agent Not Found".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+                Messages.showErrorDialog(msg, "Tips");
+                return;
+            }
             List<AgentInfo> agentInfos = agentInfoMap.values().stream().toList();
             // open terminal
             ArthasTerminalManager.run(project, agentInfos, newCommend, tunnelServerInfo, editor);
@@ -115,7 +123,7 @@ public class ArthasTerminalOptionsDialog extends JDialog {
      * 打开窗口
      */
     public void open() {
-        setTitle("arthas options use");
+        setTitle("Arthas Tunnel");
         pack();
         //两个屏幕处理出现问题，跳到主屏幕去了 https://blog.csdn.net/weixin_33919941/article/details/88129513
         setLocationRelativeTo(WindowManager.getInstance().getFrame(this.project));
@@ -165,10 +173,16 @@ public class ArthasTerminalOptionsDialog extends JDialog {
 
     private void loadAgentInfo() {
         if (appSelector.getSelectedItem() == null) {
+            execBtn.setEnabled(false);
             return;
         }
         String tunnelAddress = setting.tunnelServerList.get(nameServerSelector.getSelectedIndex()).getTunnelAddress();
         String appId = appSelector.getSelectedItem().toString();
         this.agentInfoMap = arthasTunnelServerService.getAgentInfoMap(tunnelAddress, appId);
+        if (this.agentInfoMap != null && !this.agentInfoMap.isEmpty()) {
+            execBtn.setEnabled(true);
+        } else {
+            execBtn.setEnabled(false);
+        }
     }
 }

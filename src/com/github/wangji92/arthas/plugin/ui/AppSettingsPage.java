@@ -31,7 +31,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Vector;
 
 import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.AT;
@@ -820,7 +822,8 @@ public class AppSettingsPage implements Configurable {
         tunnelTable.getColumnModel().getColumn(0).setMaxWidth(200);
         tunnelTable.getColumnModel().getColumn(1).setMaxWidth(400);
         tunnelTable.getColumnModel().getColumn(2).setMaxWidth(400);
-        settings.tunnelServerList.forEach(tunnelServerInfo -> tableModel.addRow(tunnelServerInfo.toObjArr()));
+        Optional.ofNullable(settings.tunnelServerList).stream()
+                .flatMap(Collection::stream).map(TunnelServerInfo::toObjArr).forEach(tableModel::addRow);
         JScrollPane scrollPane = new JBScrollPane(tunnelTable);
         BorderLayout borderLayout = new BorderLayout();
         tablePanel.setLayout(borderLayout);

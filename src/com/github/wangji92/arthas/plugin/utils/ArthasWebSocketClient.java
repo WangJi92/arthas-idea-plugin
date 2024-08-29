@@ -2,7 +2,6 @@ package com.github.wangji92.arthas.plugin.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.github.wangji92.arthas.plugin.common.pojo.WsArthasRequest;
-import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.Disposable;
@@ -34,10 +33,6 @@ public class ArthasWebSocketClient extends WebSocketClient implements Disposable
     public static final String ENTER = "\n";
     private ConsoleView consoleView;
 
-    public void setConsoleView(ConsoleView consoleView) {
-        this.consoleView = consoleView;
-    }
-
     private final String agentId;
 
     private boolean isStartPrint;
@@ -47,7 +42,7 @@ public class ArthasWebSocketClient extends WebSocketClient implements Disposable
     private List<RangeHighlighter> highlighters;
 
 
-    public ArthasWebSocketClient(URI serverUri, String agentId, Editor editor, ConsoleViewImpl consoleView) {
+    public ArthasWebSocketClient(URI serverUri, String agentId, Editor editor, ConsoleView consoleView) {
         super(serverUri);
         this.agentId = agentId;
         this.isStartPrint = false;

@@ -1,8 +1,9 @@
 package com.github.wangji92.arthas.plugin.action.terminal;
 
 import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.ui.ConsoleView;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -15,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
  * @author https://github.com/shuxiongwuziqi
  */
 public class ClearAllAction extends DumbAwareAction {
-    private final ConsoleViewImpl consoleView;
+    private final ConsoleView consoleView;
 
-    public ClearAllAction(ConsoleViewImpl consoleView) {
+    public ClearAllAction(ConsoleView consoleView) {
         super(ExecutionBundle.message("clear.all.from.console.action.name"), "Clear All", AllIcons.Actions.GC);
         this.consoleView = consoleView;
     }
@@ -40,5 +41,10 @@ public class ClearAllAction extends DumbAwareAction {
         if (consoleView != null) {
             consoleView.clear();
         }
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 }

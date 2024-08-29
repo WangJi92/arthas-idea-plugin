@@ -1,6 +1,5 @@
 package com.github.wangji92.arthas.plugin.ui;
 
-import com.github.wangji92.arthas.plugin.common.swing.PlaceholderTextSearchField;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 
@@ -23,9 +22,6 @@ public class AddTunnelServer extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField name;
-    private JPanel wsAddressPanel;
-    private JPanel tunnelAddressPanel;
-    private JPanel namePanel;
     private JTextField tunnelAddress;
     private JTextField wsAddress;
 
@@ -35,13 +31,6 @@ public class AddTunnelServer extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-
-        tunnelAddress = new PlaceholderTextSearchField("[http/https]://127.0.0.1:8080");
-        tunnelAddressPanel.add(tunnelAddress);
-        wsAddress = new PlaceholderTextSearchField("[ws/wss]://127.0.0.1:7777");
-        wsAddressPanel.add(wsAddress);
-        name = new PlaceholderTextSearchField("example");
-        namePanel.add(name);
 
         buttonOK.addActionListener(e -> onOK());
 
