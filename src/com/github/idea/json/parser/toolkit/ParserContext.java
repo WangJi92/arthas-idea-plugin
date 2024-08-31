@@ -50,7 +50,7 @@ public class ParserContext {
             }
         },
         JACKSON {
-            private final static ObjectMapper OBJECTMAPPER = new ObjectMapper()
+            private final ObjectMapper OBJECTMAPPER = new ObjectMapper()
                     .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
@@ -69,9 +69,9 @@ public class ParserContext {
             }
         },
         GSON {
-            private final static Gson GSON_PRETTY = new GsonBuilder().setPrettyPrinting().create();
+            private final Gson GSON_PRETTY = new GsonBuilder().setPrettyPrinting().create();
 
-            private final static Gson GSON = new GsonBuilder().create();
+            private final Gson GSON = new GsonBuilder().create();
 
             @Override
             public String toJsonString(Object object, ParserContext parserContext) {

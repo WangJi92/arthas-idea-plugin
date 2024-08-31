@@ -2,6 +2,7 @@ package com.github.idea.json.parser.typevalue;
 
 import com.github.idea.json.parser.toolkit.PsiToolkit;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ public interface MultiTypeDefaultValue extends TypeDefaultValue {
      * @return
      */
     default Set<String> getQualifiedNames() {
-        return this.getContainer() != null ? this.getContainer().keySet() : Set.of();
+        return this.getContainer() != null ? this.getContainer().keySet() : new HashSet<>();
     }
 
     /**

@@ -42,10 +42,11 @@ public class PsiToolkit {
 
     /**
      * psiType的名称会存在 泛型的信息 这种构建ognl 不准确
+     *
      * @param psiType
      * @return
      */
-    public static  String getPsiTypeSimpleName(PsiType psiType){
+    public static String getPsiTypeSimpleName(PsiType psiType) {
         String qualifiedName = psiType.getCanonicalText();
         //携带有泛型的这里有点问题.. 处理一下
         if (qualifiedName.indexOf("<") > 0) {
@@ -57,6 +58,7 @@ public class PsiToolkit {
 
     /**
      * 获取clazz 内名称，处理了内部类的情况 这种构建ognl 更加准确
+     *
      * @param classType
      * @return
      */
@@ -73,7 +75,7 @@ public class PsiToolkit {
      * @param currentContainingClass
      * @return
      */
-    public static String getPsiTypeQualifiedNameClazzName(PsiClass currentContainingClass){
+    public static String getPsiTypeQualifiedNameClazzName(PsiClass currentContainingClass) {
         // clazz 直接返回这个类的字符串
         assert currentContainingClass != null;
         PsiClass nextContainingClass = currentContainingClass.getContainingClass();
@@ -122,7 +124,7 @@ public class PsiToolkit {
     public static Map<String, PsiType> getPsiClassGenerics(PsiType type) {
         PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
         if (psiClass != null) {
-            Map<String,PsiType> psiClazzGenerics = new HashMap<>();
+            Map<String, PsiType> psiClazzGenerics = new HashMap<>();
             for (PsiTypeParameter typeParameter : psiClass.getTypeParameters()) {
                 PsiType substituteTypeParameter = PsiUtil.substituteTypeParameter(type, psiClass, typeParameter.getIndex(), false);
                 if (substituteTypeParameter != null) {
@@ -134,7 +136,7 @@ public class PsiToolkit {
             }
             return psiClazzGenerics;
         }
-        return Map.of();
+        return new HashMap<>();
     }
 
     /**
@@ -144,18 +146,19 @@ public class PsiToolkit {
      * @param parameter
      * @return
      */
-    public static PsiType getPsiTypeGenericsType(PsiType parameter){
-        if(parameter instanceof PsiClassType psiClassType){
-            return  psiClassType;
-        }else if (parameter instanceof PsiWildcardType wildcardType) {
+    public static PsiType getPsiTypeGenericsType(PsiType parameter) {
+        if (parameter instanceof PsiClassType) {
+            return parameter;
+        } else if (parameter instanceof PsiWildcardType) {
+            PsiWildcardType wildcardType = (PsiWildcardType) parameter;
             if (wildcardType.isExtends()) {
                 // 获取上界限定的类型 上界限定通配符 (? extends T): 指定了类型的上界，表示该类型可以是 T 或 T 的子类。
-               return wildcardType.getExtendsBound();
+                return wildcardType.getExtendsBound();
 
             } else if (wildcardType.isSuper()) {
                 // 获取下界限定的类型 下界限定通配符 (? super T): 指定了类型的下界，表示该类型可以是 T 或 T 的超类。
                 return wildcardType.getSuperBound();
-            }else{
+            } else {
                 return null;
             }
         }
@@ -164,6 +167,7 @@ public class PsiToolkit {
 
     /**
      * PsiClass 转 psiType
+     *
      * @param psiClass
      * @return
      */
@@ -175,16 +179,40 @@ public class PsiToolkit {
 
     public static String getPsiClassBasicTypeDefaultStringValue(PsiType psiType) {
         String canonicalText = psiType.getCanonicalText();
-        return switch (canonicalText) {
-            case "java.lang.Boolean","boolean" -> "true";
-            case "java.lang.String" -> "\" \"";
-            case "java.lang.Integer", "java.lang.Byte", "java.lang.Short","short", "int", "byte" -> "0";
-            case "java.lang.Long","long" -> "0L";
-            case "java.lang.Double","double" -> "0D";
-            case "java.lang.Float" -> "0F";
-            case "char" -> "\'c\'";
-            default -> null;
-        };
+        switch (canonicalText) {
+            case "java.lang.Boolean":
+            case "boolean": {
+                return "true";
+            }
+            case "java.lang.String": {
+                return "\" \"";
+            }
+            case "java.lang.Integer":
+            case "java.lang.Byte":
+            case "java.lang.Short":
+            case "short":
+            case "int":
+            case "byte": {
+                return "0";
+            }
+            case "java.lang.Long":
+            case "long": {
+                return "0L";
+            }
+            case "java.lang.Double":
+            case "double": {
+                return "0D";
+            }
+            case "java.lang.Float": {
+                return "0F";
+            }
+            case "char": {
+                return "\'c\'";
+            }
+            default: {
+                return null;
+            }
+        }
     }
 
     /**

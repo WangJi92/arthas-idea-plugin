@@ -3,7 +3,7 @@ package com.github.idea.json.parser.typevalue.thirdlib.jackson;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author wangji
@@ -12,7 +12,7 @@ import java.util.Map;
 public class ObjectNodeTypeValue implements TypeDefaultValue {
     @Override
     public Object getValue(TypeValueContext context) {
-        return Map.of();
+        return new HashMap<>();
     }
 
     @Override

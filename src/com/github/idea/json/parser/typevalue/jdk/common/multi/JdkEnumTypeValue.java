@@ -1,6 +1,5 @@
 package com.github.idea.json.parser.typevalue.jdk.common.multi;
 
-import com.github.idea.json.parser.toolkit.PsiToolkit;
 import com.github.idea.json.parser.typevalue.MultiTypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
@@ -17,9 +16,10 @@ public class JdkEnumTypeValue implements MultiTypeDefaultValue {
     @Override
     public boolean isSupport(TypeValueContext context) {
         PsiType type = context.getType();
-        if (!(type instanceof PsiClassType psiClassType)) {
+        if (!(type instanceof PsiClassType)) {
             return false;
         }
+        PsiClassType psiClassType = (PsiClassType)type;
         PsiClass psiClass = psiClassType.resolve();
         if (psiClass != null && psiClass.isEnum()) {
             // enum

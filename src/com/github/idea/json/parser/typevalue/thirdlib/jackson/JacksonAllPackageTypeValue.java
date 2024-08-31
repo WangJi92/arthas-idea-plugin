@@ -7,8 +7,8 @@ import com.intellij.psi.PsiType;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +29,7 @@ public class JacksonAllPackageTypeValue implements MultiTypeDefaultValue {
     public void init() {
         Map<String, Object> container = this.getContainer();
         container.put("com.fasterxml.jackson.databind.node.BooleanNode", BooleanNode.valueOf(true));
-        container.put("com.fasterxml.jackson.databind.node.ArrayNode", List.of());
+        container.put("com.fasterxml.jackson.databind.node.ArrayNode", new ArrayList<>());
         container.put("com.fasterxml.jackson.databind.node.BigIntegerNode", BigIntegerNode.valueOf(BigInteger.ONE));
         container.put("com.fasterxml.jackson.databind.node.DecimalNode", DecimalNode.valueOf(BigDecimal.ONE));
         container.put("com.fasterxml.jackson.databind.node.DoubleNode", DoubleNode.valueOf(1d));
@@ -38,7 +38,7 @@ public class JacksonAllPackageTypeValue implements MultiTypeDefaultValue {
         container.put("com.fasterxml.jackson.databind.node.LongNode", LongNode.valueOf(1L));
         container.put("com.fasterxml.jackson.databind.node.NullNode", NullNode.getInstance());
         container.put("com.fasterxml.jackson.databind.node.NumericNode", IntNode.valueOf(1));
-        container.put("com.fasterxml.jackson.databind.node.POJONode", Map.of());
+        container.put("com.fasterxml.jackson.databind.node.POJONode", new HashMap<>());
         container.put("com.fasterxml.jackson.databind.node.ShortNode", ShortNode.valueOf((short) 1));
         container.put("com.fasterxml.jackson.databind.node.TextNode", TextNode.valueOf(" "));
     }

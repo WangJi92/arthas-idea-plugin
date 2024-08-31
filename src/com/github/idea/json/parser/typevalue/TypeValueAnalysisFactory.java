@@ -29,7 +29,7 @@ public class TypeValueAnalysisFactory {
 
     private void initialize() {
         try {
-            Reflections reflections = new Reflections(TypeDefaultValue.class.getPackageName());
+            Reflections reflections = new Reflections(TypeDefaultValue.class.getPackage().getName());
             Set<Class<? extends TypeDefaultValue>> typeDefaultValueClazz = reflections.getSubTypesOf(TypeDefaultValue.class);
             for (Class<? extends TypeDefaultValue> clazz : typeDefaultValueClazz) {
                 try {

@@ -6,6 +6,7 @@ import com.github.idea.json.parser.toolkit.model.JPsiTypeContext;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueAnalysisFactory;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
+import com.google.common.collect.Lists;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import org.apache.commons.lang3.StringUtils;
@@ -81,14 +82,14 @@ public class PsiParserToJson {
                 return toJSONString(returnType, context);
             }
         } else if (psiElement instanceof PsiParameter) {
-            PsiParameter psiParameter = (PsiParameter)psiElement;
+            PsiParameter psiParameter = (PsiParameter) psiElement;
             PsiType type = psiParameter.getType();
             return toJSONString(type, context);
         } else if (psiElement instanceof PsiJavaFile) {
             PsiJavaFile psiJavaFile = (PsiJavaFile) psiElement;
             PsiClass[] classes = psiJavaFile.getClasses();
             if (classes.length > 0) {
-                return toJSONString(classes[0],context);
+                return toJSONString(classes[0], context);
             }
         } else if (psiElement instanceof PsiLocalVariable) {
             PsiLocalVariable psiLocalVariable = (PsiLocalVariable) psiElement;
@@ -99,21 +100,23 @@ public class PsiParserToJson {
             if (psiNewExpression.getReference() != null) {
                 PsiElement resolve = psiNewExpression.getReference().resolve();
                 if (resolve != null) {
-                    return toJSONString(resolve,context);
+                    return toJSONString(resolve, context);
                 }
             }
-        } else if (psiElement instanceof PsiReferenceExpression referenceExpression) {
+        } else if (psiElement instanceof PsiReferenceExpression) {
+            PsiReferenceExpression referenceExpression = (PsiReferenceExpression) psiElement;
             if (referenceExpression.getReference() != null) {
                 PsiElement resolve = referenceExpression.getReference().resolve();
                 if (resolve != null) {
-                    return toJSONString(resolve,context);
+                    return toJSONString(resolve, context);
                 }
             }
-        } else if (psiElement instanceof PsiJavaCodeReferenceElement psiJavaCodeReferenceElement) {
+        } else if (psiElement instanceof PsiJavaCodeReferenceElement) {
+            PsiJavaCodeReferenceElement psiJavaCodeReferenceElement = (PsiJavaCodeReferenceElement) psiElement;
             if (psiJavaCodeReferenceElement.getReference() != null) {
                 PsiElement resolve = psiJavaCodeReferenceElement.getReference().resolve();
                 if (resolve != null) {
-                    return toJSONString(resolve,context);
+                    return toJSONString(resolve, context);
                 }
             }
         }
@@ -306,10 +309,11 @@ public class PsiParserToJson {
             PsiType typeToDeepType = type.getDeepComponentType();
             Object obj = parseVariableValue(context.copy(typeToDeepType, PsiToolkit.getPsiClassGenerics(typeToDeepType)));
             if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
-                return List.of();
+                return new ArrayList<>();
             }
-            return List.of(obj);
-        } else if (type instanceof PsiClassType currentParseIdeaPsiClassType) {
+            return new ArrayList<>();
+        } else if (type instanceof PsiClassType) {
+            PsiClassType currentParseIdeaPsiClassType = (PsiClassType) type;
             TypeValueContext quickProcessValue = typeValueAnalysisFactory.getValue(type);
             if (quickProcessValue.getSupport()) {
                 // 快速处理获取结果，比如一些常见的数据类型 Enum 处理
@@ -335,13 +339,13 @@ public class PsiParserToJson {
                         if (psiTypeGenericsType != null) {
                             Object obj = parseVariableValue(context.copy(psiTypeGenericsType, getPsiClassGenerics(psiTypeGenericsType)));
                             if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
-                                return List.of();
+                                return new ArrayList<>();
                             }
-                            return List.of(obj);
+                            return Lists.newArrayList(obj);
                         }
                     }
                     // List 没有写泛型..
-                    return List.of();
+                    return new ArrayList<>();
                 }
 
                 if (type.getCanonicalText().startsWith("java.")) {
@@ -355,20 +359,24 @@ public class PsiParserToJson {
                         }
                         // https://github.com/WangJi92/arthas-idea-plugin/issues/130
                         // List<?>  Class<? extends LanguageDriver>
-                        if (parameters[0] instanceof PsiClassType psiClassType) {
+                        if (parameters[0] instanceof PsiClassType) {
+                            PsiClassType psiClassType = (PsiClassType) parameters[0];
                             // clazz 直接返回这个类的字符串
                             return PsiToolkit.getPsiTypeQualifiedNameClazzName(psiClassType);
-                        } else if (parameters[0] instanceof PsiWildcardType wildcardType) {
+                        } else if (parameters[0] instanceof PsiWildcardType) {
+                            PsiWildcardType wildcardType = (PsiWildcardType) parameters[0];
                             if (wildcardType.isExtends()) {
                                 // 获取上界限定的类型 上界限定通配符 (? extends T): 指定了类型的上界，表示该类型可以是 T 或 T 的子类。
                                 PsiType extendsBound = wildcardType.getExtendsBound();
-                                if (extendsBound instanceof PsiClassType extendsBoundPsiClassType) {
+                                if (extendsBound instanceof PsiClassType) {
+                                    PsiClassType extendsBoundPsiClassType = (PsiClassType) extendsBound;
                                     return PsiToolkit.getPsiTypeQualifiedNameClazzName(extendsBoundPsiClassType);
                                 }
                             } else if (wildcardType.isSuper()) {
                                 // 获取下界限定的类型 下界限定通配符 (? super T): 指定了类型的下界，表示该类型可以是 T 或 T 的超类。
                                 PsiType superBound = wildcardType.getSuperBound();
-                                if (superBound instanceof PsiClassType superBoundPsiClassType) {
+                                if (superBound instanceof PsiClassType) {
+                                    PsiClassType superBoundPsiClassType = (PsiClassType) superBound;
                                     return PsiToolkit.getPsiTypeQualifiedNameClazzName(superBoundPsiClassType);
                                 }
                             }
@@ -391,7 +399,9 @@ public class PsiParserToJson {
                             if (Objects.equals(obj, TypeDefaultValue.DEFAULT_NULL) || obj == null) {
                                 return new HashMap<>();
                             }
-                            return Map.of(TypeDefaultValue.DEFAULT_MAP_KEY, obj);
+                            HashMap<Object, Object> map = new HashMap<>();
+                            map.put(TypeDefaultValue.DEFAULT_MAP_KEY, obj);
+                            return map;
                         }
                     }
                     // Map 没有写泛型..
@@ -403,9 +413,9 @@ public class PsiParserToJson {
             // current psiClazz not type generics
             // simple handler ignore type generics
             if (context.isInheritor(Map.class.getName())) {
-                return Map.of();
+                return new HashMap<>();
             } else if (context.isInheritor(Collection.class.getName())) {
-                return List.of();
+                return new HashMap<>();
             }
 
             if (context.getPsiTypeGenerics() != null) {

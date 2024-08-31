@@ -3,7 +3,7 @@ package com.github.idea.json.parser.typevalue.thirdlib.jsonorg;
 import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author wangji
@@ -12,7 +12,7 @@ import java.util.List;
 public class JsonArrayTypeValue implements TypeDefaultValue {
     @Override
     public Object getValue(TypeValueContext context) {
-        return List.of();
+        return new ArrayList<>();
     }
 
     @Override

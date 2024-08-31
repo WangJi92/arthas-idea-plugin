@@ -48,7 +48,7 @@ public class JdkAnalysisInheritanceTypeValue implements MultiTypeDefaultValue {
         container.put(TimeZone.class.getName(), TimeZone.getDefault());
         container.put(Appendable.class.getName(), " ");
         //这个很不常见
-        container.put(Enumeration.class.getName(), List.of());
+        container.put(Enumeration.class.getName(), new ArrayList<>());
 
         container.put(Calendar.class.getName(), Calendar.getInstance());
         container.put(Clob.class.getName(), TypeDefaultValue.DEFAULT_NULL);

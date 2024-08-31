@@ -4,7 +4,6 @@ import com.github.idea.json.parser.typevalue.TypeDefaultValue;
 import com.github.idea.json.parser.typevalue.TypeValueContext;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * @author wangji
