@@ -50,7 +50,7 @@ public class TypeValueAnalysisFactory {
                     LOG.error("init TypeDefaultValue error",e);
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOG.error("init error",e);
         }
     }

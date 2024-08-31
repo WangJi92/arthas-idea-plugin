@@ -599,6 +599,11 @@
                 class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolSetFieldCommandAction"
                 text="Vmtool Get Instance Set Field"
                 description="Vmtool get instance set field"/>
+        <action id="CopyJsonAction"
+                class="com.github.idea.json.parser.action.CopyJsonAction"
+                icon="AllIcons.Json.Object"
+                text="Arthas Copy JSON"
+                description="ToolParseJsonAction"/>
 
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
@@ -702,6 +707,11 @@
             <reference ref="ArthasIdeaOpenConfigPageAction"/>
             <reference ref="ArthasHelpCommand"/>
             <reference ref="HelpArthasDocumentPageAction"/>
+        </group>
+        <group id="arthas-copy-json">
+            <reference ref="CopyJsonAction"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="arthas-plugin"/>
+            <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="arthas-plugin"/>
         </group>
     </actions>
 

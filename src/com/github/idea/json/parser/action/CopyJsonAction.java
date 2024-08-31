@@ -1,7 +1,9 @@
 package com.github.idea.json.parser.action;
 
+import com.github.idea.json.parser.PsiParserToJson;
 import com.github.idea.json.parser.toolkit.ParserContext;
-import com.github.wangji92.arthas.plugin.utils.OgnlPsUtils;
+import com.github.wangji92.arthas.plugin.utils.*;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -71,20 +73,20 @@ public class CopyJsonAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-//        DataContext dataContext = e.getDataContext();
-//        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
-//        assert psiElement != null;
-//        OgnlJsonHandlerUtils.JsonType jsonType = OgnlJsonHandlerUtils.getJsonType(e.getProject());
-//        parserContext.setJsonType(jsonType.getType());
-//        String jsonString = PsiParserToJson.getInstance().toJSONString(psiElement,parserContext);
-//        if (StringUtils.isBlank(jsonString)) {
-//            String emptyData = "JSON data empty";
-//            ClipboardUtils.setClipboardString("{}");
-//            NotifyUtils.notifyMessage(e.getProject(), emptyData, NotificationType.INFORMATION);
-//            return;
-//        }
-//        ClipboardUtils.setClipboardString(jsonString);
-//        String emptyData = "JSON data copied to clipboard";
-//        NotifyUtils.notifyMessage(e.getProject(), emptyData);
+        DataContext dataContext = e.getDataContext();
+        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
+        assert psiElement != null;
+        OgnlJsonHandlerUtils.JsonType jsonType = OgnlJsonHandlerUtils.getJsonType(e.getProject());
+        parserContext.setJsonType(jsonType.getType());
+        String jsonString = PsiParserToJson.getInstance().toJSONString(psiElement,parserContext);
+        if (StringUtils.isBlank(jsonString)) {
+            String emptyData = "JSON data empty";
+            ClipboardUtils.setClipboardString("{}");
+            NotifyUtils.notifyMessage(e.getProject(), emptyData, NotificationType.INFORMATION);
+            return;
+        }
+        ClipboardUtils.setClipboardString(jsonString);
+        String emptyData = "JSON data copied to clipboard";
+        NotifyUtils.notifyMessage(e.getProject(), emptyData);
     }
 }
