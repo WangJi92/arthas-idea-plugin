@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.44</version>
+    <version>182version-compatible-202409</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,19 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>182version-compatible-202409-RELEASE</p>
+      <ul>
+        <li>add a command Arthas Copy JSON</li>
+        <li>vmtool & ognl & springContext.getBean support  <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/127"> auto generator complex params </a> use JSON.parseObject("jsonStr",XXX.class)</li>
+        <li>JSON Escape、compression 、Chinese To Unicode Can Use Tools Like <a href="https://www.json.cn/jsonzip/"> Json Tools</a>,Make vmtool command invoke complex params easy</li>
+        <li>Automatically get JSON tool class, default priority is:
+            1、FastJson Ognl(@com.alibaba.fastjson.JSON@parseObject("%s",%s))
+            2、FastJson2 Ognl (@com.alibaba.fastjson2.JSON@parseObject("%s",%s))
+            3、JACKSON Ognl (new com.fasterxml.jackson.databind.ObjectMapper().readValue("%s",%s))
+            4、GSON Ognl(ew com.google.gson.Gson().fromJson("%s",%s))
+            FastJson is default clazz
+         </li>
+      </ul>
     <p>2.44-RELEASE</p>
       <ul>
         <li>optimizing quickly add ref link</li>
@@ -340,7 +353,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="182"/>
+    <idea-version since-build="182" until-build="222.3345.117"/>
 
     <extensions defaultExtensionNs="com.intellij">
         // parentId = "tools"
