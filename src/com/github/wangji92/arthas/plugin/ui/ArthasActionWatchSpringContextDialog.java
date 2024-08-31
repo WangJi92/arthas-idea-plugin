@@ -139,7 +139,7 @@ public class ArthasActionWatchSpringContextDialog extends JDialog {
         ognlOfficeLinkLabel = new ActionLink("", AllIcons.Ide.Link, new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent anActionEvent) {
-                BrowserUtil.browse("https://commons.apache.org/proper/commons-ognl/language-guide.html");
+                BrowserUtil.browse("https://commons.apache.org/dormant/commons-ognl/language-guide.html");
             }
         });
         ognlOfficeLinkLabel.setPaintUnderline(false);
