@@ -17,5 +17,8 @@
     <orderEntry type="library" name="commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" name="redis.clients:jedis:3.4.1" level="project" />
     <orderEntry type="library" name="com.amazonaws:aws-java-sdk-s3:1.12.321" level="project" />
+    <orderEntry type="library" name="alibaba.fastjson" level="project" />
+    <orderEntry type="library" name="alibaba.fastjson2" level="project" />
+    <orderEntry type="library" name="reflections" level="project" />
   </component>
 </module>
