@@ -30,12 +30,16 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
 import com.intellij.ui.content.Content;
 import com.intellij.util.messages.MessageBusConnection;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -48,11 +52,13 @@ import java.util.UUID;
 public class ArthasTerminalManager implements Disposable {
 
     private static final Key<ArthasTerminalManager> KEY = Key.create(ArthasTerminalManager.class.getName());
+    private static final String ARTHAS_PLUS = "Arthas Plus";
 
     private final ConsoleView consoleView;
     private final Project project;
     private final RunContentDescriptor descriptor;
 
+    @Getter
     private volatile boolean running = false;
 
     private List<ArthasWebSocketClient> webSocketClients;
@@ -63,11 +69,20 @@ public class ArthasTerminalManager implements Disposable {
 
     private final TunnelServerInfo tunnelServerInfo;
 
-    private Editor editor;
+    private final Editor editor;
+
+    private final List<String> historyCache = new ArrayList<>();
+    /**
+     * 按下↑键的次数,存储起来用于获取历史记录指令
+     */
+    private int vkUpCache = 0;
 
     private ArthasTerminalManager(@NotNull Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
         this.agentInfos = agentInfos;
         this.cmd = cmd;
+        // 添加第一条指令
+        historyCache.add(this.cmd);
+
         this.tunnelServerInfo = tunnelServerInfo;
         this.editor = editor;
 
@@ -173,10 +188,71 @@ public class ArthasTerminalManager implements Disposable {
     }
 
     private JPanel createConsolePanel(ConsoleView consoleView) {
-        final JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.add(consoleView.getComponent(), BorderLayout.CENTER);
-        return panel;
+        final JPanel mainPanel = new JPanel();
+        // 显示区域
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(consoleView.getComponent(), BorderLayout.CENTER);
+        // 操作区域
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+        // 命令框
+        JTextField cmdInput = new JTextField(10);
+        cmdInput.setMaximumSize(new Dimension(800, 30));
+        // 执行按钮
+        JButton execBtn = new JButton("Exec");
+        // 注册监听器
+        this.registerListener(execBtn, cmdInput);
+        // 添加至面板
+        controlPanel.add(Box.createHorizontalStrut(1));
+        controlPanel.add(cmdInput);
+        controlPanel.add(Box.createHorizontalStrut(10));
+        controlPanel.add(execBtn);
+        mainPanel.add(controlPanel, BorderLayout.SOUTH);
+        return mainPanel;
+    }
+
+    private void registerListener(JButton execBtn, JTextField cmdInput) {
+        // 监听按钮和回车事件
+        execBtn.addActionListener(e -> executeCmd(cmdInput));
+        cmdInput.addActionListener(e -> executeCmd(cmdInput));
+        // 监听文本框的键盘↑↓键
+        cmdInput.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                String lastInput = null;
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_UP:
+                        if (vkUpCache >= historyCache.size()) {
+                            return;
+                        }
+                        lastInput = historyCache.get(historyCache.size() - ++vkUpCache);
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        if (vkUpCache <= 0) {
+                            cmdInput.setText("");
+                            return;
+                        }
+                        lastInput = historyCache.get(historyCache.size() - vkUpCache--);
+                        break;
+                    default:
+                }
+                if (StringUtils.isNotBlank(lastInput)) {
+                    cmdInput.setText(lastInput);
+                    cmdInput.setCaretPosition(cmdInput.getText().length());
+                }
+            }
+        });
+    }
+
+    private void executeCmd(JTextField inputField) {
+        String command = inputField.getText();
+        if (StringUtils.isBlank(command)) {
+            return;
+        }
+        rerun(command);
+        historyCache.add(command);
+        inputField.setText("");
+        vkUpCache = 0;
     }
 
     private RunContentDescriptor getRunContentDescriptor(RunnerLayoutUi layoutUi, String name) {
@@ -205,18 +281,14 @@ public class ArthasTerminalManager implements Disposable {
     }
 
     private RunnerLayoutUi getRunnerLayoutUi() {
-
-        return RunnerLayoutUi.Factory.getInstance(project).create("Arthas Plus", "Arthas Plus", "Arthas Plus", project);
+        return RunnerLayoutUi.Factory.getInstance(project).create(ARTHAS_PLUS, ARTHAS_PLUS, ARTHAS_PLUS, project);
     }
 
     public void run() {
-
         if (running) {
             return;
         }
-
         running = true;
-
     }
 
     public void stop() {
@@ -228,46 +300,37 @@ public class ArthasTerminalManager implements Disposable {
         this.webSocketClients = null;
     }
 
-    public void rerun() {
+    public void rerun(String command) {
         if (running) {
             // 先把之前的client全都停掉
             stop();
         }
         running = true;
-        this.webSocketClients = createWebSocketClients(this.agentInfos, this.cmd, this.tunnelServerInfo, editor);
+        command = StringUtils.defaultString(command, this.cmd);
+        this.webSocketClients = createWebSocketClients(this.agentInfos, command, this.tunnelServerInfo, editor);
     }
 
     @Nullable
     public static ArthasTerminalManager getInstance(@NotNull Project project) {
-
         ArthasTerminalManager manager = project.getUserData(KEY);
-
         if (Objects.nonNull(manager)) {
             if (!manager.getToolWindow().isAvailable()) {
                 Disposer.dispose(manager);
                 manager = null;
             }
         }
-
         return manager;
-
     }
 
     @NotNull
     public static ArthasTerminalManager createInstance(@NotNull Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
-
-
         ArthasTerminalManager manager = getInstance(project);
-
         if (Objects.nonNull(manager) && !Disposer.isDisposed(manager)) {
             Disposer.dispose(manager);
         }
-
         manager = new ArthasTerminalManager(project, agentInfos, cmd, tunnelServerInfo, editor);
         project.putUserData(KEY, manager);
-
         return manager;
-
     }
 
     public ToolWindow getToolWindow() {
@@ -275,20 +338,11 @@ public class ArthasTerminalManager implements Disposable {
     }
 
 
-    public boolean isRunning() {
-        return running;
-    }
-
     @Override
     public void dispose() {
-
         project.putUserData(KEY, null);
-
         stop();
-
-        ExecutionManager.getInstance(project).getContentManager().removeRunContent(ArthasTerminalExecutor.getInstance(),
-                descriptor);
-
+        ExecutionManager.getInstance(project).getContentManager().removeRunContent(ArthasTerminalExecutor.getInstance(), descriptor);
     }
 
 }

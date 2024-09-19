@@ -22,7 +22,7 @@ public class RerunAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        manager.rerun();
+        manager.rerun(null);
     }
 
     @Override
