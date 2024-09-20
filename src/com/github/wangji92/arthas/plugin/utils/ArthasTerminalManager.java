@@ -38,7 +38,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,22 +53,11 @@ public class ArthasTerminalManager implements Disposable {
     private static final Key<ArthasTerminalManager> KEY = Key.create(ArthasTerminalManager.class.getName());
     private static final String ARTHAS_PLUS = "Arthas Plus";
 
-    private final ConsoleView consoleView;
     private final Project project;
     private final RunContentDescriptor descriptor;
 
     @Getter
     private volatile boolean running = false;
-
-    private List<ArthasWebSocketClient> webSocketClients;
-
-    private final List<AgentInfo> agentInfos;
-
-    private final String cmd;
-
-    private final TunnelServerInfo tunnelServerInfo;
-
-    private final Editor editor;
 
     private final List<String> historyCache = new ArrayList<>();
     /**
@@ -77,95 +65,53 @@ public class ArthasTerminalManager implements Disposable {
      */
     private int vkUpCache = 0;
 
-    private ArthasTerminalManager(@NotNull Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
-        this.agentInfos = agentInfos;
-        this.cmd = cmd;
-        // 添加第一条指令
-        historyCache.add(this.cmd);
+    private final ArthasTerminalConsoleViewManager consoleViewManager;
 
-        this.tunnelServerInfo = tunnelServerInfo;
-        this.editor = editor;
+
+    private ArthasTerminalManager(@NotNull Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
+        // 添加第一条指令
+        historyCache.add(cmd);
 
         this.project = project;
 
-        this.consoleView = createConsoleView();
-
-        final JPanel panel = createConsolePanel(this.consoleView);
-
+        ConsoleView consoleView = createConsoleView();
+        final JPanel panel = createConsolePanel(consoleView);
         RunnerLayoutUi layoutUi = getRunnerLayoutUi();
-
         Content content = layoutUi.createContent(UUID.randomUUID().toString(), panel, cmd, Icons.FAVICON, panel);
-
         content.setCloseable(false);
-
         layoutUi.addContent(content);
-
-        layoutUi.getOptions().setLeftToolbar(createActionToolbar(), "RunnerToolbar");
+        ActionGroup actionToolbar = createActionToolbar(cmd, editor, consoleView);
+        layoutUi.getOptions().setLeftToolbar(actionToolbar, "RunnerToolbar");
 
         final MessageBusConnection messageBusConnection = project.getMessageBus().connect();
 
         this.descriptor = getRunContentDescriptor(layoutUi, cmd);
 
+        messageBusConnection.subscribe(ToolWindowManagerListener.TOPIC, getWindowManagerListener());
+
+        ExecutionManager.getInstance(project).getContentManager().showRunContent(ArthasTerminalExecutor.getInstance(), descriptor);
+
+        getToolWindow().activate(null);
+
+        this.consoleViewManager = new ArthasTerminalConsoleViewManager(agentInfos, cmd, tunnelServerInfo, editor, consoleView);
+
+        this.running = true;
+
         Disposer.register(this, consoleView);
         Disposer.register(this, content);
         Disposer.register(this, layoutUi.getContentManager());
         Disposer.register(this, messageBusConnection);
-
-
-        messageBusConnection.subscribe(ToolWindowManagerListener.TOPIC, new ToolWindowManagerListener() {
-            @Override
-            public void toolWindowRegistered(@NotNull String id) {
-
-            }
-
-            @Override
-            public void stateChanged() {
-                if (!getToolWindow().isAvailable()) {
-                    Disposer.dispose(ArthasTerminalManager.this);
-                }
-            }
-        });
-
-        ExecutionManager.getInstance(project).getContentManager().showRunContent(ArthasTerminalExecutor.getInstance(),
-                descriptor);
-
-        getToolWindow().activate(null);
-
-
-        this.webSocketClients = createWebSocketClients(agentInfos, cmd, tunnelServerInfo, editor);
-    }
-
-    private List<ArthasWebSocketClient> createWebSocketClients(List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
-        return agentInfos.stream().map(agentInfo ->
-                        createSocketConnection(cmd, agentInfo.getAgentId(), agentInfo.getClientConnectHost(), tunnelServerInfo, editor))
-                .filter(Objects::nonNull)
-                .peek(client -> Disposer.register(this, client))
-                .toList();
+        Disposer.register(this, consoleViewManager);
     }
 
     public static void run(Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
 
-        final ArthasTerminalManager manager = ArthasTerminalManager.getInstance(project);
-        if (Objects.nonNull(manager)) {
+        ArthasTerminalManager manager = getInstance(project);
+        if (Objects.nonNull(manager) && !Disposer.isDisposed(manager)) {
             Disposer.dispose(manager);
         }
-        ArthasTerminalManager.createInstance(project, agentInfos, cmd, tunnelServerInfo, editor).run();
-    }
-
-    private ArthasWebSocketClient createSocketConnection(String cmd, String agentId, String host, TunnelServerInfo tunnelServerInfo, Editor editor) {
-
-        String uri = TunnelServerPath.getWsUrl(agentId, host, tunnelServerInfo);
-        ArthasWebSocketClient client = null;
-        try {
-            client = new ArthasWebSocketClient(new URI(uri), agentId, editor, this.consoleView);
-            client.connectBlocking();
-            Thread.sleep(500);
-            client.sendCmd(cmd);
-        } catch (Exception e) {
-            NotifyUtils.notifyMessage(editor.getProject(), "连接失败" + agentId);
-        }
-
-        return client;
+        manager = new ArthasTerminalManager(project, agentInfos, cmd, tunnelServerInfo, editor);
+        project.putUserData(KEY, manager);
     }
 
     private ConsoleView createConsoleView() {
@@ -177,13 +123,13 @@ public class ArthasTerminalManager implements Disposable {
         return console;
     }
 
-    private ActionGroup createActionToolbar() {
+    private ActionGroup createActionToolbar(String cmd, Editor editor, ConsoleView consoleView) {
         final DefaultActionGroup actionGroup = new DefaultActionGroup();
         actionGroup.add(new RerunAction(this));
-        actionGroup.add(new ModifyRerunAction(this.project, this.editor, this.cmd));
+        actionGroup.add(new ModifyRerunAction(this.project, editor, cmd));
         actionGroup.add(new StopAction(this));
         actionGroup.addSeparator();
-        actionGroup.add(new ClearAllAction(this.consoleView));
+        actionGroup.add(new ClearAllAction(consoleView));
         return actionGroup;
     }
 
@@ -249,10 +195,12 @@ public class ArthasTerminalManager implements Disposable {
         if (StringUtils.isBlank(command)) {
             return;
         }
-        rerun(command);
-        historyCache.add(command);
+        if (!StringUtils.equals(historyCache.get(historyCache.size() - 1), command)) {
+            historyCache.add(command);
+        }
         inputField.setText("");
         vkUpCache = 0;
+        this.rerun(command);
     }
 
     private RunContentDescriptor getRunContentDescriptor(RunnerLayoutUi layoutUi, String name) {
@@ -280,15 +228,24 @@ public class ArthasTerminalManager implements Disposable {
         return descriptor;
     }
 
-    private RunnerLayoutUi getRunnerLayoutUi() {
-        return RunnerLayoutUi.Factory.getInstance(project).create(ARTHAS_PLUS, ARTHAS_PLUS, ARTHAS_PLUS, project);
+    @NotNull
+    private ToolWindowManagerListener getWindowManagerListener() {
+        return new ToolWindowManagerListener() {
+            @Override
+            public void toolWindowRegistered(@NotNull String id) {
+
+            }
+            @Override
+            public void stateChanged() {
+                if (!getToolWindow().isAvailable()) {
+                    Disposer.dispose(ArthasTerminalManager.this);
+                }
+            }
+        };
     }
 
-    public void run() {
-        if (running) {
-            return;
-        }
-        running = true;
+    private RunnerLayoutUi getRunnerLayoutUi() {
+        return RunnerLayoutUi.Factory.getInstance(project).create(ARTHAS_PLUS, ARTHAS_PLUS, ARTHAS_PLUS, project);
     }
 
     public void stop() {
@@ -296,18 +253,15 @@ public class ArthasTerminalManager implements Disposable {
             return;
         }
         running = false;
-        this.webSocketClients.forEach(ArthasWebSocketClient::dispose);
-        this.webSocketClients = null;
+        this.consoleViewManager.onStop();
     }
 
     public void rerun(String command) {
         if (running) {
-            // 先把之前的client全都停掉
             stop();
         }
         running = true;
-        command = StringUtils.defaultString(command, this.cmd);
-        this.webSocketClients = createWebSocketClients(this.agentInfos, command, this.tunnelServerInfo, editor);
+        this.consoleViewManager.onRerun(command);
     }
 
     @Nullable
@@ -322,21 +276,9 @@ public class ArthasTerminalManager implements Disposable {
         return manager;
     }
 
-    @NotNull
-    public static ArthasTerminalManager createInstance(@NotNull Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
-        ArthasTerminalManager manager = getInstance(project);
-        if (Objects.nonNull(manager) && !Disposer.isDisposed(manager)) {
-            Disposer.dispose(manager);
-        }
-        manager = new ArthasTerminalManager(project, agentInfos, cmd, tunnelServerInfo, editor);
-        project.putUserData(KEY, manager);
-        return manager;
-    }
-
     public ToolWindow getToolWindow() {
         return ToolWindowManager.getInstance(project).getToolWindow(ArthasTerminalExecutor.TOOL_WINDOW_ID);
     }
-
 
     @Override
     public void dispose() {
