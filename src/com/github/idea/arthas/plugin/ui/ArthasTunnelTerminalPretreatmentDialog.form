@@ -6,18 +6,20 @@
       <xy x="20" y="40" width="702" height="288"/>
     </constraints>
     <properties>
-      <maximumSize width="2147483647" height="2147483647"/>
+      <maximumSize width="720" height="230"/>
       <minimumSize width="700" height="261"/>
+      <preferredSize width="700" height="261"/>
     </properties>
     <border type="none"/>
     <children>
-      <component id="292f4" class="javax.swing.JLabel">
+      <component id="292f4" class="com.intellij.ui.components.ActionLink" binding="tunnelServerLabel" custom-create="true">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <enabled value="true"/>
-          <text value="NameServer"/>
+          <text value="tunnel server addr"/>
+          <toolTipText value="start a arthas-tunnel-server.jar connect multiple app agents,just like 'nginx' proxy execution command."/>
         </properties>
       </component>
       <component id="b69f0" class="javax.swing.JLabel" binding="command">
@@ -25,6 +27,7 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <requestFocusEnabled value="false"/>
           <text value="command"/>
         </properties>
       </component>
@@ -35,13 +38,13 @@
           </grid>
         </constraints>
         <properties>
-          <text value="AgentId"/>
+          <text value="agent id"/>
           <toolTipText value="best practices agentId config with appName&#10;"/>
         </properties>
       </component>
       <component id="5cc87" class="javax.swing.JComboBox" binding="appSelector">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="400" height="25"/>
             <maximum-size width="500" height="-1"/>
           </grid>
@@ -49,53 +52,73 @@
         <properties>
           <editable value="false"/>
           <model/>
+          <requestFocusEnabled value="false"/>
           <toolTipText value=""/>
         </properties>
       </component>
       <component id="d2bd5" class="javax.swing.JComboBox" binding="nameServerSelector">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="400" height="-1"/>
           </grid>
         </constraints>
         <properties>
           <editable value="false"/>
           <model/>
+          <requestFocusEnabled value="false"/>
         </properties>
       </component>
       <component id="c2348" class="javax.swing.JButton" binding="execBtn" default-binding="true">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Exec"/>
+          <requestFocusEnabled value="false"/>
+          <text value="execute command"/>
         </properties>
       </component>
-      <vspacer id="8d23b">
+      <scrollpane id="99a2">
         <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-        </constraints>
-      </vspacer>
-      <component id="a3c40" class="javax.swing.JTextArea" binding="commendEdit">
-        <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="5" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="500" height="100"/>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="555" height="120"/>
+            <maximum-size width="555" height="120"/>
           </grid>
         </constraints>
         <properties>
-          <alignmentX value="0.5"/>
-          <alignmentY value="0.5"/>
-          <columns value="1"/>
-          <dragEnabled value="false"/>
-          <editable value="true"/>
-          <lineWrap value="true"/>
-          <margin top="10" left="10" bottom="10" right="10"/>
-          <preferredSize width="583" height="120"/>
-          <rows value="0"/>
-          <text value=""/>
-          <wrapStyleWord value="true"/>
+          <horizontalScrollBarPolicy value="31"/>
+          <verticalScrollBarPolicy value="20"/>
         </properties>
-      </component>
+        <border type="none"/>
+        <children>
+          <component id="a3c40" class="javax.swing.JTextArea" binding="commendEdit">
+            <constraints/>
+            <properties>
+              <alignmentX value="0.5"/>
+              <alignmentY value="0.5"/>
+              <autoscrolls value="false"/>
+              <columns value="1"/>
+              <dragEnabled value="false"/>
+              <editable value="true"/>
+              <focusCycleRoot value="false"/>
+              <lineWrap value="true"/>
+              <margin top="10" left="10" bottom="10" right="10"/>
+              <maximumSize width="2147483647" height="2147483647"/>
+              <minimumSize width="555" height="120"/>
+              <preferredSize width="555" height="17020"/>
+              <requestFocusEnabled value="true"/>
+              <rows value="1000"/>
+              <text value=""/>
+              <toolTipText value=""/>
+              <wrapStyleWord value="true"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <vspacer id="1bc69">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
     </children>
   </grid>
 </form>

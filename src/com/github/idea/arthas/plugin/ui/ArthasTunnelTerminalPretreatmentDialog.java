@@ -49,6 +49,8 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
 
     private JLabel command;
 
+    private ActionLink tunnelServerLabel;
+
     private final Project project;
 
     /**
@@ -65,7 +67,7 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         this.project = project;
         setContentPane(this.contentPane);
         setModal(false);
-
+        getRootPane().setDefaultButton(execBtn);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -200,5 +202,6 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
     private void createUIComponents() {
        // agent Id
         tunnelAgentLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5");
+        tunnelServerLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#tunnel-server-%E7%9A%84%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2");
     }
 }
