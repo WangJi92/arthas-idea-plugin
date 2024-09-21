@@ -1,8 +1,8 @@
 package com.github.idea.json.parser.action;
 
+import com.github.idea.arthas.plugin.utils.*;
 import com.github.idea.json.parser.PsiParserToJson;
 import com.github.idea.json.parser.toolkit.ParserContext;
-import com.github.wangji92.arthas.plugin.utils.*;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.psi.*;

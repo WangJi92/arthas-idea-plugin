@@ -372,19 +372,19 @@
 
     <extensions defaultExtensionNs="com.intellij">
         // parentId = "tools"
-        <projectConfigurable instance="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
-                             id="com.github.wangji92.arthas.plugin.ui.AppSettingsPage"
+        <projectConfigurable instance="com.github.idea.arthas.plugin.ui.AppSettingsPage"
+                             id="com.github.idea.arthas.plugin.ui.AppSettingsPage"
                              displayName="Arthas Idea Plugin"/>
-        <projectService serviceImplementation="com.github.wangji92.arthas.plugin.setting.AppSettingsState"/>
+        <projectService serviceImplementation="com.github.idea.arthas.plugin.setting.AppSettingsState"/>
 
         <notificationGroup id="arthas" displayType="BALLOON"/>
 
-        <executor implementation="com.github.wangji92.arthas.plugin.utils.ArthasTerminalExecutor" id="ArthasTerminalExecutor"/>
+        <executor implementation="com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalExecutor" id="ArthasTerminalExecutor"/>
 
     </extensions>
 
     <!--    <extensions defaultExtensionNs="com.intellij">-->
-    <!--        <applicationConfigurable dynamic="false" instance="com.github.wangji92.arthas.plugin.ui.SettingDialog"/>-->
+    <!--        <applicationConfigurable dynamic="false" instance="ui.com.github.idea.arthas.plugin.SettingDialog"/>-->
     <!--    </extensions>-->
 
 <!--    <depends>com.intellij.modules.platform</depends>-->
@@ -402,226 +402,226 @@
     <actions>
         <!-- Add your actions here -->
 
-        <action id="ArthasSc" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasScCommandAction"
+        <action id="ArthasSc" class="com.github.idea.arthas.plugin.action.arthas.ArthasScCommandAction"
                 text="Search Classes Loaded By Jvm Sc"
                 description="Arthas get classloader">
         </action>
-        <action id="ArthasWatch" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchCommandAction"
+        <action id="ArthasWatch" class="com.github.idea.arthas.plugin.action.arthas.ArthasWatchCommandAction"
                 text="Watch"
                 description=" Arthas watch">
         </action>
-        <action id="ArthasTrace" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTraceCommandAction"
+        <action id="ArthasTrace" class="com.github.idea.arthas.plugin.action.arthas.ArthasTraceCommandAction"
                 text="Trace"
                 description="Arthas trace">
         </action>
-        <action id="ArthasStatic" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
+        <action id="ArthasStatic" class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlStaticCommandAction"
                 text="Ognl Invoke Static Method Field"
                 description="Arthas ognl static">
         </action>
         <action id="ArthasSimpleGetStaticCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSimpleGetStaticCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasSimpleGetStaticCommandAction"
                 text="Get Static Field Simple"
                 description="Simple getStatic field">
         </action>
 
-        <action id="ArthasSpecial" class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSpecialCommandAction"
+        <action id="ArthasSpecial" class="com.github.idea.arthas.plugin.action.arthas.ArthasSpecialCommandAction"
                 text="Arthas Special Use Link"
                 description="Arthas special use link">
 
         </action>
 
         <action id="ArthasInvokeBeanMethod"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringContextInvokeMethodAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlSpringContextInvokeMethodAction"
                 text="Static Spring Context Invoke"
                 description="Static spring context invoke  method field">
 
         </action>
 
         <action id="ArthasInstallCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasInstallCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasInstallCommandAction"
                 text="Install Arthas-Boot.Jar Alias as.sh"
                 description="Arthas install shell">
 
         </action>
         <action id="ArthasInstall2Command"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasInstall2CommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasInstall2CommandAction"
                 text="Install as.sh"
                 description="Arthas install in current dir">
         </action>
 
-        <action id="ArthasHelpCommand" class="com.github.wangji92.arthas.plugin.action.arthas.HelpAction"
+        <action id="ArthasHelpCommand" class="com.github.idea.arthas.plugin.action.arthas.HelpAction"
                 text="Arthas Idea Plugin Help"
                 description="Arthas idea plugin help">
         </action>
         <action id="ArthasTraceMultipleCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTraceMultipleClassMethodCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasTraceMultipleClassMethodCommandAction"
                 text="Trace Multiple Class Method Trace -E"
                 description="Arthas trace multiple class method">
 
         </action>
         <action id="ArthasMonitorCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasMonitorCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasMonitorCommandAction"
                 text="Monitor"
                 description="Monitor method execution statistics, e.g. total/success/failure count, average rt, fail rate, etc.">
 
         </action>
         <action id="ArthasStackCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasStackCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasStackCommandAction"
                 text="Stack"
                 description="Display the stack trace for the specified class and method">
 
         </action>
         <action id="ArthasTimeTunnelCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTimeTunnelCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasTimeTunnelCommandAction"
                 text="TimeTunnel Tt"
                 description="Time tunnel">
 
         </action>
         <action id="ArthasSetStaticFieldCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSetStaticFieldCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlSetStaticFieldCommandAction"
                 text="Ognl Set Static Field"
                 description="Ognl set static field">
 
         </action>
 
         <action id="ArthasOgnlSpringSelectedPropertySourceCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringSelectedPropertySourceCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlSpringSelectedPropertySourceCommandAction"
                 text="Get Selected Spring Property"
                 description="Ognl get selected spring property">
 
         </action>
         <action id="ArthasOgnlSpringAllPropertySourceCommand"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlSpringAllPropertySourceCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlSpringAllPropertySourceCommandAction"
                 text="Get All Spring Property"
                 description="Ognl get all spring property">
 
         </action>
         <action id="ArthasJadCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasJadCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasJadCommandAction"
                 text="Decompile Class Jad"
                 description="Decompile class">
 
         </action>
 
         <action id="ArthasDumpCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasDumpCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasDumpCommandAction"
                 text="Dump Class Byte Array from Jvm"
                 description="Dump class byte array from Jvm">
         </action>
         <action id="ArthasHeapDumpCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHeapDumpCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasHeapDumpCommandAction"
                 text="Heap Dump"
                 description="Heap dump">
         </action>
         <action id="ArthasThreadAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasThreadAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasThreadAction"
                 text="Top Thread Stack"
                 description="Display thread info, thread stack">
         </action>
 
         <action id="ArthasWatchOgnlSpringContextInvokeMethodAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasWatchOgnlSpringContextInvokeMethodAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasWatchOgnlSpringContextInvokeMethodAction"
                 text="Watch Spring Context Invoke"
                 description="Watch spring context invoke">
         </action>
         <action id="ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasTimeTunnelOgnlSpringContextInvokeMethodAction"
                 text="TimeTunnel Spring Context Invoke"
                 description="TimeTunnel spring context">
         </action>
 
         <action id="ArthasLoggerCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasLoggerCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasLoggerCommandAction"
                 text="Logger Set Level"
                 description="Print logger info, and update the logger level">
         </action>
         <action id="ArthasJvmCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasJvmCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasJvmCommandAction"
                 text="Jvm Information"
                 description="Display the target JVM information">
         </action>
         <action id="ArthasClassloaderCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasClassloaderCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasClassloaderCommandAction"
                 text="Show Classloader Info"
                 description="Show classloader info">
         </action>
         <action id="ArthasPerCountCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasPerCountCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasPerCountCommandAction"
                 text="Jvm Perf Counter"
                 description="Jvm perf counter">
         </action>
         <action id="ArthasDashboardCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasDashboardCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasDashboardCommandAction"
                 text="Dashboard"
                 description="Dashboard">
         </action>
         <action id="ArthasVmOptionCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmOptionCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasVmOptionCommandAction"
                 text="Jvm Option"
                 description="VmOption">
         </action>
         <action id="ArthasOgnlStaticGrammaticalStructureCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlStaticGrammaticalStructureCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlStaticGrammaticalStructureCommandAction"
                 text="Static Ognl Grammar Help Watch Static Content"
                 description="Ognl static grammatical structure">
         </action>
         <action id="ArthasAsyncProfilerCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasAsyncProfilerCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasAsyncProfilerCommandAction"
                 text="Async Profiler"
                 description="Async profiler">
         </action>
         <action id="ArthasSmCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasSmCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasSmCommandAction"
                 text="Search Method Loaded By Jvm Sm"
                 description="Search method loaded By jvm sm">
         </action>
         <action id="HelpArthasDocumentPageAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.HelpArthasDocumentPageAction"
+                class="com.github.idea.arthas.plugin.action.arthas.HelpArthasDocumentPageAction"
                 text="Arthas Documentation Website"
                 description="Arthas documentation website">
         </action>
         <action id="ArthasClassLoaderLoadClassCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasClassLoaderLoadClassCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasClassLoaderLoadClassCommandAction"
                 text="Classloader Load Class"
                 description="Classloader load class">
         </action>
         <action id="ArthasHotCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
                 text="(Hot Swap) Redefine"
                 description="Redefine">
         </action>
 
         <action id="ArthasHotRetransformCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasHotRedefineCommandAction"
                 text="(Hot Swap) Retransform"
                 description="Retransform">
         </action>
 
         <action id="LocalFileUploadToOssAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.LocalFileUploadToOssAction"
+                class="com.github.idea.arthas.plugin.action.arthas.LocalFileUploadToOssAction"
                 text="Local File Upload To Object Storage"
                 description="LocalFileUploadToOssAction">
         </action>
 
         <action id="ArthasOptionsCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOptionsCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasOptionsCommandAction"
                 text="Global Options Setting"
                 description="Global options setting"/>
 
         <action id="ArthasMybatisMapperReloadAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasMybatisMapperReloadAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasMybatisMapperReloadAction"
                 text="Mybatis Mapper Xml Reload"
                 description="Mybatis mapper xml reload"/>
         <action id="ArthasShellScriptCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasShellScriptCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasShellScriptCommandAction"
                 text="Quickly Get Available Command "
                 description="Shell script command"/>
         <action id="ArthasVmtoolCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasVmtoolCommandAction"
                 text="Vmtool Get Instance Invoke Method Field"
                 description="Vmtool get instance invoke method field"/>
 <!--        <action id="ArthasVmtoolComplexCommandAction"-->
-<!--                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolComplexCommandAction"-->
+<!--                class="arthas.action.com.github.idea.arthas.plugin.ArthasVmtoolComplexCommandAction"-->
 <!--                text="Vmtool Get Instance Invoke Complex Method"-->
 <!--                description="Vmtool get instance invoke method field"/>-->
         <action id="CopyJsonAction"
@@ -631,15 +631,15 @@
                 description="ToolParseJsonAction"/>
 
         <action id="ArthasIdeaOpenConfigPageAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasIdeaOpenConfigPageAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasIdeaOpenConfigPageAction"
                 text="Setting Arthas Idea Plugin"
                 description="Setting arthas idea"/>
         <action id="ArthasOgnlEnumAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasOgnlEnumAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlEnumAction"
                 text="Ognl Invoke for Enum"
                 description="Ognl invoke for enum"/>
         <action id="ArthasVmtoolSetFieldCommandAction"
-                class="com.github.wangji92.arthas.plugin.action.arthas.ArthasVmtoolSetFieldCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasVmtoolSetFieldCommandAction"
                 text="Vmtool Get Instance Set Field"
                 description="Vmtool get instance set field"/>
 
@@ -754,7 +754,7 @@
             <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="arthas-plugin"/>
         </group>
 
-        <action id="OpenTerminalAction" class="com.github.wangji92.arthas.plugin.action.terminal.OpenTerminalAction"
+        <action id="OpenTerminalAction" class="com.github.idea.arthas.plugin.action.terminal.OpenTerminalAction"
                 text="OpenArthasTerminal" description="OpenArthasTerminal">
             <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="$Paste"/>
         </action>

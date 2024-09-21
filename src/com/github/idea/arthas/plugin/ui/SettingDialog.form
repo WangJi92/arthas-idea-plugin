@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.idea.arthas.plugin.ui.SettingDialog">
+  <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="5" left="10" bottom="10" right="5"/>
+    <constraints>
+      <xy x="20" y="108" width="834" height="153"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="1f0d3" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="157" height="72"/>
+          </grid>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="2"/>
+          <horizontalTextPosition value="0"/>
+          <text value="variable(#springContext)"/>
+        </properties>
+      </component>
+      <component id="3bbbf" class="com.intellij.ui.components.ActionLink" binding="linkLable" custom-create="true">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="370" height="72"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Spring Context eg:@applicationContextProvider@context"/>
+        </properties>
+      </component>
+      <component id="ad3a8" class="javax.swing.JTextField" binding="springContextStaticOgnlExpressionTextFiled">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="180" height="32"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=""/>
+          <toolTipText value="spring context  static ognl expression"/>
+        </properties>
+      </component>
+      <component id="51236" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="157" height="32"/>
+          </grid>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="2"/>
+          <horizontalTextPosition value="2"/>
+          <text value="ognl expression"/>
+          <toolTipText value="spring context ognl expression"/>
+        </properties>
+      </component>
+      <component id="7cb1a" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="157" height="16"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="变量: #springContext=@applicationContextProvider@context"/>
+        </properties>
+      </component>
+      <component id="cdb95" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="调用方法数据: ,#springContext.getBean(&quot;controller&quot;).test(&quot;param&quot;)"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
