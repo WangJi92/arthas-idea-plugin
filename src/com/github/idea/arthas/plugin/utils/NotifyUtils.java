@@ -7,10 +7,8 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.AnActionButton;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.HyperlinkEvent;
@@ -48,15 +46,16 @@ public class NotifyUtils {
             new ArthasTunnelTerminalPretreatmentDialog(project, command, editor).open();
             return;
         }
+        notifyMessage(project,message);
 
-        notifyMessage(project, StringUtils.defaultString(message, COMMAND_COPIED), NotificationType.INFORMATION, (Notification arthas) -> {
-            arthas.addAction(new AnActionButton("Open Arthas Terminal") {
-                @Override
-                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-                    new ArthasTunnelTerminalPretreatmentDialog(project, command, editor).open();
-                }
-            });
-        });
+//        notifyMessage(project, StringUtils.defaultString(message, COMMAND_COPIED), NotificationType.INFORMATION, (Notification arthas) -> {
+//            arthas.addAction(new AnActionButton("Open Arthas Terminal") {
+//                @Override
+//                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+//                    new ArthasTunnelTerminalPretreatmentDialog(project, command, editor).open();
+//                }
+//            });
+//        });
     }
 
     /**
