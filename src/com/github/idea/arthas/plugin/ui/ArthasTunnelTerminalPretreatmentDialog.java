@@ -1,16 +1,17 @@
 package com.github.idea.arthas.plugin.ui;
 
+import com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalManager;
+import com.github.idea.arthas.plugin.action.terminal.tunnel.service.ArthasTunnelServerService;
 import com.github.idea.arthas.plugin.common.pojo.AgentInfo;
 import com.github.idea.arthas.plugin.common.pojo.TunnelServerInfo;
-import com.github.idea.arthas.plugin.common.swing.PlaceholderTextSearchField;
 import com.github.idea.arthas.plugin.setting.AppSettingsState;
-import com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalManager;
+import com.github.idea.arthas.plugin.utils.ActionLinkUtils;
 import com.github.idea.arthas.plugin.utils.StringUtils;
-import com.github.idea.arthas.plugin.action.terminal.tunnel.service.ArthasTunnelServerService;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.WindowManager;
+import com.intellij.ui.components.ActionLink;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
@@ -24,19 +25,29 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * OptionsDialog
+ * 打开 ArthasTunnelTerminal 预处理 Dialog 选择 Arthas Tunnel Server Agent 信息
  *
  * @author https://github.com/shuxiongwuziqi
  * @date 01-01-2024
  */
-public class ArthasTerminalOptionsDialog extends JDialog {
+public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
     private static final String PLACEHOLDER = "Searchable Agent";
+
     private JPanel contentPane;
+
     private JComboBox<String> nameServerSelector;
+
     private JTextArea commendEdit;
+
     private JButton execBtn;
+
     private JComboBox<String> appSelector;
-    private JPanel searchableAgentPanel;
+
+    //private JPanel searchableAgentPanel;
+
+    private ActionLink tunnelAgentLabel;
+
+    private JLabel command;
 
     private final Project project;
 
@@ -50,7 +61,7 @@ public class ArthasTerminalOptionsDialog extends JDialog {
     private Map<String, AgentInfo> agentInfoMap;
     private List<String> appIdList;
 
-    public ArthasTerminalOptionsDialog(Project project, String command, Editor editor) {
+    public ArthasTunnelTerminalPretreatmentDialog(Project project, String command, Editor editor) {
         this.project = project;
         setContentPane(this.contentPane);
         setModal(false);
@@ -80,15 +91,15 @@ public class ArthasTerminalOptionsDialog extends JDialog {
         setting.lastSelectApp = setting.lastSelectApp == null ? new HashMap<>() : setting.lastSelectApp;
 
         // set search
-        var searchableAgent = new PlaceholderTextSearchField(PLACEHOLDER, (fs) -> loadAppSelector(false, fs));
-        searchableAgentPanel.add(searchableAgent);
+//        var searchableAgent = new PlaceholderTextSearchField(PLACEHOLDER, (fs) -> loadAppSelector(false, fs));
+//        searchableAgentPanel.add(searchableAgent);
 
         loadNameServerSelector();
         loadAppSelector(true, null);
         loadAgentInfo();
 
         nameServerSelector.addItemListener(e -> {
-            searchableAgent.clearText();
+           // searchableAgent.clearText();
             loadAppSelector(true, null);
         });
         appSelector.addItemListener(e -> loadAgentInfo());
@@ -184,5 +195,10 @@ public class ArthasTerminalOptionsDialog extends JDialog {
         } else {
             execBtn.setEnabled(false);
         }
+    }
+
+    private void createUIComponents() {
+       // agent Id
+        tunnelAgentLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5");
     }
 }

@@ -1,7 +1,7 @@
 package com.github.idea.arthas.plugin.utils;
 
 import com.github.idea.arthas.plugin.setting.AppSettingsState;
-import com.github.idea.arthas.plugin.ui.ArthasTerminalOptionsDialog;
+import com.github.idea.arthas.plugin.ui.ArthasTunnelTerminalPretreatmentDialog;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationGroupManager;
@@ -45,7 +45,7 @@ public class NotifyUtils {
 
         boolean autoOpenArthasTerminal = AppSettingsState.getInstance(project).autoOpenArthasTerminal;
         if (autoOpenArthasTerminal) {
-            new ArthasTerminalOptionsDialog(project, command, editor).open();
+            new ArthasTunnelTerminalPretreatmentDialog(project, command, editor).open();
             return;
         }
 
@@ -53,7 +53,7 @@ public class NotifyUtils {
             arthas.addAction(new AnActionButton("Open Arthas Terminal") {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-                    new ArthasTerminalOptionsDialog(project, command, editor).open();
+                    new ArthasTunnelTerminalPretreatmentDialog(project, command, editor).open();
                 }
             });
         });
