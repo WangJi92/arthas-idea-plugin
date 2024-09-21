@@ -34,6 +34,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Spring Static Context Setting Example"/>
                 </properties>
               </component>
@@ -47,6 +48,7 @@
                   <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Spring Context eg:@applicationContextProvider@context"/>
                 </properties>
               </component>
@@ -55,6 +57,7 @@
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Spring Static  Context Ognl Setting"/>
                   <toolTipText value="@XXXCLass@xxStaticField 静态的spring context完整路径"/>
                 </properties>
@@ -72,6 +75,7 @@
                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Invoke Count(-n)"/>
                   <toolTipText value="watch trace 调用次数"/>
                 </properties>
@@ -87,6 +91,7 @@
                   <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Invoke Monitor Count(-n)"/>
                   <toolTipText value="监控次数"/>
                 </properties>
@@ -102,6 +107,7 @@
                   <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Invoke MoInitor Interval(--cycle)"/>
                   <toolTipText value="调用监控的时间间隔"/>
                 </properties>
@@ -117,6 +123,7 @@
                   <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Depth  Print Property (-x)"/>
                   <toolTipText value="指定输出结果的属性遍历深度"/>
                 </properties>
@@ -132,6 +139,7 @@
                   <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Trace skipJDKMethod(--skipJDKMethod)"/>
                   <toolTipText value="默认是否跳过jdk方法"/>
                 </properties>
@@ -149,6 +157,7 @@
                   <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Default Condition Express Display"/>
                   <toolTipText value="默认条件表达式展示否"/>
                 </properties>
@@ -166,6 +175,7 @@
                   <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Spring static context global configuration"/>
                   <toolTipText value="当前配置设置为全局默认配置"/>
                 </properties>
@@ -175,6 +185,7 @@
                   <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Print ConditionExpress Result(-v)"/>
                 </properties>
               </component>
@@ -199,6 +210,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="arthas idea plugin"/>
                 </properties>
               </component>
@@ -207,6 +219,7 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="arthas idea plugin demo"/>
                 </properties>
               </component>
@@ -215,6 +228,7 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="arthas idea plugin yuque document"/>
                 </properties>
               </component>
@@ -223,6 +237,7 @@
                   <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Auto Convert Chinese To Unicode"/>
                   <toolTipText value="输入参数为中文自动转换为unicode 编码"/>
                 </properties>
@@ -248,6 +263,7 @@
                   <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Auto Open Arthas Terminal"/>
                   <toolTipText value="选择指令后自动打开Arthas Terminal"/>
                 </properties>
@@ -277,6 +293,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Storage configuration options"/>
                   <toolTipText value="redefine 的时候需要将更新的class 上传到目标服务器"/>
                 </properties>
@@ -921,6 +938,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="redefine help"/>
                 </properties>
               </component>
@@ -929,6 +947,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="retransform help"/>
                 </properties>
               </component>
@@ -937,6 +956,7 @@
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Analysis of Arthas retransformer hot swap function"/>
                   <toolTipText value="retransformer 实现原理浅析"/>
                 </properties>
@@ -993,6 +1013,7 @@
                   <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <font/>
                   <text value="* The reload  mybatis xml requires  configuration of a spring bean service"/>
                 </properties>
@@ -1002,6 +1023,7 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="Mybatis Mapper Xml  Reload Know More"/>
                 </properties>
               </component>
@@ -1010,6 +1032,7 @@
                   <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value=" eg spring.getBean(&quot;mybatisMapperXmlFileReloadService&quot;).reloadAllSqlSessionFactoryMapper(&quot;mapperXmlPath&quot;)  "/>
                 </properties>
               </component>
@@ -1018,6 +1041,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value="* Service Method only one parameter and that is  mapper xml path"/>
                 </properties>
               </component>
