@@ -1,6 +1,7 @@
 package com.github.idea.arthas.plugin.utils;
 
 import com.github.idea.arthas.plugin.setting.AppSettingsState;
+import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.Project;
 
 import java.awt.*;
@@ -50,8 +51,6 @@ public class ClipboardUtils {
      */
     public static void setClipboardString(String text) {
         try {
-            // 获取系统剪贴板
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             // 将中文转换为 unicode  这里写法 通过断点跟踪其实这个 转换的逻辑是ognl 解析表达式的时候搞定的
             // https://github.com/alibaba/arthas/blob/master/site/src/site/sphinx/faq.md#%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87unicode%E5%AD%97%E7%AC%A6
             String command = ChineseUnicodeConvert.chineseToUnicode(text);
@@ -63,10 +62,17 @@ public class ClipboardUtils {
                     command = text;
                 }
             }
+
             // 封装文本内容
             Transferable trans = new StringSelection(command);
+            CopyPasteManager.getInstance().setContents(trans);
+
+            //偶发剪切板用不了.. 换idea 官方的功能
+
+            // 获取系统剪贴板
+            // Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             // 把文本内容设置到系统剪贴板
-            clipboard.setContents(trans, null);
+            // clipboard.setContents(trans, null);
         } catch (Exception e) {
             //
         }
