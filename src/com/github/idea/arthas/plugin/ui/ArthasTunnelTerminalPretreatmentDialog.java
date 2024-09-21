@@ -6,6 +6,7 @@ import com.github.idea.arthas.plugin.common.pojo.AgentInfo;
 import com.github.idea.arthas.plugin.common.pojo.TunnelServerInfo;
 import com.github.idea.arthas.plugin.setting.AppSettingsState;
 import com.github.idea.arthas.plugin.utils.ActionLinkUtils;
+import com.github.idea.arthas.plugin.utils.OpenConfigDialogUtils;
 import com.github.idea.arthas.plugin.utils.StringUtils;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -50,6 +51,7 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
     private JLabel command;
 
     private ActionLink tunnelServerLabel;
+    private JButton settingTunnelServerButton;
 
     private final Project project;
 
@@ -78,7 +80,10 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
+        // open setting
+        settingTunnelServerButton.addActionListener((event)->{
+            OpenConfigDialogUtils.openConfigDialog(project);
+        });
         init(project, command, editor);
 
     }
