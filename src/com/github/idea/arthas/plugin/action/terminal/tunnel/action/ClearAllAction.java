@@ -1,4 +1,4 @@
-package com.github.idea.arthas.plugin.action.terminal;
+package com.github.idea.arthas.plugin.action.terminal.tunnel.action;
 
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ui.ConsoleView;

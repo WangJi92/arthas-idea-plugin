@@ -1,4 +1,4 @@
-package com.github.idea.arthas.plugin.utils;
+package com.github.idea.arthas.plugin.action.terminal.tunnel;
 
 import com.github.idea.arthas.plugin.common.pojo.TunnelServerInfo;
 import lombok.AllArgsConstructor;

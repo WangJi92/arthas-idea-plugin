@@ -1,6 +1,6 @@
-package com.github.idea.arthas.plugin.action.terminal;
+package com.github.idea.arthas.plugin.action.terminal.tunnel.action;
 
-import com.github.idea.arthas.plugin.utils.ArthasTerminalManager;
+import com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalManager;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;

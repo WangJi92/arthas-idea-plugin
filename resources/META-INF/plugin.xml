@@ -379,7 +379,7 @@
 
         <notificationGroup id="arthas" displayType="BALLOON"/>
 
-        <executor implementation="com.github.idea.arthas.plugin.utils.ArthasTerminalExecutor" id="ArthasTerminalExecutor"/>
+        <executor implementation="com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalExecutor" id="ArthasTerminalExecutor"/>
 
     </extensions>
 

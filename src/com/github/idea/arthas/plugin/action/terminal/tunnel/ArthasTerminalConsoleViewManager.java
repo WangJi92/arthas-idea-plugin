@@ -1,10 +1,12 @@
-package com.github.idea.arthas.plugin.utils;
+package com.github.idea.arthas.plugin.action.terminal.tunnel;
 
 
 import com.alibaba.fastjson.JSON;
 import com.github.idea.arthas.plugin.common.pojo.WsArthasRequest;
 import com.github.idea.arthas.plugin.common.pojo.AgentInfo;
 import com.github.idea.arthas.plugin.common.pojo.TunnelServerInfo;
+import com.github.idea.arthas.plugin.utils.NotifyUtils;
+import com.github.idea.arthas.plugin.utils.StringUtils;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.Disposable;
@@ -21,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.github.idea.arthas.plugin.utils.ArthasWebSocketClient.LISTENING_STR;
-import static com.github.idea.arthas.plugin.utils.ArthasWebSocketClient.RESIZE_WIDTH;
+import static com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasWebSocketClient.LISTENING_STR;
+import static com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasWebSocketClient.RESIZE_WIDTH;
 
 /**
  * @author imyzt

@@ -1,5 +1,6 @@
-package com.github.idea.arthas.plugin.utils;
+package com.github.idea.arthas.plugin.action.terminal.tunnel;
 
+import com.github.idea.arthas.plugin.utils.Icons;
 import com.intellij.execution.Executor;
 import com.intellij.execution.ExecutorRegistry;
 import org.jetbrains.annotations.NotNull;

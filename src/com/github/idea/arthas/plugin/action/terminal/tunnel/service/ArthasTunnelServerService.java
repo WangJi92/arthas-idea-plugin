@@ -1,4 +1,4 @@
-package com.github.idea.arthas.plugin.component;
+package com.github.idea.arthas.plugin.action.terminal.tunnel.service;
 
 
 import com.alibaba.fastjson.JSON;
@@ -6,7 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.github.idea.arthas.plugin.common.pojo.AgentInfo;
 import com.github.idea.arthas.plugin.utils.HttpUtil;
 import com.github.idea.arthas.plugin.utils.StringUtils;
-import com.github.idea.arthas.plugin.utils.TunnelServerPath;
+import com.github.idea.arthas.plugin.action.terminal.tunnel.TunnelServerPath;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;

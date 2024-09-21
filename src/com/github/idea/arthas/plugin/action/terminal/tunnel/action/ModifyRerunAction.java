@@ -1,4 +1,4 @@
-package com.github.idea.arthas.plugin.action.terminal;
+package com.github.idea.arthas.plugin.action.terminal.tunnel.action;
 
 import com.github.idea.arthas.plugin.ui.ArthasTerminalOptionsDialog;
 import com.intellij.icons.AllIcons;

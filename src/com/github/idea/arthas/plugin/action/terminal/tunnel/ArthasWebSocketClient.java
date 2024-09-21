@@ -1,4 +1,4 @@
-package com.github.idea.arthas.plugin.utils;
+package com.github.idea.arthas.plugin.action.terminal.tunnel;
 
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.Disposable;
