@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.idea.arthas.plugin.ui.ArthasAsyncProfileDialog">
+  <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="73" y="140" width="1174" height="243"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="e3588" layout-manager="GridLayoutManager" row-count="6" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="b6f3a" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="profiler start"/>
+            </properties>
+          </component>
+          <vspacer id="e77de">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="9c79e" class="javax.swing.JComboBox" binding="eventComboBox">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <model>
+                <item value="cpu"/>
+                <item value="alloc"/>
+                <item value="lock"/>
+                <item value="wall"/>
+                <item value="itimer"/>
+                <item value=""/>
+                <item value="page-faults"/>
+                <item value="context-switches"/>
+                <item value="cycles"/>
+                <item value="instructions"/>
+                <item value="cache-references"/>
+                <item value="cache-misses"/>
+                <item value="branches"/>
+                <item value="branch-misses"/>
+                <item value="bus-cycles"/>
+                <item value="L1-dcache-load-misses"/>
+                <item value="LLC-load-misses"/>
+                <item value="dTLB-load-misses"/>
+                <item value="mem:breakpoint"/>
+                <item value="trace:tracepoint"/>
+              </model>
+            </properties>
+          </component>
+          <component id="400b2" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="profiler stop"/>
+            </properties>
+          </component>
+          <component id="99636" class="javax.swing.JButton" binding="startCommandButton">
+            <constraints>
+              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="copy start command"/>
+              <toolTipText value="need to execute stop command after execte start command"/>
+            </properties>
+          </component>
+          <component id="6f3f6" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="ohter command"/>
+            </properties>
+          </component>
+          <component id="8ca0b" class="javax.swing.JComboBox" binding="otherCommandComboBox">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="5" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <model>
+                <item value="resume"/>
+                <item value="status"/>
+                <item value="list"/>
+                <item value="actions"/>
+                <item value="version"/>
+                <item value="dumpFlat"/>
+                <item value="dumpTraces"/>
+                <item value="dumpCollapsed"/>
+              </model>
+            </properties>
+          </component>
+          <component id="289b6" class="javax.swing.JButton" binding="otherCommandButton">
+            <constraints>
+              <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="copy other command"/>
+            </properties>
+          </component>
+          <component id="186e8" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="profiler getSamples"/>
+              <toolTipText value="获取当前profiler 收集的样本的数量"/>
+            </properties>
+          </component>
+          <component id="882c2" class="javax.swing.JButton" binding="getSampleCommandButton">
+            <constraints>
+              <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="copy samples command"/>
+            </properties>
+          </component>
+          <component id="619c0" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="profiling event"/>
+              <toolTipText value="profiler list 获取"/>
+            </properties>
+          </component>
+          <component id="4cef3" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="format"/>
+              <toolTipText value="导出文件支持的格式"/>
+            </properties>
+          </component>
+          <component id="c52e9" class="javax.swing.JComboBox" binding="outputFileFormatComboBox">
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <model>
+                <item value="html"/>
+                <item value="jfr"/>
+              </model>
+            </properties>
+          </component>
+          <component id="73c2e" class="javax.swing.JButton" binding="closeButton">
+            <constraints>
+              <grid row="4" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="close"/>
+            </properties>
+          </component>
+          <component id="98166" class="com.intellij.ui.components.ActionLink" binding="help" custom-create="true">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="arthas help"/>
+              <toolTipText value="火焰图使用帮助文档"/>
+            </properties>
+          </component>
+          <component id="21fc8" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="火焰图X轴越长,代表用的越多(重点关注),Y轴是调用堆栈信息,和颜色无关"/>
+            </properties>
+          </component>
+          <component id="ca461" class="javax.swing.JComboBox" binding="eventModeComboBox">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <model>
+                <item value=""/>
+                <item value="alluser"/>
+                <item value="allkernel"/>
+              </model>
+              <toolTipText value="events mode 注意: macOS 分析仅限于用户空间"/>
+            </properties>
+          </component>
+          <component id="67b5" class="javax.swing.JRadioButton" binding="differentThreadsSeparatelyRadioButton">
+            <constraints>
+              <grid row="0" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <selected value="false"/>
+              <text value="不同线程分开统计"/>
+              <toolTipText value="wall profiler is most useful in per-thread mode"/>
+            </properties>
+          </component>
+          <component id="6fa68" class="com.intellij.ui.components.ActionLink" binding="asyncExample" custom-create="true">
+            <constraints>
+              <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="async-profiler example"/>
+            </properties>
+          </component>
+          <component id="a323b" class="javax.swing.JButton" binding="stopCommandButton">
+            <constraints>
+              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="copy stop command"/>
+            </properties>
+          </component>
+          <component id="cf181" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="duration(seconds) "/>
+              <toolTipText value="持续时间 自动结束 单位秒"/>
+            </properties>
+          </component>
+          <component id="9b9c" class="javax.swing.JTextField" binding="durationTextField">
+            <constraints>
+              <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="30"/>
+              <toolTipText value="持续多久自动结束"/>
+            </properties>
+          </component>
+          <component id="c81c2" class="javax.swing.JButton" binding="autoStopCommandButton">
+            <constraints>
+              <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="copy duration(start|stop) command"/>
+              <toolTipText value="auto stop in duration"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
