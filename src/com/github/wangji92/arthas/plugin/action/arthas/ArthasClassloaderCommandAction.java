@@ -2,9 +2,13 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.wangji92.arthas.plugin.utils.NotifyUtils.COMMAND_COPIED;
 
 /**
  * classloader 使用
@@ -20,18 +24,15 @@ import org.jetbrains.annotations.NotNull;
  * @author 汪小哥
  * @date 20-06-2020
  */
-public class ArthasClassloaderCommandAction extends AnAction {
+public class ArthasClassloaderCommandAction extends BaseArthasPluginAction {
 
     @Override
-    public void actionPerformed(@NotNull AnActionEvent event) {
-        DataContext dataContext = event.getDataContext();
-        Project project = CommonDataKeys.PROJECT.getData(dataContext);
-        if (project == null) {
-            return;
-        }
-        ClipboardUtils.setClipboardString("classloader -l");
-        NotifyUtils.notifyMessageDefault(project);
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
+        String command = "classloader -l";
+        ClipboardUtils.setClipboardString(command);
+        NotifyUtils.notifyMessageOpenTerminal(project, COMMAND_COPIED, command, editor);
     }
+
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
         return ActionUpdateThread.EDT;

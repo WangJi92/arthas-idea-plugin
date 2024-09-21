@@ -4,6 +4,7 @@ import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
@@ -19,7 +20,7 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
     }
 
     @Override
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
         CommandContext commandContext = new CommandContext(project, psiElement);
         ShellScriptCommandEnum scriptCommandEnum = ShellScriptCommandEnum.WATCH;
         //这里针对放置在字段上获取字段的值的信息进行处理增强
@@ -34,6 +35,6 @@ public class ArthasWatchCommandAction extends BaseArthasPluginAction {
         }
         String command = scriptCommandEnum.getArthasCommand(commandContext);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessageOpenTerminal(project, NotifyUtils.COMMAND_COPIED, command, editor);
     }
 }

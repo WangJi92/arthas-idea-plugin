@@ -1,5 +1,8 @@
 package com.github.wangji92.arthas.plugin.setting;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.github.wangji92.arthas.plugin.common.pojo.TunnelServerInfo;
 import com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.wangji92.arthas.plugin.utils.PropertiesComponentUtils;
 import com.github.wangji92.arthas.plugin.utils.StringUtils;
@@ -12,7 +15,15 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.AT;
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL;
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_MYBATIS_MAPPER_RELOAD_METHOD_NAME;
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME;
+import static com.github.wangji92.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING;
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -220,6 +231,32 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean autoToUnicode = true;
 
     /**
+     * Arthas-Tunnel服务器列表
+     */
+    public List<TunnelServerInfo> tunnelServerList;
+
+    /**
+     * 上次选择的Agent
+     */
+    @com.intellij.util.xmlb.annotations.Transient
+    public Map<String, String> lastSelectApp;
+
+    /**
+     * @see #lastSelectApp
+     */
+    public String lastSelectAppJson;
+
+    /**
+     * 上次选择的Arthas-Tunnel
+     */
+    public String lastSelectTunnelServer;
+
+    /**
+     * 自动打开Arthas终端
+     */
+    public boolean autoOpenArthasTerminal = false;
+
+    /**
      * 获取工程的名称
      *
      * @return
@@ -260,6 +297,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         checkGlobalScriptDialogCloseWhenSelectedCommand(appSettingsState);
 
         checkGlobalAutoToUnicode(appSettingsState);
+        checkGlobalAutoOpenArthasTerminal(appSettingsState);
+
+        checkGlobalTunnelServerAndSettingCurrentProjectIfEmpty(appSettingsState);
 
         return appSettingsState;
     }
@@ -346,6 +386,18 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         String autoToUnicode = PropertiesComponentUtils.getValue("autoToUnicode");
         if (StringUtils.isNotBlank(autoToUnicode)) {
             appSettingsState.autoToUnicode = "y".equals(autoToUnicode);
+        }
+    }
+
+    /**
+     * 使用全局的配置  自动打开Arthas终端
+     *
+     * @param appSettingsState
+     */
+    private static void checkGlobalAutoOpenArthasTerminal(AppSettingsState appSettingsState) {
+        String autoOpenArthasTerminal = PropertiesComponentUtils.getValue("autoOpenArthasTerminal");
+        if (StringUtils.isNotBlank(autoOpenArthasTerminal)) {
+            appSettingsState.autoOpenArthasTerminal = "y".equals(autoOpenArthasTerminal);
         }
     }
 
@@ -469,14 +521,24 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         }
     }
 
+    private static void checkGlobalTunnelServerAndSettingCurrentProjectIfEmpty(AppSettingsState appSettingsState) {
+        String tunnelServerList = PropertiesComponentUtils.getValue("ArthasTunnelServerList");
+        if (StringUtils.isNotEmpty(tunnelServerList)) {
+            appSettingsState.tunnelServerList = JSON.parseArray(tunnelServerList, TunnelServerInfo.class);
+        }
+    }
+
     @Nullable
     @Override
     public AppSettingsState getState() {
-        return this;
+        AppSettingsState state = this;
+        state.lastSelectAppJson = JSON.toJSONString(lastSelectApp);
+        return state;
     }
 
     @Override
     public void loadState(@NotNull AppSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
+        lastSelectApp = JSON.parseObject(state.lastSelectAppJson, new TypeReference<HashMap<String, String>>() {}.getType());
     }
 }

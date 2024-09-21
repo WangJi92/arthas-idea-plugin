@@ -1,6 +1,7 @@
 package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.ui.ArthasTraceMultipleCommandDialog;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
@@ -18,7 +19,7 @@ public class ArthasTraceMultipleClassMethodCommandAction extends BaseArthasPlugi
     }
 
     @Override
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
         SwingUtilities.invokeLater(() -> {
             ArthasTraceMultipleCommandDialog instance = new ArthasTraceMultipleCommandDialog(project);
             instance.continueAddTrace(className,methodName);

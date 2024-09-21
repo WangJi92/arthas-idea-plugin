@@ -4,8 +4,11 @@ import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+
+import static com.github.wangji92.arthas.plugin.utils.NotifyUtils.COMMAND_COPIED;
 
 /**
  * Monitor method execution statistics, e.g. total/success/failure count, average rt, fail rate, etc.
@@ -20,10 +23,10 @@ public class ArthasMonitorCommandAction extends BaseArthasPluginAction {
     }
 
     @Override
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
         CommandContext commandContext = new CommandContext(project, psiElement);
         String command = ShellScriptCommandEnum.MONITOR.getArthasCommand(commandContext);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessageOpenTerminal(project, COMMAND_COPIED, command, editor);
     }
 }

@@ -58,4 +58,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
 
+    public static String toString(Object o) {
+        return o != null ? o.toString() : "";
+    }
 }

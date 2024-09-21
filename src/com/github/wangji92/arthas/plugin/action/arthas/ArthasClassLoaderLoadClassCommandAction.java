@@ -3,6 +3,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 import com.github.wangji92.arthas.plugin.ui.ArthasClassLoaderLoadClassCommandDialog;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
@@ -19,7 +20,7 @@ import javax.swing.*;
  */
 public class ArthasClassLoaderLoadClassCommandAction extends BaseArthasPluginAction {
     @Override
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
         if (className.contains("*$*")) {
             NotifyUtils.notifyMessage(project, "匿名类不支持 使用sc -d xxxClass*$* 查找具体的类处理", NotificationType.ERROR);
             return;

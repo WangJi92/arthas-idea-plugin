@@ -2,6 +2,7 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 
@@ -19,13 +20,14 @@ import com.intellij.psi.PsiElement;
 public class ArthasJadCommandAction extends BaseArthasPluginAction {
 
     @Override
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
         if ("*".equals(methodName)) {
             // 查看当前类的反编译结果
             methodName = "";
         }
         String command = String.join(" ", "jad --source-only", className, methodName);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(Decompile the code of the target method or class, online consistency check is very convenient)");
+        String message = NotifyUtils.COMMAND_COPIED + "(Decompile the code of the target method or class, online consistency check is very convenient)";
+        NotifyUtils.notifyMessageOpenTerminal(project, message, command, editor);
     }
 }

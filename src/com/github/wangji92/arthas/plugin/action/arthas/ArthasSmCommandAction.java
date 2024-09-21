@@ -2,9 +2,12 @@ package com.github.wangji92.arthas.plugin.action.arthas;
 
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+
+import static com.github.wangji92.arthas.plugin.utils.NotifyUtils.COMMAND_COPIED;
 
 /**
  * “Search-Method” 的简写，这个命令能搜索出所有已经加载了 Class 信息的方法信息。
@@ -22,7 +25,7 @@ import com.intellij.psi.PsiMethod;
 public class ArthasSmCommandAction extends BaseArthasPluginAction {
 
     @Override
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
         String smPreCommand = "sm";
         // 只有方法的情况才展示详情
         if (psiElement instanceof PsiMethod) {
@@ -30,6 +33,6 @@ public class ArthasSmCommandAction extends BaseArthasPluginAction {
         }
         String command = String.join(" ", smPreCommand, className, methodName);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessageDefault(project);
+        NotifyUtils.notifyMessageOpenTerminal(project, COMMAND_COPIED, command, editor);
     }
 }

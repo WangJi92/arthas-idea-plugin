@@ -4,8 +4,11 @@ import com.github.wangji92.arthas.plugin.common.command.CommandContext;
 import com.github.wangji92.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.wangji92.arthas.plugin.utils.ClipboardUtils;
 import com.github.wangji92.arthas.plugin.utils.NotifyUtils;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+
+import static com.github.wangji92.arthas.plugin.utils.NotifyUtils.COMMAND_COPIED;
 
 /**
  * 输出当前方法被调用的调用路径
@@ -22,11 +25,12 @@ public class ArthasStackCommandAction extends BaseArthasPluginAction {
     }
 
     @Override
-    public void doCommand(String className, String methodName, Project project, PsiElement psiElement) {
+    public void doCommand(String className, String methodName, Project project, PsiElement psiElement, Editor editor) {
         CommandContext commandContext = new CommandContext(project, psiElement);
         String command = ShellScriptCommandEnum.STACK.getArthasCommand(commandContext);
         ClipboardUtils.setClipboardString(command);
-        NotifyUtils.notifyMessage(project, NotifyUtils.COMMAND_COPIED + "(Source code analysis, view method call stack is very convenient)");
+        String message = COMMAND_COPIED + "(Source code analysis, view method call stack is very convenient)";
+        NotifyUtils.notifyMessageOpenTerminal(project, message, command, editor);
     }
 
 }
