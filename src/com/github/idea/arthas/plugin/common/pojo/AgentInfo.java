@@ -10,17 +10,7 @@ import lombok.Data;
 @Data
 public class AgentInfo {
     /**
-     * arthas版本号
-     */
-    private String arthasVersion;
-
-    /**
-     * 客户端连接IP地址
-     */
-    private String clientConnectHost;
-
-    /**
-     * 主机IP地址
+     * 主机IP地址  应用启动arthas-agent 的地址
      */
     private String host;
 
@@ -28,9 +18,18 @@ public class AgentInfo {
      * 端口号
      */
     private Integer port;
-
     /**
      * agentID
      */
     private String agentId;
+
+    /**
+     * arthas版本号
+     */
+    private String arthasVersion;
+
+    /**
+     * 客户端连接IP地址 (arthas-tunnel server 的 ip)
+     */
+    private String clientConnectHost;
 }

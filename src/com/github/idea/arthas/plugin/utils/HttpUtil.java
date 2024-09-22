@@ -20,8 +20,8 @@ public class HttpUtil {
             URL url = new URL(urlStr);
             conn = (HttpURLConnection)url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setConnectTimeout(1000);
-            conn.setReadTimeout(1000);
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(10000);
 
             conn.connect();
 

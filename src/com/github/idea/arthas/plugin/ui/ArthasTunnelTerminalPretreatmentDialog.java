@@ -10,18 +10,18 @@ import com.github.idea.arthas.plugin.setting.AppSettingsState;
 import com.github.idea.arthas.plugin.utils.ActionLinkUtils;
 import com.github.idea.arthas.plugin.utils.OpenConfigDialogUtils;
 import com.github.idea.arthas.plugin.utils.StringUtils;
+import com.google.common.collect.Lists;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.ActionLink;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,27 +34,30 @@ import java.util.Objects;
  * @date 01-01-2024
  */
 public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
-    private static final String PLACEHOLDER = "Searchable Agent";
 
     private JPanel contentPane;
 
-    private JComboBox tunnelServerComboBox;
+    private JComboBox<CustomComboBoxItem<TunnelServerInfo>> tunnelServerComboBox;
+
+    private JComboBox<String> appComboBox;
+
+    private JComboBox<CustomComboBoxItem<AgentInfo>> agentComboBox;
 
     private JTextArea commendEdit;
 
     private JButton execBtn;
 
-    private JComboBox<String> appSelector;
 
-    //private JPanel searchableAgentPanel;
-
-    private ActionLink tunnelAgentLabel;
+    private ActionLink tunnelAppLabel;
 
     private JLabel command;
 
     private ActionLink tunnelServerLabel;
 
     private JButton settingTunnelServerButton;
+
+    private ActionLink agentLabel;
+
 
     private final Project project;
 
@@ -65,8 +68,6 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
 
     private final ArthasTunnelServerService arthasTunnelServerService = new ArthasTunnelServerService();
 
-    private Map<String, AgentInfo> agentInfoMap;
-    private List<String> appIdList;
 
     public ArthasTunnelTerminalPretreatmentDialog(Project project, String command, Editor editor) {
         this.project = project;
@@ -100,37 +101,59 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         setting = AppSettingsState.getInstance(project);
         setting.lastSelectApp = setting.lastSelectApp == null ? new HashMap<>() : setting.lastSelectApp;
 
-        // set search
-//        var searchableAgent = new PlaceholderTextSearchField(PLACEHOLDER, (fs) -> loadAppSelector(false, fs));
-//        searchableAgentPanel.add(searchableAgent);
-
-        loadConfigTunnelServerList();
-        loadAppSelector(true, null);
-        loadAgentInfo();
-
         tunnelServerComboBox.addItemListener(e -> {
-            // searchableAgent.clearText();
-            loadAppSelector(true, null);
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                agentComboBox.removeAllItems();
+                appComboBox.removeAllItems();
+                loadAppList(false);
+            }
         });
-        appSelector.addItemListener(e -> loadAgentInfo());
+
+        appComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                agentComboBox.removeAllItems();
+                loadAgentIdList();
+            }
+        });
+        agentComboBox.addItemListener(e -> {
+            showExeBtn();
+        });
+
+        loadTunnelServerList();
+        loadAppList(true);
+        loadAgentIdList();
+
 
         execBtn.addActionListener((e) -> {
-
             String newCommend = commendEdit.getText();
-            TunnelServerInfo tunnelServerInfo = setting.tunnelServerList.get(tunnelServerComboBox.getSelectedIndex());
-            if (Objects.isNull(agentInfoMap) || agentInfoMap.isEmpty()) {
-                String msg = new String("Agent Not Found".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
-                Messages.showErrorDialog(msg, "Tips");
+            if (StringUtils.isBlank(newCommend)) {
+                newCommend = "help";
+            }
+            TunnelServerInfo tunnelServerInfo = this.getCurrentTunnelServer();
+            if (tunnelServerInfo == null) {
                 return;
             }
-            List<AgentInfo> agentInfos = agentInfoMap.values().stream().toList();
+            AgentInfo currentAgentInfo = this.getCurrentAgentInfo();
+            List<AgentInfo> agentInfos = Lists.newArrayList(currentAgentInfo);
             // open terminal
             ArthasTerminalManager.run(project, agentInfos, newCommend, tunnelServerInfo, editor);
             // save last select
-            setting.lastSelectTunnelServer = tunnelServerComboBox.getSelectedItem().toString();
-            setting.lastSelectApp.put(tunnelServerComboBox.getSelectedItem().toString(), appSelector.getSelectedItem().toString());
+            setting.lastSelectTunnelServer = tunnelServerInfo.getName();
+
+            String currentAppId = this.getCurrentAppId();
+            setting.lastSelectApp.put(tunnelServerInfo.getName(), currentAppId);
             onCancel();
         });
+    }
+
+    private void showExeBtn() {
+        AgentInfo currentAgentInfo = this.getCurrentAgentInfo();
+        String currentAppId = this.getCurrentAppId();
+        if (StringUtils.isNotBlank(currentAppId) && currentAgentInfo != null) {
+            execBtn.setEnabled(true);
+        } else {
+            execBtn.setEnabled(false);
+        }
     }
 
     /**
@@ -154,69 +177,114 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
     /**
      * 加载本地配置的 server 列表
      */
-    private void loadConfigTunnelServerList() {
+    private void loadTunnelServerList() {
+        tunnelServerComboBox.removeAllItems();
         tunnelServerComboBox.setRenderer(new CustomDefaultListCellRenderer(tunnelServerComboBox, null));
         List<TunnelServerInfo> tunnelServerList = setting.tunnelServerList;
         if (CollectionUtils.isNotEmpty(tunnelServerList)) {
-            for (int i = 0; i < tunnelServerList.size(); i++) {
-                TunnelServerInfo tunnelServerInfo = tunnelServerList.get(i);
-                String nameServer = tunnelServerInfo.getName();
-                if (Objects.equals(setting.lastSelectTunnelServer, nameServer)) {
-                    // 默认选中之前选中的
-                    tunnelServerComboBox.setSelectedIndex(i);
-                }
+            for (TunnelServerInfo tunnelServerInfo : tunnelServerList) {
+                String tunnelServerName = tunnelServerInfo.getName();
                 CustomComboBoxItem<TunnelServerInfo> boxItem = new CustomComboBoxItem<TunnelServerInfo>();
                 boxItem.setContentObject(tunnelServerInfo);
                 boxItem.setDisplay(tunnelServerInfo.getName());
                 boxItem.setTipText(String.format("%s:%s", tunnelServerInfo.getTunnelAddress(), tunnelServerInfo.getWsAddress()));
                 tunnelServerComboBox.addItem(boxItem);
+                if (Objects.equals(setting.lastSelectTunnelServer, tunnelServerName)) {
+                    // 默认选中之前选中的
+                    tunnelServerComboBox.setSelectedItem(tunnelServerInfo);
+                }
             }
         }
     }
 
-    private void loadAppSelector(boolean refresh, String filterString) {
-        if (tunnelServerComboBox.getSelectedIndex() < 0) {
+    private void loadAppList(boolean init) {
+        String currentTunnelAddress = this.getCurrentTunnelAddress();
+        if (StringUtils.isBlank(currentTunnelAddress)) {
             return;
         }
-        List<String> appIds = this.appIdList;
-        if (refresh) {
-            TunnelServerInfo nameServerSelectIdx = setting.tunnelServerList.get(tunnelServerComboBox.getSelectedIndex());
-            appIdList = appIds = arthasTunnelServerService.getAppIdList(nameServerSelectIdx.getTunnelAddress());
-        }
-        appSelector.removeAllItems();
-        String lastSelectAgent = setting.lastSelectApp.get(tunnelServerComboBox.getSelectedItem().toString());
-        for (int i = 0, j = 0; i < appIds.size(); i++) {
-            String appId = appIds.get(i);
-            if (StringUtils.isNotBlank(filterString) && !appId.contains(filterString)) {
-                continue;
+        List<String> appIds = arthasTunnelServerService.getAppIdList(currentTunnelAddress);
+        String lastSelectAgent = setting.lastSelectApp.get(currentTunnelAddress);
+        for (String appId : appIds) {
+            appComboBox.addItem(appId);
+            if (init && Objects.equals(lastSelectAgent, appId)) {
+                appComboBox.setSelectedItem(appId);
             }
-            appSelector.addItem(appId);
-            if (Objects.equals(lastSelectAgent, appId)) {
-                appSelector.setSelectedIndex(j);
-            }
-            j++;
         }
-
     }
 
-    private void loadAgentInfo() {
-        if (appSelector.getSelectedItem() == null) {
-            execBtn.setEnabled(false);
+    private void loadAgentIdList() {
+        String currentTunnelAddress = this.getCurrentTunnelAddress();
+        if (StringUtils.isBlank(currentTunnelAddress)) {
             return;
         }
-        String tunnelAddress = setting.tunnelServerList.get(tunnelServerComboBox.getSelectedIndex()).getTunnelAddress();
-        String appId = appSelector.getSelectedItem().toString();
-        this.agentInfoMap = arthasTunnelServerService.getAgentInfoMap(tunnelAddress, appId);
-        if (this.agentInfoMap != null && !this.agentInfoMap.isEmpty()) {
-            execBtn.setEnabled(true);
-        } else {
-            execBtn.setEnabled(false);
+        String currentAppId = this.getCurrentAppId();
+        if (StringUtils.isBlank(currentAppId)) {
+            return;
         }
+        Map<String, AgentInfo> agentInfoMap = arthasTunnelServerService.getAgentInfoMap(currentTunnelAddress, currentAppId);
+        agentComboBox.setRenderer(new CustomDefaultListCellRenderer(agentComboBox, null));
+        for (AgentInfo agent : agentInfoMap.values()) {
+            CustomComboBoxItem<AgentInfo> boxItem = new CustomComboBoxItem<AgentInfo>();
+            boxItem.setContentObject(agent);
+            boxItem.setDisplay(String.format("%s:%s:%s", currentAppId, agent.getHost(), agent.getPort()));
+            boxItem.setTipText(agent.toString());
+            agentComboBox.addItem(boxItem);
+        }
+    }
+
+    /**
+     * 获取 getTunnelAddress
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private String getCurrentTunnelAddress() {
+        Object selectedItem = tunnelServerComboBox.getSelectedItem();
+        if (selectedItem == null) {
+            return "";
+        }
+        CustomComboBoxItem<TunnelServerInfo> selectInfo = (CustomComboBoxItem<TunnelServerInfo>) selectedItem;
+        return selectInfo.getContentObject().getTunnelAddress();
+    }
+
+    @SuppressWarnings("unchecked")
+    private TunnelServerInfo getCurrentTunnelServer() {
+        Object selectedItem = tunnelServerComboBox.getSelectedItem();
+        if (selectedItem == null) {
+            return null;
+        }
+        CustomComboBoxItem<TunnelServerInfo> selectInfo = (CustomComboBoxItem<TunnelServerInfo>) selectedItem;
+        return selectInfo.getContentObject();
+    }
+
+    /**
+     * 获取当前appId
+     *
+     * @return
+     */
+    private String getCurrentAppId() {
+        Object selectedItem = appComboBox.getSelectedItem();
+        if (selectedItem == null) {
+            return "";
+        }
+        return selectedItem.toString();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    private AgentInfo getCurrentAgentInfo() {
+        Object selectedItem = agentComboBox.getSelectedItem();
+        if (selectedItem == null) {
+            return null;
+        }
+        CustomComboBoxItem<AgentInfo> selectInfo = (CustomComboBoxItem<AgentInfo>) selectedItem;
+        return selectInfo.getContentObject();
     }
 
     private void createUIComponents() {
         // agent Id
-        tunnelAgentLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5");
+        tunnelAppLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5");
+        agentLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5");
         tunnelServerLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#tunnel-server-%E7%9A%84%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2");
     }
 }
