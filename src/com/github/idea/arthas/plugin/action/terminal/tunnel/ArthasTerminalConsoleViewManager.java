@@ -133,7 +133,7 @@ public class ArthasTerminalConsoleViewManager implements Disposable {
             client.send(JSON.toJSONString(new WsArthasRequest(command + "\r")));
             this.print(agentId + LISTENING_STR, ConsoleViewContentType.SYSTEM_OUTPUT);
         } catch (Exception e) {
-            NotifyUtils.notifyMessage(editor.getProject(), "连接失败" + agentId);
+            NotifyUtils.notifyMessage(editor.getProject(), "connect error:" + agentId);
         }
 
         return client;

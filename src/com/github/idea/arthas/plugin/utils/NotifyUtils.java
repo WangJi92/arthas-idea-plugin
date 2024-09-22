@@ -1,5 +1,6 @@
 package com.github.idea.arthas.plugin.utils;
 
+import com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalManager;
 import com.github.idea.arthas.plugin.setting.AppSettingsState;
 import com.github.idea.arthas.plugin.ui.ArthasTunnelTerminalPretreatmentDialog;
 import com.intellij.ide.BrowserUtil;
@@ -42,11 +43,19 @@ public class NotifyUtils {
     public static void notifyMessageOpenTerminal(Project project, String message, String command, Editor editor) {
 
         boolean autoOpenArthasTerminal = AppSettingsState.getInstance(project).autoOpenArthasTerminal;
-        if (autoOpenArthasTerminal) {
+
+        // 没有运行的时候执行打开对话框的动作
+        ArthasTerminalManager instance = ArthasTerminalManager.getInstance(project);
+        boolean runningTerminal = false;
+        if (instance != null) {
+            runningTerminal = instance.isRunning();
+        }
+
+        if (autoOpenArthasTerminal && !runningTerminal) {
             new ArthasTunnelTerminalPretreatmentDialog(project, command, editor).open();
             return;
         }
-        notifyMessage(project,message);
+        notifyMessage(project, message);
 
 //        notifyMessage(project, StringUtils.defaultString(message, COMMAND_COPIED), NotificationType.INFORMATION, (Notification arthas) -> {
 //            arthas.addAction(new AnActionButton("Open Arthas Terminal") {
@@ -78,6 +87,7 @@ public class NotifyUtils {
     public static void notifyMessage(Project project, String message, @NotNull NotificationType type) {
         notifyMessage(project, message, type, null);
     }
+
     public static void notifyMessage(Project project, String message, @NotNull NotificationType type, Consumer<Notification> buttonHandler) {
         try {
             Notification arthas = NotificationGroupManager.getInstance().getNotificationGroup("arthas").createNotification(message, type);

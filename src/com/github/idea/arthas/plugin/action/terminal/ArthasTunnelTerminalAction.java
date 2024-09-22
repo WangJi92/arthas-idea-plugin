@@ -18,6 +18,6 @@ public class ArthasTunnelTerminalAction extends AnAction {
         DataContext dataContext = e.getDataContext();
         Project project = CommonDataKeys.PROJECT.getData(dataContext);
         Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
-        new ArthasTunnelTerminalPretreatmentDialog(project, "", editor).open();
+        new ArthasTunnelTerminalPretreatmentDialog(project, "dashboard", editor).open();
     }
 }
