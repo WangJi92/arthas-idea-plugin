@@ -3,16 +3,17 @@ package com.github.idea.arthas.plugin.ui;
 import com.alibaba.fastjson.JSON;
 import com.aliyun.oss.OSS;
 import com.amazonaws.services.s3.AmazonS3;
-import com.github.idea.arthas.plugin.setting.AppSettingsState;
-import com.github.idea.arthas.plugin.utils.JedisUtils;
-import com.github.idea.arthas.plugin.utils.NotifyUtils;
 import com.github.idea.arthas.plugin.common.pojo.TunnelServerInfo;
 import com.github.idea.arthas.plugin.constants.ArthasCommandConstants;
+import com.github.idea.arthas.plugin.setting.AppSettingsState;
 import com.github.idea.arthas.plugin.utils.ActionLinkUtils;
 import com.github.idea.arthas.plugin.utils.AliyunOssUtils;
+import com.github.idea.arthas.plugin.utils.JedisUtils;
+import com.github.idea.arthas.plugin.utils.NotifyUtils;
 import com.github.idea.arthas.plugin.utils.OsS3Utils;
 import com.github.idea.arthas.plugin.utils.PropertiesComponentUtils;
 import com.github.idea.arthas.plugin.utils.StringUtils;
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
@@ -37,6 +38,7 @@ import java.util.Optional;
 import java.util.Vector;
 
 import static com.github.idea.arthas.plugin.constants.ArthasCommandConstants.AT;
+import static com.github.idea.arthas.plugin.utils.OpenConfigDialogUtils.OPEN_CONFIG_TAB;
 
 /**
  * https://jetbrains.org/intellij/sdk/docs/reference_guide/settings_guide.html 属性配置 参考
@@ -327,6 +329,8 @@ public class AppSettingsPage implements Configurable {
     @Nullable
     @Override
     public JComponent createComponent() {
+        int openConfigTab = PropertiesComponent.getInstance().getInt(OPEN_CONFIG_TAB, 0);
+        settingTabPane.setSelectedIndex(openConfigTab);
         return contentPane;
     }
 

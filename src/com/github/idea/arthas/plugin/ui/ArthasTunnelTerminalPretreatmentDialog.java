@@ -86,7 +86,7 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         // open setting
         settingTunnelServerButton.addActionListener((event) -> {
-            OpenConfigDialogUtils.openConfigDialog(project);
+            OpenConfigDialogUtils.openConfigDialog(project, 4);
         });
         init(project, command, editor);
 
@@ -120,9 +120,6 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         });
 
         loadTunnelServerList();
-        loadAppList(true);
-        loadAgentIdList();
-
 
         execBtn.addActionListener((e) -> {
             String newCommend = commendEdit.getText();
@@ -133,8 +130,7 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
             if (tunnelServerInfo == null) {
                 return;
             }
-            AgentInfo currentAgentInfo = this.getCurrentAgentInfo();
-            List<AgentInfo> agentInfos = Lists.newArrayList(currentAgentInfo);
+            List<AgentInfo> agentInfos = this.getCurrentAgentInfo();
             // open terminal
             ArthasTerminalManager.run(project, agentInfos, newCommend, tunnelServerInfo, editor);
             // save last select
@@ -147,13 +143,9 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
     }
 
     private void showExeBtn() {
-        AgentInfo currentAgentInfo = this.getCurrentAgentInfo();
+        List<AgentInfo> currentAgentInfo = this.getCurrentAgentInfo();
         String currentAppId = this.getCurrentAppId();
-        if (StringUtils.isNotBlank(currentAppId) && currentAgentInfo != null) {
-            execBtn.setEnabled(true);
-        } else {
-            execBtn.setEnabled(false);
-        }
+        execBtn.setEnabled(StringUtils.isNotBlank(currentAppId) && CollectionUtils.isNotEmpty(currentAgentInfo));
     }
 
     /**
@@ -223,8 +215,12 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         }
         Map<String, AgentInfo> agentInfoMap = arthasTunnelServerService.getAgentInfoMap(currentTunnelAddress, currentAppId);
         agentComboBox.setRenderer(new CustomDefaultListCellRenderer(agentComboBox, null));
+        CustomComboBoxItem<AgentInfo> virtualItem = new CustomComboBoxItem<>();
+        virtualItem.setDisplay("all agents");
+        virtualItem.setTipText("Send requests to all agents (while monitoring multiple instances simultaneously)");
+        agentComboBox.addItem(virtualItem);
         for (AgentInfo agent : agentInfoMap.values()) {
-            CustomComboBoxItem<AgentInfo> boxItem = new CustomComboBoxItem<AgentInfo>();
+            CustomComboBoxItem<AgentInfo> boxItem = new CustomComboBoxItem<>();
             boxItem.setContentObject(agent);
             boxItem.setDisplay(String.format("%s:%s:%s", currentAppId, agent.getHost(), agent.getPort()));
             boxItem.setTipText(agent.toString());
@@ -272,13 +268,18 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
 
 
     @SuppressWarnings("unchecked")
-    private AgentInfo getCurrentAgentInfo() {
+    private List<AgentInfo> getCurrentAgentInfo() {
         Object selectedItem = agentComboBox.getSelectedItem();
         if (selectedItem == null) {
             return null;
         }
         CustomComboBoxItem<AgentInfo> selectInfo = (CustomComboBoxItem<AgentInfo>) selectedItem;
-        return selectInfo.getContentObject();
+        String currentTunnelAddress = this.getCurrentTunnelAddress();
+        String currentAppId = this.getCurrentAppId();
+        if (Objects.equals(selectInfo.getDisplay(), "all agents")) {
+            return arthasTunnelServerService.getAgentInfoMap(currentTunnelAddress, currentAppId).values().stream().toList();
+        }
+        return Lists.newArrayList(selectInfo.getContentObject());
     }
 
     private void createUIComponents() {
