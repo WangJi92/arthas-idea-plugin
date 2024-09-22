@@ -48,7 +48,7 @@ public class NotifyUtils {
         ArthasTerminalManager instance = ArthasTerminalManager.getInstance(project);
         boolean runningTerminal = false;
         if (instance != null) {
-            runningTerminal = instance.isRunning();
+            runningTerminal = instance.getToolWindow().isActive();
         }
 
         if (autoOpenArthasTerminal && !runningTerminal) {
