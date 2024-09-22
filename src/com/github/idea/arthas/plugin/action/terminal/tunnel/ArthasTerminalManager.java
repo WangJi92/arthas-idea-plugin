@@ -31,10 +31,14 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
 import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentManagerEvent;
+import com.intellij.ui.content.ContentManagerListener;
 import com.intellij.util.messages.MessageBusConnection;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,6 +58,7 @@ public class ArthasTerminalManager implements Disposable {
 
     private static final Key<ArthasTerminalManager> KEY = Key.create(ArthasTerminalManager.class.getName());
     private static final String ARTHAS_PLUS = "Arthas Plus";
+    private static final Logger log = LoggerFactory.getLogger(ArthasTerminalManager.class);
 
     private final Project project;
     private final RunContentDescriptor descriptor;
@@ -92,8 +97,14 @@ public class ArthasTerminalManager implements Disposable {
         messageBusConnection.subscribe(ToolWindowManagerListener.TOPIC, getWindowManagerListener());
 
         ExecutionManager.getInstance(project).getContentManager().showRunContent(ArthasTerminalExecutor.getInstance(), descriptor);
-
-        getToolWindow().activate(null);
+        ToolWindow toolWindow = getToolWindow();
+        toolWindow.addContentManagerListener(new ContentManagerListener() {
+            @Override
+            public void contentRemoved(@NotNull ContentManagerEvent event) {
+                dispose();
+            }
+        });
+        toolWindow.activate(null);
 
         this.consoleViewManager = new ArthasTerminalConsoleViewManager(agentInfos, cmd, tunnelServerInfo, editor, consoleView);
 
@@ -251,11 +262,12 @@ public class ArthasTerminalManager implements Disposable {
     }
 
     public void stop() {
-        if (!running) {
-            return;
+        try {
+            running = false;
+            this.consoleViewManager.onStop();
+        } catch (Exception e) {
+           log.info("error",e);
         }
-        running = false;
-        this.consoleViewManager.onStop();
     }
 
     public void rerun(String command) {
