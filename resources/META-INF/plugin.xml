@@ -754,8 +754,8 @@
             <add-to-group group-id="CutCopyPasteGroup" anchor="before" relative-to-action="arthas-plugin"/>
         </group>
 
-        <action id="OpenTerminalAction" class="com.github.idea.arthas.plugin.action.terminal.OpenTerminalAction"
-                text="OpenArthasTerminal" description="OpenArthasTerminal">
+        <action id="OpenTerminalAction" class="com.github.idea.arthas.plugin.action.terminal.ArthasTunnelTerminalAction"
+                text="Arthas Tunnel Terminal" description="Arthas tunnel terminal">
             <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="$Paste"/>
         </action>
     </actions>

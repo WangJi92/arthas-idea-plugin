@@ -1,16 +1,15 @@
 package com.github.idea.arthas.plugin.utils;
 
+import com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalManager;
 import com.github.idea.arthas.plugin.setting.AppSettingsState;
-import com.github.idea.arthas.plugin.ui.ArthasTerminalOptionsDialog;
+import com.github.idea.arthas.plugin.ui.ArthasTunnelTerminalPretreatmentDialog;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.AnActionButton;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.HyperlinkEvent;
@@ -44,19 +43,28 @@ public class NotifyUtils {
     public static void notifyMessageOpenTerminal(Project project, String message, String command, Editor editor) {
 
         boolean autoOpenArthasTerminal = AppSettingsState.getInstance(project).autoOpenArthasTerminal;
-        if (autoOpenArthasTerminal) {
-            new ArthasTerminalOptionsDialog(project, command, editor).open();
-            return;
+
+        // 没有运行的时候执行打开对话框的动作
+        ArthasTerminalManager instance = ArthasTerminalManager.getInstance(project);
+        boolean runningTerminal = false;
+        if (instance != null) {
+            runningTerminal = instance.isRunning();
         }
 
-        notifyMessage(project, StringUtils.defaultString(message, COMMAND_COPIED), NotificationType.INFORMATION, (Notification arthas) -> {
-            arthas.addAction(new AnActionButton("Open Arthas Terminal") {
-                @Override
-                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-                    new ArthasTerminalOptionsDialog(project, command, editor).open();
-                }
-            });
-        });
+        if (autoOpenArthasTerminal && !runningTerminal) {
+            new ArthasTunnelTerminalPretreatmentDialog(project, command, editor).open();
+            return;
+        }
+        notifyMessage(project, message);
+
+//        notifyMessage(project, StringUtils.defaultString(message, COMMAND_COPIED), NotificationType.INFORMATION, (Notification arthas) -> {
+//            arthas.addAction(new AnActionButton("Open Arthas Terminal") {
+//                @Override
+//                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+//                    new ArthasTunnelTerminalPretreatmentDialog(project, command, editor).open();
+//                }
+//            });
+//        });
     }
 
     /**
@@ -79,6 +87,7 @@ public class NotifyUtils {
     public static void notifyMessage(Project project, String message, @NotNull NotificationType type) {
         notifyMessage(project, message, type, null);
     }
+
     public static void notifyMessage(Project project, String message, @NotNull NotificationType type, Consumer<Notification> buttonHandler) {
         try {
             Notification arthas = NotificationGroupManager.getInstance().getNotificationGroup("arthas").createNotification(message, type);

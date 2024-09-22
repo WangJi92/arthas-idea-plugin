@@ -274,6 +274,7 @@ public class AppSettingsPage implements Configurable {
      * 自动打开Arthas终端
      */
     private JRadioButton autoOpenArthasTerminalRadioButton;
+    private ActionLink tunnelServerLabel;
 
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -319,6 +320,7 @@ public class AppSettingsPage implements Configurable {
         this.arthasIdeaDemoLink = ActionLinkUtils.newActionLink("https://github.com/WangJi92/arthas-plugin-demo");
         this.arthasYuQueDocumentLink = ActionLinkUtils.newActionLink("https://www.yuque.com/arthas-idea-plugin");
         this.howToInputChineseParamLink = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/faq.html#%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87-unicode-%E5%AD%97%E7%AC%A6");
+        this.tunnelServerLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5");
 
     }
 

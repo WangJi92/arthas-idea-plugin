@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.idea.arthas.plugin.ui.ArthasTunnelTerminalPretreatmentDialog">
+  <grid id="27dc6" binding="contentPane" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="20" y="40" width="702" height="328"/>
+    </constraints>
+    <properties>
+      <maximumSize width="720" height="300"/>
+      <minimumSize width="700" height="300"/>
+      <preferredSize width="700" height="300"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <component id="292f4" class="com.intellij.ui.components.ActionLink" binding="tunnelServerLabel" custom-create="true">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <enabled value="true"/>
+          <focusable value="false"/>
+          <text value="tunnel server addr"/>
+          <toolTipText value="start a arthas-tunnel-server.jar connect multiple app agents,just like 'nginx' proxy execution command."/>
+        </properties>
+      </component>
+      <component id="b69f0" class="javax.swing.JLabel" binding="command">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <focusable value="false"/>
+          <requestFocusEnabled value="false"/>
+          <text value="command"/>
+        </properties>
+      </component>
+      <component id="d372f" class="com.intellij.ui.components.ActionLink" binding="tunnelAppLabel" custom-create="true">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="49" height="25"/>
+          </grid>
+        </constraints>
+        <properties>
+          <focusable value="false"/>
+          <text value="app list"/>
+          <toolTipText value="best practices agentId config with appName "/>
+        </properties>
+      </component>
+      <component id="5cc87" class="javax.swing.JComboBox" binding="appComboBox">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="400" height="25"/>
+            <maximum-size width="500" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <editable value="false"/>
+          <focusable value="false"/>
+          <model/>
+          <requestFocusEnabled value="false"/>
+          <toolTipText value=""/>
+        </properties>
+      </component>
+      <component id="d2bd5" class="javax.swing.JComboBox" binding="tunnelServerComboBox">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="400" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <editable value="false"/>
+          <focusable value="false"/>
+          <model/>
+          <requestFocusEnabled value="false"/>
+        </properties>
+      </component>
+      <component id="c2348" class="javax.swing.JButton" binding="execBtn" default-binding="true">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <focusable value="false"/>
+          <requestFocusEnabled value="false"/>
+          <text value="execute command"/>
+        </properties>
+      </component>
+      <scrollpane id="99a2">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="555" height="120"/>
+            <maximum-size width="555" height="120"/>
+          </grid>
+        </constraints>
+        <properties>
+          <horizontalScrollBarPolicy value="31"/>
+          <verticalScrollBarPolicy value="20"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="a3c40" class="javax.swing.JTextArea" binding="commendEdit">
+            <constraints/>
+            <properties>
+              <alignmentX value="0.5"/>
+              <alignmentY value="0.5"/>
+              <autoscrolls value="false"/>
+              <columns value="1"/>
+              <dragEnabled value="false"/>
+              <editable value="true"/>
+              <focusCycleRoot value="false"/>
+              <lineWrap value="true"/>
+              <margin top="10" left="10" bottom="10" right="10"/>
+              <maximumSize width="2147483647" height="2147483647"/>
+              <minimumSize width="555" height="120"/>
+              <preferredSize width="555" height="17020"/>
+              <requestFocusEnabled value="true"/>
+              <rows value="1000"/>
+              <text value=""/>
+              <toolTipText value=""/>
+              <wrapStyleWord value="true"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <vspacer id="1bc69">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <component id="eb33e" class="javax.swing.JButton" binding="settingTunnelServerButton" default-binding="true">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <focusable value="false"/>
+          <text value="setting tunnel server"/>
+        </properties>
+      </component>
+      <component id="e1f00" class="com.intellij.ui.components.ActionLink" binding="agentLabel" custom-create="true">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="49" height="25"/>
+          </grid>
+        </constraints>
+        <properties>
+          <focusable value="false"/>
+          <text value="agent id"/>
+          <toolTipText value=" agentId is prefix with appName&#10;"/>
+        </properties>
+      </component>
+      <component id="52132" class="javax.swing.JComboBox" binding="agentComboBox">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="400" height="25"/>
+            <maximum-size width="500" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <editable value="false"/>
+          <focusable value="false"/>
+          <model/>
+          <requestFocusEnabled value="false"/>
+          <toolTipText value=""/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

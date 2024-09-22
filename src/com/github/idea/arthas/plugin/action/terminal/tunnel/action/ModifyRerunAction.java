@@ -1,6 +1,6 @@
 package com.github.idea.arthas.plugin.action.terminal.tunnel.action;
 
-import com.github.idea.arthas.plugin.ui.ArthasTerminalOptionsDialog;
+import com.github.idea.arthas.plugin.ui.ArthasTunnelTerminalPretreatmentDialog;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -28,7 +28,7 @@ public class ModifyRerunAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        new ArthasTerminalOptionsDialog(project, this.cmd, this.editor).open();
+        new ArthasTunnelTerminalPretreatmentDialog(project, this.cmd, this.editor).open();
     }
 
     @Override

@@ -27,18 +27,20 @@ public class CustomDefaultListCellRenderer extends DefaultListCellRenderer {
                                                   int index, boolean isSelected, boolean cellHasFocus) {
         super.getListCellRendererComponent(list, value, index,
                 isSelected, cellHasFocus);
-        String tipText = value.toString();
-        if (comboBox.getModel().getElementAt(index) instanceof CustomComboBoxItem) {
-            tipText = ((CustomComboBoxItem) value).getTipText();
-        }
-        if (isSelected) {
-            comboBox.setToolTipText(tipText);
-            if (tipLabel != null) {
-                tipLabel.setText(tipText);
-                tipLabel.setToolTipText(tipText);
+        if (value != null) {
+            String tipText = value.toString();
+            if (comboBox.getModel().getElementAt(index) instanceof CustomComboBoxItem) {
+                tipText = ((CustomComboBoxItem) value).getTipText();
             }
+            if (isSelected) {
+                comboBox.setToolTipText(tipText);
+                if (tipLabel != null) {
+                    tipLabel.setText(tipText);
+                    tipLabel.setToolTipText(tipText);
+                }
+            }
+            setToolTipText(tipText);
         }
-        setToolTipText(tipText);
         return this;
     }
 }
