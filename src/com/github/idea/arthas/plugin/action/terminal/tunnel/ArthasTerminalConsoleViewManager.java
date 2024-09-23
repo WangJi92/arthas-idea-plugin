@@ -2,11 +2,10 @@ package com.github.idea.arthas.plugin.action.terminal.tunnel;
 
 
 import com.alibaba.fastjson.JSON;
-import com.github.idea.arthas.plugin.common.pojo.WsArthasRequest;
 import com.github.idea.arthas.plugin.common.pojo.AgentInfo;
 import com.github.idea.arthas.plugin.common.pojo.TunnelServerInfo;
+import com.github.idea.arthas.plugin.common.pojo.WsArthasRequest;
 import com.github.idea.arthas.plugin.utils.NotifyUtils;
-import com.github.idea.arthas.plugin.utils.StringUtils;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.Disposable;
@@ -80,7 +79,7 @@ public class ArthasTerminalConsoleViewManager implements Disposable {
 
     public void onRerun(String command) {
         this.isStartPrint = false;
-        command = StringUtils.defaultString(command, this.cmd);
+        command = Objects.toString(command, this.cmd);
         this.webSocketClients = createWebSocketClients(this.agentInfos, command, this.tunnelServerInfo);
     }
 
@@ -91,7 +90,7 @@ public class ArthasTerminalConsoleViewManager implements Disposable {
                 int start = s.indexOf('#');
                 if (start != -1) {
                     String substring = s.substring(start + 1);
-                    if (NumberUtils.isNumber(substring)) {
+                    if (NumberUtils.isDigits(substring)) {
                         int lineNumber = Integer.parseInt(substring) - 1;
                         EventQueue.invokeLater(() -> {
                             try {

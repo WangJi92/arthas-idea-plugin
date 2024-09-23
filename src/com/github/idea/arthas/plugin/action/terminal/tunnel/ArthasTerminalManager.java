@@ -118,7 +118,7 @@ public class ArthasTerminalManager implements Disposable {
     public static void run(Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
 
         ArthasTerminalManager manager = getInstance(project);
-        if (Objects.nonNull(manager) && !Disposer.isDisposed(manager)) {
+        if (Objects.nonNull(manager) && !manager.isRunning()) {
             Disposer.dispose(manager);
         }
         manager = new ArthasTerminalManager(project, agentInfos, cmd, tunnelServerInfo, editor);
@@ -247,7 +247,7 @@ public class ArthasTerminalManager implements Disposable {
 //    }
 
     private RunnerLayoutUi getRunnerLayoutUi() {
-        return RunnerLayoutUi.Factory.getInstance(project).create(ARTHAS_PLUS, ARTHAS_PLUS, ARTHAS_PLUS, project);
+        return RunnerLayoutUi.Factory.getInstance(project).create(ARTHAS_PLUS, ARTHAS_PLUS, ARTHAS_PLUS, this);
     }
 
     public void stop() {
@@ -255,7 +255,7 @@ public class ArthasTerminalManager implements Disposable {
             running = false;
             this.consoleViewManager.onStop();
         } catch (Exception e) {
-           log.info("error",e);
+            log.info("error", e);
         }
     }
 
