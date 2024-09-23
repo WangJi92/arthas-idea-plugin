@@ -9,7 +9,6 @@ import com.github.idea.arthas.plugin.common.pojo.TunnelServerInfo;
 import com.github.idea.arthas.plugin.utils.Icons;
 import com.github.idea.arthas.plugin.utils.StringUtils;
 import com.intellij.execution.DefaultExecutionResult;
-import com.intellij.execution.ExecutionManager;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
@@ -19,6 +18,7 @@ import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.execution.ui.RunContentManager;
 import com.intellij.execution.ui.RunnerLayoutUi;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -29,11 +29,9 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManagerEvent;
 import com.intellij.ui.content.ContentManagerListener;
-import com.intellij.util.messages.MessageBusConnection;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,13 +88,13 @@ public class ArthasTerminalManager implements Disposable {
         ActionGroup actionToolbar = createActionToolbar(cmd, editor, consoleView);
         layoutUi.getOptions().setLeftToolbar(actionToolbar, "RunnerToolbar");
 
-        final MessageBusConnection messageBusConnection = project.getMessageBus().connect();
+        // final MessageBusConnection messageBusConnection = project.getMessageBus().connect();
 
         this.descriptor = getRunContentDescriptor(layoutUi, cmd);
 
-        messageBusConnection.subscribe(ToolWindowManagerListener.TOPIC, getWindowManagerListener());
+        // messageBusConnection.subscribe(ToolWindowManagerListener.TOPIC, getWindowManagerListener());
 
-        ExecutionManager.getInstance(project).getContentManager().showRunContent(ArthasTerminalExecutor.getInstance(), descriptor);
+        RunContentManager.getInstance(project).showRunContent(ArthasTerminalExecutor.getInstance(), descriptor);
         ToolWindow toolWindow = getToolWindow();
         toolWindow.addContentManagerListener(new ContentManagerListener() {
             @Override
@@ -113,7 +111,7 @@ public class ArthasTerminalManager implements Disposable {
         Disposer.register(this, consoleView);
         Disposer.register(this, content);
         Disposer.register(this, layoutUi.getContentManager());
-        Disposer.register(this, messageBusConnection);
+        //Disposer.register(this, messageBusConnection);
         Disposer.register(this, consoleViewManager);
     }
 
@@ -241,21 +239,12 @@ public class ArthasTerminalManager implements Disposable {
         return descriptor;
     }
 
-    @NotNull
-    private ToolWindowManagerListener getWindowManagerListener() {
-        return new ToolWindowManagerListener() {
-            @Override
-            public void toolWindowRegistered(@NotNull String id) {
-
-            }
-            @Override
-            public void stateChanged() {
-                if (!getToolWindow().isAvailable()) {
-                    Disposer.dispose(ArthasTerminalManager.this);
-                }
-            }
-        };
-    }
+//    @NotNull
+//    private ToolWindowManagerListener getWindowManagerListener() {
+//        return new ToolWindowManagerListener() {
+//
+//        };
+//    }
 
     private RunnerLayoutUi getRunnerLayoutUi() {
         return RunnerLayoutUi.Factory.getInstance(project).create(ARTHAS_PLUS, ARTHAS_PLUS, ARTHAS_PLUS, project);
@@ -298,7 +287,7 @@ public class ArthasTerminalManager implements Disposable {
     public void dispose() {
         project.putUserData(KEY, null);
         stop();
-        ExecutionManager.getInstance(project).getContentManager().removeRunContent(ArthasTerminalExecutor.getInstance(), descriptor);
+        RunContentManager.getInstance(project).removeRunContent(ArthasTerminalExecutor.getInstance(), descriptor);
     }
 
 }
