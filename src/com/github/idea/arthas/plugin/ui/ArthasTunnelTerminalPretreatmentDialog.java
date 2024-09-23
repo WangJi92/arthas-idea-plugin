@@ -105,8 +105,11 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         setting = AppSettingsState.getInstance(project);
         setting.lastSelectApp = setting.lastSelectApp == null ? new HashMap<>() : setting.lastSelectApp;
 
-        // 先根据顺序初始化3个下拉组件, 否则在初始化时也会触发监听器
+        // 先根据顺序初始化3个下拉组件, 再注册对应的监听器, 否则在初始化时也会触发监听器
         loadTunnelServerList();
+        loadAppList();
+        loadAgentIdList();
+        showExeBtn();
 
         tunnelServerComboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
