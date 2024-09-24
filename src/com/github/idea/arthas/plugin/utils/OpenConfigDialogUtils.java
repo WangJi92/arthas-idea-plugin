@@ -47,6 +47,7 @@ public class OpenConfigDialogUtils {
         PropertiesComponent.getInstance().setValue(OPEN_CONFIG_TAB, String.valueOf(tabbedPaneIndex));
         ApplicationManager.getApplication().invokeLater(() -> {
             ShowSettingsUtil.getInstance().showSettingsDialog(project, configClass);
+            PropertiesComponent.getInstance().setValue(OPEN_CONFIG_TAB, null);
         }, ModalityState.defaultModalityState());
     }
 
