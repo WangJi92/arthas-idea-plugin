@@ -46,6 +46,7 @@
       <ul>
         <li>Use the IDEA terminal to connect to the tunnel-server; ensure you have configured the tunnel-server before using it.</li>
         <li>I hope you can use it very well and contact me promptly if you have any questions</li>
+        <li>More usage introduce <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/154"> arthas-idea-plugin/issues/154 </a></li>
       </ul>
      <p>2.47-RELEASE</p>
       <ul>
@@ -379,7 +380,8 @@
 
         <notificationGroup id="arthas" displayType="BALLOON"/>
 
-        <executor implementation="com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalExecutor" id="ArthasTerminalExecutor"/>
+        <executor implementation="com.github.idea.arthas.plugin.action.terminal.tunnel.ArthasTerminalExecutor"
+                  id="ArthasTerminalExecutor"/>
 
     </extensions>
 
@@ -387,7 +389,7 @@
     <!--        <applicationConfigurable dynamic="false" instance="ui.com.github.idea.arthas.plugin.SettingDialog"/>-->
     <!--    </extensions>-->
 
-<!--    <depends>com.intellij.modules.platform</depends>-->
+    <!--    <depends>com.intellij.modules.platform</depends>-->
 
     <!--    Plugin uses classes of Java plugin, for example-->
     <!--    'JvmAnnotatedElement' is used at 'JvmModifiersOwner'-->
@@ -620,10 +622,10 @@
                 class="com.github.idea.arthas.plugin.action.arthas.ArthasVmtoolCommandAction"
                 text="Vmtool Get Instance Invoke Method Field"
                 description="Vmtool get instance invoke method field"/>
-<!--        <action id="ArthasVmtoolComplexCommandAction"-->
-<!--                class="arthas.action.com.github.idea.arthas.plugin.ArthasVmtoolComplexCommandAction"-->
-<!--                text="Vmtool Get Instance Invoke Complex Method"-->
-<!--                description="Vmtool get instance invoke method field"/>-->
+        <!--        <action id="ArthasVmtoolComplexCommandAction"-->
+        <!--                class="arthas.action.com.github.idea.arthas.plugin.ArthasVmtoolComplexCommandAction"-->
+        <!--                text="Vmtool Get Instance Invoke Complex Method"-->
+        <!--                description="Vmtool get instance invoke method field"/>-->
         <action id="CopyJsonAction"
                 class="com.github.idea.json.parser.action.CopyJsonAction"
                 icon="AllIcons.Json.Object"
@@ -693,7 +695,7 @@
             <reference ref="ArthasTimeTunnelCommand"/>
             <separator/>
             <reference ref="ArthasVmtoolCommandAction"/>
-<!--            <reference ref="ArthasVmtoolComplexCommandAction"/>-->
+            <!--            <reference ref="ArthasVmtoolComplexCommandAction"/>-->
             <reference ref="ArthasVmtoolSetFieldCommandAction"/>
             <separator/>
             <group id="arthas-plugin-spring-context" popup="true" text="Spring Get Context Invoke Method Filed">
