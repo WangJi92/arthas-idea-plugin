@@ -526,7 +526,8 @@ public class OgnlPsUtils {
                         if (parameters.length == 0) {
                             return "(@java.lang.Object@class)";
                         } else {
-                            String qualifiedName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) parameters[0]);
+                            PsiType genericsType = PsiToolkit.getPsiTypeGenericsType(parameters[0]);
+                            String qualifiedName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) genericsType);
                             return "(@" + qualifiedName + "@class)";
                         }
                     }
