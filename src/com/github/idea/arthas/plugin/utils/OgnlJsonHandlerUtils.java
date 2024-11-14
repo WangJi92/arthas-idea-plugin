@@ -229,6 +229,10 @@ public class OgnlJsonHandlerUtils {
         String escapeJson = StringEscapeUtils.escapeJson(jsonString);
 
         String psiTypeSimpleName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) currentPsiType);
+        if(StringUtils.isBlank(jsonString) || StringUtils.isBlank(psiTypeSimpleName)){
+            // https://github.com/WangJi92/arthas-idea-plugin/issues/156
+            return null;
+        }
         return jsonType.getTemplate().formatted(escapeJson, "@" + psiTypeSimpleName + "@class");
     }
 }

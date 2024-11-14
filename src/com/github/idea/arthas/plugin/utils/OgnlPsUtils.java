@@ -424,7 +424,14 @@ public class OgnlPsUtils {
         if (parameters.length > 0) {
             int index = 0;
             for (PsiParameter parameter : parameters) {
-                String defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType(), parameter.getProject());
+                String defaultParamValue = null;
+                try {
+                    defaultParamValue = OgnlPsUtils.getDefaultString(parameter.getType(), parameter.getProject());
+                } catch (Exception e) {
+                    // https://github.com/WangJi92/arthas-idea-plugin/issues/156
+                    // 防御性编程
+                    LOG.error("get default json",e);
+                }
                 builder.append(defaultParamValue);
                 if (!(index == parameters.length - 1)) {
                     builder.append(",");
@@ -526,7 +533,9 @@ public class OgnlPsUtils {
                         if (parameters.length == 0) {
                             return "(@java.lang.Object@class)";
                         } else {
-                            String qualifiedName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) parameters[0]);
+                            //https://github.com/WangJi92/arthas-idea-plugin/issues/156
+                            PsiType genericsType = PsiToolkit.getPsiTypeGenericsType(parameters[0]);
+                            String qualifiedName = PsiToolkit.getPsiTypeQualifiedNameClazzName((PsiClassType) genericsType);
                             return "(@" + qualifiedName + "@class)";
                         }
                     }
