@@ -1,11 +1,8 @@
 package com.github.idea.arthas.plugin.action.arthas;
 
-import com.github.idea.arthas.plugin.common.command.CommandContext;
-import com.github.idea.arthas.plugin.common.enums.ShellScriptCommandEnum;
 import com.github.idea.arthas.plugin.constants.ArthasCommandConstants;
 import com.github.idea.arthas.plugin.setting.AppSettingsState;
 import com.github.idea.arthas.plugin.ui.ArthasActionStaticDialog;
-import com.github.idea.arthas.plugin.ui.ArthasVmToolDialog;
 import com.github.idea.arthas.plugin.utils.NotifyUtils;
 import com.github.idea.arthas.plugin.utils.SpringStaticContextUtils;
 import com.intellij.notification.NotificationType;
@@ -40,14 +37,7 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
             return;
         }
 
-        if (!SpringStaticContextUtils.booleanConfigStaticSpringContext(project)) {
-            //if you not set static spring context,you can use vmtool
-            CommandContext commandContext = new CommandContext(e);
-            ShellScriptCommandEnum vmToolSpringEnv = ShellScriptCommandEnum.VM_TOOL_SPRING_ENV;
-            String arthasCommand = vmToolSpringEnv.getArthasCommand(commandContext);
-            String instancesCommand = "vmtool -x  1 --action getInstances --className org.springframework.core.env.ConfigurableEnvironment  --limit 5 ";
-            ArthasVmToolDialog dialog = new ArthasVmToolDialog(project, "org.springframework.core.env.ConfigurableEnvironment", arthasCommand, instancesCommand);
-            dialog.open("vmtool get all spring property,first keyword has the highest priority");
+        if (!SpringStaticContextUtils.booleanConfigStaticSpringContextFalseOpenConfig(project)) {
             return;
         }
 
@@ -79,6 +69,6 @@ public class ArthasOgnlSpringAllPropertySourceCommandAction extends AnAction {
 
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.EDT;
+        return ActionUpdateThread.BGT;
     }
 }

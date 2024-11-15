@@ -488,15 +488,23 @@
 
         <action id="ArthasOgnlSpringSelectedPropertySourceCommand"
                 class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlSpringSelectedPropertySourceCommandAction"
-                text="Get Selected Spring Property"
+                text="Ognl Get Selected Spring Property"
                 description="Ognl get selected spring property">
-
+        </action>
+        <action id="ArthasVmtoolSpringSelectedPropertySourceCommand"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasVmtoolSpringSelectedPropertySourceCommandAction"
+                text="Vmtool Get Selected Spring Property"
+                description="Vmtool get selected spring property">
         </action>
         <action id="ArthasOgnlSpringAllPropertySourceCommand"
                 class="com.github.idea.arthas.plugin.action.arthas.ArthasOgnlSpringAllPropertySourceCommandAction"
-                text="Get All Spring Property"
+                text="Ognl Get All Spring Property"
                 description="Ognl get all spring property">
-
+        </action>
+        <action id="ArthasVmtoolSpringAllPropertySourceCommand"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasVmtoolSpringAllPropertySourceCommandAction"
+                text="Vmtool Get All Spring Property"
+                description="Ognl get all spring property">
         </action>
         <action id="ArthasJadCommandAction"
                 class="com.github.idea.arthas.plugin.action.arthas.ArthasJadCommandAction"
@@ -622,10 +630,7 @@
                 class="com.github.idea.arthas.plugin.action.arthas.ArthasVmtoolCommandAction"
                 text="Vmtool Get Instance Invoke Method Field"
                 description="Vmtool get instance invoke method field"/>
-        <!--        <action id="ArthasVmtoolComplexCommandAction"-->
-        <!--                class="arthas.action.com.github.idea.arthas.plugin.ArthasVmtoolComplexCommandAction"-->
-        <!--                text="Vmtool Get Instance Invoke Complex Method"-->
-        <!--                description="Vmtool get instance invoke method field"/>-->
+
         <action id="CopyJsonAction"
                 class="com.github.idea.json.parser.action.CopyJsonAction"
                 icon="AllIcons.Json.Object"
@@ -695,7 +700,6 @@
             <reference ref="ArthasTimeTunnelCommand"/>
             <separator/>
             <reference ref="ArthasVmtoolCommandAction"/>
-            <!--            <reference ref="ArthasVmtoolComplexCommandAction"/>-->
             <reference ref="ArthasVmtoolSetFieldCommandAction"/>
             <separator/>
             <group id="arthas-plugin-spring-context" popup="true" text="Spring Get Context Invoke Method Filed">
@@ -713,6 +717,8 @@
             <reference ref="ArthasOgnlEnumAction"/>
             <separator/>
             <group id="arthas-plugin-Spring Properties Priority" popup="true" text="Spring Properties">
+                <reference ref="ArthasVmtoolSpringSelectedPropertySourceCommand"/>
+                <reference ref="ArthasVmtoolSpringAllPropertySourceCommand"/>
                 <reference ref="ArthasOgnlSpringSelectedPropertySourceCommand"/>
                 <reference ref="ArthasOgnlSpringAllPropertySourceCommand"/>
             </group>
