@@ -83,7 +83,7 @@ public interface ArthasCommandConstants {
     /**
      * 获取所有的 map source的配置
      */
-    String SPRING_ALL_MAP_PROPERTY = "#allProperties={},#propertySourceIterator=#standardServletEnvironment.getPropertySources().iterator(),#propertySourceIterator.{#key=#this.getName(),#allProperties.add(\"                \"),#allProperties.add(\"------------------------- name:\"+#key),#this.getSource() instanceof java.util.Map ?#this.getSource().entrySet().iterator.{#key=#this.key,#allProperties.add(#key+\"=\"+#standardServletEnvironment.getProperty(#key))}:#{}},#allProperties";
+    String SPRING_ALL_MAP_PROPERTY = "#allProperties={},#propertySourceIterator=#standardServletEnvironment.getPropertySources().iterator(),#propertySourceIterator.{#key=#this.getName(),#allProperties.add(\"                \"),#allProperties.add(\"------------------------- name:\"+#key),#this.getSource() instanceof java.util.Map ?#this.getSource().entrySet().iterator.{#key=#this.key,#value=#this.getValue(),#allProperties.add(#key+\"=\"+#value)}:#{}},#allProperties";
     /**
      * 获取spring 所有的环境变量的表达式
      */
