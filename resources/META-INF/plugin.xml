@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>182version-compatible-202409</version>
+    <version>182version-compatible-202411</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>182version-compatible-202411-RELEASE</p>
+      <ul>
+        <li>fix bug 156 some command not work in some class <a href="https://github.com/WangJi92/arthas-idea-plugin/issues/156"> arthas-idea-plugin/issues/156 </a></li>
+        <li>fix bug 158 get spring all  properties null<a href="https://github.com/WangJi92/arthas-idea-plugin/issues/158"> arthas-idea-plugin/issues/158 </a></li>
+      </ul>
     <p>182version-compatible-202409-RELEASE</p>
       <ul>
         <li>add a command Arthas Copy JSON</li>
