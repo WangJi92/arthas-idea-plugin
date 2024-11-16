@@ -4,7 +4,7 @@
 ### 帮助文档链接
 more issue : [https://github.com/WangJi92/arthas-idea-plugin/issues label=documentation ](https://github.com/WangJi92/arthas-idea-plugin/issues?q=label%3Adocumentation+)
    * [arthas idea plugin document](https://www.yuque.com/arthas-idea-plugin)
-   * [arthas + arhtas idea plugin 实战视频](https://www.bilibili.com/video/BV1yz4y1f7iz/)
+   * [arthas + arthas idea plugin 实战视频](https://www.bilibili.com/video/BV1yz4y1f7iz/)
    * [arthas-idea-plugin demo](https://github.com/WangJi92/arthas-plugin-demo)
 
 
@@ -81,7 +81,9 @@ public class ApplicationContextProvider implements ApplicationContextAware {
 ```
 
 ### 2.4.1 设置获取spring context的上下文
- [arthas idea plugin 配置](https://www.yuque.com/arthas-idea-plugin/help/ugrc8n)
+ 最新版本 推荐使用vmtool 
+ 
+[arthas idea plugin 配置](https://www.yuque.com/arthas-idea-plugin/help/ugrc8n)
  
 ### 2.4.2 右键点击需要调用的方法
 这里的策略和static ognl 一样的，本质还是ognl的调用。
@@ -92,8 +94,8 @@ ognl  -x  3  '#springContext=@applicationContextProvider@context,#springContext.
 
 
 #### 特别说明对于ognl 字段类型的处理
-[代码地址 ](https://github.com/WangJi92/arthas-idea-plugin/blob/master/src/com/github/wangji92/arthas/plugin/utils/OgnlPsUtils.java)
 
+- [arthas 构建 vmtool & ognl & spring context.getBean 等命令入参支持复杂类型 JSON 转换](https://github.com/WangJi92/arthas-idea-plugin/issues/127)
 
 ## 2.6 常用特殊用法链接
 
