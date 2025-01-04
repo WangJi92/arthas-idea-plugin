@@ -73,7 +73,8 @@ public abstract class BaseArthasPluginAction extends AnAction {
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(dataContext);
         String className = OgnlPsUtils.getCommonOrInnerOrAnonymousClassName(psiElement);
         String methodName = OgnlPsUtils.getMethodName(psiElement);
-        Editor editor = event.getRequiredData(CommonDataKeys.EDITOR);
+       // https://github.com/WangJi92/arthas-idea-plugin/issues/161
+        Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
         doCommand(className, methodName, project, psiElement, editor);
     }
 
