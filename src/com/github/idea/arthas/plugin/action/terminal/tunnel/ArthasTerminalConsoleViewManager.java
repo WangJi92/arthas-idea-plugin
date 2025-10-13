@@ -14,7 +14,9 @@ import com.intellij.openapi.editor.markup.MarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.util.Disposer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.net.URI;
@@ -47,12 +49,15 @@ public class ArthasTerminalConsoleViewManager implements Disposable {
 
     private final TunnelServerInfo tunnelServerInfo;
 
+    private final Pair<String, String> auth;
+
     private final ConsoleView consoleView;
 
     private final Editor editor;
 
 
-    public ArthasTerminalConsoleViewManager(List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor, ConsoleView consoleView) {
+    public ArthasTerminalConsoleViewManager(Pair<String, String> auth, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor, ConsoleView consoleView) {
+        this.auth = auth;
         this.agentInfos = agentInfos;
         this.cmd = cmd;
         this.tunnelServerInfo = tunnelServerInfo;
@@ -61,7 +66,7 @@ public class ArthasTerminalConsoleViewManager implements Disposable {
         this.highlighters = new ArrayList<>();
         this.consoleView = consoleView;
 
-        this.webSocketClients = this.createWebSocketClients(agentInfos, cmd, tunnelServerInfo);
+        this.webSocketClients = this.createWebSocketClients(auth, agentInfos, cmd, tunnelServerInfo);
     }
 
     public void onStop() {
@@ -80,7 +85,7 @@ public class ArthasTerminalConsoleViewManager implements Disposable {
     public void onRerun(String command) {
         this.isStartPrint = false;
         command = Objects.toString(command, this.cmd);
-        this.webSocketClients = createWebSocketClients(this.agentInfos, command, this.tunnelServerInfo);
+        this.webSocketClients = createWebSocketClients(this.auth, this.agentInfos, command, this.tunnelServerInfo);
     }
 
     public void print(String s, ConsoleViewContentType viewContentType) {
@@ -107,15 +112,15 @@ public class ArthasTerminalConsoleViewManager implements Disposable {
         }
     }
 
-    private List<ArthasWebSocketClient> createWebSocketClients(List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo) {
+    private List<ArthasWebSocketClient> createWebSocketClients(Pair<String, String> auth, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo) {
         return agentInfos.stream()
-                .map(agentInfo -> createSocketConnection(cmd, agentInfo.getAgentId(), agentInfo.getClientConnectHost(), tunnelServerInfo))
-                .filter(Objects::nonNull)
-                .peek(client -> Disposer.register(this, client))
-                .toList();
+            .map(agentInfo -> createSocketConnection(cmd, auth, agentInfo.getAgentId(), agentInfo.getClientConnectHost(), tunnelServerInfo))
+            .filter(Objects::nonNull)
+            .peek(client -> Disposer.register(this, client))
+            .toList();
     }
 
-    private ArthasWebSocketClient createSocketConnection(String cmd, String agentId, String host, TunnelServerInfo tunnelServerInfo) {
+    private ArthasWebSocketClient createSocketConnection(String cmd, Pair<String, String> auth, String agentId, String host, TunnelServerInfo tunnelServerInfo) {
 
         String uri = TunnelServerPath.getWsUrl(agentId, host, tunnelServerInfo);
         ArthasWebSocketClient client = null;
@@ -127,6 +132,19 @@ public class ArthasTerminalConsoleViewManager implements Disposable {
             // 重置窗口宽度
             client.send(RESIZE_WIDTH);
             isStartPrint = true;
+            // If auth exists, send auth command
+            if (auth != null) {
+                String key = auth.getKey();
+                String value = auth.getValue();
+                if (StringUtils.isNotBlank(value)) {
+                    String authCmd = StringUtils.isNotBlank(key)
+                            ? String.format("--username %s %s", key, value)
+                            : value;
+                    client.send(JSON.toJSONString(new WsArthasRequest("auth " + authCmd + "\r")));
+                    Thread.sleep(500);
+                }
+            }
+
             // 将命令的结果去除 ANSI 颜色
             String command = cmd + " |plaintext";
             client.send(JSON.toJSONString(new WsArthasRequest(command + "\r")));
