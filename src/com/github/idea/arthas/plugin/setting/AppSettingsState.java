@@ -12,6 +12,7 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,11 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.idea.arthas.plugin.constants.ArthasCommandConstants.AT;
-import static com.github.idea.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_ARTHAS_PACKAGE_ZIP_DOWNLOAD_URL;
-import static com.github.idea.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_MYBATIS_MAPPER_RELOAD_METHOD_NAME;
-import static com.github.idea.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_MYBATIS_MAPPER_RELOAD_SERVICE_BEAN_NAME;
-import static com.github.idea.arthas.plugin.constants.ArthasCommandConstants.DEFAULT_SPRING_CONTEXT_SETTING;
+import static com.github.idea.arthas.plugin.constants.ArthasCommandConstants.*;
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -34,8 +31,8 @@ import static com.github.idea.arthas.plugin.constants.ArthasCommandConstants.DEF
  * @date 14-08-2020
  */
 @State(
-        name = "arthas.idea.plugin",
-        storages = {@Storage("setting.xml")}
+    name = "arthas.idea.plugin",
+    storages = {@Storage("setting.xml")}
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
@@ -267,6 +264,12 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     private static Project projectInfo;
 
+    /**
+     * 应用设置的auth信息，https://arthas.aliyun.com/doc/auth.html
+     */
+    public Map<String, Pair<String, String>> appAuthMap;
+
+    public String appAuthJson;
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         projectInfo = project;
@@ -317,9 +320,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         String directoryPrefix1 = PropertiesComponentUtils.getValue("s3DirectoryPrefix");
         String region = PropertiesComponentUtils.getValue("s3Region");
         if (StringUtils.isNotBlank(bucketName1)
-                && StringUtils.isNotBlank(endPoint1)
-                && StringUtils.isNotBlank(accessKeyId1)
-                && StringUtils.isNotBlank(accessKeySecret1)) {
+            && StringUtils.isNotBlank(endPoint1)
+            && StringUtils.isNotBlank(accessKeyId1)
+            && StringUtils.isNotBlank(accessKeySecret1)) {
             appSettingsState.s3Endpoint = endPoint1;
             appSettingsState.s3AccessKeyId = accessKeyId1;
             appSettingsState.s3BucketName = bucketName1;
@@ -466,7 +469,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
                 appSettingsState.redisCacheKeyTtl = Integer.parseInt(redisCacheKeyTtl);
             }
             if (!appSettingsState.aliYunOss && !appSettingsState.hotRedefineClipboard
-                    && !appSettingsState.awsS3) {
+                && !appSettingsState.awsS3) {
                 appSettingsState.hotRedefineRedis = true;
             }
         }
@@ -505,12 +508,12 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         String directoryPrefix1 = PropertiesComponentUtils.getValue("directoryPrefix");
         // 如果之前有设置过就打开了
         if (StringUtils.isNotBlank(bucketName1)
-                && StringUtils.isNotBlank(endPoint1)
-                && StringUtils.isNotBlank(accessKeyId1)
-                && StringUtils.isNotBlank(accessKeySecret1)) {
+            && StringUtils.isNotBlank(endPoint1)
+            && StringUtils.isNotBlank(accessKeyId1)
+            && StringUtils.isNotBlank(accessKeySecret1)) {
             if (!appSettingsState.hotRedefineRedis
-                    && !appSettingsState.hotRedefineClipboard
-                    && !appSettingsState.awsS3) {
+                && !appSettingsState.hotRedefineClipboard
+                && !appSettingsState.awsS3) {
                 appSettingsState.aliYunOss = true;
             }
             appSettingsState.endpoint = endPoint1;
@@ -533,6 +536,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public AppSettingsState getState() {
         AppSettingsState state = this;
         state.lastSelectAppJson = JSON.toJSONString(lastSelectApp);
+        state.appAuthJson = JSON.toJSONString(appAuthMap);
         return state;
     }
 
@@ -540,5 +544,6 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public void loadState(@NotNull AppSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
         lastSelectApp = JSON.parseObject(state.lastSelectAppJson, new TypeReference<HashMap<String, String>>() {}.getType());
+        appAuthMap = JSON.parseObject(state.appAuthJson, new TypeReference<Pair<String, String>>() {}.getType());
     }
 }

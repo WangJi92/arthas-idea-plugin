@@ -33,6 +33,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManagerEvent;
 import com.intellij.ui.content.ContentManagerListener;
 import lombok.Getter;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -73,7 +74,7 @@ public class ArthasTerminalManager implements Disposable {
     private final ArthasTerminalConsoleViewManager consoleViewManager;
 
 
-    private ArthasTerminalManager(@NotNull Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
+    private ArthasTerminalManager(@NotNull Project project, Pair<String, String> auth, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
         // 添加第一条指令
         historyCache.add(cmd);
 
@@ -104,7 +105,7 @@ public class ArthasTerminalManager implements Disposable {
         });
         toolWindow.activate(null);
 
-        this.consoleViewManager = new ArthasTerminalConsoleViewManager(agentInfos, cmd, tunnelServerInfo, editor, consoleView);
+        this.consoleViewManager = new ArthasTerminalConsoleViewManager(auth, agentInfos, cmd, tunnelServerInfo, editor, consoleView);
 
         this.running = true;
 
@@ -115,13 +116,13 @@ public class ArthasTerminalManager implements Disposable {
         Disposer.register(this, consoleViewManager);
     }
 
-    public static void run(Project project, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
+    public static void run(Project project, Pair<String, String> auth, List<AgentInfo> agentInfos, String cmd, TunnelServerInfo tunnelServerInfo, Editor editor) {
 
         ArthasTerminalManager manager = getInstance(project);
         if (Objects.nonNull(manager) && !manager.isRunning()) {
             Disposer.dispose(manager);
         }
-        manager = new ArthasTerminalManager(project, agentInfos, cmd, tunnelServerInfo, editor);
+        manager = new ArthasTerminalManager(project, auth, agentInfos, cmd, tunnelServerInfo, editor);
         project.putUserData(KEY, manager);
     }
 

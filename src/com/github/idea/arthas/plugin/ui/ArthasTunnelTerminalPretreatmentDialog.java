@@ -16,17 +16,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.ActionLink;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 打开 ArthasTunnelTerminal 预处理 Dialog 选择 Arthas Tunnel Server Agent 信息
@@ -60,6 +57,11 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
     private JButton settingTunnelServerButton;
 
     private ActionLink agentLabel;
+    private JTextField username;
+    private JTextField password;
+    private ActionLink upwd;
+    private ActionLink uname;
+    private ActionLink authLink;
 
 
     private final Project project;
@@ -94,6 +96,21 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         });
         init(project, command, editor);
 
+        // hide auth panel
+        uname.setVisible(false);
+        username.setVisible(false);
+        upwd.setVisible(false);
+        password.setVisible(false);
+
+        authLink.addActionListener(e -> {
+            boolean isVisible = uname.isVisible();
+            uname.setVisible(!isVisible);
+            username.setVisible(!isVisible);
+            upwd.setVisible(!isVisible);
+            password.setVisible(!isVisible);
+            pack();
+        });
+
     }
 
     private void init(Project project, String command, Editor editor) {
@@ -104,11 +121,13 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         // 设置环境和模块选择器
         setting = AppSettingsState.getInstance(project);
         setting.lastSelectApp = setting.lastSelectApp == null ? new HashMap<>() : setting.lastSelectApp;
+        setting.appAuthMap = setting.appAuthMap == null ? new HashMap<>() : setting.appAuthMap;
 
         // 先根据顺序初始化3个下拉组件, 再注册对应的监听器, 否则在初始化时也会触发监听器
         loadTunnelServerList();
         loadAppList();
         loadAgentIdList();
+        loadAuth();
         showExeBtn();
 
         tunnelServerComboBox.addItemListener(e -> {
@@ -123,6 +142,7 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 agentComboBox.removeAllItems();
                 loadAgentIdList();
+                loadAuth();
             }
         });
         agentComboBox.addItemListener(e -> showExeBtn());
@@ -136,16 +156,36 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
             if (tunnelServerInfo == null) {
                 return;
             }
+            Pair<String, String> auth = Pair.of(username.getText(), password.getText());
             List<AgentInfo> agentInfos = this.getCurrentAgentInfo();
             // open terminal
-            ArthasTerminalManager.run(project, agentInfos, newCommend, tunnelServerInfo, editor);
+            ArthasTerminalManager.run(project, auth, agentInfos, newCommend, tunnelServerInfo, editor);
             // save last select
             setting.lastSelectTunnelServer = tunnelServerInfo.getName();
+            setting.appAuthMap.put(appComboBox.getSelectedItem().toString(), auth);
 
             String currentAppId = this.getCurrentAppId();
             setting.lastSelectApp.put(tunnelServerInfo.getName(), currentAppId);
             onCancel();
         });
+    }
+
+    /**
+     * 根据app填充auth信息
+     */
+    private void loadAuth() {
+        String selectedItem = (String) appComboBox.getSelectedItem();
+        if (StringUtils.isBlank(selectedItem)) {
+            return;
+        }
+        Pair<String, String> auth = setting.appAuthMap.get(selectedItem);
+        if (auth != null) {
+            username.setText(auth.getKey());
+            password.setText(auth.getValue());
+        } else {
+            username.setText(null);
+            password.setText(null);
+        }
     }
 
     private void showExeBtn() {
@@ -281,5 +321,8 @@ public class ArthasTunnelTerminalPretreatmentDialog extends JDialog {
         tunnelAppLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5");
         agentLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5");
         tunnelServerLabel = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/tunnel.html#tunnel-server-%E7%9A%84%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2");
+        uname = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/auth.html#auth");
+        upwd = ActionLinkUtils.newActionLink("https://arthas.aliyun.com/doc/auth.html#auth");
+        authLink = new ActionLink();
     }
 }
