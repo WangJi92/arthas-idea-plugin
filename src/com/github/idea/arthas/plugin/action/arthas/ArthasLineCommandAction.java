@@ -11,6 +11,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
@@ -110,7 +111,8 @@ public class ArthasLineCommandAction extends AnAction {
     }
 
     /**
-     * 根据 editor 光标位置找到包含该位置的 PsiMethod
+     * 根据 editor 光标位置找到包含该位置的 PsiMethod。
+     * 光标必须在方法体内部，不能落在方法声明行上。
      */
     private PsiMethod findContainingMethod(Editor editor, PsiFile psiFile) {
         try {
@@ -119,7 +121,12 @@ public class ArthasLineCommandAction extends AnAction {
             if (elementAtCaret == null) {
                 return null;
             }
-            return PsiTreeUtil.getParentOfType(elementAtCaret, PsiMethod.class);
+            // 光标必须在方法体内部，排除方法声明行
+            PsiCodeBlock methodBody = PsiTreeUtil.getParentOfType(elementAtCaret, PsiCodeBlock.class);
+            if (methodBody == null) {
+                return null;
+            }
+            return PsiTreeUtil.getParentOfType(methodBody, PsiMethod.class);
         } catch (Exception e) {
             return null;
         }
