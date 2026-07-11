@@ -659,6 +659,11 @@
                 text="Vmtool Get Instance Set Field"
                 description="Vmtool get instance set field"/>
 
+        <action id="ArthasLineCommandAction"
+                class="com.github.idea.arthas.plugin.action.arthas.ArthasLineCommandAction"
+                text="Line"
+                description="Insert probe at specified source line to observe variables"/>
+
         <group id="arthas-ChangesViewPopupMenu" popup="true" text="Arthas Command">
             <!--            version control 修改变更那里 找了好久-->
             <add-to-group group-id="ChangesViewPopupMenu" anchor="after" relative-to-action="EditSource"/>
@@ -707,6 +712,7 @@
             <reference ref="ArthasStackCommand"/>
             <reference ref="ArthasMonitorCommand"/>
             <reference ref="ArthasTimeTunnelCommand"/>
+            <reference ref="ArthasLineCommandAction"/>
             <separator/>
             <reference ref="ArthasVmtoolCommandAction"/>
             <reference ref="ArthasVmtoolSetFieldCommandAction"/>
@@ -736,6 +742,7 @@
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
             <reference ref="ArthasSmCommandAction"/>
+            <reference ref="ArthasLineCommandAction"/>
             <reference ref="ArthasLoggerCommandAction"/>
             <reference ref="ArthasOptionsCommandAction"/>
             <separator/>
