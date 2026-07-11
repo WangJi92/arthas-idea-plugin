@@ -1,7 +1,7 @@
 <idea-plugin require-restart="true">
     <id>com.github.wangji92.arthas.plugin</id>
     <name>arthas idea</name>
-    <version>2.50</version>
+    <version>2.51</version>
     <vendor email="983433479@qq.com" url="https://github.com/WangJi92/arthas-idea-plugin">汪小哥</vendor>
 
     <description><![CDATA[
@@ -42,6 +42,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <p>2.51-RELEASE</p>
+      <ul>
+        <li>support arthas line command: insert probe at specified source line to observe variables <a href="https://arthas.aliyun.com/doc/line.html">arthas line command</a></li>
+      </ul>
     <p>2.50-RELEASE</p>
       <ul>
         <li><a href="https://github.com/WangJi92/arthas-idea-plugin/issues/166"> support get logger name by editor get select text </a></li>
