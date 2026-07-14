@@ -746,7 +746,6 @@
             <reference ref="ArthasJadCommandAction"/>
             <reference ref="ArthasSc"/>
             <reference ref="ArthasSmCommandAction"/>
-            <reference ref="ArthasLineCommandAction"/>
             <reference ref="ArthasLoggerCommandAction"/>
             <reference ref="ArthasOptionsCommandAction"/>
             <separator/>
